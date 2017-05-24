@@ -1,0 +1,57 @@
+package com.sanshan.web.config.javaconfig;
+
+
+import com.sanshan.web.config.javaconfig.auxiliary.BlogOperationListener;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.listener.PatternTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.redis.listener.Topic;
+import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
+
+import java.util.*;
+
+/**
+ 消息发布订阅配置
+ */
+@ComponentScan(value = "com.sanshan.web.config.javaconfig.auxiliary")
+@Configuration
+public class SubPubMessageConfig {
+    @Autowired
+    JedisConnectionFactory connectionFactory;
+
+    @Autowired
+    BlogOperationListener listener;
+
+    @Bean
+    public PatternTopic CacheTopic(){
+        PatternTopic patternTopic = new PatternTopic("blog");
+        return patternTopic;
+    }
+
+    @Bean
+     public RedisMessageListenerContainer redisMessageListenerContainer(MessageListenerAdapter listenerAdapter,
+                                                                        PatternTopic patternTopic){
+         RedisMessageListenerContainer redisMessageListenerContainer = new RedisMessageListenerContainer();
+         redisMessageListenerContainer.setConnectionFactory(connectionFactory);
+         Map<MessageListenerAdapter, Collection<? extends Topic>>map = new HashMap<>();
+         List<Topic> list = new ArrayList<Topic>();
+         list.add(patternTopic);
+         map.put(listenerAdapter, list);
+         redisMessageListenerContainer.setMessageListeners(map);
+         return redisMessageListenerContainer;
+     }
+
+
+     @Bean
+     public MessageListenerAdapter listenerAdapter(){
+         MessageListenerAdapter messageListenerAdapter = new MessageListenerAdapter(listener,
+                 "handle");
+        return messageListenerAdapter;
+     }
+
+
+}

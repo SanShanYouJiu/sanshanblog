@@ -42,7 +42,7 @@
           <element id="library" level="project" name="Maven: commons-dbcp:commons-dbcp:1.4" />
           <element id="library" level="project" name="Maven: commons-pool:commons-pool:1.5.4" />
           <element id="library" level="project" name="Maven: org.mybatis:mybatis-ehcache:1.0.0" />
-          <element id="library" level="project" name="Maven: net.sf.ehcache:ehcache-core:2.6.11" />
+          <element id="library" level="project" name="Maven: net.sf.ehcache:ehcache-core:2.0.0" />
           <element id="library" level="project" name="Maven: javax.cache:cache-api:1.0.0" />
           <element id="library" level="project" name="Maven: mysql:mysql-connector-java:5.1.6" />
           <element id="library" level="project" name="Maven: com.alibaba:druid:1.0.9" />

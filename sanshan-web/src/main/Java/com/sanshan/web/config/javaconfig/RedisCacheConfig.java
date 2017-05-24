@@ -62,9 +62,6 @@ public class RedisCacheConfig {
         return jedisPoolConfig;
     }
 
-    public static void main(String[] args) {
-
-    }
 
     @Bean
     public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory cf) {
@@ -83,6 +80,8 @@ public class RedisCacheConfig {
         managers.add(new EhCacheCacheManager(cm));
         managers.add(new RedisCacheManager(redisTemplate(jedisConnectionFactory)));
         compositeCacheManager.setCacheManagers(managers);
+        //在找不到 accountCache，且没有将 fallbackToNoOpCache 设置为 true 的情况下，系统会抛出异常
+        compositeCacheManager.setFallbackToNoOpCache(true);
         return compositeCacheManager;
     }
 
@@ -110,5 +109,8 @@ public class RedisCacheConfig {
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
     }
+
+
+
 
 }

@@ -102,8 +102,6 @@
 
 
 
-
-
         <dependency>
             <groupId>com.sanshan</groupId>
             <artifactId>sanshan-util</artifactId>
@@ -126,12 +124,12 @@
             <version>1.0.0</version>
         </dependency>
 
-        <!--ehcache缓存-->
-        <dependency>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache-core</artifactId>
-            <version>2.6.11</version>
-        </dependency>
+        <!--&lt;!&ndash;ehcache缓存&ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>net.sf.ehcache</groupId>-->
+            <!--<artifactId>ehcache-core</artifactId>-->
+            <!--<version>2.6.11</version>-->
+        <!--</dependency>-->
 
         <!-- javax.cache/cache-api -->
         <dependency>

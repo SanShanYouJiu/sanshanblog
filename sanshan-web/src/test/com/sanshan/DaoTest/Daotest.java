@@ -3,10 +3,7 @@ package com.sanshan.DaoTest;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sanshan.service.editor.MarkDownBlogService;
-import com.sanshan.web.config.javaconfig.DBConfig;
-import com.sanshan.web.config.javaconfig.MongoDBConfig;
-import com.sanshan.web.config.javaconfig.MybatisConfig;
-import com.sanshan.web.config.javaconfig.ServiceConfig;
+import com.sanshan.web.config.javaconfig.*;
 import com.sanshan.dao.MarkDownBlogMapper;
 import com.sanshan.pojo.entity.MarkDownBlogDO;
 import com.sanshan.pojo.entity.UEditorBlogDO;
@@ -24,7 +21,9 @@ import java.util.List;
 import java.util.Map;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {DBConfig.class,ServiceConfig.class, MybatisConfig.class, MongoDBConfig.class})
+@ContextConfiguration(classes = {ServiceConfig.class, DBConfig.class,
+        MybatisConfig.class, RedisCacheConfig.class, TransactionConfig.class,QuartzConfig.class
+        ,MongoDBConfig.class})
 public class Daotest {
     @Autowired
     MarkDownBlogCacheService markDownBlogService;
@@ -75,9 +74,9 @@ public class Daotest {
         MarkDownBlogDO blog = new MarkDownBlogDO();
         blog.setCreated(new Date());
         blog.setUpdated(new Date());
-        blog.setContent("#ceshi");
-        blog.setId(3);
-        blog.setUser("ceshiuser");
+        blog.setContent("# ceshi");
+        blog.setId(5);
+        blog.setUser("ceshi");
         blog.setTag("ceshi");
         blog.setTitle("测试标题");
         blog.setTime(new Date());

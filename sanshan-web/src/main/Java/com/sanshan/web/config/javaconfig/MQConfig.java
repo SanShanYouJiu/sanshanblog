@@ -15,11 +15,11 @@ import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import java.util.*;
 
 /**
- 消息发布订阅配置
+ 用的是Redis自带的MQ 消息发布订阅配置
  */
 @ComponentScan(value = "com.sanshan.web.config.javaconfig.auxiliary")
 @Configuration
-public class PubSubMessageConfig {
+public class MQConfig {
     @Autowired
     JedisConnectionFactory connectionFactory;
 

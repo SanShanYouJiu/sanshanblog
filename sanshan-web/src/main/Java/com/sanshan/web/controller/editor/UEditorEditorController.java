@@ -7,10 +7,9 @@ import com.sanshan.pojo.dto.UEditorBlogDTO;
 import com.sanshan.pojo.entity.UEditorBlogDO;
 import com.sanshan.service.editor.UEditorFileService;
 import com.sanshan.service.editor.UeditorBlogService;
+import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.BlogIdGenerate;
-import com.sanshan.util.info.BlogOperationState;
 import com.sanshan.util.info.EditorTypeEnum;
-import com.sanshan.util.info.SanShanBlogInfoEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,9 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Slf4j
 @RestController
@@ -79,50 +76,44 @@ public class UEditorEditorController {
 
 
     @RequestMapping("query-by-page")
-    public Map<String,Object> QueryByPage(@RequestParam("pagenum")Integer pagenum
+    public ResponseMsgVO QueryByPage(@RequestParam("pagenum")Integer pagenum
             , @RequestParam("pagesize")Integer pagesize){
-        Map<String,Object> maps =new HashMap();
+        ResponseMsgVO<PageInfo<UEditorBlogDTO>> responseMsgVO = new ResponseMsgVO<>();
         PageHelper.startPage(pagenum, pagesize);
         List<UEditorBlogDTO> list = uEditorBlogService.queryDtoAll();
         PageInfo<UEditorBlogDTO> info = new PageInfo(list);
-        maps.put("total", info.getTotal());
-        maps.put("rows", info.getSize());
-        return maps;
+        return responseMsgVO.buildOKWithData(info);
     }
 
 
-
     @RequestMapping("query-all")
-    public List<UEditorBlogDTO> QueryAll(){
-        List<UEditorBlogDTO> list= uEditorBlogService.queryDtoAll();
-        return list;
+    public ResponseMsgVO QueryAll() {
+        ResponseMsgVO<List<UEditorBlogDTO>> responseMsgVO = new ResponseMsgVO<>();
+        List<UEditorBlogDTO> list = uEditorBlogService.queryDtoAll();
+        return responseMsgVO.buildOKWithData(list);
     }
 
 
 
     @RequestMapping(value = "/insert-blog",method = RequestMethod.POST)
-    public BlogOperationState InsertUeditorBlog(@RequestParam("ueditor-blog")UEditorBlogDO uEditorBlog) {
+    public ResponseMsgVO InsertUeditorBlog(@RequestParam("ueditor-blog")UEditorBlogDO uEditorBlog) {
         //Id生成器
         blogIdGenerate.setId(uEditorBlog.getId(), EditorTypeEnum.UEDITOR_EDITOR);
         uEditorBlog.setId(blogIdGenerate.getId());
         uEditorBlogService.saveDO(uEditorBlog);
-        BlogOperationState sanShanBlogState;
-        sanShanBlogState=new BlogOperationState(200, SanShanBlogInfoEnum.SAVE_SUCCESS.getValue());
-        return  sanShanBlogState;
+        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
+        return  responseMsgVO.buildOK();
     }
 
 
 
-    @RequestMapping(value = "/delete-blog-by-id",method = RequestMethod.POST)
-    public BlogOperationState InsertUeditorBlog(@RequestParam("id")Long id) {
+    @RequestMapping(value = "/delete-by-id",method = RequestMethod.POST)
+    public ResponseMsgVO InsertUeditorBlog(@RequestParam("id")Long id) {
+        //id去除
         blogIdGenerate.remove(id);
         uEditorBlogService.deleteDOById(id);
-        BlogOperationState sanShanBlogState;
-        sanShanBlogState=new BlogOperationState(200, SanShanBlogInfoEnum.DELETE_SUCCESS.getValue());
-        return  sanShanBlogState;
+        return  new ResponseMsgVO().buildOK();
     }
-
-
 
 
 

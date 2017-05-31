@@ -3,10 +3,9 @@ package com.sanshan.service;
 import com.sanshan.service.editor.MarkDownBlogService;
 import com.sanshan.service.editor.UeditorBlogService;
 import com.sanshan.service.vo.BlogVO;
+import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.BlogIdGenerate;
-import com.sanshan.util.info.BlogOperationState;
 import com.sanshan.util.info.EditorTypeEnum;
-import com.sanshan.util.info.SanShanBlogInfoEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,12 +35,14 @@ public class BlogService {
             case MarkDown_EDITOR:
                 blog = new BlogVO(markDownBlogService.queryDtoById(id));
                 break;
+            case Void_Id:
+                throw new NullPointerException("ID已失效  ID has expired ");
         }
         return blog;
     }
 
 
-    public BlogOperationState removeBlog(Long id) {
+    public ResponseMsgVO removeBlog(Long id) {
         EditorTypeEnum type = blogIdGenerate.getType(id);
         blogIdGenerate.remove(id);
         BlogVO blog = null;
@@ -52,8 +53,10 @@ public class BlogService {
             case MarkDown_EDITOR:
                 markDownBlogService.deleteDOById(id);
                 break;
+            case Void_Id:
+                throw  new NullPointerException("ID已失效 ID has expired");
         }
-        return new BlogOperationState(200, SanShanBlogInfoEnum.DELETE_SUCCESS.getValue());
+        return new ResponseMsgVO().buildOK();
     }
 
     public List<BlogVO> queryAll() {

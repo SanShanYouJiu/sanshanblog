@@ -88,5 +88,4 @@ public class BlogIdGenerate {
         log.info("已将IdMap映射文件写入到" + filename);
     }
 
-
 }

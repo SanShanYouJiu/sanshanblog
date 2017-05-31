@@ -1,18 +1,18 @@
 package com.sanshan.service.vo;
 
 import com.sanshan.util.info.PosCodeEnum;
+import lombok.Data;
+import lombok.ToString;
 
-/**
- * 通用返回对象
- * @param <T>
- */
+@Data
+@ToString
 public class ResponseMsgVO<T> {
 
-    private Integer status;
+    private Integer status;// 是否成功标志
 
-    private T data;
+    private T data;// 成功时返回的数据
 
-    private String msg;
+    private String msg;// 错误信息
 
     public ResponseMsgVO() {
     }
@@ -23,7 +23,8 @@ public class ResponseMsgVO<T> {
         return this;
     }
 
-    public ResponseMsgVO buildWithPosCode(PosCodeEnum posCode){
+
+    public ResponseMsgVO buildWithPosCode(PosCodeEnum posCode) {
         this.status = posCode.getStatus();
         this.msg = posCode.getMsg();
         return this;

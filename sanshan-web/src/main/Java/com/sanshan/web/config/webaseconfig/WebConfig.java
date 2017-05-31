@@ -1,8 +1,11 @@
 package com.sanshan.web.config.webaseconfig;
 
+import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter4;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -15,6 +18,8 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
+
+import java.util.List;
 
 @Configuration
 @EnableWebMvc
@@ -71,6 +76,15 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 //    public MultipartResolver multipartResolver() {
 //        return new StandardServletMultipartResolver();
 //    }
+
+    @Autowired
+    private FastJsonHttpMessageConverter4 jsonHttpMessageConverter4;
+
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        converters.add(jsonHttpMessageConverter4);
+        super.configureMessageConverters(converters);
+    }
 
 }
 

@@ -36,7 +36,6 @@ public class PropertiesConventMapUtil {
 			Set<Entry<Object, Object>> entrySet = props.entrySet();
 			for (Entry<Object, Object> entry : entrySet) {
 				if (!entry.getKey().toString().startsWith("#")) {
-					System.out.println(entry.getValue());
 					map.put((Long.valueOf((String) entry.getKey())), EditorTypeEnum.getEditorType((String) entry
 							.getValue()));
 				}

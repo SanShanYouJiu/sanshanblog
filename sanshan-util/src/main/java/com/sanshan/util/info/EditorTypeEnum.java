@@ -5,16 +5,16 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public enum EditorTypeEnum {
-    UEDITOR_EDITOR("UEDITOR_EDITOR",0),
-    MarkDown_EDITOR("MarkDown_EDITOR",1),
-    Void_Id("Void_Id",404);
+    UEDITOR_EDITOR(0,"UEDITOR_EDITOR"),
+    MarkDown_EDITOR(1,"MarkDown_EDITOR"),
+    Void_Id(404,"Void_Id");
 
     private String type;
     private int index;
 
-    EditorTypeEnum(String type, int index) {
-        this.type=type;
+    EditorTypeEnum(int index, String type) {
         this.index=index;
+        this.type=type;
     }
 
 

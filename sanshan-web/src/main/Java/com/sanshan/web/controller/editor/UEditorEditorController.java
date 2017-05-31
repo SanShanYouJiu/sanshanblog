@@ -30,7 +30,6 @@ import java.util.Map;
 @RequestMapping("ueditor-editor")
 public class UEditorEditorController {
 
-    public static String temp;
 
     @Autowired
     private UEditorFileService fileService;
@@ -101,7 +100,7 @@ public class UEditorEditorController {
 
 
 
-    @RequestMapping(value = "/insert-blog")
+    @RequestMapping(value = "/insert-blog",method = RequestMethod.POST)
     public BlogOperationState InsertUeditorBlog(@RequestParam("ueditor-blog")UEditorBlogDO uEditorBlog) {
         //Id生成器
         blogIdGenerate.setId(uEditorBlog.getId(), EditorTypeEnum.UEDITOR_EDITOR);
@@ -114,7 +113,7 @@ public class UEditorEditorController {
 
 
 
-    @RequestMapping(value = "/delete-blog-by-id")
+    @RequestMapping(value = "/delete-blog-by-id",method = RequestMethod.POST)
     public BlogOperationState InsertUeditorBlog(@RequestParam("id")Long id) {
         blogIdGenerate.remove(id);
         uEditorBlogService.deleteDOById(id);

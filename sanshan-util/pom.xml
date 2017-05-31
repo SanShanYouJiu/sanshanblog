@@ -12,6 +12,58 @@
     <groupId>com.sanshan</groupId>
     <artifactId>sanshan-util</artifactId>
     <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <commonlang.version>3.5</commonlang.version>
+        <commoncodec.version>1.10</commoncodec.version>
+        <httpclient.version>4.5.2</httpclient.version>
+        <commonfile.version>1.3.2</commonfile.version>
+        <commonio.version>2.5</commonio.version>
+        <servlet.version>3.1.0</servlet.version>
+        <jedis.version>2.9.0</jedis.version>
+    </properties>
+
+    <dependencies>
+        <!--common start-->
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commonlang.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-codec</groupId>
+            <artifactId>commons-codec</artifactId>
+            <version>${commoncodec.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.httpcomponents</groupId>
+            <artifactId>httpclient</artifactId>
+            <version>${httpclient.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>${commonfile.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commonio.version}</version>
+        </dependency>
+
+        <!--jedis start-->
+        <dependency>
+            <groupId>redis.clients</groupId>
+            <artifactId>jedis</artifactId>
+            <version>${jedis.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servlet.version}</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
     <build>
         <plugins>
             <plugin>

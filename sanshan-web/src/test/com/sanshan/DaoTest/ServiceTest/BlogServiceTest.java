@@ -24,4 +24,6 @@ public class BlogServiceTest {
         MarkDownBlogDTO markDownBlogDTO = markDownBlogService.queryDtoById((long) 1);
         System.out.println(markDownBlogDTO);
     }
+
+
 }

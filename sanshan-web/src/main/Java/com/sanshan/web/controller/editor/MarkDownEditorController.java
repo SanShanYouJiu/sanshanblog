@@ -10,9 +10,11 @@ import com.sanshan.util.info.EditorTypeEnum;
 import com.sanshan.util.info.SanShanBlogInfoEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,9 +54,18 @@ public class MarkDownEditorController {
     }
 
 
-    @RequestMapping("insert-blog")
-    public BlogOperationState InsertMarkDownBlog(@RequestParam("markdown-blog") MarkDownBlogDO markDownBlog) {
+    @RequestMapping(value = "insert-blog",method = RequestMethod.POST)
+    public BlogOperationState InsertMarkDownBlog(@RequestParam("id") Long id,@RequestParam("content") String content,@RequestParam("tag") String tag
+            ,@RequestParam("user") String user) {
         //id生成
+        MarkDownBlogDO markDownBlog = new MarkDownBlogDO();
+        markDownBlog.setId(id);
+        markDownBlog.setContent(content);
+        markDownBlog.setCreated(new Date());
+        markDownBlog.setUpdated(new Date());
+        markDownBlog.setTag(tag);
+        markDownBlog.setTime(new Date());
+        markDownBlog.setUser(user);
         blogIdGenerate.setId(markDownBlog.getId(), EditorTypeEnum.MarkDown_EDITOR);
         markDownBlog.setId(blogIdGenerate.getId());
         markDownBlogService.saveDO(markDownBlog);
@@ -65,7 +76,7 @@ public class MarkDownEditorController {
 
 
 
-     @RequestMapping("delete-blog-by-id")
+     @RequestMapping(value = "delete-blog-by-id",method = RequestMethod.POST)
      public BlogOperationState DeleteMarkDownBlog(@RequestParam("id")Long id){
         //id去除
          blogIdGenerate.remove(id);

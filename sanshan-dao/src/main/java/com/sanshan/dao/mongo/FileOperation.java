@@ -34,7 +34,7 @@ public class FileOperation {
     /**
      *  获得图片
      * @param filename 文件名
-     * @return 返回图片集合
+     * @return 返回匹配图片集合
      */
     public List<GridFSDBFile> getFile(String filename) {
         return gridFsTemplate.find(new Query().addCriteria(Criteria.where("filename").is(filename)));

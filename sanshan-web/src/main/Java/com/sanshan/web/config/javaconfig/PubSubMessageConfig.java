@@ -19,7 +19,7 @@ import java.util.*;
  */
 @ComponentScan(value = "com.sanshan.web.config.javaconfig.auxiliary")
 @Configuration
-public class SubPubMessageConfig {
+public class PubSubMessageConfig {
     @Autowired
     JedisConnectionFactory connectionFactory;
 

@@ -12,6 +12,7 @@ import com.sanshan.util.BlogIdGenerate;
 import com.sanshan.util.info.EditorTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -75,7 +76,7 @@ public class UEditorEditorController {
     }
 
 
-    @RequestMapping("query-by-page")
+    @RequestMapping(value = "query-by-page",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO QueryByPage(@RequestParam("pagenum")Integer pagenum
             , @RequestParam("pagesize")Integer pagesize){
         ResponseMsgVO<PageInfo<UEditorBlogDTO>> responseMsgVO = new ResponseMsgVO<>();
@@ -86,7 +87,7 @@ public class UEditorEditorController {
     }
 
 
-    @RequestMapping("query-all")
+    @RequestMapping(value = "query-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO QueryAll() {
         ResponseMsgVO<List<UEditorBlogDTO>> responseMsgVO = new ResponseMsgVO<>();
         List<UEditorBlogDTO> list = uEditorBlogService.queryDtoAll();
@@ -95,7 +96,7 @@ public class UEditorEditorController {
 
 
 
-    @RequestMapping(value = "/insert-blog",method = RequestMethod.POST)
+    @RequestMapping(value = "/insert-blog",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO InsertUeditorBlog(@RequestParam("ueditor-blog")UEditorBlogDO uEditorBlog) {
         //Id生成器
         blogIdGenerate.setId(uEditorBlog.getId(), EditorTypeEnum.UEDITOR_EDITOR);
@@ -107,7 +108,7 @@ public class UEditorEditorController {
 
 
 
-    @RequestMapping(value = "/delete-by-id",method = RequestMethod.POST)
+    @RequestMapping(value = "/delete-by-id",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO InsertUeditorBlog(@RequestParam("id")Long id) {
         //id去除
         blogIdGenerate.remove(id);

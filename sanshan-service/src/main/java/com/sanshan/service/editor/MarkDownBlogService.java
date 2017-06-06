@@ -3,7 +3,7 @@ package com.sanshan.service.editor;
 import com.github.pagehelper.PageInfo;
 import com.sanshan.pojo.dto.MarkDownBlogDTO;
 import com.sanshan.pojo.entity.MarkDownBlogDO;
-import com.sanshan.service.convent.MarkDownEditorConvent;
+import com.sanshan.service.convent.MarkDownEditorConvert;
 import com.sanshan.service.editor.CacheService.MarkDownBlogCacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +21,7 @@ public class MarkDownBlogService {
      * @return
      */
     public List<MarkDownBlogDTO> queryDtoAll() {
-        return MarkDownEditorConvent.doToDtoList(cacheService.queryAll());
+        return MarkDownEditorConvert.doToDtoList(cacheService.queryAll());
     }
 
 
@@ -31,7 +31,7 @@ public class MarkDownBlogService {
      * @return
      */
     public List<MarkDownBlogDTO> queryDtoListByWhere(MarkDownBlogDO example) {
-        return MarkDownEditorConvent.doToDtoList(cacheService.queryListByWhere(example));
+        return MarkDownEditorConvert.doToDtoList(cacheService.queryListByWhere(example));
     }
 
 
@@ -39,7 +39,7 @@ public class MarkDownBlogService {
      *
      */
     public MarkDownBlogDTO queryDtoById(Long id){
-        return MarkDownEditorConvent.doToDto(cacheService.queryById(id));
+        return MarkDownEditorConvert.doToDto(cacheService.queryById(id));
     }
 
     /**
@@ -52,7 +52,7 @@ public class MarkDownBlogService {
      */
     public PageInfo<MarkDownBlogDTO> queryDtoPageListByWhere(MarkDownBlogDO example, Integer page, Integer rows) {
         PageInfo<MarkDownBlogDO> markDownBlogDOPageInfo = cacheService.queryPageListByWhere(example, page, rows);
-        return MarkDownEditorConvent.doToDtoPage(markDownBlogDOPageInfo);
+        return MarkDownEditorConvert.doToDtoPage(markDownBlogDOPageInfo);
     }
 
     public Integer saveDO(MarkDownBlogDO markDownBlog) {

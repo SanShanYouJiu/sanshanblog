@@ -12,48 +12,54 @@
     <artifactId>sanshan-dao</artifactId>
     <packaging>jar</packaging>
 
-    <dependencies>
+    <properties>
+        <org.mybatis>3.3.0</org.mybatis>
+        <tk.mybatis.mapper>3.3.9</tk.mybatis.mapper>
+        <org.spring.jpa.mongodb>1.8.4.RELEASE</org.spring.jpa.mongodb>
+        <org.mongo-java-driver>3.2.2</org.mongo-java-driver>
+        <org.springframework.data-commons>1.11.4.RELEASE</org.springframework.data-commons>
 
-        <!--mybatis-->
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
-            <version>3.3.0</version>
-        </dependency>
+    </properties>
+    <dependencies>
 
         <dependency>
             <groupId>com.sanshan</groupId>
             <artifactId>sanshan-pojo</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
-
+        <!--mybatis-->
+        <dependency>
+            <groupId>org.mybatis</groupId>
+            <artifactId>mybatis</artifactId>
+            <version>${org.mybatis}</version>
+        </dependency>
 
         <!--通用mapper-->
         <dependency>
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper</artifactId>
-            <version>3.3.9</version>
+            <version>${tk.mybatis.mapper}</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-mongodb</artifactId>
-            <version>1.8.4.RELEASE</version>
+            <version>${org.spring.jpa.mongodb}</version>
         </dependency>
 
         <!--mongo 连接驱动-->
         <dependency>
             <groupId>org.mongodb</groupId>
             <artifactId>mongo-java-driver</artifactId>
-            <version>3.2.2</version>
+            <version>${org.mongo-java-driver}</version>
         </dependency>
 
 
         <!--Spring-data通用核心类  mongonDB需要 注意这个会与Spring-data-jpa冲突-->
         <dependency>
-        <groupId>org.springframework.data</groupId>
-        <artifactId>spring-data-commons</artifactId>
-        <version>1.11.4.RELEASE</version>
+            <groupId>org.springframework.data</groupId>
+            <artifactId>spring-data-commons</artifactId>
+            <version>${org.springframework.data-commons}</version>
         </dependency>
 
     </dependencies>

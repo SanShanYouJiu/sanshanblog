@@ -46,7 +46,7 @@ import java.util.*;
 public abstract class WebUtils {
 
     /**
-     * PoolingHttpClientConnectionManager
+     * PoolingHttpClientConnectionManager 配置连接池
      */
     private static final PoolingHttpClientConnectionManager HTTP_CLIENT_CONNECTION_MANAGER;
 
@@ -57,7 +57,9 @@ public abstract class WebUtils {
 
     static {
         HTTP_CLIENT_CONNECTION_MANAGER = new PoolingHttpClientConnectionManager(RegistryBuilder.<ConnectionSocketFactory>create().register("http", PlainConnectionSocketFactory.getSocketFactory()).register("https", SSLConnectionSocketFactory.getSocketFactory()).build());
+        // 将每个路由基础的连接增加
         HTTP_CLIENT_CONNECTION_MANAGER.setDefaultMaxPerRoute(100);
+        //将最大连接数增加
         HTTP_CLIENT_CONNECTION_MANAGER.setMaxTotal(200);
         RequestConfig requestConfig = RequestConfig.custom().setConnectionRequestTimeout(60000).setConnectTimeout(60000).setSocketTimeout(60000).build();
         HTTP_CLIENT = HttpClientBuilder.create().setConnectionManager(HTTP_CLIENT_CONNECTION_MANAGER).setDefaultRequestConfig(requestConfig).build();
@@ -399,4 +401,29 @@ public abstract class WebUtils {
         }
         return ip;
     }
+
+
+    /**
+     * 从请求中获取字符串类型值
+     *
+     * @param key          指定key
+     * @param defaultValue 不存在的value
+     * @param request      该请求
+     * @return 值
+     */
+    public static String getString(String key, String defaultValue, HttpServletRequest request) {
+        return Optional.ofNullable(request.getParameter(key)).orElse(defaultValue);
+    }
+
+    /**
+     * 从header中读取值
+     * @param key          指定key
+     * @param defaultValue 不存在的value
+     * @param request      该请求
+     * @return 值
+     */
+    public static String getHeader(String key, String defaultValue, HttpServletRequest request){
+        return Optional.ofNullable(request.getHeader(key)).orElse(defaultValue);
+    }
+
 }

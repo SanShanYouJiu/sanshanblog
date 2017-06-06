@@ -10,7 +10,7 @@ import org.modelmapper.TypeToken;
 import java.util.List;
 import java.util.Objects;
 
-public class MarkDownEditorConvent {
+public class MarkDownEditorConvert {
 
     private static final ModelMapper modelMapper = new ModelMapper();
 
@@ -29,7 +29,7 @@ public class MarkDownEditorConvent {
 
     public static PageInfo<MarkDownBlogDTO> doToDtoPage(PageInfo<MarkDownBlogDO> markDownBlogDOPageInfo) {
         List<MarkDownBlogDO> list = markDownBlogDOPageInfo.getList();
-        List<MarkDownBlogDTO> markDownBlogDTOS = MarkDownEditorConvent.doToDtoList(list);
+        List<MarkDownBlogDTO> markDownBlogDTOS = MarkDownEditorConvert.doToDtoList(list);
         return new PageInfo<MarkDownBlogDTO>(markDownBlogDTOS);
     }
 

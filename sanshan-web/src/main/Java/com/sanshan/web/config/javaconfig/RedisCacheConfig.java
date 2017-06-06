@@ -87,9 +87,9 @@ public class RedisCacheConfig {
 
     /**
      * @return 自定义策略生成的key
-     * @description 自定义的缓存key的生成策略</br>
-     * 若想使用这个key</br>
-     * 只需要讲注解上keyGenerator的值设置为customKeyGenerator即可</br>
+     * @description 自定义的缓存key的生成策略
+     * 若想使用这个key
+     * 只需要讲注解上keyGenerator的值设置为customKeyGenerator即可
      */
     @Bean
     public KeyGenerator customKeyGenerator() {

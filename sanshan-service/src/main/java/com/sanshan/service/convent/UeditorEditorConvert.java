@@ -9,7 +9,7 @@ import org.modelmapper.TypeToken;
 import java.util.List;
 import java.util.Objects;
 
-public class UeditorEditorConvent {
+public class UeditorEditorConvert {
 
     private static final ModelMapper modelMapper = new ModelMapper();
 
@@ -27,7 +27,7 @@ public class UeditorEditorConvent {
 
     public static PageInfo<UEditorBlogDTO> doToDtoPage(PageInfo<UEditorBlogDO> uEditorBlogDTOPageInfo) {
         List<UEditorBlogDO> list = uEditorBlogDTOPageInfo.getList();
-        List<UEditorBlogDTO> uEditorBlogDTOS = UeditorEditorConvent.doToDtoList(list);
+        List<UEditorBlogDTO> uEditorBlogDTOS = UeditorEditorConvert.doToDtoList(list);
         return new PageInfo<UEditorBlogDTO>(uEditorBlogDTOS);
     }
 

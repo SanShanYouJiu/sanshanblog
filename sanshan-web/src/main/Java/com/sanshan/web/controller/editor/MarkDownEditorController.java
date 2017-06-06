@@ -8,6 +8,7 @@ import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.BlogIdGenerate;
 import com.sanshan.util.info.EditorTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,7 +33,7 @@ public class MarkDownEditorController {
      * @param pagesize
      * @return
      */
-    @RequestMapping(value = "query-by-page")
+    @RequestMapping(value = "query-by-page",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO QueryByPage(@RequestParam("pagenum")Integer pagenum
                                           ,@RequestParam("pagesize")Integer pagesize){
         PageInfo<MarkDownBlogDTO> info = markDownBlogService.queryDtoPageListByWhere(null,pagenum,pagesize);
@@ -42,7 +43,7 @@ public class MarkDownEditorController {
 
 
 
-    @RequestMapping(value = "query-all")
+    @RequestMapping(value = "query-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO QueryAll(){
         ResponseMsgVO<List<MarkDownBlogDTO>> responseMsgVO = new ResponseMsgVO<>();
         List<MarkDownBlogDTO> list = markDownBlogService.queryDtoAll();
@@ -50,7 +51,7 @@ public class MarkDownEditorController {
     }
 
 
-    @RequestMapping(value = "insert-blog",method = RequestMethod.POST)
+    @RequestMapping(value = "insert-blog",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO InsertMarkDownBlog(@RequestParam("id") Long id,@RequestParam("content") String content,@RequestParam("tag") String tag
             ,@RequestParam("user") String user) {
         //id生成
@@ -71,7 +72,7 @@ public class MarkDownEditorController {
 
 
 
-     @RequestMapping(value = "delete-by-id",method = RequestMethod.POST)
+     @RequestMapping(value = "delete-by-id",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
      public ResponseMsgVO DeleteMarkDownBlog(@RequestParam("id")Long id){
         //id去除
          blogIdGenerate.remove(id);

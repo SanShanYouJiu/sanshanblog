@@ -4,9 +4,13 @@ import com.sanshan.util.info.PosCodeEnum;
 import lombok.Data;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 @Data
 @ToString
-public class ResponseMsgVO<T> {
+public class ResponseMsgVO<T> implements Serializable {
+
+    private static final long serialVersionUID = -7268116244546414571L;
 
     private Integer status;// 是否成功标志
 

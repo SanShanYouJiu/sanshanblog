@@ -1,10 +1,8 @@
 package com.sanshan.web.config.javaconfig;
 
-import com.alibaba.druid.pool.DruidDataSource;
 import com.github.pagehelper.PageInterceptor;
 import org.apache.ibatis.plugin.Interceptor;
 import org.mybatis.spring.SqlSessionFactoryBean;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tk.mybatis.spring.mapper.MapperScannerConfigurer;
@@ -16,8 +14,6 @@ import java.util.Properties;
 @Configuration
 public class MybatisConfig {
 
-    @Autowired
-    private DruidDataSource dataSource;
 
     @Bean
     public SqlSessionFactoryBean sqlSessionFactoryBean(DataSource dataSource) throws IOException {

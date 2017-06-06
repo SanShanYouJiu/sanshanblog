@@ -15,7 +15,7 @@ import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
 import java.util.*;
 
 /**
- 用的是Redis自带的MQ 消息发布订阅配置
+ 用的是Redis自带的MQ 消息发布订阅配置 这个Redis自带的MQ性能不是很好 暂时在这里吧
  */
 @ComponentScan(value = "com.sanshan.web.config.javaconfig.auxiliary")
 @Configuration

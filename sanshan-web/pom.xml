@@ -12,19 +12,54 @@
     <url>http://maven.apache.org</url>
 
     <properties>
+        <javax.servlet-api>3.1.0</javax.servlet-api>
+
+        <org.thymeleaf>2.1.4.RELEASE</org.thymeleaf>
+        <org.thymeleaf-extras-springsecurity3>2.1.1.RELEASE</org.thymeleaf-extras-springsecurity3>
+        <org.thymeleaf-spring4>2.1.4.RELEASE</org.thymeleaf-spring4>
+
+        <jstl>1.2</jstl>
+        <javax.el-api>2.2.4</javax.el-api>
+        <org.glassfish.web-javax.el>2.2.4</org.glassfish.web-javax.el>
+
+        <spring-jpa-redis>1.7.2.RELEASE</spring-jpa-redis>
+        <jedis>2.6.2</jedis>
+
+        <com.alibaba.druid>1.0.9</com.alibaba.druid>
+        <tk.mybatis.mapper>3.3.9</tk.mybatis.mapper>
+        <mysql-connector-java>5.1.6</mysql-connector-java>
+        <javax.cache-api>1.0.0</javax.cache-api>
+        <org.mybatis-ehcache>1.0.0</org.mybatis-ehcache>
+        <org.mybatis-spring>1.2.2</org.mybatis-spring>
+         <!--Ueditor组件部分-->
         <version.commons-codec>1.9</version.commons-codec>
         <version.commons-io>2.4</version.commons-io>
         <version.commons-fileupload>1.3.1</version.commons-fileupload>
         <version.json>20160212</version.json>
+         <!--JWT-->
+        <io.jsonwebtoken-jjwt>0.7.0</io.jsonwebtoken-jjwt>
     </properties>
 
     <dependencies>
+
+        <dependency>
+            <groupId>com.sanshan</groupId>
+            <artifactId>sanshan-service</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.sanshan</groupId>
+            <artifactId>sanshan-util</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+
 
         <!--servlet版本 -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>3.1.0</version>
+            <version>${javax.servlet-api}</version>
         </dependency>
 
 
@@ -32,13 +67,13 @@
         <dependency>
             <groupId>org.thymeleaf</groupId>
             <artifactId>thymeleaf</artifactId>
-            <version>2.1.4.RELEASE</version>
+            <version>${org.thymeleaf}</version>
         </dependency>
 
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity3</artifactId>
-            <version>2.1.1.RELEASE</version>
+            <version>${org.thymeleaf-extras-springsecurity3}</version>
         </dependency>
 
 
@@ -46,14 +81,14 @@
         <dependency>
             <groupId>org.thymeleaf</groupId>
             <artifactId>thymeleaf-spring4</artifactId>
-            <version>2.1.4.RELEASE</version>
+            <version>${org.thymeleaf-spring4}</version>
         </dependency>
 
         <!--jstl start-->
         <dependency>
             <groupId>jstl</groupId>
             <artifactId>jstl</artifactId>
-            <version>1.2</version>
+            <version>${jstl}</version>
         </dependency>
         <!--jstl end-->
 
@@ -61,19 +96,13 @@
         <dependency>
             <groupId>javax.el</groupId>
             <artifactId>javax.el-api</artifactId>
-            <version>2.2.4</version>
+            <version>${javax.el-api}</version>
         </dependency>
 
         <dependency>
             <groupId>org.glassfish.web</groupId>
             <artifactId>javax.el</artifactId>
-            <version>2.2.4</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.sanshan</groupId>
-            <artifactId>sanshan-service</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>${org.glassfish.web-javax.el}</version>
         </dependency>
 
 
@@ -82,14 +111,14 @@
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
-            <version>2.6.2</version>
+            <version>${jedis}</version>
         </dependency>
 
 
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-redis</artifactId>
-            <version>1.7.2.RELEASE</version>
+            <version>${spring-jpa-redis}</version>
         </dependency>
 
 
@@ -97,22 +126,7 @@
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis-spring</artifactId>
-            <version>1.2.2</version>
-        </dependency>
-
-
-
-        <dependency>
-            <groupId>com.sanshan</groupId>
-            <artifactId>sanshan-util</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <!--dbcp连接池-->
-        <dependency>
-            <groupId>commons-dbcp</groupId>
-            <artifactId>commons-dbcp</artifactId>
-            <version>1.4</version>
+            <version>${org.mybatis-spring}</version>
         </dependency>
 
 
@@ -121,7 +135,7 @@
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis-ehcache</artifactId>
-            <version>1.0.0</version>
+            <version>${org.mybatis-ehcache}</version>
         </dependency>
 
         <!--&lt;!&ndash;ehcache缓存&ndash;&gt;-->
@@ -135,20 +149,20 @@
         <dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>
-            <version>1.0.0</version>
+            <version>${javax.cache-api}</version>
         </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.6</version>
+            <version>${mysql-connector-java}</version>
         </dependency>
 
         <!--阿里druid配置 start-->
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>druid</artifactId>
-            <version>1.0.9</version>
+            <version>${com.alibaba.druid}</version>
         </dependency>
         <!--阿里druid配置 end-->
 
@@ -156,7 +170,7 @@
         <dependency>
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper</artifactId>
-            <version>3.3.9</version>
+            <version>${tk.mybatis.mapper}</version>
         </dependency>
 
 
@@ -181,6 +195,12 @@
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
             <version>${version.json}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${io.jsonwebtoken-jjwt}</version>
         </dependency>
 
 

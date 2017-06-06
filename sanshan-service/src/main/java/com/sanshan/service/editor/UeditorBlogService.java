@@ -3,7 +3,7 @@ package com.sanshan.service.editor;
 import com.github.pagehelper.PageInfo;
 import com.sanshan.pojo.dto.UEditorBlogDTO;
 import com.sanshan.pojo.entity.UEditorBlogDO;
-import com.sanshan.service.convent.UeditorEditorConvent;
+import com.sanshan.service.convent.UeditorEditorConvert;
 import com.sanshan.service.editor.CacheService.UEditorBlogCacheService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +22,7 @@ public class UeditorBlogService {
      * @return
      */
     public List<UEditorBlogDTO> queryDtoAll() {
-        return UeditorEditorConvent.doToDtoList(cacheService.queryAll());
+        return UeditorEditorConvert.doToDtoList(cacheService.queryAll());
     }
 
     /**
@@ -31,7 +31,7 @@ public class UeditorBlogService {
      * @return
      */
     public List<UEditorBlogDTO> queryDtoListByWhere(UEditorBlogDO example) {
-        return UeditorEditorConvent.doToDtoList(cacheService.queryListByWhere(example));
+        return UeditorEditorConvert.doToDtoList(cacheService.queryListByWhere(example));
     }
 
     /**
@@ -43,7 +43,7 @@ public class UeditorBlogService {
      */
     public PageInfo<UEditorBlogDTO> queryDtoPageListByWhere(UEditorBlogDO example, Integer page, Integer rows){
         PageInfo<UEditorBlogDO>  uEditorBlogDOPageInfo=cacheService.queryPageListByWhere(example, page, rows);
-        return UeditorEditorConvent.doToDtoPage(uEditorBlogDOPageInfo);
+        return UeditorEditorConvert.doToDtoPage(uEditorBlogDOPageInfo);
     }
 
 
@@ -53,7 +53,7 @@ public class UeditorBlogService {
      * @return
      */
     public  UEditorBlogDTO queryDtoById(Long id){
-        return UeditorEditorConvent.doToDto(cacheService.queryById(id));
+        return UeditorEditorConvert.doToDto(cacheService.queryById(id));
     }
 
 

@@ -5,6 +5,7 @@ import com.sanshan.service.vo.BlogVO;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.BlogIdGenerate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,14 +24,14 @@ public class BlogController {
     @Autowired
     BlogIdGenerate blogIdGenerate;
 
-    @RequestMapping("query-by-id")
+    @RequestMapping(value = "query-by-id",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO GetBlog(@RequestParam("id") Long id) throws Exception {
         ResponseMsgVO<BlogVO> responseMsgVO = new ResponseMsgVO<>();
         BlogVO blog = blogService.getBlog(id);
         return responseMsgVO.buildOKWithData(blog);
     }
 
-    @RequestMapping("query-all")
+    @RequestMapping(value = "query-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO queryAllBlog() {
         ResponseMsgVO<List<BlogVO>> responseMsgVO = new ResponseMsgVO();
         List<BlogVO> list = blogService.queryAll();
@@ -38,7 +39,7 @@ public class BlogController {
     }
 
 
-    @RequestMapping("delete-by-id")
+    @RequestMapping(value = "delete-by-id",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO blogState(@RequestParam("id") Long id) {
         //id去除
         ResponseMsgVO responseMsgVO= blogService.removeBlog(id);

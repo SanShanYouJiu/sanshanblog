@@ -16,8 +16,8 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="Maven: org.mybatis:mybatis:3.3.0" level="project" />
     <orderEntry type="module" module-name="sanshan-pojo" />
+    <orderEntry type="library" name="Maven: org.mybatis:mybatis:3.3.0" level="project" />
     <orderEntry type="library" name="Maven: tk.mybatis:mapper:3.3.9" level="project" />
     <orderEntry type="library" name="Maven: javax.persistence:persistence-api:1.0" level="project" />
     <orderEntry type="library" name="Maven: org.springframework.data:spring-data-mongodb:1.8.4.RELEASE" level="project" />

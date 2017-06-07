@@ -18,7 +18,6 @@
         <org.spring.jpa.mongodb>1.8.4.RELEASE</org.spring.jpa.mongodb>
         <org.mongo-java-driver>3.2.2</org.mongo-java-driver>
         <org.springframework.data-commons>1.11.4.RELEASE</org.springframework.data-commons>
-
     </properties>
     <dependencies>
 
@@ -47,20 +46,20 @@
             <version>${org.spring.jpa.mongodb}</version>
         </dependency>
 
-        <!--mongo 连接驱动-->
-        <dependency>
-            <groupId>org.mongodb</groupId>
-            <artifactId>mongo-java-driver</artifactId>
-            <version>${org.mongo-java-driver}</version>
-        </dependency>
+        <!--&lt;!&ndash;mongo 连接驱动&ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.mongodb</groupId>-->
+            <!--<artifactId>mongo-java-driver</artifactId>-->
+            <!--<version>${org.mongo-java-driver}</version>-->
+        <!--</dependency>-->
 
 
-        <!--Spring-data通用核心类  mongonDB需要 注意这个会与Spring-data-jpa冲突-->
-        <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-commons</artifactId>
-            <version>${org.springframework.data-commons}</version>
-        </dependency>
+        <!--&lt;!&ndash;Spring-data通用核心类  mongonDB需要 注意这个会与Spring-data-jpa冲突&ndash;&gt;-->
+        <!--<dependency>-->
+            <!--<groupId>org.springframework.data</groupId>-->
+            <!--<artifactId>spring-data-commons</artifactId>-->
+            <!--<version>${org.springframework.data-commons}</version>-->
+        <!--</dependency>-->
 
     </dependencies>
 

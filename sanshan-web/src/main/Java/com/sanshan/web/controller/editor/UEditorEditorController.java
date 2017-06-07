@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -38,10 +37,6 @@ public class UEditorEditorController {
     @Autowired
     private BlogIdGenerate blogIdGenerate;
 
-    @RequestMapping(method = RequestMethod.GET)
-    public ModelAndView UEditor() {
-        return new ModelAndView("Editor/ueditor");
-    }
 
 
     @RequestMapping("/config")

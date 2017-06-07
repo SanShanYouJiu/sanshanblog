@@ -6,9 +6,9 @@
 
     xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <!--<parent>-->
-        <!--<artifactId>com.sanshan.parent</artifactId>-->
-        <!--<groupId>com.sanshan</groupId>-->
-        <!--<version>1.0-SNAPSHOT</version>-->
+    <!--<artifactId>com.sanshan.parent</artifactId>-->
+    <!--<groupId>com.sanshan</groupId>-->
+    <!--<version>1.0-SNAPSHOT</version>-->
     <!--</parent>-->
 
 
@@ -18,13 +18,25 @@
     <version>1.0-SNAPSHOT</version>
 
     <properties>
+        <junit>4.10</junit>
         <spring.version>4.2.5.RELEASE</spring.version>
+        <!--validate-->
+
+        <cglib>3.2.2</cglib>
+        <!--aspectj-->
+        <org.aspectj-aspectjweaver>1.8.6</org.aspectj-aspectjweaver>
+        <org.aspectj-aspectjrt>1.8.6</org.aspectj-aspectjrt>
         <!--log-->
         <slf4j.version>1.7.7</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
-        <org.springframework.security.version>3.2.5.RELEASE</org.springframework.security.version>
-        <org.hibernate>4.1.1.Final</org.hibernate>
         <slf4j-log4j12>1.7.21</slf4j-log4j12>
+
+        <com.alibaba-fastjson>1.2.24</com.alibaba-fastjson>
+
+        <org.springframework.security.version>3.2.5.RELEASE</org.springframework.security.version>
+
+        <lombok>1.16.4.0</lombok>
+        <modelmapper>0.7.5</modelmapper>
     </properties>
 
     <modules>
@@ -38,7 +50,7 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>4.10</version>
+            <version>${junit}</version>
             <scope>test</scope>
         </dependency>
 
@@ -105,19 +117,12 @@
         </dependency>
         <!-- springframe end -->
 
-        <!--hibervate validate start-->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>5.2.4.Final</version>
-        </dependency>
-        <!--hibervate validate end-->
 
         <!--cglib动态代理-->
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
-            <version>3.2.2</version>
+            <version>${cglib}</version>
         </dependency>
         <!--cglib动态代理 end-->
 
@@ -125,52 +130,17 @@
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
-            <version>1.8.6</version>
+            <version>${org.aspectj-aspectjweaver}</version>
         </dependency>
 
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
-            <version>1.8.6</version>
+            <version>${org.aspectj-aspectjrt}</version>
         </dependency>
         <!--aspectj end-->
 
 
-        <!--mybatis spring整合-->
-        <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis-spring</artifactId>
-            <version>1.2.3</version>
-        </dependency>
-
-
-        <!--web页面缓存-->
-        <dependency>
-            <groupId>net.sf.ehcache</groupId>
-            <artifactId>ehcache-web</artifactId>
-            <version>2.0.4</version>
-        </dependency>
-
-
-        <!--文件上传组件 start-->
-        <dependency>
-            <groupId>commons-fileupload</groupId>
-            <artifactId>commons-fileupload</artifactId>
-            <version>1.3.2</version>
-        </dependency>
-        <dependency>
-            <groupId>commons-io</groupId>
-            <artifactId>commons-io</artifactId>
-            <version>2.4</version>
-        </dependency>
-        <!--文件上传组件 end-->
-        <!--common lang start-->
-        <dependency>
-            <groupId>org.apache.commons</groupId>
-            <artifactId>commons-lang3</artifactId>
-            <version>3.3.2</version>
-        </dependency>
-        <!--common lang end-->
         <!-- log start -->
         <dependency>
             <groupId>log4j</groupId>
@@ -191,16 +161,8 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.24</version>
+            <version>${com.alibaba-fastjson}</version>
         </dependency>
-
-        <!-- mail支持 -->
-        <dependency>
-            <groupId>javax.mail</groupId>
-            <artifactId>mail</artifactId>
-            <version>1.4.7</version>
-        </dependency>
-
 
         <!--Spring security-->
         <dependency>
@@ -217,7 +179,7 @@
         <dependency>
             <groupId>org.springframework.security</groupId>
             <artifactId>spring-security-config</artifactId>
-            <version>3.2.5.RELEASE</version>
+            <version>${org.springframework.security.version}</version>
         </dependency>
 
 
@@ -228,50 +190,9 @@
         </dependency>
 
 
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
-            <version>${org.hibernate}</version>
-        </dependency>
 
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>2.6.5</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.6.3</version>
-        </dependency>
 
         <!--el-->
-
-        <dependency>
-            <groupId>org.eclipse.jetty.orbit</groupId>
-            <artifactId>javax.annotation</artifactId>
-            <version>1.1.0.v201108011116</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.quartz-scheduler</groupId>
-            <artifactId>quartz</artifactId>
-            <version>2.2.1</version>
-        </dependency>
-        <dependency>
-            <groupId>org.quartz-scheduler</groupId>
-            <artifactId>quartz-jobs</artifactId>
-            <version>2.2.1</version>
-        </dependency>
-
-
-        <dependency>
-            <groupId>org.mybatis.caches</groupId>
-            <artifactId>mybatis-ehcache</artifactId>
-            <version>1.0.1</version>
-        </dependency>
 
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -282,20 +203,14 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok-maven </artifactId>
-            <version>1.16.4.0</version>
+            <version>${lombok}</version>
         </dependency>
 
-        <!--mybatis 分页插件-->
-        <dependency>
-            <groupId>com.github.pagehelper</groupId>
-            <artifactId>pagehelper</artifactId>
-            <version>5.0.0</version>
-        </dependency>
 
         <dependency>
             <groupId>org.modelmapper</groupId>
             <artifactId>modelmapper</artifactId>
-            <version>0.7.5</version>
+            <version>${modelmapper}</version>
         </dependency>
 
     </dependencies>

@@ -27,7 +27,8 @@ public class GlobalException {
     @ResponseStatus(HttpStatus.OK)//前端不支持非200的异常
     public ERROR NotFoundExceptionHandler(NullPointerException e) {
         log.error("NullPointerException  error occurred:" + e.getMessage());
-        return new ERROR(500, "出错 NullPointerException空指针异常:" + e +
+        return new ERROR(500, "出错 NullPointerException空指针异常 可能是没有对应的ID的Blog" +
+                ":" + e +
                 " message:" + e.getMessage()
                 + "  cause:" + e.getCause());
     }

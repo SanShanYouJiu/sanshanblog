@@ -21,9 +21,11 @@
         <jstl>1.2</jstl>
         <javax.el-api>2.2.4</javax.el-api>
         <org.glassfish.web-javax.el>2.2.4</org.glassfish.web-javax.el>
-
+         <!--Redis配置-->
         <spring-jpa-redis>1.7.2.RELEASE</spring-jpa-redis>
         <jedis>2.6.2</jedis>
+        <com.fasterxml.jackson.core>2.6.5</com.fasterxml.jackson.core>
+        <com.fasterxml.jackson.core-jackson-databind>2.6.3</com.fasterxml.jackson.core-jackson-databind>
 
         <com.alibaba.druid>1.0.9</com.alibaba.druid>
         <tk.mybatis.mapper>3.3.9</tk.mybatis.mapper>
@@ -31,13 +33,20 @@
         <javax.cache-api>1.0.0</javax.cache-api>
         <org.mybatis-ehcache>1.0.0</org.mybatis-ehcache>
         <org.mybatis-spring>1.2.2</org.mybatis-spring>
-         <!--Ueditor组件部分-->
+
+        <org.hibernate-validator>5.2.4.Final</org.hibernate-validator>
+
+        <!--Ueditor组件部分-->
         <version.commons-codec>1.9</version.commons-codec>
         <version.commons-io>2.4</version.commons-io>
         <version.commons-fileupload>1.3.1</version.commons-fileupload>
         <version.json>20160212</version.json>
-         <!--JWT-->
+        <!--JWT-->
         <io.jsonwebtoken-jjwt>0.7.0</io.jsonwebtoken-jjwt>
+        <net.sf.ehcache-web>2.0.4</net.sf.ehcache-web>
+         <!--Quartz-->
+        <org.quartz-scheduler>2.2.1</org.quartz-scheduler>
+       <org.quartz-scheduler-jobs>2.2.1</org.quartz-scheduler-jobs>
     </properties>
 
     <dependencies>
@@ -107,6 +116,24 @@
 
 
 
+        <!--web页面缓存-->
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache-web</artifactId>
+            <version>${net.sf.ehcache-web}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>${org.quartz-scheduler}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz-jobs</artifactId>
+            <version>${org.quartz-scheduler-jobs}</version>
+        </dependency>
+
         <!--Redis配置-->
         <dependency>
             <groupId>redis.clients</groupId>
@@ -119,6 +146,19 @@
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-redis</artifactId>
             <version>${spring-jpa-redis}</version>
+        </dependency>
+
+        <!--Redis Jackson配置-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${com.fasterxml.jackson.core}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${com.fasterxml.jackson.core-jackson-databind}</version>
         </dependency>
 
 
@@ -140,9 +180,9 @@
 
         <!--&lt;!&ndash;ehcache缓存&ndash;&gt;-->
         <!--<dependency>-->
-            <!--<groupId>net.sf.ehcache</groupId>-->
-            <!--<artifactId>ehcache-core</artifactId>-->
-            <!--<version>2.6.11</version>-->
+        <!--<groupId>net.sf.ehcache</groupId>-->
+        <!--<artifactId>ehcache-core</artifactId>-->
+        <!--<version>2.6.11</version>-->
         <!--</dependency>-->
 
         <!-- javax.cache/cache-api -->
@@ -174,7 +214,15 @@
         </dependency>
 
 
-      <!--Ueditor组件-->
+        <!--hibervate validate start-->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>${org.hibernate-validator}</version>
+        </dependency>
+
+
+        <!--Ueditor组件-->
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>

@@ -14,7 +14,6 @@ import org.springframework.scheduling.quartz.SchedulerFactoryBean;
  * 定时任务配置
  */
 @Configuration
-@PropertySource("classpath:SanShanBlog.properties")
 public class QuartzConfig {
 
     @Value("${storage.location}")
@@ -58,11 +57,6 @@ public class QuartzConfig {
         SchedulerFactoryBean sched=new SchedulerFactoryBean();
         sched.setTriggers(myTrigger.getObject());
         return sched;
-    }
-
-    @Bean
-    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
-        return new PropertySourcesPlaceholderConfigurer();
     }
 
 

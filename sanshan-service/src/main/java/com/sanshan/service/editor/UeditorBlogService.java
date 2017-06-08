@@ -61,6 +61,16 @@ public class UeditorBlogService {
         return cacheService.save(uEditorBlog);
     }
 
+    public Boolean updateDO(UEditorBlogDO uEditorBlogDO){
+          UeditorEditorConvert.doToDto(cacheService.update(uEditorBlogDO));
+        return true;
+    }
+
+    public Boolean  updateSelectiveDO(UEditorBlogDO uEditorBlogDO){
+        UeditorEditorConvert.doToDto(cacheService.updateSelective(uEditorBlogDO));
+        return true;
+    }
+
     public Integer deleteDOById(Long id) {
         return cacheService.deleteById(id);
     }

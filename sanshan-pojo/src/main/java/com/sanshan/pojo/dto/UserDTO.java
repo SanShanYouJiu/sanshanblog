@@ -17,8 +17,6 @@ public class UserDTO {
 
     private String email;
 
-    private String passowrd;
-
     private String blog;
 
     private String honor;

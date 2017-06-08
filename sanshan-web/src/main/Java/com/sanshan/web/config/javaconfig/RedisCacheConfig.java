@@ -1,10 +1,14 @@
 package com.sanshan.web.config.javaconfig;
 
-import org.apache.ibatis.executor.loader.cglib.CglibProxyFactory;
+import com.sanshan.util.CacheKeyGenerator;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CachingConfigurer;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.ehcache.EhCacheCacheManager;
+import org.springframework.cache.interceptor.CacheErrorHandler;
+import org.springframework.cache.interceptor.CacheResolver;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.cache.jcache.JCacheCacheManager;
 import org.springframework.cache.support.CompositeCacheManager;
@@ -16,15 +20,19 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.util.ClassUtils;
 import redis.clients.jedis.JedisPoolConfig;
+import redis.clients.util.Hashing;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
+@Slf4j
 @Configuration
 @EnableCaching(proxyTargetClass = true)
 @PropertySource("classpath:SanShanBlog.properties")
-public class RedisCacheConfig {
+public class RedisCacheConfig  implements CachingConfigurer  {
 
     @Value("${redis.maxActive}")
     private int maxactive;
@@ -88,29 +96,34 @@ public class RedisCacheConfig {
     /**
      * @return 自定义策略生成的key
      * @description 自定义的缓存key的生成策略
-     * 若想使用这个key
-     * 只需要讲注解上keyGenerator的值设置为customKeyGenerator即可
      */
     @Bean
-    public KeyGenerator customKeyGenerator() {
-        return (o, method, objects) -> {
-            StringBuilder sb = new StringBuilder();
-            sb.append(o.getClass().getName());
-            sb.append(method.getName());
-            for (Object obj : objects) {
-                sb.append(obj.toString());
-            }
-            return sb.toString();
-        };
+    @Override
+    public KeyGenerator keyGenerator() {
+        CacheKeyGenerator keyGenerator = new CacheKeyGenerator();
+        return keyGenerator;
     }
 
+
+    /*只是为了设置keyGenerator而实现该接口
+    * 下列方法可以不实现 (在不加@Bean的注解的情况下)
+    * */
+    @Override
+    public CacheManager cacheManager() {
+        return null;
+    }
+    @Override
+    public CacheResolver cacheResolver() {
+        return null;
+    }
+    @Override
+    public CacheErrorHandler errorHandler() {
+        return null;
+    }
 
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
     }
-
-
-
-
 }
+

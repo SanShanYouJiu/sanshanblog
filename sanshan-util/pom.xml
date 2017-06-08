@@ -22,6 +22,8 @@
         <servlet.version>3.1.0</servlet.version>
         <jedis.version>2.9.0</jedis.version>
         <javax.mail>1.4.7</javax.mail>
+        <io.jsonwebtoken-jjwt>0.7.0</io.jsonwebtoken-jjwt>
+        <com.google.guava>11.0</com.google.guava>
     </properties>
 
     <dependencies>
@@ -72,6 +74,18 @@
             <version>${javax.mail}</version>
         </dependency>
 
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${io.jsonwebtoken-jjwt}</version>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${com.google.guava}</version>
+        </dependency>
 
     </dependencies>
     <build>

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Objects;
 
 
 @RequestMapping("blog")
@@ -25,9 +26,12 @@ public class BlogController {
     BlogIdGenerate blogIdGenerate;
 
     @RequestMapping(value = "query-by-id",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO GetBlog(@RequestParam("id") Long id) throws Exception {
+    public ResponseMsgVO getBlog(@RequestParam("id") Long id) throws Exception {
         ResponseMsgVO<BlogVO> responseMsgVO = new ResponseMsgVO<>();
         BlogVO blog = blogService.getBlog(id);
+        if (Objects.isNull(blog)){
+            throw new NullPointerException("ID已失效");
+        }
         return responseMsgVO.buildOKWithData(blog);
     }
 

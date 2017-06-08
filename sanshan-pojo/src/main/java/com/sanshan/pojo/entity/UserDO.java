@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import javax.persistence.Column;
 import javax.persistence.Table;
 import java.util.Date;
 
@@ -57,8 +56,7 @@ public class UserDO extends BaseDO {
     /**
      * 是否锁定 1是 0否
      */
-    @Column(name = "is_lock")
-    private Integer isLock;
+    private Integer enabled;
 
     /**
      * 登录失败次数

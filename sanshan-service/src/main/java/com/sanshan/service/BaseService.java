@@ -53,16 +53,16 @@ public interface BaseService<T extends BaseDO>  {
       /**
        * 更新数据，设置数据的更新时间
        * @param t
-       * @return 返回成功的条数
+       * @return 返回传入参数 {@link T}
        */
-      Integer update(T t);
+      T update(T t);
 
       /**
        * 更新数据，设置数据的更新时间（更新部分数据）
        * @param t
-       * @return 返回成功的条数
+       * @return 返回传入参数 {@link T}
        */
-      Integer updateSelective(T t);
+      T updateSelective(T t);
 
       /**
        * 根据id删除数据

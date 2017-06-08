@@ -57,14 +57,16 @@ public class BaseServiceImpl<T extends BaseDO> implements BaseService<T>{
         return this.mapper.insertSelective(t);
     }
 
-    public Integer update(T t){
+    public T update(T t){
         t.setUpdated(new Date());
-        return this.mapper.updateByPrimaryKey(t);
+        this.mapper.updateByPrimaryKey(t);
+        return  t;
     }
 
-    public Integer updateSelective(T t){
+    public T updateSelective(T t){
         t.setUpdated(new Date());
-        return this.mapper.updateByPrimaryKeySelective(t);
+        this.mapper.updateByPrimaryKeySelective(t);
+        return t;
     }
 
     public Integer deleteById(Long id){

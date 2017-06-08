@@ -16,7 +16,7 @@ import java.util.List;
 @Service
 public class UEditorBlogCacheService extends BaseServiceImpl<UEditorBlogDO> {
 
-    @CachePut({"ueditor-blog"})
+    @Cacheable(value = {"ueditor-blog"})
     @Override
     public List<UEditorBlogDO> queryAll() {
         return super.queryAll();
@@ -29,7 +29,6 @@ public class UEditorBlogCacheService extends BaseServiceImpl<UEditorBlogDO> {
     public List<UEditorBlogDO> queryListByWhere(UEditorBlogDO example) {
         return super.queryListByWhere(example);
     }
-
 
 
     @Cacheable(value = {"ueditor-blog"},key = "#a0")
@@ -46,7 +45,6 @@ public class UEditorBlogCacheService extends BaseServiceImpl<UEditorBlogDO> {
     }
 
 
-
     @Override
     public Integer save(UEditorBlogDO uEditorBlog) {
         return super.save(uEditorBlog);
@@ -59,5 +57,19 @@ public class UEditorBlogCacheService extends BaseServiceImpl<UEditorBlogDO> {
         return super.deleteById(id);
     }
 
+
+    @CachePut(value = {"ueditor-blog"},key = "#a0.id")
+    @Override
+    public UEditorBlogDO update(UEditorBlogDO uEditorBlogDO) {
+        return super.update(uEditorBlogDO);
+    }
+
+
+    @CachePut(value = {"ueditor-blog"},key = "#a0.id")
+    public UEditorBlogDO updateSelective(UEditorBlogDO uEditorBlogDO) {
+        super.updateSelective(uEditorBlogDO);
+        //cache注解是通过切面实现的 调用同一类中的方法不会用到缓存 直接访问数据库获取
+        return queryById(uEditorBlogDO.getId());
+    }
 
 }

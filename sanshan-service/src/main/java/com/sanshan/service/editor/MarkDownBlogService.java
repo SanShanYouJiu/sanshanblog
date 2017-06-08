@@ -60,6 +60,17 @@ public class MarkDownBlogService {
     }
 
 
+    public MarkDownBlogDTO updateDO(MarkDownBlogDO markDownBlogDO){
+        return MarkDownEditorConvert.doToDto(cacheService.update(markDownBlogDO));
+    }
+
+
+    public Boolean  updateSelectiveDO(MarkDownBlogDO markDownBlogDO){
+        MarkDownEditorConvert.doToDto(cacheService.updateSelective(markDownBlogDO));
+        return true;
+    }
+
+
     public Integer deleteDOById(Long id) {
         return cacheService.deleteById(id);
     }

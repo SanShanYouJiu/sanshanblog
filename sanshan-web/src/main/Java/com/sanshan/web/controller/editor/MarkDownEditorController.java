@@ -29,31 +29,31 @@ public class MarkDownEditorController {
 
     /**
      * 分页查询
+     *
      * @param pagenum
      * @param pagesize
      * @return
      */
-    @RequestMapping(value = "query-by-page",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO QueryByPage(@RequestParam("pagenum")Integer pagenum
-                                          ,@RequestParam("pagesize")Integer pagesize){
-        PageInfo<MarkDownBlogDTO> info = markDownBlogService.queryDtoPageListByWhere(null,pagenum,pagesize);
-        ResponseMsgVO<PageInfo> responseMsgVO= new ResponseMsgVO<PageInfo>();
-        return  responseMsgVO.buildOKWithData(info);
+    @RequestMapping(value = "query-by-page", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO queryByPage(@RequestParam("pagenum") Integer pagenum
+            , @RequestParam("pagesize") Integer pagesize) {
+        PageInfo<MarkDownBlogDTO> info = markDownBlogService.queryDtoPageListByWhere(null, pagenum, pagesize);
+        ResponseMsgVO<PageInfo> responseMsgVO = new ResponseMsgVO<PageInfo>();
+        return responseMsgVO.buildOKWithData(info);
     }
 
 
-
-    @RequestMapping(value = "query-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO QueryAll(){
+    @RequestMapping(value = "query-all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO queryAll() {
         ResponseMsgVO<List<MarkDownBlogDTO>> responseMsgVO = new ResponseMsgVO<>();
         List<MarkDownBlogDTO> list = markDownBlogService.queryDtoAll();
         return responseMsgVO.buildOKWithData(list);
     }
 
 
-    @RequestMapping(value = "insert-blog",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO InsertMarkDownBlog(@RequestParam("id") Long id,@RequestParam("content") String content,@RequestParam("tag") String tag
-            ,@RequestParam("user") String user) {
+    @RequestMapping(value = "insert-blog", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO insertMarkDownBlog(@RequestParam("id") Long id, @RequestParam("content") String content, @RequestParam("tag") String tag
+            , @RequestParam("user") String user) {
         //id生成
         MarkDownBlogDO markDownBlog = new MarkDownBlogDO();
         markDownBlog.setId(id);
@@ -66,19 +66,35 @@ public class MarkDownEditorController {
         blogIdGenerate.setId(markDownBlog.getId(), EditorTypeEnum.MarkDown_EDITOR);
         markDownBlog.setId(blogIdGenerate.getId());
         markDownBlogService.saveDO(markDownBlog);
-         ResponseMsgVO responseMsgVO =new ResponseMsgVO().buildOK();
+        ResponseMsgVO responseMsgVO = new ResponseMsgVO().buildOK();
         return responseMsgVO;
     }
 
 
-
-     @RequestMapping(value = "delete-by-id",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-     public ResponseMsgVO DeleteMarkDownBlog(@RequestParam("id")Long id){
+    @RequestMapping(value = "delete-by-id", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO deleteMarkDownBlog(@RequestParam("id") Long id) {
         //id去除
-         blogIdGenerate.remove(id);
-         markDownBlogService.deleteDOById(id);
-         return  new ResponseMsgVO().buildOK();
+        blogIdGenerate.remove(id);
+        markDownBlogService.deleteDOById(id);
+        return new ResponseMsgVO().buildOK();
     }
 
 
+    @RequestMapping(value = "update-blog-by-id", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO update(
+            @RequestParam(value = "id")Long id,
+            @RequestParam(value = "content", required = false) String content,
+            @RequestParam(value = "tag", required = false) String tag,
+            @RequestParam(value = "title", required = false) String title) {
+        MarkDownBlogDO markDownBlogDO = new MarkDownBlogDO();
+        markDownBlogDO.setId(id);
+        markDownBlogDO.setContent(content);
+        markDownBlogDO.setUpdated(new Date());
+        markDownBlogDO.setTag(tag);
+        markDownBlogDO.setTitle(title);
+        markDownBlogService.updateSelectiveDO(markDownBlogDO);
+        return new ResponseMsgVO().buildOK();
+    }
+
 }
+

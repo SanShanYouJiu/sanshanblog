@@ -3,9 +3,11 @@ package com.sanshan.service.editor.CacheService;
 import com.github.pagehelper.PageInfo;
 import com.sanshan.pojo.entity.MarkDownBlogDO;
 import com.sanshan.service.BaseServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,9 +17,11 @@ import java.util.List;
  */
 @Service
 public class MarkDownBlogCacheService extends BaseServiceImpl<MarkDownBlogDO> {
+    @Autowired
+    private RedisTemplate<String, String> redisTemplate;
 
 
-    @CachePut(value = {"markdown-blog"})
+    @Cacheable(value = {"markdown-blog"})
     @Override
     public List<MarkDownBlogDO> queryAll() {
         return super.queryAll();
@@ -48,7 +52,6 @@ public class MarkDownBlogCacheService extends BaseServiceImpl<MarkDownBlogDO> {
     }
 
 
-
     @Override
     public Integer save(MarkDownBlogDO markDownBlog) {
         return super.save(markDownBlog);
@@ -62,4 +65,17 @@ public class MarkDownBlogCacheService extends BaseServiceImpl<MarkDownBlogDO> {
     }
 
 
+    @CachePut(value = {"markdown-blog"},key = "#a0.id")
+    @Override
+    public MarkDownBlogDO update(MarkDownBlogDO markDownBlogDO) {
+        return super.update(markDownBlogDO);
+    }
+
+
+    @CachePut(value = {"markdown-blog"},key = "#a0.id")
+    public MarkDownBlogDO updateSelective(MarkDownBlogDO markDownBlogDO) {
+        super.updateSelective(markDownBlogDO);
+        //cache注解是通过切面实现的 调用同一类中的方法不会用到缓存 直接访问数据库获取
+      return   queryById(markDownBlogDO.getId());
+    }
 }

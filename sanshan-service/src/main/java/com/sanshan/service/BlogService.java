@@ -11,6 +11,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
 /**
  * Service在新增Editor时需要修改
  */
@@ -36,13 +38,13 @@ public class BlogService {
                 blog = new BlogVO(markDownBlogService.queryDtoById(id));
                 break;
             case Void_Id:
-                throw new NullPointerException("ID已失效  ID has expired ");
+                break;
         }
         return blog;
     }
 
 
-    public ResponseMsgVO removeBlog(Long id) {
+    public ResponseMsgVO removeBlog(Long id)  {
         EditorTypeEnum type = blogIdGenerate.getType(id);
         blogIdGenerate.remove(id);
         BlogVO blog = null;
@@ -54,7 +56,7 @@ public class BlogService {
                 markDownBlogService.deleteDOById(id);
                 break;
             case Void_Id:
-                throw  new NullPointerException("ID已失效 ID has expired");
+                throw  new NullPointerException("无法删除 ID已失效");
         }
         return new ResponseMsgVO().buildOK();
     }
@@ -63,8 +65,12 @@ public class BlogService {
         List<BlogVO> blogs = new ArrayList<BlogVO>();
         int size = blogIdGenerate.getId();
         for (int i = 1; i <= size; i++) {
-            blogs.add(getBlog((long) i));
-        }
+            if (Objects.isNull(getBlog((long) i))){
+             continue;
+            }else {
+                blogs.add(getBlog((long) i));
+            }
+            }
         return blogs;
     }
 

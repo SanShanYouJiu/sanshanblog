@@ -74,14 +74,16 @@ public class Daotest {
         MarkDownBlogDO blog = new MarkDownBlogDO();
         blog.setCreated(new Date());
         blog.setUpdated(new Date());
-        blog.setContent("# ceshi");
-        blog.setId(5);
+        blog.setContent("# ceshi2");
+        blog.setId(2);
         blog.setUser("ceshi");
         blog.setTag("ceshi");
-        blog.setTitle("测试标题");
+        blog.setTitle("测试标题 字段2");
         blog.setTime(new Date());
         markDownBlogService.save(blog);
     }
+
+
 
     //在不是protected权限保护之前测试
     //@Test
@@ -106,6 +108,13 @@ public class Daotest {
     @Test
     public void  ueditor_blog_test2(){
         UEditorBlogDO uEditorBlog = new UEditorBlogDO();
+        uEditorBlog.setId(3);
+        uEditorBlog.setContent("ueditor 测试1");
+        uEditorBlog.setCreated(new Date());
+        uEditorBlog.setUpdated(new Date());
+        uEditorBlog.setTag("测试标题");
+        uEditorBlog.setTime(new Date());
+        uEditorBlog.setUser("ceshi");
         uEditorBlogService.save(uEditorBlog);
     }
 

@@ -5,6 +5,6 @@ import org.springframework.security.web.context.AbstractSecurityWebApplicationIn
 /**继承该类{@link AbstractSecurityWebApplicationInitializer}
  * 会将SpringSecurity自动注册到web容器中
  */
-public class SpringSecuityFilter   {
+public class SpringSecuityFilter  extends  AbstractSecurityWebApplicationInitializer  {
 
 }

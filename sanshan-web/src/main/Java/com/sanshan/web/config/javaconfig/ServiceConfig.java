@@ -10,7 +10,8 @@ import org.springframework.context.annotation.Configuration;
 public class ServiceConfig {
 
 
- @Bean
+
+    @Bean
     public StorageManager storageManager(){
      return new StorageManager();
  }

@@ -7,6 +7,7 @@ import com.sanshan.service.editor.MarkDownBlogService;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.BlogIdGenerate;
 import com.sanshan.util.info.EditorTypeEnum;
+import com.sanshan.util.info.PosCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -52,19 +53,22 @@ public class MarkDownEditorController {
 
 
     @RequestMapping(value = "insert-blog", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO insertMarkDownBlog(@RequestParam("id") Long id, @RequestParam("content") String content, @RequestParam("tag") String tag
-            , @RequestParam("user") String user) {
-        //id生成
+    public ResponseMsgVO insertMarkDownBlog(
+            @RequestParam(value = "content", required = false) String content,
+            @RequestParam(value = "tag", required = false) String tag,
+            @RequestParam(value = "title", required = false) String title) {
         MarkDownBlogDO markDownBlog = new MarkDownBlogDO();
-        markDownBlog.setId(id);
+        //使用IdMap生成的Id
+        markDownBlog.setId(blogIdGenerate.getId());
         markDownBlog.setContent(content);
+        markDownBlog.setTitle(title);
         markDownBlog.setCreated(new Date());
         markDownBlog.setUpdated(new Date());
         markDownBlog.setTag(tag);
         markDownBlog.setTime(new Date());
-        markDownBlog.setUser(user);
-        blogIdGenerate.setId(markDownBlog.getId(), EditorTypeEnum.MarkDown_EDITOR);
-        markDownBlog.setId(blogIdGenerate.getId());
+        markDownBlog.setUser("ceshi");
+        //加入IdMap对应
+        blogIdGenerate.addIdMap(blogIdGenerate.getId(), EditorTypeEnum.MarkDown_EDITOR);
         markDownBlogService.saveDO(markDownBlog);
         ResponseMsgVO responseMsgVO = new ResponseMsgVO().buildOK();
         return responseMsgVO;
@@ -73,14 +77,17 @@ public class MarkDownEditorController {
 
     @RequestMapping(value = "delete-by-id", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO deleteMarkDownBlog(@RequestParam("id") Long id) {
-        //id去除
+        if (blogIdGenerate.getType(id)==EditorTypeEnum.MarkDown_EDITOR){
+        //id去除匹配
         blogIdGenerate.remove(id);
         markDownBlogService.deleteDOById(id);
         return new ResponseMsgVO().buildOK();
+        }
+        return new ResponseMsgVO().buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR,"该ID不是MarkdownEditor格式");
     }
 
 
-    @RequestMapping(value = "update-blog-by-id", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "update-by-id",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO update(
             @RequestParam(value = "id")Long id,
             @RequestParam(value = "content", required = false) String content,
@@ -97,4 +104,3 @@ public class MarkDownEditorController {
     }
 
 }
-

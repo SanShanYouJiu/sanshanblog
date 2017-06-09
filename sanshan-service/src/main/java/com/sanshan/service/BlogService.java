@@ -63,17 +63,16 @@ public class BlogService {
 
     public List<BlogVO> queryAll() {
         List<BlogVO> blogs = new ArrayList<BlogVO>();
-        int size = blogIdGenerate.getId();
-        for (int i = 1; i <= size; i++) {
-            if (Objects.isNull(getBlog((long) i))){
+        Long size = blogIdGenerate.getSize();
+        for (long i = 1; i <= size; i++) {
+            if (Objects.isNull(getBlog(i))){
              continue;
             }else {
-                blogs.add(getBlog((long) i));
+                blogs.add(getBlog(i));
             }
             }
         return blogs;
     }
-
 
 }
 

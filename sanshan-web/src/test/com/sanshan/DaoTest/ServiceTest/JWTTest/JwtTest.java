@@ -18,6 +18,7 @@ public class JwtTest {
          JwtTest test = new JwtTest();
          //五分钟失效
          String token = test.createJWT("1", "sanshan", "测试主题", 300000);
+         System.out.println(token);
          test.parseJWT(token);
     }
 

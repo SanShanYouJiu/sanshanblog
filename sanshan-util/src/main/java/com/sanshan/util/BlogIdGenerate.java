@@ -40,17 +40,24 @@ public class BlogIdGenerate {
     }
 
     /**
-     * 将ID到序列中
+     * 将ID推到序列中
      * @param id
      * @param type
      */
-    public void setId(Long id, EditorTypeEnum type) {
+    public void addIdMap(Long id, EditorTypeEnum type) {
         IdMap.put(id, type);
     }
 
 
+    /**
+     * 获取新的博客的ID
+     * @return 返回设置ID
+     */
+    public long getId() {
+        return IdMap.size()+1;
+    }
 
-    public int getId() {
+    public long getSize(){
         return IdMap.size();
     }
 
@@ -64,7 +71,8 @@ public class BlogIdGenerate {
     }
 
     /**
-     * 将ID在序列中设置为无用ID
+     * 将ID在序列中移出
+     * 设置为无用ID
      * @param id
      */
     public void remove(Long id) {
@@ -82,10 +90,11 @@ public class BlogIdGenerate {
         try {
             PropertiesConventMapUtil.MapToProperties(filename, IdMap);
         } catch (IOException e) {
-            log.error("写入错误" + e.getMessage() + e.getCause());
+            log.debug("当前的IDMap内容 {}",IdMap.toString());
+            log.error("写入错误 message:{} cause:{}" ,e.getMessage() , e.getCause());
             throw new IdMapWriteException();
         }
-        log.info("已将IdMap映射文件写入到" + filename);
+        log.info("已将IdMap映射文件写入到 {}" , filename);
     }
 
 }

@@ -18,7 +18,7 @@ public class BlogOperationListener {
 
     public void handle(String  mesType){
        log.info("receive mesType is {}",mesType);
-       log.info("暂时未做处理 {}"+mesType);
+       log.info("暂时未做处理 {}",mesType);
     }
 
 

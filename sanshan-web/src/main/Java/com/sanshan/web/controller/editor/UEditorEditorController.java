@@ -10,6 +10,7 @@ import com.sanshan.service.editor.UeditorBlogService;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.BlogIdGenerate;
 import com.sanshan.util.info.EditorTypeEnum;
+import com.sanshan.util.info.PosCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -59,7 +60,6 @@ public class UEditorEditorController {
     }
 
 
-
     @RequestMapping(value = "/upload/{format}/{date}/{filename}.{suffix}")
     public void getUeditorFile(@PathVariable("format") String format,
                                @PathVariable("date") String date,
@@ -92,27 +92,44 @@ public class UEditorEditorController {
 
 
 
-    @RequestMapping(value = "/insert-blog",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO insertUeditorBlog(@RequestParam("ueditor-blog")UEditorBlogDO uEditorBlog) {
-        //Id生成器
-        blogIdGenerate.setId(uEditorBlog.getId(), EditorTypeEnum.UEDITOR_EDITOR);
-        uEditorBlog.setId(blogIdGenerate.getId());
-        uEditorBlogService.saveDO(uEditorBlog);
-        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
-        return  responseMsgVO.buildOK();
+
+    @RequestMapping(value = "insert-blog", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO insertMarkDownBlog(
+            @RequestParam(value = "content", required = false) String content,
+            @RequestParam(value = "tag", required = false) String tag,
+            @RequestParam(value = "title", required = false) String title) {
+        UEditorBlogDO uEditorBlogDO = new UEditorBlogDO();
+        //使用IdMap生成的Id
+        uEditorBlogDO.setId(blogIdGenerate.getId());
+        uEditorBlogDO.setContent(content);
+        uEditorBlogDO.setTitle(title);
+        uEditorBlogDO.setCreated(new Date());
+        uEditorBlogDO.setUpdated(new Date());
+        uEditorBlogDO.setTag(tag);
+        uEditorBlogDO.setTime(new Date());
+        uEditorBlogDO.setUser("ceshi");
+        //加入IdMap对应
+        blogIdGenerate.addIdMap(blogIdGenerate.getId(), EditorTypeEnum.UEDITOR_EDITOR);
+        uEditorBlogService.saveDO(uEditorBlogDO);
+        ResponseMsgVO responseMsgVO = new ResponseMsgVO().buildOK();
+        return responseMsgVO;
+    }
+
+
+    @RequestMapping(value = "delete-by-id", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO deleteUeditorBlog(@RequestParam("id") Long id) {
+        if (blogIdGenerate.getType(id)==EditorTypeEnum.UEDITOR_EDITOR) {
+            //id去除匹配
+            blogIdGenerate.remove(id);
+            uEditorBlogService.deleteDOById(id);
+            return new ResponseMsgVO().buildOK();
+        }
+        return new ResponseMsgVO().buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR,"该ID不是UeditorEditor格式");
     }
 
 
 
-    @RequestMapping(value = "/delete-by-id",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO insertUeditorBlog(@RequestParam("id")Long id) {
-        //id去除
-        blogIdGenerate.remove(id);
-        uEditorBlogService.deleteDOById(id);
-        return  new ResponseMsgVO().buildOK();
-    }
-
-    @RequestMapping(value = "update-blog-by-id", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "update-by-id",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO update(
             @RequestParam(value = "id")Long id,
             @RequestParam(value = "content", required = false) String content,

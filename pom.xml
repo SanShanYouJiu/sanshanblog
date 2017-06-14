@@ -33,7 +33,7 @@
 
         <com.alibaba-fastjson>1.2.24</com.alibaba-fastjson>
 
-        <org.springframework.security.version>3.2.5.RELEASE</org.springframework.security.version>
+        <org.springframework.security.version>3.2.3.RELEASE</org.springframework.security.version>
 
         <lombok>1.16.4.0</lombok>
         <modelmapper>0.7.5</modelmapper>

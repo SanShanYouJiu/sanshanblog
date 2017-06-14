@@ -17,7 +17,7 @@
     <bytecodeTargetLevel target="1.8">
       <module name="sanshan-dao" target="1.5" />
       <module name="sanshan-pojo" target="1.5" />
-      <module name="sanshan-service" target="1.5" />
+      <module name="sanshan-service" target="1.8" />
       <module name="sanshan-util" target="1.8" />
       <module name="sanshan-web" target="1.8" />
       <module name="sanshanblog" target="1.5" />

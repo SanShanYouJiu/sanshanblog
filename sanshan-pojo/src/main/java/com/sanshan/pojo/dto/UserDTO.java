@@ -13,7 +13,7 @@ public class UserDTO {
 
     private String avatear;
 
-    private String nickname;
+    private String username;
 
     private String email;
 

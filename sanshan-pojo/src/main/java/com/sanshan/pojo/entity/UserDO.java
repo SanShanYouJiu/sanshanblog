@@ -3,9 +3,13 @@ package com.sanshan.pojo.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.mongodb.core.index.IndexDirection;
+import org.springframework.data.mongodb.core.index.Indexed;
 
+import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Date;
+import java.util.List;
 
 @Table(name = "user")
 @NoArgsConstructor
@@ -15,6 +19,7 @@ public class UserDO extends BaseDO {
     /**
      * ID
      */
+    @Id
     private Long id;
 
     /**
@@ -25,7 +30,8 @@ public class UserDO extends BaseDO {
     /**
      * 昵称
      */
-    private String nickname;
+    @Indexed(unique=true, direction= IndexDirection.DESCENDING, dropDups=true)
+    private String username;
 
     /**
      * 电子邮箱
@@ -35,7 +41,7 @@ public class UserDO extends BaseDO {
     /**
      * 密码
      */
-    private String passowrd;
+    private String password;
 
     /**
      * 博客链接
@@ -73,4 +79,13 @@ public class UserDO extends BaseDO {
 
     private String extend;
 
+    /**
+     * 权限
+     */
+    private List<String> roles;
+
+    /**
+     * 最后修改密码的时间
+     */
+    private Date lastPasswordResetDate;
 }

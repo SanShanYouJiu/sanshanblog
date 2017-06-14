@@ -1,4 +1,4 @@
-package com.sanshan.web.controller.login;
+package com.sanshan.web.controller.auth;
 
 import com.sanshan.util.AuthCodeUtil;
 import org.springframework.web.bind.annotation.RequestMapping;

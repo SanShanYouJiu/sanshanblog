@@ -1,44 +1,30 @@
-package com.sanshan.util;
+package com.sanshan.service.auth;
 
+import com.sanshan.service.vo.JwtUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-
+@Component
 public class JwtTokenUtil implements Serializable {
 
 
-    private static final long serialVersionUID = -37800873755108555L;
-
+    private static final long serialVersionUID = 5147131089330923881L;
     private static final String CLAIM_KEY_USERNAME = "sub";
     private static final String CLAIM_KEY_CREATED = "created";
 
+    @Value("${jwt.secret}")
     private String secret;
 
+    @Value("${jwt.expiration}")
     private Long expiration;
-
-    public String getSecret() {
-        return secret;
-    }
-
-    public void setSecret(String secret) {
-        this.secret = secret;
-    }
-
-    public Long getExpiration() {
-        return expiration;
-    }
-
-    public void setExpiration(Long expiration) {
-        this.expiration = expiration;
-    }
-
 
     public String getUsernameFromToken(String token) {
         String username;
@@ -100,7 +86,7 @@ public class JwtTokenUtil implements Serializable {
     }
 
     public String generateToken(UserDetails userDetails) {
-        Map<String, Object> claims = new HashMap<>();
+        Map<String, Object> claims = new HashMap<String,Object>();
         claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
         claims.put(CLAIM_KEY_CREATED, new Date());
         return generateToken(claims);
@@ -132,15 +118,14 @@ public class JwtTokenUtil implements Serializable {
         return refreshedToken;
     }
 
-    //public Boolean validateToken(String token, UserDetails userDetails) {
-    //    JwtUser user = (JwtUser) userDetails;
-    //    final String username = getUsernameFromToken(token);
-    //    final Date created = getCreatedDateFromToken(token);
-    //    //final Date expiration = getExpirationDateFromToken(token);
-    //    return (
-    //            username.equals(user.getUsername())
-    //                    && !isTokenExpired(token)
-    //                    && !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate()));
-    //}
+    public Boolean validateToken(String token, UserDetails userDetails) {
+        JwtUser user = (JwtUser) userDetails;
+        final String username = getUsernameFromToken(token);
+        final Date created = getCreatedDateFromToken(token);
+        //final Date expiration = getExpirationDateFromToken(token);
+        return (
+                username.equals(user.getUsername())
+                        && !isTokenExpired(token)
+                        && !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate()));
+    }
 }
-

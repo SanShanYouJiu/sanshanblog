@@ -1,67 +1,48 @@
 
 package com.sanshan.web.config.javaconfig.security;
 
-import com.sanshan.util.JwtTokenUtil;
+import com.sanshan.web.config.javaconfig.auxiliary.jwt.JwtAuthenticationEntryPoint;
+import com.sanshan.web.config.javaconfig.auxiliary.jwt.JwtAuthenticationTokenFilter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.annotation.web.servlet.configuration.EnableWebMvcSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import javax.sql.DataSource;
-
+@SuppressWarnings("SpringJavaAutowiringInspection")
 @Configuration
-@EnableWebMvcSecurity//启动Spring Security功能
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private DataSource dataSource;
+    private JwtAuthenticationEntryPoint unauthorizedHandler;
 
-    @Value("${jwt.expiration}")
-    private Long expiration;
-
-    @Value("${jwt.secret}")
-    private String secret;
+    @Autowired
+    private UserDetailsService userDetailsService;
 
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth
-                .jdbcAuthentication()
-                .dataSource(dataSource)
-                .passwordEncoder(passwordEncoder())
-                .usersByUsernameQuery("SELECT email,password,enabled FROM  user  " +
-                        "WHERE email=? ")
-                .authoritiesByUsernameQuery("SELECT email,authority FROM authorities" +
-                        " WHERE email =?");
+                .userDetailsService(this.userDetailsService)
+                .passwordEncoder(passwordEncoder());
 
     }
 
+    @Bean
     @Override
-    protected void configure(HttpSecurity httpSecurity) throws Exception {
-        //关闭CSRF防护
-        httpSecurity.
-                csrf().
-                disable();
-
-        httpSecurity
-                .authorizeRequests()
-                .antMatchers(
-                        "/**"
-                ).permitAll()
-                .anyRequest()
-                .authenticated();
-
-        //httpSecurity
-        //.addFilter();
-        // 禁用缓存
-        httpSecurity.headers().cacheControl();
-
+    public AuthenticationManager authenticationManagerBean() throws Exception {
+        return super.authenticationManagerBean();
     }
 
     @Bean
@@ -71,12 +52,35 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
 
     @Bean
-    public JwtTokenUtil jwtTokenUtil(){
-        JwtTokenUtil util = new JwtTokenUtil();
-        util.setExpiration(expiration);
-        util.setSecret(secret);
-        return  util;
+    public JwtAuthenticationTokenFilter authenticationTokenFilterBean() throws Exception {
+        return new JwtAuthenticationTokenFilter();
     }
 
+
+    @Override
+    protected void configure(HttpSecurity httpSecurity) throws Exception {
+        // 由于使用的是JWT，我们这里不需要csrf
+        httpSecurity.
+                csrf().
+                disable()
+                .exceptionHandling().authenticationEntryPoint(unauthorizedHandler).and()
+                // 基于token，所以不需要session
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .authorizeRequests()
+                .antMatchers(
+                        "/**"
+                ).permitAll()
+                .antMatchers("/auth/**").permitAll()
+                .anyRequest()
+                .authenticated();
+
+        // 添加JWT filter
+        httpSecurity
+                .addFilterBefore(authenticationTokenFilterBean(), UsernamePasswordAuthenticationFilter.class);
+        // 禁用缓存
+        httpSecurity.headers().cacheControl();
+
+    }
 
 }

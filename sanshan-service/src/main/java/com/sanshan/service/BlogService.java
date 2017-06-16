@@ -6,6 +6,7 @@ import com.sanshan.service.vo.BlogVO;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.BlogIdGenerate;
 import com.sanshan.util.info.EditorTypeEnum;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +18,7 @@ import java.util.Objects;
  * Service在新增Editor时需要修改
  */
 @Service
+@Slf4j
 public class BlogService {
     @Autowired
     MarkDownBlogService markDownBlogService;
@@ -26,6 +28,24 @@ public class BlogService {
 
     @Autowired
     BlogIdGenerate blogIdGenerate;
+
+
+    public  Long getCurrentId(){
+        Long id= blogIdGenerate.getSize();
+        for (Long i = id; i >0 ; i--) {
+            EditorTypeEnum type = blogIdGenerate.getType(i);
+            switch (type) {
+                case UEDITOR_EDITOR:
+                    return i;
+                case MarkDown_EDITOR:
+                    return i;
+                case Void_Id:
+                    continue;
+            }
+        }
+        log.error("获取当前ID错误:{}",id);
+            throw  new NullPointerException("未知错误");
+    }
 
     public BlogVO getBlog(Long id) {
         EditorTypeEnum type = blogIdGenerate.getType(id);

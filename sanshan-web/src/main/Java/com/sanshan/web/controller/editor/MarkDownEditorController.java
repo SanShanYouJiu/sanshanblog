@@ -4,12 +4,15 @@ import com.github.pagehelper.PageInfo;
 import com.sanshan.pojo.dto.MarkDownBlogDTO;
 import com.sanshan.pojo.entity.MarkDownBlogDO;
 import com.sanshan.service.editor.MarkDownBlogService;
+import com.sanshan.service.vo.JwtUser;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.BlogIdGenerate;
 import com.sanshan.util.info.EditorTypeEnum;
 import com.sanshan.util.info.PosCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,6 +23,7 @@ import java.util.List;
 
 @RequestMapping("markdown-editor")
 @RestController
+@PreAuthorize("hasRole('USER')")
 public class MarkDownEditorController {
 
     @Autowired
@@ -66,7 +70,11 @@ public class MarkDownEditorController {
         markDownBlog.setUpdated(new Date());
         markDownBlog.setTag(tag);
         markDownBlog.setTime(new Date());
-        markDownBlog.setUser("ceshi");
+
+        //获得当前用户
+        JwtUser user = (JwtUser) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        markDownBlog.setUser(user.getUsername());
         //加入IdMap对应
         blogIdGenerate.addIdMap(blogIdGenerate.getId(), EditorTypeEnum.MarkDown_EDITOR);
         markDownBlogService.saveDO(markDownBlog);

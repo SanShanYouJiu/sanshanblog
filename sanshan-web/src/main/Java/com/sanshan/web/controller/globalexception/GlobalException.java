@@ -47,6 +47,7 @@ public class GlobalException {
     public Object ExceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception ex) {
         log.error("exception handler "+ex);
 
+        //TODO 目前前端用的不是ajax
         //判断是否为ajax请求
         String xRequested = WebUtils.getHeader("x-requested-with",null,request);
         if (StringUtils.equalsIgnoreCase(xRequested,"XMLHttpRequest")){

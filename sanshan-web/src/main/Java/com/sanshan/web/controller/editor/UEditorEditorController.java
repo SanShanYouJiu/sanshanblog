@@ -7,6 +7,7 @@ import com.sanshan.pojo.dto.UEditorBlogDTO;
 import com.sanshan.pojo.entity.UEditorBlogDO;
 import com.sanshan.service.editor.UEditorFileService;
 import com.sanshan.service.editor.UeditorBlogService;
+import com.sanshan.service.vo.JwtUser;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.BlogIdGenerate;
 import com.sanshan.util.info.EditorTypeEnum;
@@ -14,6 +15,8 @@ import com.sanshan.util.info.PosCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,6 +30,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("ueditor-editor")
+@PreAuthorize("hasRole('USER')")
 public class UEditorEditorController {
 
 
@@ -107,7 +111,9 @@ public class UEditorEditorController {
         uEditorBlogDO.setUpdated(new Date());
         uEditorBlogDO.setTag(tag);
         uEditorBlogDO.setTime(new Date());
-        uEditorBlogDO.setUser("ceshi");
+        JwtUser user = (JwtUser) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        uEditorBlogDO.setUser(user.getUsername());
         //加入IdMap对应
         blogIdGenerate.addIdMap(blogIdGenerate.getId(), EditorTypeEnum.UEDITOR_EDITOR);
         uEditorBlogService.saveDO(uEditorBlogDO);

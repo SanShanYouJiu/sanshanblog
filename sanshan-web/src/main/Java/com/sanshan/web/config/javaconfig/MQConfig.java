@@ -4,7 +4,6 @@ package com.sanshan.web.config.javaconfig;
 import com.sanshan.web.config.javaconfig.auxiliary.BlogOperationListener;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.listener.PatternTopic;
@@ -17,7 +16,6 @@ import java.util.*;
 /**
  用的是Redis自带的MQ 消息发布订阅配置 这个Redis自带的MQ性能不是很好 暂时在这里吧
  */
-@ComponentScan(value = "com.sanshan.web.config.javaconfig.auxiliary")
 @Configuration
 public class MQConfig {
     @Autowired

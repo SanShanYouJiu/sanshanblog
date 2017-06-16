@@ -3,9 +3,9 @@ package com.sanshan.web.controller.blog;
 import com.sanshan.service.BlogService;
 import com.sanshan.service.vo.BlogVO;
 import com.sanshan.service.vo.ResponseMsgVO;
-import com.sanshan.util.BlogIdGenerate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,8 +22,6 @@ public class BlogController {
     @Autowired
     BlogService blogService;
 
-    @Autowired
-    BlogIdGenerate blogIdGenerate;
 
     @RequestMapping(value = "query-by-id",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO getBlog(@RequestParam("id") Long id) throws Exception {
@@ -44,10 +42,22 @@ public class BlogController {
 
 
     @RequestMapping(value = "delete-by-id",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PreAuthorize("hasRole('USER')")
     public ResponseMsgVO blogState(@RequestParam("id") Long id) {
         //id去除
         ResponseMsgVO responseMsgVO= blogService.removeBlog(id);
         return responseMsgVO;
+    }
+
+    /**
+     * 获得目前的最新博客ID
+     * @return 最新博客ID
+     */
+    @RequestMapping(value = "get-current-id", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PreAuthorize("hasRole('USER')")
+    public ResponseMsgVO getCurrentId() {
+          Long id =  blogService.getCurrentId();
+        return new ResponseMsgVO().buildOKWithData(id);
     }
 
 

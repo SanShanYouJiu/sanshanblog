@@ -69,11 +69,19 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(
-                        "/**"
+                        "/"
+                        ,"/api/",
+                        "/favicon.ico",
+                        "/api/blog/query-all",
+                         "/api/blog/query-by-id",
+                        "/druid/**",
+                        "/api/codeValidate"
                 ).permitAll()
-                .antMatchers("/auth/**").permitAll()
+                .antMatchers("/api/auth/**").permitAll()
                 .anyRequest()
                 .authenticated();
+
+
 
         // 添加JWT filter
         httpSecurity

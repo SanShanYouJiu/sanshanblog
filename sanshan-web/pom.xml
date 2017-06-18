@@ -3,62 +3,146 @@
     <parent>
         <groupId>com.sanshan</groupId>
         <artifactId>sanshanblog</artifactId>
-        <version>1.0-SNAPSHOT</version>
+        <version>1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
     <artifactId>sanshan-web</artifactId>
+    <version>1.0</version>
+
     <packaging>war</packaging>
     <name>Web Maven Webapp</name>
     <url>http://maven.apache.org</url>
 
-    <properties>
-        <javax.servlet-api>3.1.0</javax.servlet-api>
-
-        <org.thymeleaf>2.1.4.RELEASE</org.thymeleaf>
-        <org.thymeleaf-extras-springsecurity3>2.1.1.RELEASE</org.thymeleaf-extras-springsecurity3>
-        <org.thymeleaf-spring4>2.1.4.RELEASE</org.thymeleaf-spring4>
-
-        <jstl>1.2</jstl>
-        <javax.el-api>2.2.4</javax.el-api>
-        <org.glassfish.web-javax.el>2.2.4</org.glassfish.web-javax.el>
-         <!--Redis配置-->
-        <spring-jpa-redis>1.7.2.RELEASE</spring-jpa-redis>
-        <jedis>2.6.2</jedis>
-        <com.fasterxml.jackson.core>2.6.5</com.fasterxml.jackson.core>
-        <com.fasterxml.jackson.core-jackson-databind>2.6.3</com.fasterxml.jackson.core-jackson-databind>
-
-        <com.alibaba.druid>1.0.9</com.alibaba.druid>
-        <tk.mybatis.mapper>3.3.9</tk.mybatis.mapper>
-        <mysql-connector-java>5.1.6</mysql-connector-java>
-        <javax.cache-api>1.0.0</javax.cache-api>
-        <org.mybatis-ehcache>1.0.0</org.mybatis-ehcache>
-        <org.mybatis-spring>1.2.2</org.mybatis-spring>
-
-        <org.hibernate-validator>5.2.4.Final</org.hibernate-validator>
-
-        <!--Ueditor组件部分-->
-        <version.commons-codec>1.9</version.commons-codec>
-        <version.commons-io>2.4</version.commons-io>
-        <version.commons-fileupload>1.3.1</version.commons-fileupload>
-        <version.json>20160212</version.json>
-        <net.sf.ehcache-web>2.0.4</net.sf.ehcache-web>
-         <!--Quartz-->
-        <org.quartz-scheduler>2.2.1</org.quartz-scheduler>
-       <org.quartz-scheduler-jobs>2.2.1</org.quartz-scheduler-jobs>
-    </properties>
 
     <dependencies>
 
         <dependency>
-            <groupId>com.sanshan</groupId>
-            <artifactId>sanshan-service</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-oxm</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-jdbc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context-support</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>fastjson</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok-maven</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.modelmapper</groupId>
+            <artifactId>modelmapper</artifactId>
         </dependency>
 
         <dependency>
             <groupId>com.sanshan</groupId>
-            <artifactId>sanshan-util</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <artifactId>sanshan-service</artifactId>
         </dependency>
 
 
@@ -66,7 +150,6 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>${javax.servlet-api}</version>
         </dependency>
 
 
@@ -74,13 +157,11 @@
         <dependency>
             <groupId>org.thymeleaf</groupId>
             <artifactId>thymeleaf</artifactId>
-            <version>${org.thymeleaf}</version>
         </dependency>
 
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
             <artifactId>thymeleaf-extras-springsecurity3</artifactId>
-            <version>${org.thymeleaf-extras-springsecurity3}</version>
         </dependency>
 
 
@@ -88,14 +169,12 @@
         <dependency>
             <groupId>org.thymeleaf</groupId>
             <artifactId>thymeleaf-spring4</artifactId>
-            <version>${org.thymeleaf-spring4}</version>
         </dependency>
 
         <!--jstl start-->
         <dependency>
             <groupId>jstl</groupId>
             <artifactId>jstl</artifactId>
-            <version>${jstl}</version>
         </dependency>
         <!--jstl end-->
 
@@ -103,60 +182,50 @@
         <dependency>
             <groupId>javax.el</groupId>
             <artifactId>javax.el-api</artifactId>
-            <version>${javax.el-api}</version>
         </dependency>
 
         <dependency>
             <groupId>org.glassfish.web</groupId>
             <artifactId>javax.el</artifactId>
-            <version>${org.glassfish.web-javax.el}</version>
         </dependency>
-
 
 
         <!--web页面缓存-->
         <dependency>
             <groupId>net.sf.ehcache</groupId>
             <artifactId>ehcache-web</artifactId>
-            <version>${net.sf.ehcache-web}</version>
         </dependency>
 
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
-            <version>${org.quartz-scheduler}</version>
         </dependency>
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz-jobs</artifactId>
-            <version>${org.quartz-scheduler-jobs}</version>
         </dependency>
 
         <!--Redis配置-->
         <dependency>
             <groupId>redis.clients</groupId>
             <artifactId>jedis</artifactId>
-            <version>${jedis}</version>
         </dependency>
 
 
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-redis</artifactId>
-            <version>${spring-jpa-redis}</version>
         </dependency>
 
         <!--Redis Jackson配置-->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-core</artifactId>
-            <version>${com.fasterxml.jackson.core}</version>
         </dependency>
 
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
-            <version>${com.fasterxml.jackson.core-jackson-databind}</version>
         </dependency>
 
 
@@ -164,16 +233,13 @@
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis-spring</artifactId>
-            <version>${org.mybatis-spring}</version>
         </dependency>
-
 
 
         <!--mybatis 二级缓存-->
         <dependency>
             <groupId>org.mybatis</groupId>
             <artifactId>mybatis-ehcache</artifactId>
-            <version>${org.mybatis-ehcache}</version>
         </dependency>
 
         <!--&lt;!&ndash;ehcache缓存&ndash;&gt;-->
@@ -187,13 +253,11 @@
         <dependency>
             <groupId>javax.cache</groupId>
             <artifactId>cache-api</artifactId>
-            <version>${javax.cache-api}</version>
         </dependency>
 
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql-connector-java}</version>
         </dependency>
 
         <!--阿里druid配置 start-->
@@ -208,7 +272,6 @@
         <dependency>
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper</artifactId>
-            <version>${tk.mybatis.mapper}</version>
         </dependency>
 
 
@@ -216,7 +279,6 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>${org.hibernate-validator}</version>
         </dependency>
 
 
@@ -224,38 +286,35 @@
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>${version.commons-codec}</version>
         </dependency>
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
-            <version>${version.commons-io}</version>
         </dependency>
         <dependency>
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
-            <version>${version.commons-fileupload}</version>
         </dependency>
 
         <dependency>
             <groupId>org.json</groupId>
             <artifactId>json</artifactId>
-            <version>${version.json}</version>
         </dependency>
- 
+
 
     </dependencies>
-    <build>
-        <finalName>Web</finalName>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
+    <!--<build>-->
+        <!--<finalName>Web</finalName>-->
+        <!--<plugins>-->
+            <!--<plugin>-->
+                <!--<groupId>org.apache.maven.plugins</groupId>-->
+                <!--<artifactId>maven-compiler-plugin</artifactId>-->
+                <!--<configuration>-->
+                    <!--<source>1.8</source>-->
+                    <!--<target>1.8</target>-->
+                    <!--<encoding>UTF-8</encoding>-->
+                <!--</configuration>-->
+            <!--</plugin>-->
+        <!--</plugins>-->
+    <!--</build>-->
 </project>

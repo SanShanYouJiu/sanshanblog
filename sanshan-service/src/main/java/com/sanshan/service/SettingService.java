@@ -1,13 +1,9 @@
 package com.sanshan.service;
 
-import com.alibaba.fastjson.JSON;
-import com.sanshan.pojo.entity.Setting.Setting;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import sun.plugin2.util.SystemUtil;
 
 import javax.annotation.Resource;
-import java.util.Objects;
 
 @Service
 public class SettingService {

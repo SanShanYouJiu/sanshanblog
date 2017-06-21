@@ -34,16 +34,22 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
 
     @Override
     public void onStartup(ServletContext servletContext) throws ServletException {
+         //
         FilterRegistration.Dynamic filter = servletContext.addFilter("CharacterEncodingFilter",
                 CharacterEncodingFilter.class);
         filter.setInitParameter("encoding", "utf-8");
         filter.addMappingForUrlPatterns(null, false, "/api/*");
+
 //        主要负责处理由　JavaBeans Introspector的使用而引起的缓冲泄露
         servletContext.addListener(org.springframework.web.util.IntrospectorCleanupListener.class);
 //
+        //log4j监听器
+        servletContext.addListener(org.springframework.web.util.Log4jConfigListener.class);
+
         //Driud监控
         ServletRegistration.Dynamic druidservlet = servletContext.addServlet("DruidStatView", com.alibaba.druid.support.http.StatViewServlet.class);
         druidservlet.addMapping("/druid/*");
+
         super.onStartup(servletContext);
     }
 

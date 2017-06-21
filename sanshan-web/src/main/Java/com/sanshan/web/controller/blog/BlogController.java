@@ -23,11 +23,11 @@ public class BlogController {
     BlogService blogService;
 
 
-    @RequestMapping(value = "query-by-id",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "query-by-id", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO getBlog(@RequestParam("id") Long id) throws Exception {
         ResponseMsgVO<BlogVO> responseMsgVO = new ResponseMsgVO<>();
         BlogVO blog = blogService.getBlog(id);
-        if (Objects.isNull(blog)){
+        if (Objects.isNull(blog)) {
             throw new NullPointerException("ID已失效");
         }
         return responseMsgVO.buildOKWithData(blog);

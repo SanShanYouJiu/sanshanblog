@@ -92,6 +92,11 @@
         </dependency>
 
         <dependency>
+            <groupId>org.log4mongo</groupId>
+            <artifactId>log4mongo-java</artifactId>
+        </dependency>
+
+        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>

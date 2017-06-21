@@ -14,7 +14,7 @@ public class StringToHashMapConventTest {
         HashMap map = new HashMap();
         String idmaps = "{1=MarkDown_EDITOR, 2=MarkDown_EDITOR, 3=UEDITOR_EDITOR, 4=void_Id}";
         try {
-            String s = FileUtils.readFileToString(new File("D://保存文件//Idmap.txt"));
+            String s = FileUtils.readFileToString(new File("D://Tim//Idmap.txt"));
         } catch (IOException e) {
             e.printStackTrace();
         }

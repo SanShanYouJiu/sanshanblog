@@ -75,7 +75,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/blog/query-all",
                          "/api/blog/query-by-id",
                         "/druid/**",
-                        "/api/codeValidate"
+                        "/api/codeValidate",
+                        "/api/ueditor-editor/**"
                 ).permitAll()
                 .antMatchers("/api/auth/**").permitAll()
                 .anyRequest()

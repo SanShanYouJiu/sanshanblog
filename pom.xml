@@ -36,6 +36,7 @@
         <slf4j.version>1.7.7</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
         <slf4j-log4j12>1.7.21</slf4j-log4j12>
+        <log4-mongo-java>0.7.4</log4-mongo-java>
         <!--JSON-->
         <com.alibaba-fastjson>1.2.24</com.alibaba-fastjson>
         <version.json>20160212</version.json>
@@ -59,7 +60,6 @@
         <mysql-connector-java>5.1.6</mysql-connector-java>
         <!--mongo-->
         <org.spring.jpa.mongodb>1.8.4.RELEASE</org.spring.jpa.mongodb>
-        <org.mongo-java-driver>3.2.2</org.mongo-java-driver>
         <!--entity Manager-->
         <org.hibernate-entitymanager>4.1.1.Final</org.hibernate-entitymanager>
 
@@ -232,6 +232,19 @@
                 <artifactId>log4j</artifactId>
                 <version>${log4j.version}</version>
             </dependency>
+            <!-- log4j -mongo -->
+            <dependency>
+                <groupId>org.log4mongo</groupId>
+                <artifactId>log4mongo-java</artifactId>
+                <version>${log4-mongo-java}</version>
+                <!--依赖重复 在Spring-data-mongodb中有mongo-java-driver2.13的依赖了-->
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.mongodb</groupId>
+                        <artifactId>mongo-java-driver</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
@@ -309,14 +322,14 @@
                 <groupId>org.springframework.data</groupId>
                 <artifactId>spring-data-mongodb</artifactId>
                 <version>${org.spring.jpa.mongodb}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>jcl-over-slf4j</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
-            <!--&lt;!&ndash;mongo 连接驱动&ndash;&gt;-->
-            <!--<dependency>-->
-            <!--<groupId>org.mongodb</groupId>-->
-            <!--<artifactId>mongo-java-driver</artifactId>-->
-            <!--<version>${org.mongo-java-driver}</version>-->
-            <!--</dependency>-->
 
 
             <!--&lt;!&ndash;Spring-data通用核心类  mongonDB需要 注意这个会与Spring-data-jpa冲突&ndash;&gt;-->
@@ -324,12 +337,25 @@
                 <groupId>org.springframework.data</groupId>
                 <artifactId>spring-data-commons</artifactId>
                 <version>${org.springframework.data-commons}</version>
+               <exclusions>
+                   <exclusion>
+                       <groupId>org.slf4j</groupId>
+                       <artifactId>jcl-over-slf4j</artifactId>
+                   </exclusion>
+               </exclusions>
             </dependency>
+
 
             <dependency>
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-entitymanager</artifactId>
                 <version>${org.hibernate-entitymanager}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.javassist</groupId>
+                        <artifactId>javassist</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
@@ -432,6 +458,12 @@
                 <groupId>org.mybatis</groupId>
                 <artifactId>mybatis-ehcache</artifactId>
                 <version>${org.mybatis-ehcache}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>net.sf.ehcache</groupId>
+                        <artifactId>ehcache-core</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
@@ -459,6 +491,12 @@
                 <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-validator</artifactId>
                 <version>${org.hibernate-validator}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.jboss.logging</groupId>
+                        <artifactId>jboss-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <!--Ueditor组件-->

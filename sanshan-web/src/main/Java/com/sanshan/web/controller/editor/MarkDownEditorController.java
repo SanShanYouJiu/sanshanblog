@@ -101,6 +101,10 @@ public class MarkDownEditorController {
             @RequestParam(value = "content", required = false) String content,
             @RequestParam(value = "tag", required = false) String tag,
             @RequestParam(value = "title", required = false) String title) {
+        if(blogIdGenerate.getType(id)!=EditorTypeEnum.MarkDown_EDITOR){
+            return  new ResponseMsgVO().buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR,
+                    "该ID对应的不是Markdown格式的文件");
+        }
         MarkDownBlogDO markDownBlogDO = new MarkDownBlogDO();
         markDownBlogDO.setId(id);
         markDownBlogDO.setContent(content);

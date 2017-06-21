@@ -43,12 +43,6 @@
             <artifactId>spring-data-mongodb</artifactId>
         </dependency>
 
-        <!--&lt;!&ndash;mongo 连接驱动&ndash;&gt;-->
-        <!--<dependency>-->
-            <!--<groupId>org.mongodb</groupId>-->
-            <!--<artifactId>mongo-java-driver</artifactId>-->
-            <!--<version>${org.mongo-java-driver}</version>-->
-        <!--</dependency>-->
         <!--&lt;!&ndash;Spring-data通用核心类  mongonDB需要 注意这个会与Spring-data-jpa冲突&ndash;&gt;-->
         <dependency>
             <groupId>org.springframework.data</groupId>

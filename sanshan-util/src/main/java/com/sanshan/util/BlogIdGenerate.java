@@ -5,6 +5,7 @@ import com.sanshan.util.info.EditorTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -21,6 +22,28 @@ public class BlogIdGenerate {
                 else return -1;
             }
     );
+
+    private Map<Long, Date> IdTitleMap = new TreeMap<>(
+            (o1, o2) -> {
+                if (o1 > o2) return 1;
+                else return -1;
+            }
+    );
+
+    private Map<Long, String> IdTagMap = new TreeMap<>(
+            (o1, o2) -> {
+                if (o1 > o2) return 1;
+                else return -1;
+            }
+    );
+
+    private Map<Long, Date> IdDateMap = new TreeMap<>(
+            (o1, o2) -> {
+                if (o1 > o2) return 1;
+                else return -1;
+            }
+    );
+
 
     private String filename;
 

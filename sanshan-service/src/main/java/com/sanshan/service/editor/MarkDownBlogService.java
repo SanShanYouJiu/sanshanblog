@@ -26,6 +26,24 @@ public class MarkDownBlogService {
 
 
     /**
+     * 通过DTO查询
+     * @param tag
+     * @return
+     */
+    public List<MarkDownBlogDTO> queryByTag(String tag){
+        MarkDownBlogDO markDownBlogDO = new MarkDownBlogDO();
+        markDownBlogDO.setTag(tag);
+        return MarkDownEditorConvert.doToDtoList(cacheService.queryByTag(markDownBlogDO));
+    }
+
+
+    public List<MarkDownBlogDTO> queryByTitle(String title) {
+        MarkDownBlogDO markDownBlogDO = new MarkDownBlogDO();
+        markDownBlogDO.setTitle(title);
+        return MarkDownEditorConvert.doToDtoList(cacheService.queryByTitle(markDownBlogDO));
+    }
+
+    /**
      * DTO查询
      * @param example 查询条件
      * @return
@@ -39,7 +57,9 @@ public class MarkDownBlogService {
      *
      */
     public MarkDownBlogDTO queryDtoById(Long id){
-        return MarkDownEditorConvert.doToDto(cacheService.queryById(id));
+        MarkDownBlogDO markDownBlogDO = new MarkDownBlogDO();
+        markDownBlogDO.setId(id);
+        return MarkDownEditorConvert.doToDto(cacheService.queryOne(markDownBlogDO));
     }
 
     /**

@@ -33,6 +33,23 @@ public class BlogController {
         return responseMsgVO.buildOKWithData(blog);
     }
 
+
+    @RequestMapping(value = "query-by-tag",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO<List<BlogVO>> queryByTag(@RequestParam("tag")String tag){
+        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
+        List<BlogVO> list = blogService.getBlogByTag(tag);
+        return responseMsgVO.buildOKWithData(list);
+    }
+
+
+    @RequestMapping(value = "query-by-title",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO<List<BlogVO>>  queryByTitle(@RequestParam("title")String title){
+        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
+        List<BlogVO> list = blogService.getBlogByTitle(title);
+        return responseMsgVO.buildOKWithData(list);
+    }
+
+
     @RequestMapping(value = "query-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO queryAllBlog() {
         ResponseMsgVO<List<BlogVO>> responseMsgVO = new ResponseMsgVO();
@@ -59,6 +76,8 @@ public class BlogController {
           Long id =  blogService.getCurrentId();
         return new ResponseMsgVO().buildOKWithData(id);
     }
+
+
 
 
 }

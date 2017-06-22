@@ -14,7 +14,7 @@ import java.util.List;
 public class UeditorBlogService {
 
     @Autowired
-   private UEditorBlogCacheService cacheService;
+    private UEditorBlogCacheService cacheService;
 
     /**
      * DTO查询
@@ -23,6 +23,25 @@ public class UeditorBlogService {
      */
     public List<UEditorBlogDTO> queryDtoAll() {
         return UeditorEditorConvert.doToDtoList(cacheService.queryAll());
+    }
+
+
+    /**
+     * 通过DTO查询
+     * @param tag
+     * @return
+     */
+    public List<UEditorBlogDTO> queryByTag(String tag){
+        UEditorBlogDO uEditorBlogDO = new UEditorBlogDO();
+        uEditorBlogDO.setTag(tag);
+        return UeditorEditorConvert.doToDtoList(cacheService.queryByTag(uEditorBlogDO));
+    }
+
+
+    public List<UEditorBlogDTO> queryByTitle(String title) {
+        UEditorBlogDO uEditorBlogDO = new UEditorBlogDO();
+        uEditorBlogDO.setTitle(title);
+        return UeditorEditorConvert.doToDtoList(cacheService.queryByTitle(uEditorBlogDO));
     }
 
     /**
@@ -53,7 +72,9 @@ public class UeditorBlogService {
      * @return
      */
     public  UEditorBlogDTO queryDtoById(Long id){
-        return UeditorEditorConvert.doToDto(cacheService.queryById(id));
+        UEditorBlogDO uEditorBlogDO = new UEditorBlogDO();
+        uEditorBlogDO.setId(id);
+        return UeditorEditorConvert.doToDto(cacheService.queryOne(uEditorBlogDO));
     }
 
 

@@ -4,10 +4,8 @@ import com.baidu.ueditor.ActionEnter;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sanshan.pojo.dto.UEditorBlogDTO;
-import com.sanshan.pojo.entity.UEditorBlogDO;
 import com.sanshan.service.editor.UEditorFileService;
 import com.sanshan.service.editor.UeditorBlogService;
-import com.sanshan.service.vo.JwtUser;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.BlogIdGenerate;
 import com.sanshan.util.info.EditorTypeEnum;
@@ -16,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,7 +21,6 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.Date;
 import java.util.List;
 
 @Slf4j
@@ -41,7 +37,6 @@ public class UEditorEditorController {
 
     @Autowired
     private BlogIdGenerate blogIdGenerate;
-
 
 
     @RequestMapping("/config")
@@ -70,15 +65,15 @@ public class UEditorEditorController {
                                @PathVariable("suffix") String suffix,
                                HttpServletRequest request,
                                HttpServletResponse response) {
-       fileService.getUEditorFile(format,date,filename,suffix,response);
+        fileService.getUEditorFile(format, date, filename, suffix, response);
 
     }
 
 
-    @RequestMapping(value = "query-by-page",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "query-by-page", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PreAuthorize("hasRole('USER')")
-    public ResponseMsgVO queryByPage(@RequestParam("pagenum")Integer pagenum
-            , @RequestParam("pagesize")Integer pagesize){
+    public ResponseMsgVO queryByPage(@RequestParam("pagenum") Integer pagenum
+            , @RequestParam("pagesize") Integer pagesize) {
         ResponseMsgVO<PageInfo<UEditorBlogDTO>> responseMsgVO = new ResponseMsgVO<>();
         PageHelper.startPage(pagenum, pagesize);
         List<UEditorBlogDTO> list = uEditorBlogService.queryDtoAll();
@@ -87,7 +82,7 @@ public class UEditorEditorController {
     }
 
 
-    @RequestMapping(value = "query-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "query-all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PreAuthorize("hasRole('USER')")
     public ResponseMsgVO queryAll() {
         ResponseMsgVO<List<UEditorBlogDTO>> responseMsgVO = new ResponseMsgVO<>();
@@ -96,29 +91,14 @@ public class UEditorEditorController {
     }
 
 
-
-
     @RequestMapping(value = "insert-blog", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PreAuthorize("hasRole('USER')")
     public ResponseMsgVO insertMarkDownBlog(
             @RequestParam(value = "content", required = false) String content,
-            @RequestParam(value = "tag", required = false) String tag,
-            @RequestParam(value = "title", required = false) String title) {
-        UEditorBlogDO uEditorBlogDO = new UEditorBlogDO();
-        //使用IdMap生成的Id
-        uEditorBlogDO.setId(blogIdGenerate.getId());
-        uEditorBlogDO.setContent(content);
-        uEditorBlogDO.setTitle(title);
-        uEditorBlogDO.setCreated(new Date());
-        uEditorBlogDO.setUpdated(new Date());
-        uEditorBlogDO.setTag(tag);
-        uEditorBlogDO.setTime(new Date());
-        JwtUser user = (JwtUser) SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal();
-        uEditorBlogDO.setUser(user.getUsername());
-        //加入IdMap对应
-        blogIdGenerate.addIdMap(blogIdGenerate.getId(), EditorTypeEnum.UEDITOR_EDITOR);
-        uEditorBlogService.saveDO(uEditorBlogDO);
+        @RequestParam(value = "title", required = false) String title,
+            @RequestParam(value = "tag", required = false) String tag) {
+
+        uEditorBlogService.saveDO(content,title,tag);
         ResponseMsgVO responseMsgVO = new ResponseMsgVO().buildOK();
         return responseMsgVO;
     }
@@ -127,35 +107,28 @@ public class UEditorEditorController {
     @RequestMapping(value = "delete-by-id", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PreAuthorize("hasRole('USER')")
     public ResponseMsgVO deleteUeditorBlog(@RequestParam("id") Long id) {
-        if (blogIdGenerate.getType(id)==EditorTypeEnum.UEDITOR_EDITOR) {
+        if (blogIdGenerate.getType(id) == EditorTypeEnum.UEDITOR_EDITOR) {
             //id去除匹配
             blogIdGenerate.remove(id);
             uEditorBlogService.deleteDOById(id);
             return new ResponseMsgVO().buildOK();
         }
-        return new ResponseMsgVO().buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR,"该ID对应的不是富文本格式的文件");
+        return new ResponseMsgVO().buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR, "该ID对应的不是富文本格式的文件");
     }
 
 
-
-    @RequestMapping(value = "update-by-id",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "update-by-id", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PreAuthorize("hasRole('USER')")
     public ResponseMsgVO update(
-            @RequestParam(value = "id")Long id,
+            @RequestParam(value = "id") Long id,
             @RequestParam(value = "content", required = false) String content,
             @RequestParam(value = "tag", required = false) String tag,
             @RequestParam(value = "title", required = false) String title) {
-        if(blogIdGenerate.getType(id)!=EditorTypeEnum.UEDITOR_EDITOR){
-             return  new ResponseMsgVO().buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR,
-                     "该ID对应的不是富文本格式的文件");
+        if (blogIdGenerate.getType(id) != EditorTypeEnum.UEDITOR_EDITOR) {
+            return new ResponseMsgVO().buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR,
+                    "该ID对应的不是富文本格式的文件");
         }
-        UEditorBlogDO uEditorBlogDO = new UEditorBlogDO();
-        uEditorBlogDO.setId(id);
-        uEditorBlogDO.setContent(content);
-        uEditorBlogDO.setUpdated(new Date());
-        uEditorBlogDO.setTag(tag);
-        uEditorBlogDO.setTitle(title);
-        uEditorBlogService.updateSelectiveDO(uEditorBlogDO);
+        uEditorBlogService.updateSelectiveDO(id,content,title,tag);
         return new ResponseMsgVO().buildOK();
     }
 

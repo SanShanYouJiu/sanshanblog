@@ -25,7 +25,7 @@ public class QuartzConfig {
     @Bean(initMethod = "init")
     public  BlogIdGenerate blogIdGenerate(){
         BlogIdGenerate blogIdGenerate = new BlogIdGenerate();
-        blogIdGenerate.setFilename(storagelocation);
+        //blogIdGenerate.setFilename(storagelocation);
         return  blogIdGenerate;
     }
 
@@ -36,7 +36,7 @@ public class QuartzConfig {
         m.setName("job_work_name");
         m.setConcurrent(false);
         m.setTargetObject(job);
-        m.setTargetMethod("saveIdMap");
+        m.setTargetMethod("saveMap");
         return m;
     }
 

@@ -1,8 +1,5 @@
 package com.sanshan.service;
 
-import com.sanshan.pojo.dto.MarkDownBlogDTO;
-import com.sanshan.pojo.dto.UEditorBlogDTO;
-import com.sanshan.service.convent.BlogConvert;
 import com.sanshan.service.editor.MarkDownBlogService;
 import com.sanshan.service.editor.UeditorBlogService;
 import com.sanshan.service.vo.BlogVO;
@@ -16,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Service在新增Editor时需要修改
@@ -67,6 +65,7 @@ public class BlogService {
     }
 
 
+    //TODO 防止null异常
     /**
      * 查询对应tag标签的博客
      * @param tag
@@ -74,13 +73,29 @@ public class BlogService {
      */
     public List<BlogVO> getBlogByTag(String tag) {
         List<BlogVO> blogVOS = new ArrayList<>();
-        List<UEditorBlogDTO> uEditorBlogDTOS = uEditorBlogService.queryByTag(tag);
-        List<MarkDownBlogDTO> markDownBlogDTOS = markDownBlogService.queryByTag(tag);
-        blogVOS.addAll(BlogConvert.MarkdownDoToDtoList(markDownBlogDTOS));
-        blogVOS.addAll(BlogConvert.UeditorDoToDtoList(uEditorBlogDTOS));
+        Set<Long> longs = blogIdGenerate.getTagMap(tag);
+        Long[] a = {};
+        Long[] ids = longs.toArray(a);
+        for (long i = 0; i < ids.length; i++) {
+            BlogVO blogVO = getBlog(ids[(int) i]);
+            blogVOS.add(blogVO);
+        }
         return blogVOS;
     }
 
+    //TODO 查找全部的Tag
+    public List queryTagAll() {
+
+        return null;
+    }
+
+    //TODO 查找全部的Title
+    public List queryTtitleAll() {
+
+        return null;
+    }
+
+     //todo 防止null异常
     /**
      * 查询对应title标签的博客
      * @param title
@@ -88,10 +103,13 @@ public class BlogService {
      */
     public List<BlogVO> getBlogByTitle(String title) {
         List<BlogVO> blogVOS = new ArrayList<>();
-        List<UEditorBlogDTO> uEditorBlogDTOS = uEditorBlogService.queryByTitle(title);
-        List<MarkDownBlogDTO> markDownBlogDTOS = markDownBlogService.queryByTitle(title);
-        blogVOS.addAll(BlogConvert.MarkdownDoToDtoList(markDownBlogDTOS));
-        blogVOS.addAll(BlogConvert.UeditorDoToDtoList(uEditorBlogDTOS));
+        Set<Long> longs = blogIdGenerate.getTitleMap(title);
+        Long[] a={};
+        Long[] ids = longs.toArray(a);
+        for (long i = 0; i <ids.length ; i++) {
+            BlogVO blogVO = getBlog(ids[Math.toIntExact(i)]);
+            blogVOS.add(blogVO);
+        }
         return blogVOS;
     }
 

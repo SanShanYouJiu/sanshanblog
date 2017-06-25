@@ -25,6 +25,9 @@ DO DTO VO 三种实体对象
 博客支持俩种风格的Blog 
 > - 一种是Markdown风格的编辑  另外一种是富文本方式(富文本方式用的是百度的UEditor) 
 
+#### 注意事项
+properties文件默认不是UTF-8编码 需要自己在IDEA中设置为UTF-8 或者自己手动处理
+
 
  
 

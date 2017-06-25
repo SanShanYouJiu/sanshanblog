@@ -10,6 +10,7 @@ import org.springframework.expression.spel.standard.SpelExpressionParser;
  */
 public class SpelTest {
 
+
     @Test
     public void test(){
         ExpressionParser parser = new SpelExpressionParser();

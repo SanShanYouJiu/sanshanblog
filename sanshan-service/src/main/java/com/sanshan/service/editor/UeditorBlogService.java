@@ -5,9 +5,14 @@ import com.sanshan.pojo.dto.UEditorBlogDTO;
 import com.sanshan.pojo.entity.UEditorBlogDO;
 import com.sanshan.service.convent.UeditorEditorConvert;
 import com.sanshan.service.editor.CacheService.UEditorBlogCacheService;
+import com.sanshan.service.vo.JwtUser;
+import com.sanshan.util.BlogIdGenerate;
+import com.sanshan.util.info.EditorTypeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -16,6 +21,8 @@ public class UeditorBlogService {
     @Autowired
     private UEditorBlogCacheService cacheService;
 
+    @Autowired
+    BlogIdGenerate blogIdGenerate;
     /**
      * DTO查询
      *
@@ -23,25 +30,6 @@ public class UeditorBlogService {
      */
     public List<UEditorBlogDTO> queryDtoAll() {
         return UeditorEditorConvert.doToDtoList(cacheService.queryAll());
-    }
-
-
-    /**
-     * 通过DTO查询
-     * @param tag
-     * @return
-     */
-    public List<UEditorBlogDTO> queryByTag(String tag){
-        UEditorBlogDO uEditorBlogDO = new UEditorBlogDO();
-        uEditorBlogDO.setTag(tag);
-        return UeditorEditorConvert.doToDtoList(cacheService.queryByTag(uEditorBlogDO));
-    }
-
-
-    public List<UEditorBlogDTO> queryByTitle(String title) {
-        UEditorBlogDO uEditorBlogDO = new UEditorBlogDO();
-        uEditorBlogDO.setTitle(title);
-        return UeditorEditorConvert.doToDtoList(cacheService.queryByTitle(uEditorBlogDO));
     }
 
     /**
@@ -72,22 +60,54 @@ public class UeditorBlogService {
      * @return
      */
     public  UEditorBlogDTO queryDtoById(Long id){
-        UEditorBlogDO uEditorBlogDO = new UEditorBlogDO();
-        uEditorBlogDO.setId(id);
-        return UeditorEditorConvert.doToDto(cacheService.queryOne(uEditorBlogDO));
+        return UeditorEditorConvert.doToDto(cacheService.queryById(id));
     }
 
 
-    public Integer saveDO(UEditorBlogDO uEditorBlog) {
-        return cacheService.save(uEditorBlog);
+    public Integer saveDO(String content, String title, String tag) {
+        UEditorBlogDO uEditorBlogDO = new UEditorBlogDO();
+        //使用IdMap生成的Id
+        uEditorBlogDO.setId(blogIdGenerate.getId());
+        uEditorBlogDO.setContent(content);
+        uEditorBlogDO.setTag(tag);
+        uEditorBlogDO.setTitle(title);
+        uEditorBlogDO.setCreated(new Date());
+        uEditorBlogDO.setUpdated(new Date());
+        Date date = new Date();
+        uEditorBlogDO.setTime(date);
+        //获得当前用户
+        JwtUser user = (JwtUser) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        uEditorBlogDO.setUser(user.getUsername());
+
+        //加入到索引中
+        blogIdGenerate.putTag(tag,blogIdGenerate.getId());
+        blogIdGenerate.putTitle(title,blogIdGenerate.getId());
+        blogIdGenerate.putDate(date,blogIdGenerate.getId());
+
+        //加入IdMap对应
+        blogIdGenerate.addIdMap(blogIdGenerate.getId(), EditorTypeEnum.UEDITOR_EDITOR);
+
+        return cacheService.save(uEditorBlogDO);
     }
 
     public Boolean updateDO(UEditorBlogDO uEditorBlogDO){
-          UeditorEditorConvert.doToDto(cacheService.update(uEditorBlogDO));
+        UeditorEditorConvert.doToDto(cacheService.update(uEditorBlogDO));
         return true;
     }
 
-    public Boolean  updateSelectiveDO(UEditorBlogDO uEditorBlogDO){
+    public Boolean  updateSelectiveDO(Long id,String content,String title,String tag){
+        UEditorBlogDO uEditorBlogDO = new UEditorBlogDO();
+        uEditorBlogDO.setId(id);
+        uEditorBlogDO.setContent(content);
+        uEditorBlogDO.setUpdated(new Date());
+        uEditorBlogDO.setTag(tag);
+        uEditorBlogDO.setTitle(title);
+        //加入到索引中
+        if (tag!=null)
+            blogIdGenerate.putTag(tag,id);
+        if (title!=null)
+            blogIdGenerate.putTitle(title,id);
         UeditorEditorConvert.doToDto(cacheService.updateSelective(uEditorBlogDO));
         return true;
     }

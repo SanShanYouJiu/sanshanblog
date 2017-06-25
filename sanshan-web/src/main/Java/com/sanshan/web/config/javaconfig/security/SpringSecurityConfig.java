@@ -69,11 +69,10 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(
-                        "/"
-                        ,"/api/",
+                        "/",
+                        "/api/",
                         "/favicon.ico",
-                        "/api/blog/query-all",
-                         "/api/blog/query-by-id",
+                        "/api/blog/**",
                         "/druid/**",
                         "/api/codeValidate",
                         "/api/ueditor-editor/**"

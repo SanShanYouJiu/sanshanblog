@@ -3,6 +3,7 @@ package com.sanshan.web.controller.blog;
 import com.sanshan.service.BlogService;
 import com.sanshan.service.vo.BlogVO;
 import com.sanshan.service.vo.ResponseMsgVO;
+import com.sanshan.util.exception.ERROR;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -35,20 +36,40 @@ public class BlogController {
 
 
     @RequestMapping(value = "query-by-tag",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO<List<BlogVO>> queryByTag(@RequestParam("tag")String tag){
+    public ResponseMsgVO queryByTag(@RequestParam("tag")String tag){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         List<BlogVO> list = blogService.getBlogByTag(tag);
+        if (Objects.isNull(list))
+            return responseMsgVO.buildError(new ERROR(404,"无效的标签"));
         return responseMsgVO.buildOKWithData(list);
     }
 
+    @RequestMapping(value = "query-tag-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO queryTagAll(){
+        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
+       List list =blogService.queryTagAll();
+        if (Objects.isNull(list))
+            return responseMsgVO.buildError(new ERROR(404,"没有标签"));
+        return responseMsgVO.buildOKWithData(list);
+    }
 
     @RequestMapping(value = "query-by-title",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO<List<BlogVO>>  queryByTitle(@RequestParam("title")String title){
+    public ResponseMsgVO  queryByTitle(@RequestParam("title")String title){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         List<BlogVO> list = blogService.getBlogByTitle(title);
+        if (Objects.isNull(list))
+            return responseMsgVO.buildError(new ERROR(404, "无效的标题"));
         return responseMsgVO.buildOKWithData(list);
     }
 
+    @RequestMapping(value = "query-title-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO queryTtitleAll(){
+        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
+        List list =blogService.queryTtitleAll();
+        if (Objects.isNull(list))
+            return responseMsgVO.buildError(new ERROR(404,"没有标题"));
+        return responseMsgVO.buildOKWithData(list);
+    }
 
     @RequestMapping(value = "query-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO queryAllBlog() {

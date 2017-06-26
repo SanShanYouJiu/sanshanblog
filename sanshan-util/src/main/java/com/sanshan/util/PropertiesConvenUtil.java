@@ -18,8 +18,8 @@ public class PropertiesConvenUtil {
      *
      * @param path
      * @param map
-     * @param type 0是指 String,Set(Long) 1则是Long,String
-     *             2则是Long,String 3则是Date,Set(Long)
+     * @param type 0是指 String,Set(Long) 1则是Long,EditorTypeEnum
+     *             2则是Long,String 3则是Date,Set(Long) 4则是 Long Date
      * @return
      * @throws Exception
      */
@@ -63,6 +63,8 @@ public class PropertiesConvenUtil {
                            set = stringConventSet(value);
                            map.put(new Date((String) entry.getKey()),set);
                            break;
+                       case 4:
+                           map.put(Long.valueOf((String) entry.getKey()), new Date((String) entry.getValue()));
                    }
                 }
             }
@@ -208,5 +210,14 @@ public class PropertiesConvenUtil {
         properties.store(osw,description);
     }
 
+    public final static void LongDateMapToFile(String path, Map<Long, Date> map,String description) throws IOException {
+        Properties properties = new Properties();
+        for (Entry<Long, Date> key : map.entrySet()) {
+            properties.setProperty(String.valueOf(key.getKey()), String.valueOf(key.getValue()));
+        }
+        FileOutputStream outputStream = new FileOutputStream(path);
+        OutputStreamWriter osw = new OutputStreamWriter(outputStream, "UTF-8");
+        properties.store(osw,description);
+    }
 
 }

@@ -1,5 +1,6 @@
 package com.sanshan.service.vo;
 
+import com.sanshan.util.exception.ERROR;
 import com.sanshan.util.info.PosCodeEnum;
 import lombok.Data;
 import lombok.ToString;
@@ -34,9 +35,18 @@ public class ResponseMsgVO<T> implements Serializable {
         return this;
     }
 
+
+
     public ResponseMsgVO buildOK() {
         this.status = PosCodeEnum.OK.getStatus();
         this.msg = PosCodeEnum.OK.getMsg();
+        return this;
+    }
+
+
+    public ResponseMsgVO buildError(ERROR error) {
+        this.status =  error.getCode();
+        this.msg = error.getMessage();
         return this;
     }
 

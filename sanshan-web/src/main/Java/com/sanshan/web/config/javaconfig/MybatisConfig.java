@@ -39,6 +39,7 @@ public class MybatisConfig {
 
     /**
      * 通用mapper
+     * 配置mapper接口扫描,扫描后会自动注入到spring
      */
     @Bean
     public MapperScannerConfigurer mapperScannerConfigurer() {

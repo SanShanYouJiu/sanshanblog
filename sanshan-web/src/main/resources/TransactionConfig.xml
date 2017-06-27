@@ -13,12 +13,10 @@
         http://www.springframework.org/schema/context
         http://www.springframework.org/schema/context/spring-context.xsd">
 
-
+    <!--这里的事务并没有起到什么作用 目前代码都是原子的操作-->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
          <tx:attributes>
-             <tx:method name="*" propagation="REQUIRED"/>
-             <tx:method name="save*"  isolation="REPEATABLE_READ"/>
-             <tx:method name="query*" isolation="REPEATABLE_READ"/>
+             <tx:method name="insert*"  isolation="REPEATABLE_READ"/>
              <tx:method name="update*" isolation="REPEATABLE_READ"/>
              <tx:method name="delete*" isolation="REPEATABLE_READ"/>
          </tx:attributes>

@@ -92,7 +92,6 @@ public class BlogController {
      * @return 最新博客ID
      */
     @RequestMapping(value = "get-current-id", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @PreAuthorize("hasRole('USER')")
     public ResponseMsgVO getCurrentId() {
           Long id =  blogService.getCurrentId();
         return new ResponseMsgVO().buildOKWithData(id);

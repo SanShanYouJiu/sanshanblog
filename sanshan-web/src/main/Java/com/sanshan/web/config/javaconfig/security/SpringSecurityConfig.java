@@ -75,9 +75,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/blog/**",
                         "/druid/**",
                         "/api/codeValidate",
-                        "/api/ueditor-editor/**"
+                        //不知道如何在前端的Ueditor端加入Authorization属性
+                        "/api/ueditor-editor/config",
+                        "/api/ueditor-editor/upload/**",
+                        "/api/auth/login",
+                        "/api/auth/register"
                 ).permitAll()
-                .antMatchers("/api/auth/**").permitAll()
                 .anyRequest()
                 .authenticated();
 

@@ -20,7 +20,7 @@ public interface MarkDownBlogMapper extends Mapper<MarkDownBlogDO> {
      List<MarkDownBlogDO> queryByTitle(MarkDownBlogDO markDownBlogDO);
 
 
-     @Delete(" DELETE FROM markdown_blog WHERE id = #{_parameter} ")
-     void DeleteById(long id);
+     @Delete("DELETE FROM markdown_blog WHERE id = #{_parameter} ")
+     void deleteById(long id);
 
 }

@@ -135,7 +135,7 @@ public class Unifytest {
 
     @Test
     public void delete_markdown_blog(){
-        markDownBlogMapper.DeleteById((long) 3);
+        markDownBlogMapper.deleteById((long) 3);
 
     }
 

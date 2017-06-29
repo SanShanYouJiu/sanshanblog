@@ -5,6 +5,7 @@ import com.sanshan.pojo.dto.MarkDownBlogDTO;
 import com.sanshan.service.editor.MarkDownBlogService;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.BlogIdGenerate;
+import com.sanshan.util.exception.ERROR;
 import com.sanshan.util.info.EditorTypeEnum;
 import com.sanshan.util.info.PosCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,7 +59,10 @@ public class MarkDownEditorController {
             @RequestParam(value = "tag", required = false) String tag,
             @RequestParam(value = "title", required = false) String title) {
 
-        markDownBlogService.saveDO(content,title,tag);
+        int result = markDownBlogService.saveDO(content, title, tag);
+        if (result ==0){
+            return new ResponseMsgVO().buildError(new ERROR(500, "未存入成功"));
+        }
         ResponseMsgVO responseMsgVO = new ResponseMsgVO().buildOK();
         return responseMsgVO;
     }
@@ -67,9 +71,12 @@ public class MarkDownEditorController {
     @RequestMapping(value = "delete-by-id", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO deleteMarkDownBlog(@RequestParam("id") Long id) {
         if (blogIdGenerate.getType(id)==EditorTypeEnum.MarkDown_EDITOR){
-        //id去除匹配
-        blogIdGenerate.remove(id);
-        markDownBlogService.deleteDOById(id);
+            int result = markDownBlogService.deleteDOById(id);
+            if (result == 0) {
+                return new ResponseMsgVO().buildError(new ERROR(500, "未删除成功"));
+            }
+            //id去除匹配
+            blogIdGenerate.remove(id);
         return new ResponseMsgVO().buildOK();
         }
         return new ResponseMsgVO().buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR,"该ID不是MarkdownEditor格式");

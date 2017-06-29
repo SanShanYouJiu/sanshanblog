@@ -78,6 +78,11 @@ public class MarkDownBlogService {
                 .getPrincipal();
         markDownBlog.setUser(user.getUsername());
 
+        int result = cacheService.save(markDownBlog);
+        //插入失败
+        if (result == 0) {
+            return 0;
+        }
         //加入到索引中
         blogIdGenerate.putTag(tag,blogIdGenerate.getId());
         blogIdGenerate.putTitle(title,blogIdGenerate.getId());
@@ -86,7 +91,7 @@ public class MarkDownBlogService {
         //加入IdMap对应
         blogIdGenerate.addIdMap(blogIdGenerate.getId(), EditorTypeEnum.MarkDown_EDITOR);
 
-        return cacheService.save(markDownBlog);
+        return result;
     }
 
 

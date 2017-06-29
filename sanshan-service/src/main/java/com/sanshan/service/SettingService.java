@@ -1,9 +1,13 @@
 package com.sanshan.service;
 
+import com.alibaba.fastjson.JSON;
+import com.sanshan.util.Setting.Setting;
+import com.sanshan.util.SystemUtil;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Objects;
 
 @Service
 public class SettingService {
@@ -18,15 +22,15 @@ public class SettingService {
      * 读取配置 缓存>配置
      * @return 系统配置
      */
-    //public Setting getSetting(){
-    //    String settingCache = redisTemplate.opsForValue().get(SETTING_CACHE);
-    //    if (Objects.isNull(settingCache)){
-    //        return SystemUtil.getSetting();
-    //    }
-    //    Setting setting = JSON.parseObject(settingCache,Setting.class);
-    //    if (Objects.nonNull(setting)){
-    //        return setting;
-    //    }
-    //    return SystemUtil.getSetting();
-    //}
+    public Setting getSetting(){
+        String settingCache = redisTemplate.opsForValue().get(SETTING_CACHE);
+        if (Objects.isNull(settingCache)){
+            return SystemUtil.getSetting();
+        }
+        Setting setting = JSON.parseObject(settingCache,Setting.class);
+        if (Objects.nonNull(setting)){
+            return setting;
+        }
+        return SystemUtil.getSetting();
+    }
 }

@@ -8,6 +8,7 @@ import com.sanshan.service.editor.UEditorFileService;
 import com.sanshan.service.editor.UeditorBlogService;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.BlogIdGenerate;
+import com.sanshan.util.exception.ERROR;
 import com.sanshan.util.info.EditorTypeEnum;
 import com.sanshan.util.info.PosCodeEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -98,7 +99,10 @@ public class UEditorEditorController {
         @RequestParam(value = "title", required = false) String title,
             @RequestParam(value = "tag", required = false) String tag) {
 
-        uEditorBlogService.saveDO(content,title,tag);
+        int result = uEditorBlogService.saveDO(content, title, tag);
+        if (result == 0) {
+            return new ResponseMsgVO().buildError(new ERROR(500, "未插入成功"));
+        }
         ResponseMsgVO responseMsgVO = new ResponseMsgVO().buildOK();
         return responseMsgVO;
     }
@@ -108,9 +112,12 @@ public class UEditorEditorController {
     @PreAuthorize("hasRole('USER')")
     public ResponseMsgVO deleteUeditorBlog(@RequestParam("id") Long id) {
         if (blogIdGenerate.getType(id) == EditorTypeEnum.UEDITOR_EDITOR) {
+            int result = uEditorBlogService.deleteDOById(id);
+            if (result == 0) {
+                return new ResponseMsgVO().buildError(new ERROR(500, "未删除成功"));
+            }
             //id去除匹配
             blogIdGenerate.remove(id);
-            uEditorBlogService.deleteDOById(id);
             return new ResponseMsgVO().buildOK();
         }
         return new ResponseMsgVO().buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR, "该ID对应的不是富文本格式的文件");

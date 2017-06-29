@@ -21,6 +21,6 @@ public interface MarkDownBlogMapper extends Mapper<MarkDownBlogDO> {
 
 
      @Delete("DELETE FROM markdown_blog WHERE id = #{_parameter} ")
-     void deleteById(long id);
+     int deleteById(long id);
 
 }

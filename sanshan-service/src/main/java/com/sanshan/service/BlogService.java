@@ -5,6 +5,7 @@ import com.sanshan.service.editor.UeditorBlogService;
 import com.sanshan.service.vo.BlogVO;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.BlogIdGenerate;
+import com.sanshan.util.exception.ERROR;
 import com.sanshan.util.info.EditorTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,10 +126,15 @@ public class BlogService {
         BlogVO blog = null;
         switch (type) {
             case UEDITOR_EDITOR:
-                uEditorBlogService.deleteDOById(id);
+               int result= uEditorBlogService.deleteDOById(id);
+                if (result==0)
+                    return new ResponseMsgVO().buildError(new ERROR(500, "删除对应Id为：" + id + "的博客失败"));
                 break;
             case MarkDown_EDITOR:
-                markDownBlogService.deleteDOById(id);
+                int result2 = markDownBlogService.deleteDOById(id);
+                if (result2 == 0) {
+                    return new ResponseMsgVO().buildError(new ERROR(500, "删除对应Id为：" + id + "的博客失败"));
+                }
                 break;
             case Void_Id:
                 throw new NullPointerException("无法删除 ID已失效");

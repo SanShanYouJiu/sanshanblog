@@ -26,11 +26,14 @@ public class ServiceConfig {
     private String mailusername;
     @Value("${mail.password}")
     private String mailpassword;
+    @Value("${mail.port}")
+    private Integer port;
 
      @Bean
     public JavaMailSenderImpl javaMailSender(){
          JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
          mailSender.setHost(mailhost);
+         mailSender.setPort(port);
          mailSender.setUsername(mailusername);
          mailSender.setPassword(mailpassword);
          mailSender.setDefaultEncoding("UTF-8");

@@ -79,7 +79,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/ueditor-editor/config",
                         "/api/ueditor-editor/upload/**",
                         "/api/auth/login",
-                        "/api/auth/register"
+                        "/api/auth/register",
+                        "/api/user/email/send",
+                        "/api/user/check/token"
                 ).permitAll()
                 .anyRequest()
                 .authenticated();

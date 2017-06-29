@@ -7,11 +7,9 @@ import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
 
 import javax.persistence.Id;
-import javax.persistence.Table;
 import java.util.Date;
 import java.util.List;
 
-@Table(name = "user")
 @NoArgsConstructor
 @Data
 @ToString
@@ -36,6 +34,7 @@ public class UserDO extends BaseDO {
     /**
      * 电子邮箱
      */
+    @Indexed(unique=true, direction= IndexDirection.DESCENDING, dropDups=true)
     private String email;
 
     /**

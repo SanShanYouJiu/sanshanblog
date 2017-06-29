@@ -1,4 +1,7 @@
-package com.sanshan.pojo.entity.Setting;
+package com.sanshan.util.Setting;
+
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -6,6 +9,8 @@ import java.io.Serializable;
  * 后台设置类
  * 目前还没有实现
  */
+@Data
+@NoArgsConstructor
 public class Setting implements Serializable {
     /**
      * 网站主域名

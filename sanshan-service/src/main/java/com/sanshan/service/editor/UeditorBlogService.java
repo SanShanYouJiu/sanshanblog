@@ -78,8 +78,12 @@ public class UeditorBlogService {
         //获得当前用户
         JwtUser user = (JwtUser) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
-        uEditorBlogDO.setUser(user.getUsername());
-
+          uEditorBlogDO.setUser(user.getUsername());
+        int result = cacheService.save(uEditorBlogDO);
+        //插入失败
+        if (result == 0) {
+            return 0;
+        }
         //加入到索引中
         blogIdGenerate.putTag(tag,blogIdGenerate.getId());
         blogIdGenerate.putTitle(title,blogIdGenerate.getId());
@@ -88,7 +92,7 @@ public class UeditorBlogService {
         //加入IdMap对应
         blogIdGenerate.addIdMap(blogIdGenerate.getId(), EditorTypeEnum.UEDITOR_EDITOR);
 
-        return cacheService.save(uEditorBlogDO);
+        return  result;
     }
 
     public Boolean updateDO(UEditorBlogDO uEditorBlogDO){

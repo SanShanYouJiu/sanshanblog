@@ -1,5 +1,6 @@
 package com.sanshan.DaoTest.mogoTest;
 
+import com.mongodb.WriteResult;
 import com.sanshan.dao.mongo.FileOperation;
 import com.sanshan.dao.mongo.UserRepository;
 import com.sanshan.pojo.entity.UserDO;
@@ -34,6 +35,12 @@ public class mongoTest {
         userRepository.save(userDO);
         UserDO userDO1 = userRepository.findByUsername("ceshi");
         System.out.println(userDO1);
+    }
+
+    @Test
+    public   void updateTest(){
+        WriteResult result = userRepository.changePassword("ceshi2","asdfghjkl");
+        System.out.println(result.toString());
     }
 
 }

@@ -59,7 +59,7 @@
         <javax.cache-api>1.0.0</javax.cache-api>
         <mysql-connector-java>5.1.6</mysql-connector-java>
         <!--mongo-->
-        <org.spring.jpa.mongodb>1.8.4.RELEASE</org.spring.jpa.mongodb>
+        <org.spring.data.mongodb>1.8.4.RELEASE</org.spring.data.mongodb>
         <!--entity Manager-->
         <org.hibernate-entitymanager>4.1.1.Final</org.hibernate-entitymanager>
 
@@ -321,7 +321,7 @@
             <dependency>
                 <groupId>org.springframework.data</groupId>
                 <artifactId>spring-data-mongodb</artifactId>
-                <version>${org.spring.jpa.mongodb}</version>
+                <version>${org.spring.data.mongodb}</version>
                 <exclusions>
                     <exclusion>
                         <groupId>org.slf4j</groupId>

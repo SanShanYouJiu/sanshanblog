@@ -6,6 +6,7 @@
   "isRegisterEnabled":true,
   "aside_tags":30,
   "aside_articles":7,
+  "disabledUsernames":"草泥马,mmp,fuck,蛤",
   "isCommentEnabled":true,
   "isCommentChecked":false,
   "notify_count":5

@@ -5,7 +5,6 @@ import com.sanshan.dao.mongo.UserRepository;
 import com.sanshan.pojo.entity.UserDO;
 import com.sanshan.service.vo.JwtUser;
 import com.sanshan.service.vo.ResponseMsgVO;
-import com.sanshan.util.Setting.Setting;
 import com.sanshan.util.info.CodeTypeEnum;
 import com.sanshan.util.info.PosCodeEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -75,9 +74,13 @@ public class UserService {
              responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "密码为空");
              return false;
         }
-        if (password.length() < 6 || password.length() > 30) {
-             responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "密码长度超出范围");
+        if (password.length() < 6 ) {
+             responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "密码长度太小 小于6位数");
              return false;
+        }
+        if (password.length() > 30){
+            responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "密码长度太长 大于30位");
+            return false;
         }
         return  true;
     }
@@ -172,31 +175,9 @@ public class UserService {
             responseMsgVO.buildWithPosCode(PosCodeEnum.USERNAME_NOALLOW);
             return false;
         }
-        //是否含有违规字段
-        if (usernameIsDisabled(username)){
-              responseMsgVO.buildWithPosCode(PosCodeEnum.USERNAME_NOALLOW);
-              return false;
-        }
         responseMsgVO.buildOK();
         return true;
     }
 
-    /**
-     * 判断用户名是否被禁用
-     *
-     * @param username 用户名
-     * @return true被禁用
-     */
-    public boolean usernameIsDisabled(String username) {
-        if (StringUtils.isEmpty(username)) return false;
-        Setting setting = settingService.getSetting();
-        String[] disabledName = setting.getDisabledUsernames().split(",");
-        for (String s : disabledName) {
-            if (StringUtils.equalsIgnoreCase(s, username)) {
-                return true;
-            }
-        }
-        return false;
-    }
 
 }

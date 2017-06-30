@@ -13,7 +13,7 @@ public class JsonConfigTest {
 
     @Test
     public void test() {
-        jwtUser = new JwtUser((long) 1,"ceshi","ceshi","www.85432173@qq.com",new ArrayList<>(),new Date());
+        jwtUser = new JwtUser("ceshi","ceshi","password","www.85432173@qq.com",new ArrayList<>(),new Date());
         String json = JSON.toJSONString(jwtUser);
         System.out.println(json);
     }

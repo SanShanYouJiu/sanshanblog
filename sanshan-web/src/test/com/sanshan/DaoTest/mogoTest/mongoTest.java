@@ -26,14 +26,13 @@ public class mongoTest {
     @Test
     public void test(){
         UserDO userDO = new UserDO();
-        userDO.setId((long) 1);
-        userDO.setUsername("ceshi");
+        userDO.setUsername("ceshi32");
         userDO.setEmail("www.85432173@qq.com");
         userDO.setEnabled(1);
-        userDO.setPassword("$2a$10$k2LkEdHwRhsNodj2yBjFyuwHGfFIwzeFNAsjXSeDI6tTKI593SnUC");
+        userDO.setPassword("侧视3");
         userDO.setRoles(asList("ROLE_USER"));
         userRepository.save(userDO);
-        UserDO userDO1 = userRepository.findByUsername("ceshi");
+        UserDO userDO1 = userRepository.findByUsername("ceshi32");
         System.out.println(userDO1);
     }
 

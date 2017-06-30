@@ -58,7 +58,7 @@ public class MailService {
 
     /**
      * 发送邮件
-     *
+     *todo 修复邮箱错误
      * @param email   邮箱
      * @param text    内容
      * @param subject 标题

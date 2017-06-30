@@ -9,7 +9,7 @@ import java.util.Date;
 
 public class JwtUser implements UserDetails {
 
-    private final Long id;
+    private final String _id;
     private final String username;
     private final String password;
     private final String email;
@@ -17,13 +17,13 @@ public class JwtUser implements UserDetails {
     private final Date lastPasswordResetDate;
 
     public JwtUser(
-            Long id,
+            String _id,
             String username,
             String password,
             String email,
             Collection<? extends GrantedAuthority> authorities,
             Date lastPasswordResetDate) {
-        this.id = id;
+        this._id = _id;
         this.username = username;
         this.password = password;
         this.email = email;
@@ -38,8 +38,8 @@ public class JwtUser implements UserDetails {
     }
 
     @JSONField(serialize = false,deserialize = false)
-    public Long getId() {
-        return id;
+    public String getId() {
+        return _id;
     }
 
     @JSONField(serialize = false,deserialize = false)

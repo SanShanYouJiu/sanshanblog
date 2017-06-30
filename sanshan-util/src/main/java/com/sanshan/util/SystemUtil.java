@@ -38,7 +38,7 @@ public class SystemUtil {
      */
     public static void setSetting(Setting setting){
         try {
-            File file = new File(SystemUtil.class.getClassLoader().getResource("").getPath()+"sanshanblog-setting.json");
+            File file = new File(SystemUtil.class.getClassLoader().getResource("").getPath()+SETTING_NAME);
             OutputStream out = new FileOutputStream(file);
             JSON.writeJSONString(out,setting);
         } catch (IOException e) {

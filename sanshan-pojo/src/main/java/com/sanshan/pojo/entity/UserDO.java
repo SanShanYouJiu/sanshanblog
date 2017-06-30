@@ -5,20 +5,20 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.Id;
 import java.util.Date;
 import java.util.List;
 
 @NoArgsConstructor
 @Data
 @ToString
+@Document
 public class UserDO extends BaseDO {
     /**
-     * ID
+     * 利用Mongo中默认的ObjectId
      */
-    @Id
-    private Long id;
+    private String _id;
 
     /**
      *头像
@@ -34,7 +34,6 @@ public class UserDO extends BaseDO {
     /**
      * 电子邮箱
      */
-    @Indexed(unique=true, direction= IndexDirection.DESCENDING, dropDups=true)
     private String email;
 
     /**

@@ -13,8 +13,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.regex.Pattern;
-
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -26,11 +24,6 @@ public class UserController {
     private UserService userService;
 
 
-    /**
-     * 邮箱匹配正则
-     */
-    private Pattern emailPattern = Pattern.compile("^([a-zA-Z0-9_\\.\\-])+\\@(([a-zA-Z0-9\\-])+\\.)+([a-zA-Z0-9]{2,4})+$");
-
 
     @RequestMapping(value = "/change-pwd",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PreAuthorize("hasRole('USER')")
@@ -40,17 +33,16 @@ public class UserController {
     }
 
 
-    //TODO 检查邮箱是否存在
     /**
      * 检查邮箱是否存在
      * @param username 要检查的用户名
      */
     @PreAuthorize("hasRole('USER')")
     @RequestMapping(value = "/email/check", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO checkUsername(String username, String email) {
+    public ResponseMsgVO checkUsername(@RequestParam(name = "username") String username, @RequestParam(name = "email") String email) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         //查看是否存在邮箱
-        if (!userService.judgeEmail(email))
+        if (userService.judgeEmail(email))
               return  responseMsgVO.buildWithPosCode(PosCodeEnum.Email_EXIST);
         //合法性检测
         if (!userService.checkEmailLegal(username,email, responseMsgVO))

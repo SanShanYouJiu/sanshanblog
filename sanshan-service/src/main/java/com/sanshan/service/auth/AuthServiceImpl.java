@@ -2,7 +2,12 @@ package com.sanshan.service.auth;
 
 import com.sanshan.dao.mongo.UserRepository;
 import com.sanshan.pojo.entity.UserDO;
+import com.sanshan.service.SettingService;
 import com.sanshan.service.vo.JwtUser;
+import com.sanshan.service.vo.ResponseMsgVO;
+import com.sanshan.util.Setting.Setting;
+import com.sanshan.util.info.PosCodeEnum;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -29,6 +34,9 @@ public class AuthServiceImpl implements AuthService {
     @Value("${jwt.tokenHead}")
     private String tokenHead;
 
+   @Autowired
+   private SettingService settingService;
+
     @Autowired
     public AuthServiceImpl(
             AuthenticationManager authenticationManager,
@@ -42,18 +50,41 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public UserDO register(UserDO userToAdd) {
+    public boolean register(UserDO userToAdd, ResponseMsgVO responseMsgVO) {
         final String username = userToAdd.getUsername();
         if (userRepository.findByUsername(username) != null) {
-            return null;
+            responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "该用户名已存在");
+            return false;
         }
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         final String rawPassword = userToAdd.getPassword();
         userToAdd.setPassword(encoder.encode(rawPassword));
         userToAdd.setLastPasswordResetDate(new Date());
         userToAdd.setRoles(asList("ROLE_USER"));
-        return userRepository.insert(userToAdd);
+        userRepository.insert(userToAdd);
+        responseMsgVO.buildOK();
+        return true;
     }
+
+    /**
+     * 判断用户名是否被禁用
+     *
+     * @param username 用户名
+     * @return true被禁用
+     */
+    public boolean usernameIsDisabled(String username) {
+        if (StringUtils.isEmpty(username)) return false;
+        Setting setting = settingService.getSetting();
+        String[] disabledName = setting.getDisabledUsernames().split(",");
+        for (String s : disabledName) {
+            if (StringUtils.equalsIgnoreCase(s, username)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 
     @Override
     public String login(String username, String password) {

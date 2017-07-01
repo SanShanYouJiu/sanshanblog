@@ -16,9 +16,9 @@
     <!--这里的事务并没有起到什么作用 目前代码都是原子的操作-->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
          <tx:attributes>
-             <tx:method name="insert*"  isolation="REPEATABLE_READ"/>
-             <tx:method name="update*" isolation="REPEATABLE_READ"/>
-             <tx:method name="delete*" isolation="REPEATABLE_READ"/>
+             <tx:method name="insert*"  isolation="REPEATABLE_READ" propagation="REQUIRED"/>
+             <tx:method name="update*" isolation="REPEATABLE_READ" propagation="REQUIRED"/>
+             <tx:method name="delete*" isolation="REPEATABLE_READ" propagation="REQUIRED"/>
          </tx:attributes>
     </tx:advice>
 

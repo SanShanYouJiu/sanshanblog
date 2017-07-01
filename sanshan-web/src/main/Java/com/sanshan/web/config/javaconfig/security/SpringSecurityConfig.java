@@ -81,7 +81,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/auth/login",
                         "/api/auth/register",
                         "/api/user/email/send",
-                        "/api/user/check/token"
+                        "/api/user/check/token",
+                        "/api/user/find-pwd"
                 ).permitAll()
                 .anyRequest()
                 .authenticated();

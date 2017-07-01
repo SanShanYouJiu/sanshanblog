@@ -7,8 +7,7 @@ import java.util.Date;
 
 @Data
 @NoArgsConstructor
-public class EditorDO extends BaseDO {
-
+public  abstract class EditorDO extends BaseDO {
 
     private String user;
 

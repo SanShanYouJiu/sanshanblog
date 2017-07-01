@@ -11,6 +11,8 @@ import javax.persistence.Table;
 @NoArgsConstructor
 public class UEditorBlogDO extends EditorDO {
 
+    private static final long serialVersionUID = 4108703926461957019L;
+
     @Id
     private long id;
 

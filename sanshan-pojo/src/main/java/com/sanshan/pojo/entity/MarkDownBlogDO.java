@@ -14,6 +14,8 @@ import javax.persistence.Table;
 @Data
 public class MarkDownBlogDO extends EditorDO {
 
+    private static final long serialVersionUID = 2532923739523906290L;
+
     @Id
     private long id;
 

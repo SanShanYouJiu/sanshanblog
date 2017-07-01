@@ -12,6 +12,8 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 public class Setting implements Serializable {
+
+    private static final long serialVersionUID = -807062687563656085L;
     /**
      * 网站主域名
      */

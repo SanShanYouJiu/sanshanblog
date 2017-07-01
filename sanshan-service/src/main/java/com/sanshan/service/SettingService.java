@@ -25,7 +25,9 @@ public class SettingService {
     public Setting getSetting(){
         String settingCache = redisTemplate.opsForValue().get(SETTING_CACHE);
         if (Objects.isNull(settingCache)){
-            return SystemUtil.getSetting();
+            Setting setting = SystemUtil.getSetting();
+            redisTemplate.opsForValue().set(SETTING_CACHE, JSON.toJSONString(setting));
+            return setting;
         }
         Setting setting = JSON.parseObject(settingCache,Setting.class);
         if (Objects.nonNull(setting)){
@@ -33,4 +35,11 @@ public class SettingService {
         }
         return SystemUtil.getSetting();
     }
+
+
+    public void setSetting(Setting setting){
+        redisTemplate.opsForValue().set(SETTING_CACHE, String.valueOf(setting));
+        SystemUtil.setSetting(setting);
+    }
+
 }

@@ -15,6 +15,9 @@ import java.util.List;
 @ToString
 @Document
 public class UserDO extends BaseDO {
+
+    private static final long serialVersionUID = -499938264759024375L;
+
     /**
      * 利用Mongo中默认的ObjectId
      */

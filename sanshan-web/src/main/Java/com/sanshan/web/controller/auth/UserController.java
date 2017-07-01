@@ -1,7 +1,6 @@
 package com.sanshan.web.controller.auth;
 
 import com.sanshan.dao.mongo.UserRepository;
-import com.sanshan.pojo.entity.UserDO;
 import com.sanshan.service.UserService;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.info.PosCodeEnum;
@@ -24,9 +23,11 @@ public class UserController {
     private UserService userService;
 
 
-
-    @RequestMapping(value = "/change-pwd",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    /**
+     *更改密码 在更改密码之前需要发送邮箱验证码
+     */
     @PreAuthorize("hasRole('USER')")
+    @RequestMapping(value = "/change-pwd",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO changePassword(@RequestParam(name = "code") String code,
                                         @RequestParam(name = "password") String password){
        return userService.changePwd(code, password);
@@ -34,34 +35,39 @@ public class UserController {
 
 
     /**
-     * 检查邮箱是否存在
-     * @param username 要检查的用户名
+     * 检查邮箱是否可以使用
      */
     @PreAuthorize("hasRole('USER')")
     @RequestMapping(value = "/email/check", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO checkUsername(@RequestParam(name = "username") String username, @RequestParam(name = "email") String email) {
+    public ResponseMsgVO checkUsername(@RequestParam(name = "email") String email) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         //查看是否存在邮箱
         if (userService.judgeEmail(email))
               return  responseMsgVO.buildWithPosCode(PosCodeEnum.Email_EXIST);
         //合法性检测
-        if (!userService.checkEmailLegal(username,email, responseMsgVO))
+        if (!userService.checkEmailLegal(email, responseMsgVO))
              return  responseMsgVO;
 
         return responseMsgVO;
     }
 
 
-    //todo 实现注册后邮箱验证
+    /**
+     * 注册之后的邮箱认证
+     */
     @PreAuthorize("hasRole('USER')")
-    @RequestMapping(value = "/register/check/token", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public UserDO registerCheckToken(@RequestParam(name = "token") String token
+    @RequestMapping(value = "/register/check/token", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO registerCheckToken(@RequestParam(name = "token") String token
     ) {
 
-        return null;
+      return  userService.checkRegisterEmailToken(token);
     }
 
 
+    /**
+     * 发送邮箱验证码
+     * @param type 对应的是CodyTypeEnum类型 1注册 2忘记密码 3更改密码
+     */
     @RequestMapping(value = "/email/send",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO sendEmailCode(
             @RequestParam(name = "type") int type,
@@ -69,11 +75,21 @@ public class UserController {
         return userService.sendEmailCode(type, email);
     }
 
-
-    //TODO 验证邮箱token
     /**
+     忘记密码
+     todo 忘记密码其实就应该去修改了 直接修改密码 而不是返回原密码 这里暂留 以后取消
+     */
+    @RequestMapping(value = "/find-pwd", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO findPassword( @RequestParam(name = "username") String username,
+                                        @RequestParam(name = "token") String token) {
+        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
+         return  userService.findPassword(username, token, responseMsgVO);
+    }
+
+
+    /**
+     * 作为其他功能的 目前暂留
      * 验证邮箱token
-     * todo验证方式
      * @param token token
      */
     @RequestMapping(value = "/check/token", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -82,6 +98,5 @@ public class UserController {
         userService.checkEmailToken(token,responseMsgVO);
         return responseMsgVO.buildOK();
     }
-
 
 }

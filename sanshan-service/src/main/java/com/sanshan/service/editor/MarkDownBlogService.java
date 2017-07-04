@@ -84,7 +84,9 @@ public class MarkDownBlogService {
             return 0;
         }
         //加入到索引中
+        if (tag!=null)
         blogIdGenerate.putTag(tag,blogIdGenerate.getId());
+        if (title!=null)
         blogIdGenerate.putTitle(title,blogIdGenerate.getId());
         blogIdGenerate.putDate(date,blogIdGenerate.getId());
 

@@ -47,7 +47,7 @@ public class UserDO extends BaseDO {
     /**
      * 博客链接
      */
-    private String blog;
+    private String bloglink;
 
     /**
      * 登录IP

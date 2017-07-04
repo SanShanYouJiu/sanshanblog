@@ -85,7 +85,9 @@ public class UeditorBlogService {
             return 0;
         }
         //加入到索引中
+        if (title!=null)
         blogIdGenerate.putTag(tag,blogIdGenerate.getId());
+        if (tag!=null)
         blogIdGenerate.putTitle(title,blogIdGenerate.getId());
         blogIdGenerate.putDate(date,blogIdGenerate.getId());
 

@@ -69,7 +69,7 @@ public class BlogService {
      * @return
      */
     public List<BlogVO> getBlogByTag(String tag) {
-        List<BlogVO> blogVOS = new ArrayList<>();
+        List<BlogVO> blogVOS = new LinkedList<>();
         Set<Long> longs = blogIdGenerate.getTagMap(tag);
         if (Objects.isNull(longs))
             return  null;
@@ -83,7 +83,7 @@ public class BlogService {
     }
 
     public List queryTagAll() {
-        List list = new ArrayList();
+        List list = new LinkedList();
         Map<String,Set<Long>> map = blogIdGenerate.getIdTagCopy();
         for (Map.Entry<String, Set<Long>> entry : map.entrySet()) {
             list.add(entry.getKey());
@@ -91,8 +91,8 @@ public class BlogService {
         return list;
     }
 
-    public List queryTtitleAll() {
-        List list = new ArrayList();
+    public List queryTitleAll() {
+        List list = new LinkedList();
         Map<String,Set<Long>> map = blogIdGenerate.getIdTitleCopy();
         for (Map.Entry<String, Set<Long>> entry : map.entrySet()) {
             list.add(entry.getKey());
@@ -106,7 +106,7 @@ public class BlogService {
      * @return
      */
     public List<BlogVO> getBlogByTitle(String title) {
-        List<BlogVO> blogVOS = new ArrayList<>();
+        List<BlogVO> blogVOS = new LinkedList<>();
         Set<Long> longs = blogIdGenerate.getTitleMap(title);
         if (Objects.isNull(longs))
             return null;
@@ -144,7 +144,7 @@ public class BlogService {
 
 
     public List<BlogVO> queryAll() {
-        List<BlogVO> blogs = new ArrayList<BlogVO>();
+        List<BlogVO> blogs = new LinkedList<>();
         Long size = blogIdGenerate.getSize();
         for (long i = 1; i <= size; i++) {
             if (Objects.isNull(getBlog(i))) {

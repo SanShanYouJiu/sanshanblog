@@ -65,7 +65,7 @@ public class BlogController {
     @RequestMapping(value = "query-title-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO queryTtitleAll(){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
-        List list =blogService.queryTtitleAll();
+        List list =blogService.queryTitleAll();
         if (Objects.isNull(list))
             return responseMsgVO.buildError(new ERROR(404,"没有标题"));
         return responseMsgVO.buildOKWithData(list);

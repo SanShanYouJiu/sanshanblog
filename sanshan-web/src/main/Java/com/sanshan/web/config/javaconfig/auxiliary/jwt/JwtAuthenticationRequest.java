@@ -8,6 +8,7 @@ public class  JwtAuthenticationRequest implements Serializable {
 
     private String username;
     private String password;
+    private String code;
 
     public JwtAuthenticationRequest() {
         super();
@@ -16,6 +17,14 @@ public class  JwtAuthenticationRequest implements Serializable {
     public JwtAuthenticationRequest(String username, String password) {
         this.setUsername(username);
         this.setPassword(password);
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getUsername() {

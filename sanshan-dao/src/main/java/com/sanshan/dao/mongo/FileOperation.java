@@ -21,7 +21,7 @@ public class FileOperation {
 
 
     /**
-     * 存入图片
+     * 存入文件
      * @param content  文件
      * @param filename 文件名
      * @param type 类型
@@ -32,7 +32,7 @@ public class FileOperation {
     }
 
     /**
-     *  获得图片
+     *  获得文件
      * @param filename 文件名
      * @return 返回匹配图片集合
      */
@@ -42,7 +42,7 @@ public class FileOperation {
 
 
     /**
-     * 删除图片
+     * 删除文件
      * @param filename 文件名
      */
     public void deleteFile(String filename){

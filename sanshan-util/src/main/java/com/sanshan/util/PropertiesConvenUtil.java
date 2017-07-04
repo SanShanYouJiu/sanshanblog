@@ -155,13 +155,15 @@ public class PropertiesConvenUtil {
      * @throws IOException
      */
     public final static void IdMapToFile(String path, Map<Long, EditorTypeEnum> map,String description) throws IOException {
-        Properties properties = new Properties();
-        for (Entry<Long, EditorTypeEnum> key : map.entrySet()) {
-            properties.setProperty(key.getKey().toString(), key.getValue().toString());
+        if (map.size()!=0) {
+            Properties properties = new Properties();
+            for (Entry<Long, EditorTypeEnum> key : map.entrySet()) {
+                properties.setProperty(key.getKey().toString(), key.getValue().toString());
+            }
+            FileOutputStream outputStream = new FileOutputStream(path);
+            OutputStreamWriter osw = new OutputStreamWriter(outputStream, "UTF-8");
+            properties.store(osw, description);
         }
-        FileOutputStream outputStream = new FileOutputStream(path);
-        OutputStreamWriter osw = new OutputStreamWriter(outputStream, "UTF-8");
-        properties.store(osw,description);
     }
 
 
@@ -173,13 +175,15 @@ public class PropertiesConvenUtil {
      * @throws IOException
      */
     public final static void setLongStringToFile(String path, Map<String, Set<Long>> map,String description) throws IOException {
-        Properties properties = new Properties();
-        for (Entry<String, Set<Long>> key : map.entrySet()) {
-            properties.setProperty(key.getKey(), key.getValue().toString());
+        if (map.size()!=0) {
+            Properties properties = new Properties();
+            for (Entry<String, Set<Long>> key : map.entrySet()) {
+                properties.setProperty(key.getKey().toString(), key.getValue().toString());
+            }
+            FileOutputStream outputStream = new FileOutputStream(path);
+            OutputStreamWriter osw = new OutputStreamWriter(outputStream, "UTF-8");
+            properties.store(osw, description);
         }
-        FileOutputStream outputStream = new FileOutputStream(path);
-        OutputStreamWriter osw = new OutputStreamWriter(outputStream, "UTF-8");
-        properties.store(osw,description);
     }
 
     /**
@@ -190,34 +194,40 @@ public class PropertiesConvenUtil {
      * @throws IOException
      */
     public final static void setLongDateMapToFile(String path, Map<Date, Set<Long>> map,String description) throws IOException {
-        Properties properties = new Properties();
-        for (Entry<Date, Set<Long>> key : map.entrySet()) {
-            properties.setProperty(String.valueOf(key.getKey()), key.getValue().toString());
+        if (map.size()!=0) {
+            Properties properties = new Properties();
+            for (Entry<Date, Set<Long>> key : map.entrySet()) {
+                properties.setProperty(String.valueOf(key.getKey()), key.getValue().toString());
+            }
+            FileOutputStream outputStream = new FileOutputStream(path);
+            OutputStreamWriter osw = new OutputStreamWriter(outputStream, "UTF-8");
+            properties.store(osw, description);
         }
-        FileOutputStream outputStream = new FileOutputStream(path);
-        OutputStreamWriter osw = new OutputStreamWriter(outputStream, "UTF-8");
-        properties.store(osw,description);
     }
 
 
     public final static void LongStringMapToFile(String path, Map<Long, String> map,String description) throws IOException {
-        Properties properties = new Properties();
-        for (Entry<Long, String> key : map.entrySet()) {
-            properties.setProperty(String.valueOf(key.getKey()), key.getValue());
+        if (map.size()!=0) {
+            Properties properties = new Properties();
+            for (Entry<Long, String> key : map.entrySet()) {
+                properties.setProperty(String.valueOf(key.getKey()), key.getValue());
+            }
+            FileOutputStream outputStream = new FileOutputStream(path);
+            OutputStreamWriter osw = new OutputStreamWriter(outputStream, "UTF-8");
+            properties.store(osw, description);
         }
-        FileOutputStream outputStream = new FileOutputStream(path);
-        OutputStreamWriter osw = new OutputStreamWriter(outputStream, "UTF-8");
-        properties.store(osw,description);
     }
 
     public final static void LongDateMapToFile(String path, Map<Long, Date> map,String description) throws IOException {
-        Properties properties = new Properties();
-        for (Entry<Long, Date> key : map.entrySet()) {
-            properties.setProperty(String.valueOf(key.getKey()), String.valueOf(key.getValue()));
+        if (map.size()!=0) {
+            Properties properties = new Properties();
+            for (Entry<Long, Date> key : map.entrySet()) {
+                properties.setProperty(String.valueOf(key.getKey()), String.valueOf(key.getValue()));
+            }
+            FileOutputStream outputStream = new FileOutputStream(path);
+            OutputStreamWriter osw = new OutputStreamWriter(outputStream, "UTF-8");
+            properties.store(osw, description);
         }
-        FileOutputStream outputStream = new FileOutputStream(path);
-        OutputStreamWriter osw = new OutputStreamWriter(outputStream, "UTF-8");
-        properties.store(osw,description);
     }
 
 }

@@ -1,6 +1,6 @@
 package com.sanshan.web.config.javaconfig.auxiliary;
 
-import com.sanshan.web.controller.advice.MultipartFileBucket;
+import com.sanshan.web.controller.index.MultipartFileBucket;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;

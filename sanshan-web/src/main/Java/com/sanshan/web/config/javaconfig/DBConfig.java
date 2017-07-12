@@ -73,6 +73,8 @@ public class DBConfig {
         ds.setMinEvictableIdleTimeMillis(minEvictableIdleTimeMillis);
         ds.setValidationQuery("SELECT 1");
         ds.setTestWhileIdle(testWhileIdle);
+        //不开启mysql的自动事务
+        ds.setDefaultAutoCommit(false);
         ds.setTestOnBorrow(testOnBorrow);
         ds.setTestOnReturn(testOnReturn);
         ds.setMaxOpenPreparedStatements(maxOpenPreparedStatements);

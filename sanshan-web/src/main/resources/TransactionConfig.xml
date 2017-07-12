@@ -16,12 +16,12 @@
     <!--这里的事务并没有起到什么作用 DAO层代码都是原子的操作 目前没有分割出一个完整的事务处理层-->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
          <tx:attributes>
-             <tx:method name="query*" isolation="REPEATABLE_READ" propagation="SUPPORTS"/>
-             <tx:method name="insert*"  isolation="REPEATABLE_READ" propagation="REQUIRED"
+             <tx:method name="query*" isolation="READ_COMMITTED" propagation="SUPPORTS"/>
+             <tx:method name="insert*"  isolation="READ_COMMITTED" propagation="REQUIRED"
                         rollback-for="com.sanshan.util.exception.dbrollback.DBRollbackInsertException"/>
-             <tx:method name="update*" isolation="REPEATABLE_READ" propagation="REQUIRED"
+             <tx:method name="update*" isolation="READ_COMMITTED" propagation="REQUIRED"
              rollback-for="com.sanshan.util.exception.dbrollback.DBRollbackUpdateException"/>
-             <tx:method name="delete*" isolation="REPEATABLE_READ" propagation="REQUIRED"
+             <tx:method name="delete*" isolation="READ_COMMITTED" propagation="REQUIRED"
              rollback-for="com.sanshan.util.exception.dbrollback.DBRollbackDeleteException"/>
          </tx:attributes>
     </tx:advice>

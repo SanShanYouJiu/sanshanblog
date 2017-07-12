@@ -10,13 +10,11 @@ import org.springframework.http.MediaType;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.alibaba.fastjson.serializer.SerializerFeature.WriteNullListAsEmpty;
-
 /**
  * 采用的FastJson作为Http转换器
  */
 @Configuration
-public class MessageConventerConfig {
+public class MessageConverterConfig {
 
     @Bean
     public FastJsonHttpMessageConverter4 fastJsonHttpMessageConverter4(FastJsonConfig fastJsonConfig){

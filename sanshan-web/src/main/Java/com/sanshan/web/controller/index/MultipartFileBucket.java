@@ -1,4 +1,4 @@
-package com.sanshan.web.controller.advice;
+package com.sanshan.web.controller.index;
 
 import org.springframework.web.multipart.MultipartFile;
 

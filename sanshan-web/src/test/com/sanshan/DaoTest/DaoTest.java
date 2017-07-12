@@ -40,4 +40,10 @@ public class DaoTest {
         }
     }
 
+    @Test
+    public void test2(){
+        MarkDownBlogDO markDownBlogDO = markDownBlogMapper.selectBlogById(1);
+        System.out.println(markDownBlogDO);
+    }
+
 }

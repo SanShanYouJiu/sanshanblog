@@ -1,4 +1,4 @@
-package com.sanshan.util.Setting;
+package com.sanshan.util.setting;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -70,6 +70,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(
                         "/",
+                        //搜索引擎
+                        "/solr/**",
                         "/api/",
                         "/favicon.ico",
                         "/api/blog/**",

@@ -71,7 +71,7 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 
     /*multipart CommonsMultipartResolver解析器*/
     @Bean
-    public  MultipartResolver multipartResolver2() {
+    public  MultipartResolver multipartResolver() {
         return new CommonsMultipartResolver();
     }
 

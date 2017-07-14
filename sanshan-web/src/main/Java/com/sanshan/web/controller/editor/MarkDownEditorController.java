@@ -2,7 +2,9 @@ package com.sanshan.web.controller.editor;
 
 import com.github.pagehelper.PageInfo;
 import com.sanshan.pojo.dto.MarkDownBlogDTO;
+import com.sanshan.service.BlogService;
 import com.sanshan.service.editor.MarkDownBlogService;
+import com.sanshan.service.vo.BlogVO;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.BlogIdGenerate;
 import com.sanshan.util.exception.ERROR;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequestMapping("markdown-editor")
 @RestController
@@ -28,6 +31,9 @@ public class MarkDownEditorController {
 
     @Autowired
     private BlogIdGenerate blogIdGenerate;
+
+    @Autowired
+    private BlogService blogService;
 
     /**
      * 分页查询
@@ -47,8 +53,9 @@ public class MarkDownEditorController {
 
     @RequestMapping(value = "query-all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO queryAll() {
-        ResponseMsgVO<List<MarkDownBlogDTO>> responseMsgVO = new ResponseMsgVO<>();
-        List<MarkDownBlogDTO> list = markDownBlogService.queryDtoAll();
+        ResponseMsgVO<List<BlogVO>> responseMsgVO = new ResponseMsgVO<>();
+        List<BlogVO> list;
+        list=blogService.queryAll().stream().filter(blogVO -> blogVO.getType()==1).collect(Collectors.toList());
         return responseMsgVO.buildOKWithData(list);
     }
 

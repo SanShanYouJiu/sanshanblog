@@ -5,7 +5,7 @@ import com.sanshan.pojo.entity.UserDO;
 import com.sanshan.service.SettingService;
 import com.sanshan.service.vo.JwtUser;
 import com.sanshan.service.vo.ResponseMsgVO;
-import com.sanshan.util.Setting.Setting;
+import com.sanshan.util.setting.Setting;
 import com.sanshan.util.info.PosCodeEnum;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;

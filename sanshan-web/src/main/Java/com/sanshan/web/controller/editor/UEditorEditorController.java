@@ -4,8 +4,10 @@ import com.baidu.ueditor.ActionEnter;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.sanshan.pojo.dto.UEditorBlogDTO;
+import com.sanshan.service.BlogService;
 import com.sanshan.service.editor.UEditorFileService;
 import com.sanshan.service.editor.UeditorBlogService;
+import com.sanshan.service.vo.BlogVO;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.BlogIdGenerate;
 import com.sanshan.util.exception.ERROR;
@@ -23,6 +25,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -39,6 +42,8 @@ public class UEditorEditorController {
     @Autowired
     private BlogIdGenerate blogIdGenerate;
 
+    @Autowired
+    private BlogService blogService;
 
     @RequestMapping("/config")
     public void config(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
@@ -86,8 +91,9 @@ public class UEditorEditorController {
     @RequestMapping(value = "query-all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @PreAuthorize("hasRole('USER')")
     public ResponseMsgVO queryAll() {
-        ResponseMsgVO<List<UEditorBlogDTO>> responseMsgVO = new ResponseMsgVO<>();
-        List<UEditorBlogDTO> list = uEditorBlogService.queryDtoAll();
+        ResponseMsgVO<List<BlogVO>> responseMsgVO = new ResponseMsgVO<>();
+        List<BlogVO> list ;
+        list=blogService.queryAll().stream().filter(blogVO -> blogVO.getType()==0).collect(Collectors.toList());
         return responseMsgVO.buildOKWithData(list);
     }
 

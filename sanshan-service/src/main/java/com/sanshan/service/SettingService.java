@@ -1,7 +1,7 @@
 package com.sanshan.service;
 
 import com.alibaba.fastjson.JSON;
-import com.sanshan.util.Setting.Setting;
+import com.sanshan.util.setting.Setting;
 import com.sanshan.util.SystemUtil;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;

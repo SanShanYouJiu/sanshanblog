@@ -10,8 +10,8 @@ import java.util.Date;
 @Data
 public class BlogVO {
     /**
-     * 0为markdown-blog
-     * 1则为UEditor-blog
+     * 1为markdown-blog
+     * 0则为UEditor-blog
      */
     private int type;
 

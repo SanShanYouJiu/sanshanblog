@@ -1,17 +1,18 @@
 package com.sanshan.web.controller.index;
 
+import com.sanshan.dao.mongo.FileOperation;
 import com.sanshan.service.FeedBackService;
 import com.sanshan.service.vo.ResponseMsgVO;
-import com.sanshan.util.info.PosCodeEnum;
 import com.sanshan.web.config.javaconfig.auxiliary.MultipartFileBucketValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.BindingResult;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
+import javax.servlet.http.HttpServletRequest;
 
-@RestController()
+@Controller()
 @RequestMapping("/index")
 public class HomeIndexController {
 
@@ -19,10 +20,13 @@ public class HomeIndexController {
     @Autowired
     private MultipartFileBucketValidator multipartFileBucketValidator;
 
+    @Autowired
+    private FileOperation fileOperation;
 
     @Autowired
     private FeedBackService feedBackService;
 
+    //TODO 作校验使用
     @InitBinder("multipartFileBucket")
     protected void initBinderMultipartFileBucket(WebDataBinder binder) {
         binder.setValidator(multipartFileBucketValidator);
@@ -30,6 +34,7 @@ public class HomeIndexController {
 
 
     @RequestMapping(value = "/advice",method = RequestMethod.POST)
+    @ResponseBody
     public ResponseMsgVO handleAdvice(@RequestParam(value = "email")String email, @RequestParam(value = "opinion",required = false)String opinion){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         responseMsgVO.buildOK();
@@ -38,28 +43,15 @@ public class HomeIndexController {
     }
 
 
-
     @RequestMapping(value = "/advice/file",method = RequestMethod.POST)
-    public ResponseMsgVO handleFileUpload(@RequestParam(value = "email")String email,@RequestParam(value = "opinion")String opinion,@RequestParam(value = "file")@Valid MultipartFileBucket multipartFileBucket, BindingResult result){
+    @ResponseBody
+    public ResponseMsgVO handleFileUpload2(
+            HttpServletRequest request, @RequestParam(name = "file") MultipartFile multipartFile){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
-        if (result.hasErrors()) {
-            return responseMsgVO.buildWithPosCode(PosCodeEnum.INTER_ERROR);
-        }
-
-        feedBackService.saveFile(email,opinion,multipartFileBucket.getMultipartFile());
+        String email = request.getHeader("email");
+        String opinion = request.getHeader("opinion");
+        feedBackService.saveFile(email,opinion,multipartFile);
         return responseMsgVO.buildOK();
     }
-
-    @RequestMapping(value = "/advice/file2",method = RequestMethod.POST)
-    public ResponseMsgVO handleFileUpload2(@RequestParam(value = "file")@Valid MultipartFileBucket multipartFileBucket, BindingResult result){
-        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
-        if (result.hasErrors()) {
-            return responseMsgVO.buildWithPosCode(PosCodeEnum.INTER_ERROR);
-        }
-
-        return responseMsgVO.buildOK();
-    }
-
-
 
 }

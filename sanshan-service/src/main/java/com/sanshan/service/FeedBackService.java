@@ -1,5 +1,7 @@
 package com.sanshan.service;
 
+import com.mongodb.BasicDBObject;
+import com.mongodb.DBObject;
 import com.sanshan.dao.FeedbackMapper;
 import com.sanshan.dao.mongo.FileOperation;
 import com.sanshan.pojo.entity.FeedbackDO;
@@ -17,10 +19,12 @@ import java.util.Date;
 public class FeedBackService {
 
    @Autowired
- private   FeedbackMapper feedbackMapper;
+   private  FeedbackMapper feedbackMapper;
 
    @Autowired
    private FileOperation fileOperation;
+
+
 
    public void store(String email, String opinion) {
       FeedbackDO feedbackDO = new FeedbackDO();
@@ -31,9 +35,13 @@ public class FeedBackService {
       feedbackMapper.save(feedbackDO);
    }
 
+
    public void saveFile(String email,String opinion,MultipartFile multipartFile) {
       try {
-         fileOperation.saveFile(multipartFile.getInputStream(),email+multipartFile.getOriginalFilename(),multipartFile.getContentType(),"反馈的意见文件");
+          DBObject metedata = new BasicDBObject();
+          metedata.put("otherEmail", email);
+          metedata.put("otherOpinion", opinion);
+         fileOperation.saveFile(multipartFile.getInputStream(),multipartFile.getOriginalFilename(),multipartFile.getContentType(),metedata);
       } catch (IOException e) {
           log.error("存入反馈文件出错");
          e.printStackTrace();

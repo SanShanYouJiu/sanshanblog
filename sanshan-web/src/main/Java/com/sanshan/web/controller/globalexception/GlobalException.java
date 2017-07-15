@@ -42,6 +42,7 @@ public class GlobalException {
     }
 
 
+    //拦住exception不是一个好选择
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.OK)
     public Object ExceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception ex) {
@@ -56,7 +57,7 @@ public class GlobalException {
 
         //重定向到错误页面
         request.setAttribute("errorMessage",ex.getMessage());
-        redirect("/error",HttpStatus.NOT_FOUND,request,response);
+        redirect("/api/error",HttpStatus.NOT_FOUND,request,response);
         return null;
     }
 

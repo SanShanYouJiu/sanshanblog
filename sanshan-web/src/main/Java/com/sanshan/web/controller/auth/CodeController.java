@@ -47,9 +47,9 @@ public class CodeController {
         response.setDateHeader("Expires", 0);
         response.setContentType("image/png");
         //生成一个codeID对应
-        long codeid=atomicLong.incrementAndGet();
-        response.setHeader("codeid", String.valueOf(codeid));
-        redisTemplate.opsForValue().set(String.valueOf(codeid), resultCode,3, TimeUnit.MINUTES);
+        long codeId=atomicLong.incrementAndGet();
+        response.setHeader("codeId", String.valueOf(codeId));
+        redisTemplate.opsForValue().set(String.valueOf(codeId), resultCode,3, TimeUnit.MINUTES);
         //写回
         ServletOutputStream sos = response.getOutputStream();
         ImageIO.write(buffImg,"png",sos);

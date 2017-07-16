@@ -11,13 +11,13 @@ public class UserDTO {
 
     private Long id;
 
-    private String avatear;
+    private String avatar;
 
     private String username;
 
     private String email;
 
-    private String bloglink;
+    private String blogLink;
 
     private String honor;
 

@@ -34,8 +34,10 @@ public class AuthServiceImpl implements AuthService {
     @Value("${jwt.tokenHead}")
     private String tokenHead;
 
-   @Autowired
-   private SettingService settingService;
+     @Autowired
+     private SettingService settingService;
+
+     public static final String DefaultAvatar ="http://localhost/images/defaultUser.jpg";
 
     @Autowired
     public AuthServiceImpl(
@@ -58,6 +60,7 @@ public class AuthServiceImpl implements AuthService {
         }
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         final String rawPassword = userToAdd.getPassword();
+        userToAdd.setAvatar(DefaultAvatar);
         userToAdd.setPassword(encoder.encode(rawPassword));
         userToAdd.setLastPasswordResetDate(new Date());
         userToAdd.setRoles(asList("ROLE_USER"));

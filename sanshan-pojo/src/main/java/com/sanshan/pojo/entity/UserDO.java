@@ -26,7 +26,7 @@ public class UserDO extends BaseDO {
     /**
      *头像
      */
-    private String avatear;
+    private String avatar;
 
     /**
      * 昵称
@@ -47,7 +47,7 @@ public class UserDO extends BaseDO {
     /**
      * 博客链接
      */
-    private String bloglink;
+    private String blogLink;
 
     /**
      * 登录IP
@@ -68,12 +68,12 @@ public class UserDO extends BaseDO {
     /**
      * 登录失败次数
      */
-    private Integer loginfail;
+    private Integer loginFail;
 
     /**
      * 锁定日期
      */
-    private Date lockdate;
+    private Date lockDate;
 
 
     private Integer status;

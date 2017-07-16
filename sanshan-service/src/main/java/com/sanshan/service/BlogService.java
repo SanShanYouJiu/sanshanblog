@@ -31,7 +31,7 @@ public class BlogService {
 
     public Long getCurrentId() {
         Long id = blogIdGenerate.getSize();
-        for (Long i = id; i > 0; i--) {
+        for (long i = id-1; i > -1; i--) {
             EditorTypeEnum type = blogIdGenerate.getType(i);
             switch (type) {
                 case UEDITOR_EDITOR:
@@ -100,6 +100,8 @@ public class BlogService {
         return list;
     }
 
+
+
     /**
      * 查询对应title标签的博客
      * @param title
@@ -108,6 +110,36 @@ public class BlogService {
     public List<BlogVO> getBlogByTitle(String title) {
         List<BlogVO> blogVOS = new LinkedList<>();
         Set<Long> longs = blogIdGenerate.getTitleMap(title);
+        if (Objects.isNull(longs))
+            return null;
+        Long[] a={};
+        Long[] ids = longs.toArray(a);
+        for (long i = 0; i <ids.length ; i++) {
+            BlogVO blogVO = getBlog(ids[Math.toIntExact(i)]);
+            blogVOS.add(blogVO);
+        }
+        return blogVOS;
+    }
+
+
+
+    public List queryDateAll() {
+        List list = new LinkedList();
+        Map<Date,Set<Long>> map = blogIdGenerate.getIdDateCopy();
+        for (Map.Entry<Date, Set<Long>> entry : map.entrySet()) {
+            list.add(entry.getKey());
+        }
+        return list;
+    }
+
+    /**
+     * 查询对应date标签的博客
+     * @param date
+     * @return
+     */
+    public List<BlogVO> getBlogByDate(Date date) {
+        List<BlogVO> blogVOS = new LinkedList<>();
+        Set<Long> longs = blogIdGenerate.getDateMap(date);
         if (Objects.isNull(longs))
             return null;
         Long[] a={};
@@ -146,7 +178,7 @@ public class BlogService {
     public List<BlogVO> queryAll() {
         List<BlogVO> blogs = new LinkedList<>();
         Long size = blogIdGenerate.getSize();
-        for (long i = 1; i <= size; i++) {
+        for (long i = 0; i <size; i++) {
             if (Objects.isNull(getBlog(i))) {
                 continue;
             } else {

@@ -16,4 +16,13 @@ public interface UEditorBlogMapper extends Mapper<UEditorBlogDO> {
     List<UEditorBlogDO> queryByTitle(UEditorBlogDO uEditorBlogDO);
 
 
+    /**
+     * 没有查询content属性 通过id进行间接的去缓存查
+     * @param uEditorBlogDO
+     * @return
+     */
+    @Select("SELECT id,title,tag,user,time FROM ueditor_blog WHERE user= #{user}")
+    List<UEditorBlogDO> queryByUser(UEditorBlogDO uEditorBlogDO);
+
+
 }

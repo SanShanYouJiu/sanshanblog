@@ -5,10 +5,12 @@ import com.sanshan.pojo.dto.UEditorBlogDTO;
 import com.sanshan.util.info.EditorTypeEnum;
 import lombok.Data;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
-public class BlogVO {
+public class BlogVO  implements Serializable{
+    private static final long serialVersionUID = -3414470325758706103L;
     /**
      * 1为markdown-blog
      * 0则为UEditor-blog

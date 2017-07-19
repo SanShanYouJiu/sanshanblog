@@ -4,6 +4,8 @@ import com.sanshan.util.info.EditorTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.*;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -61,10 +63,14 @@ public class PropertiesConvenUtil {
                        case 3:
                            value = (String) entry.getValue();
                            set = stringConventSet(value);
-                           map.put(new Date((String) entry.getKey()),set);
+                           DateFormat fmt =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                           Date date=fmt.parse((String) entry.getKey());
+                           map.put(date,set);
                            break;
                        case 4:
-                           map.put(Long.valueOf((String) entry.getKey()), new Date((String) entry.getValue()));
+                           DateFormat fmt2 =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                           Date date2=fmt2.parse((String) entry.getValue());
+                           map.put(Long.valueOf((String) entry.getKey()),date2);
                    }
                 }
             }
@@ -196,8 +202,9 @@ public class PropertiesConvenUtil {
     public final static void setLongDateMapToFile(String path, Map<Date, Set<Long>> map,String description) throws IOException {
         if (map.size()!=0) {
             Properties properties = new Properties();
+            DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             for (Entry<Date, Set<Long>> key : map.entrySet()) {
-                properties.setProperty(String.valueOf(key.getKey()), key.getValue().toString());
+                properties.setProperty(fmt.format(key.getKey()), key.getValue().toString());
             }
             FileOutputStream outputStream = new FileOutputStream(path);
             OutputStreamWriter osw = new OutputStreamWriter(outputStream, "UTF-8");
@@ -221,8 +228,10 @@ public class PropertiesConvenUtil {
     public final static void LongDateMapToFile(String path, Map<Long, Date> map,String description) throws IOException {
         if (map.size()!=0) {
             Properties properties = new Properties();
+            DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
             for (Entry<Long, Date> key : map.entrySet()) {
-                properties.setProperty(String.valueOf(key.getKey()), String.valueOf(key.getValue()));
+                properties.setProperty(String.valueOf(key.getKey()), fmt.format(key.getValue()));
             }
             FileOutputStream outputStream = new FileOutputStream(path);
             OutputStreamWriter osw = new OutputStreamWriter(outputStream, "UTF-8");

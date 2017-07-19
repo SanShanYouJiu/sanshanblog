@@ -4,6 +4,7 @@ import com.sanshan.service.BlogService;
 import com.sanshan.service.vo.BlogVO;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.exception.ERROR;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -11,17 +12,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
 
 @RequestMapping("blog")
 @RestController
+@Slf4j
 public class BlogController {
 
 
     @Autowired
-    BlogService blogService;
+    private BlogService blogService;
 
 
     @RequestMapping(value = "query-by-id", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -63,7 +69,7 @@ public class BlogController {
     }
 
     @RequestMapping(value = "query-title-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO queryTtitleAll(){
+    public ResponseMsgVO queryTitleAll(){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         List list =blogService.queryTitleAll();
         if (Objects.isNull(list))
@@ -71,12 +77,41 @@ public class BlogController {
         return responseMsgVO.buildOKWithData(list);
     }
 
+
+    @RequestMapping(value = "query-by-date",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO  queryByDate(@RequestParam("date")String dateString){
+        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date= null;
+        try {
+            date = format.parse(dateString);
+        } catch (ParseException e) {
+           log.error("无法解析字符串{}",dateString);
+            e.printStackTrace();
+        }
+        List<BlogVO> list = blogService.getBlogByDate(date);
+        if (Objects.isNull(list))
+            return responseMsgVO.buildError(new ERROR(404, "无效的日期"));
+        return responseMsgVO.buildOKWithData(list);
+    }
+
+    @RequestMapping(value = "query-date-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO queryDateAll(){
+        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
+        List list =blogService.queryDateAll();
+        if (Objects.isNull(list))
+            return responseMsgVO.buildError(new ERROR(404,"没有日期"));
+      return  responseMsgVO.buildOKWithData(list);
+    }
+
+
     @RequestMapping(value = "query-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO queryAllBlog() {
         ResponseMsgVO<List<BlogVO>> responseMsgVO = new ResponseMsgVO();
         List<BlogVO> list = blogService.queryAll();
         return responseMsgVO.buildOKWithData(list);
     }
+
 
 
     @RequestMapping(value = "delete-by-id",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -96,8 +131,6 @@ public class BlogController {
           Long id =  blogService.getCurrentId();
         return new ResponseMsgVO().buildOKWithData(id);
     }
-
-
 
 
 }

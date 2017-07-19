@@ -71,14 +71,12 @@ public final  class BlogIdGenerate {
      * @return 返回设置ID
      */
     public final long getId() {
-        return IdMap.size() + 1;
+        return IdMap.size();
     }
 
     public final long getSize() {
         return IdMap.size();
     }
-
-
 
 
     public  final EditorTypeEnum getType(Long id) {

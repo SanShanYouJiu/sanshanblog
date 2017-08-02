@@ -46,7 +46,7 @@ public class WebAppInitializer extends AbstractAnnotationConfigDispatcherServlet
         //log4j监听器
         servletContext.addListener(org.springframework.web.util.Log4jConfigListener.class);
 
-        //Driud监控
+        //Druid监控
         ServletRegistration.Dynamic druidservlet = servletContext.addServlet("DruidStatView", com.alibaba.druid.support.http.StatViewServlet.class);
         druidservlet.addMapping("/druid/*");
 

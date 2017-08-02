@@ -8,6 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -83,9 +84,13 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Autowired
     private FastJsonHttpMessageConverter4 jsonHttpMessageConverter4;
 
+    @Autowired
+    private ResourceHttpMessageConverter resourceHttpMessageConverter;
+
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         converters.add(jsonHttpMessageConverter4);
+        converters.add(resourceHttpMessageConverter);
         super.configureMessageConverters(converters);
     }
 

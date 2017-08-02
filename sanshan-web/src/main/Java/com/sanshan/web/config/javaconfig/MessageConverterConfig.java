@@ -6,8 +6,10 @@ import com.alibaba.fastjson.util.IOUtils;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.MediaType;
+import org.springframework.http.converter.ResourceHttpMessageConverter;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -33,6 +35,22 @@ public class MessageConverterConfig {
         config.setCharset(IOUtils.UTF8);
         config.setDateFormat("yyyy-MM-dd HH:mm:ss");
         return config;
+    }
+
+
+
+    @Bean
+    public ResourceHttpMessageConverter  resourceHttpMessageConverter(){
+        ResourceHttpMessageConverter res = new ResourceHttpMessageConverter();
+        List<org.springframework.http.MediaType> mediaTypes = new LinkedList<MediaType>();
+        mediaTypes.add(MediaType.APPLICATION_JSON);
+        mediaTypes.add(MediaType.APPLICATION_OCTET_STREAM);
+        mediaTypes.add(MediaType.IMAGE_JPEG);
+        mediaTypes.add(MediaType.IMAGE_PNG);
+        mediaTypes.add(MediaType.IMAGE_GIF);
+        mediaTypes.add(MediaType.TEXT_PLAIN);
+        res.setSupportedMediaTypes(mediaTypes);
+         return res;
     }
 
 }

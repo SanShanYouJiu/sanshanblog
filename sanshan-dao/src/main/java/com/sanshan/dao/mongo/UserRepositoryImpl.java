@@ -28,4 +28,19 @@ public class UserRepositoryImpl implements CustomUserRepository {
         return this.mongoTemplate.updateFirst(query, update, UserDO.class);
     }
 
+    @Override
+    public WriteResult changeUserInfo(UserDO userDO) {
+        Query query = new Query();
+        query.addCriteria(new Criteria("username").is(userDO.getUsername()));
+        Update update = new Update();
+        if (userDO.getEmail()!=null)
+            update.set("email", userDO.getEmail());
+        if (userDO.getBlogLink()!=null)
+            update.set("blogLink", userDO.getBlogLink());
+        if (userDO.getAvatar()!=null)
+            update.set("avatar", userDO.getAvatar());
+        return this.mongoTemplate.upsert(query, update, UserDO.class);
+    }
+
+
 }

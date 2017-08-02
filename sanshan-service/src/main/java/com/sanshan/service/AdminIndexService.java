@@ -1,5 +1,6 @@
 package com.sanshan.service;
 
+import com.mongodb.WriteResult;
 import com.mongodb.gridfs.GridFSDBFile;
 import com.sanshan.dao.MarkDownBlogMapper;
 import com.sanshan.dao.UEditorBlogMapper;
@@ -30,6 +31,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -115,6 +117,34 @@ public class AdminIndexService {
         return userDTO;
     }
 
+    public Boolean changeUserInfo(String username,Map<String,String> mapList ){
+        UserDO userDO = new UserDO();
+        userDO.setUsername(username);
+        String avatar = mapList.get("avatar");
+        String email = mapList.get("email");
+        String blogLink = mapList.get("blogLink");
+        boolean avatarFlag=stringIsNotNull(avatar);
+        boolean emailFlag= stringIsNotNull(email);
+        boolean blogLinFlag=stringIsNotNull(blogLink);
+           if (avatarFlag){
+               userDO.setAvatar(avatar);
+           }
+           if (emailFlag){
+               userDO.setEmail(email);
+           }
+           if (blogLinFlag){
+               userDO.setBlogLink(blogLink);
+           }
+       WriteResult result= userRepository.changeUserInfo(userDO);
+        //这里暂时将修改为0的作为更新失败
+        return  result.getN()!=0;
+    }
+
+    private  boolean stringIsNotNull(String s){
+        if (s!=null&&s!="")
+            return true;
+        return false;
+    }
 
 
 }

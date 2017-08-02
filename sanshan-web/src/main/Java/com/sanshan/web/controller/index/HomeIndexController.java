@@ -50,6 +50,7 @@ public class HomeIndexController {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         String email = request.getHeader("email");
         String opinion = request.getHeader("opinion");
+        feedBackService.store(email,"反馈文件:"+multipartFile.getOriginalFilename());
         feedBackService.saveFile(email,opinion,multipartFile);
         return responseMsgVO.buildOK();
     }

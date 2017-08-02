@@ -74,7 +74,7 @@ public class GlobalException {
 
 
     /**
-     * 重定向到错误页面
+     * 转发到错误页面
      * @param url 链接
      */
     private void redirect(String url,HttpStatus status,HttpServletRequest request,

@@ -41,7 +41,7 @@ public class FeedBackService {
           DBObject metedata = new BasicDBObject();
           metedata.put("otherEmail", email);
           metedata.put("otherOpinion", opinion);
-         fileOperation.saveFile(multipartFile.getInputStream(),multipartFile.getOriginalFilename(),multipartFile.getContentType(),metedata);
+         fileOperation.saveFile(multipartFile.getInputStream(),"反馈文件:"+multipartFile.getOriginalFilename(),multipartFile.getContentType(),metedata);
       } catch (IOException e) {
           log.error("存入反馈文件出错");
          e.printStackTrace();

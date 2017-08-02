@@ -1,5 +1,5 @@
 {
-  "domain":"http://localhost:11080",
+  "domain":"http://localhost:8080",
   "isEmailLogin":true,
   "accountLockCount":5,
   "accountLockTime":10,

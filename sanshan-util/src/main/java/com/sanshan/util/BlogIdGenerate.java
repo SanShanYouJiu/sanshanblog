@@ -29,6 +29,7 @@ public final  class BlogIdGenerate {
         //System.out.println(file.getAbsolutePath());
         //TODO  这个文件路径从当前类自动获取
         this.filename="D:\\Java3\\Github\\Module\\sanshanblog\\sanshan-util\\src\\main\\resources\\";
+        log.info("加载filename值,通过该值查找相关文件");
     }
 
 
@@ -41,7 +42,9 @@ public final  class BlogIdGenerate {
             invertTitleMap = PropertiesConvenUtil.fileToMap(filename +"invertTitleMap.properties", new HashMap<Long, String>(),2);
             invertTagMap = PropertiesConvenUtil.fileToMap(filename + "invertTagMap.properties", new HashMap<Long, String>(),2);
             invertDateMap = PropertiesConvenUtil.fileToMap(filename + "invertDateMap.properties", new HashMap<Long,Date>(),4);
+            log.info("加载文件系统中的properties文件 该文件是倒排索引关键文件");
         } catch (Exception e) {
+            log.error("加载失败,{}",e.getCause());
             e.printStackTrace();
         }
     }
@@ -62,6 +65,7 @@ public final  class BlogIdGenerate {
      */
     public final void addIdMap(Long id, EditorTypeEnum type) {
         IdMap.put(id, type);
+        log.info("将Id为{}与对应的类型为{}加入到IdMap集合中",id,type);
     }
 
 
@@ -71,15 +75,19 @@ public final  class BlogIdGenerate {
      * @return 返回设置ID
      */
     public final long getId() {
+        log.info("获取当前系统新的博客Id,可能是用于新增博客");
         return IdMap.size();
+
     }
 
     public final long getSize() {
+        log.info("获取当前IdMap文件长度");
         return IdMap.size();
     }
 
 
     public  final EditorTypeEnum getType(Long id) {
+        log.info("获取ID为{}的博客类型",id);
         return IdMap.get(id);
     }
 
@@ -114,12 +122,14 @@ public final  class BlogIdGenerate {
         }
         longs.add(id);
         IdTitleMap.put(title, longs);
-        //加入到已经成为该Id对应的Ttile序列中
+        //加入到已经成为该Id对应的Title序列中
         invertTitleMap.put(id, title);
+        log.info("上传标题为{},id为{}的新IdTitle索引 或许该索引项已存在 则不加",title,id);
     }
 
     public final Set<Long> getTitleMap(String title){
         Set<Long> longs = IdTitleMap.get(title);
+        log.info("查找title为{}的Id集合",title);
         return longs;
     }
 
@@ -132,6 +142,7 @@ public final  class BlogIdGenerate {
         for (Map.Entry<String, Set<Long>> entry : IdTitleMap.entrySet()) {
             hashMap.put(entry.getKey(), entry.getValue());
         }
+        log.info("拷贝发布IdTitleMap集合的内容");
         return  hashMap;
     }
 
@@ -166,10 +177,12 @@ public final  class BlogIdGenerate {
         IdTagMap.put(tag, longs);
         //加入到已经成为该Id对应的tag序列中
         invertTagMap.put(id, tag);
+        log.info("上传标签为{},id为{}的新IdTag索引 或许该索引项已存在 则不加",tag,id);
     }
 
     public  final  Set<Long> getTagMap(String tag){
         Set<Long> longs = IdTagMap.get(tag);
+        log.info("查找tag为{}的Id集合",tag);
         return longs;
     }
 
@@ -182,6 +195,7 @@ public final  class BlogIdGenerate {
         for (Map.Entry<String, Set<Long>> entry : IdTagMap.entrySet()) {
             hashMap.put(entry.getKey(), entry.getValue());
         }
+        log.info("拷贝发布IdTagMap集合的内容");
         return  hashMap;
     }
 
@@ -201,10 +215,12 @@ public final  class BlogIdGenerate {
         longs.add(id);
         IdDateMap.put(date, longs);
         invertDateMap.put(id, date);
+        log.info("上传日期为{},id为{}的新IdDate索引 或许该索引项已存在 则不加",date,id);
     }
 
     public  final Set<Long> getDateMap(Date date){
         Set<Long> longs = IdDateMap.get(date);
+        log.info("查找日期为{}的博客",date);
         return longs;
     }
 
@@ -217,6 +233,7 @@ public final  class BlogIdGenerate {
         for (Map.Entry<Date, Set<Long>> entry : IdDateMap.entrySet()) {
             hashMap.put(entry.getKey(), entry.getValue());
         }
+        log.info("拷贝发布IdDateMap集合的内容");
         return  hashMap;
     }
 
@@ -249,6 +266,7 @@ public final  class BlogIdGenerate {
         invertDateMap.remove(id);
 
         IdMap.put(id, EditorTypeEnum.Void_Id);
+        log.info("删除该Id对应的倒排索引对应项");
     }
 
 

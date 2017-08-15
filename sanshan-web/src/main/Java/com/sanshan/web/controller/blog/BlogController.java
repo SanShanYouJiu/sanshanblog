@@ -108,7 +108,8 @@ public class BlogController {
     @RequestMapping(value = "query-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO queryAllBlog() {
         ResponseMsgVO<List<BlogVO>> responseMsgVO = new ResponseMsgVO();
-        List<BlogVO> list = blogService.queryAll();
+        //List<BlogVO> list = blogService.queryAll();
+        List<BlogVO> list = blogService.queryAllofIdMap();
         return responseMsgVO.buildOKWithData(list);
     }
 

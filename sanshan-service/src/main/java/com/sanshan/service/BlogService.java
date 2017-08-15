@@ -1,5 +1,7 @@
 package com.sanshan.service;
 
+import com.sanshan.pojo.dto.MarkDownBlogDTO;
+import com.sanshan.pojo.dto.UEditorBlogDTO;
 import com.sanshan.service.editor.MarkDownBlogService;
 import com.sanshan.service.editor.UeditorBlogService;
 import com.sanshan.service.vo.BlogVO;
@@ -179,13 +181,41 @@ public class BlogService {
         List<BlogVO> blogs = new LinkedList<>();
         Long size = blogIdGenerate.getSize();
         for (long i = 0; i <size; i++) {
-            if (Objects.isNull(getBlog(i))) {
+            BlogVO blogVO=getBlog(i);
+            if (Objects.isNull(blogVO)) {
                 continue;
             } else {
-                blogs.add(getBlog(i));
+                blogs.add(blogVO);
             }
         }
         return blogs;
+    }
+
+    public  List<BlogVO> queryAllofIdMap(){
+        List<BlogVO> blogVOS = new LinkedList<>();
+        Map<Long,EditorTypeEnum>  map = blogIdGenerate.getIdCopy();
+        Map<Long, String> titleMap = blogIdGenerate.getInvertIdTitleMap();
+        for (Map.Entry<Long, EditorTypeEnum> entry : map.entrySet()) {
+            long id= entry.getKey();
+            switch (entry.getValue()){
+                case UEDITOR_EDITOR:
+                    UEditorBlogDTO u = new UEditorBlogDTO();
+                    u.setId(id);
+                    u.setTitle(titleMap.get(id));
+                    blogVOS.add(new BlogVO(u));
+                    break;
+                case MarkDown_EDITOR:
+                    MarkDownBlogDTO m = new MarkDownBlogDTO();
+                    m.setId(id);
+                    m.setTitle(titleMap.get(id));
+                    blogVOS.add(new BlogVO(m));
+                    break;
+                case Void_Id:
+                    continue;
+            }
+        }
+
+        return blogVOS;
     }
 
 }

@@ -80,6 +80,20 @@ public final  class BlogIdGenerate {
 
     }
 
+    /**
+     * 拷贝发布IdMap集合内容
+     * @return
+     */
+    public final  Map<Long, EditorTypeEnum> getIdCopy(){
+        HashMap<Long, EditorTypeEnum> hashMap = new HashMap<>();
+        for (Map.Entry<Long, EditorTypeEnum> entry : IdMap.entrySet()) {
+            hashMap.put(entry.getKey(), entry.getValue());
+        }
+        log.info("拷贝发布IdMap集合的内容");
+        return hashMap;
+    }
+
+
     public final long getSize() {
         log.info("获取当前IdMap文件长度");
         return IdMap.size();
@@ -145,6 +159,20 @@ public final  class BlogIdGenerate {
         log.info("拷贝发布IdTitleMap集合的内容");
         return  hashMap;
     }
+
+    /**
+     * 拷贝发布出InvertIdTitleMap集合中的内容
+     * @return
+     */
+    public  final  Map<Long,String> getInvertIdTitleMap(){
+        HashMap<Long, String> hashMap = new HashMap<>();
+        for (Map.Entry<Long, String> entry : invertTitleMap.entrySet()) {
+            hashMap.put(entry.getKey(), entry.getValue());
+        }
+        log.info("拷贝发布IdTitleMap集合的内容");
+        return  hashMap;
+    }
+
 
     /**
      * Id tag索引
@@ -282,6 +310,7 @@ public final  class BlogIdGenerate {
             PropertiesConvenUtil.LongDateMapToFile(filename+"invertDateMap.properties",invertDateMap,"已存在的Id的Date索引");
         } catch (IOException e) {
             log.error("写入错误 message:{} cause:{}", e.getMessage(), e.getCause());
+            e.printStackTrace();
             throw new IdMapWriteException();
         }
         log.info("已将Map映射文件写入到 {}", filename);

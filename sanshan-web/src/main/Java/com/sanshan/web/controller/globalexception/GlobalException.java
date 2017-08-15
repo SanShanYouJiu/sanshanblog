@@ -55,7 +55,7 @@ public class GlobalException {
             return handlerAjax(ex);
         }
 
-        //重定向到错误页面
+        //转发到错误页面
         request.setAttribute("errorMessage",ex.getMessage());
         redirect("/api/error",HttpStatus.NOT_FOUND,request,response);
         return null;

@@ -3,10 +3,8 @@ package com.sanshan.DaoTest;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.mongodb.gridfs.GridFSDBFile;
+import com.sanshan.dao.mongo.FileOperation;
 import com.sanshan.web.config.javaconfig.MongoDBConfig;
-import com.sanshan.web.config.javaconfig.MybatisConfig;
-import com.sanshan.web.config.javaconfig.ServiceConfig;
-import com.sanshan.service.editor.UEditorFileService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +15,13 @@ import java.io.*;
 import java.util.List;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {MybatisConfig.class, ServiceConfig.class,MongoDBConfig.class})
+@ContextConfiguration(classes = {MongoDBConfig.class})
 public class MongonTest {
 
 
 
     @Autowired
-    UEditorFileService fileService;
+    FileOperation fileService;
 
 
     /**
@@ -31,11 +29,9 @@ public class MongonTest {
      */
     @Test
     public void imageSaveTest() throws FileNotFoundException {
-        InputStream content = new FileInputStream(new File("D:\\ceshi.jpg"));
+        InputStream content = new FileInputStream(new File("C:\\Program Files\\nginx-1.13.3\\html\\assets\\images\\defaultUser.png"));
         DBObject metedata = new BasicDBObject();
-        metedata.put("extra1", "anything1");
-        metedata.put("extra2", "anything2");
-        fileService.saveFile(content, "ueditor/upload/image/20170105/1493982258590010211.jpg","jpg", metedata);
+        fileService.saveFile(content, "defaultUser.png","image/png", metedata);
 
     }
 

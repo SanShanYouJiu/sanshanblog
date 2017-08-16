@@ -109,10 +109,9 @@ public class BlogController {
     public ResponseMsgVO queryAllBlog() {
         ResponseMsgVO<List<BlogVO>> responseMsgVO = new ResponseMsgVO();
         //List<BlogVO> list = blogService.queryAll();
-        List<BlogVO> list = blogService.queryAllofIdMap();
+        List<BlogVO> list = blogService.queryAllOfIdMap();
         return responseMsgVO.buildOKWithData(list);
     }
-
 
 
     @RequestMapping(value = "delete-by-id",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

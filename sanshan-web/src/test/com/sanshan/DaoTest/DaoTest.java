@@ -46,4 +46,17 @@ public class DaoTest {
         System.out.println(markDownBlogDO);
     }
 
+    @Test
+    public  void insert(){
+        MarkDownBlogDO m = new MarkDownBlogDO();
+        m.setId(3);
+        m.setUser("ceshi");
+        m.setCreated(new Date());
+        m.setUpdated(new Date());
+        m.setContent("ces");
+        m.setTitle("CES");
+        m.setTime(new Date());
+        markDownBlogMapper.insert(m);
+    }
+
 }

@@ -8,14 +8,19 @@ import com.sanshan.service.editor.CacheService.MarkDownBlogCacheService;
 import com.sanshan.service.vo.JwtUser;
 import com.sanshan.util.BlogIdGenerate;
 import com.sanshan.util.info.EditorTypeEnum;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
 @Service
+@Slf4j
 public class MarkDownBlogService {
     @Autowired
     private   MarkDownBlogCacheService cacheService;
@@ -71,7 +76,16 @@ public class MarkDownBlogService {
         markDownBlog.setTitle(title);
         markDownBlog.setCreated(new Date());
         markDownBlog.setUpdated(new Date());
-        Date date = new Date();
+        Date currentDate = new Date();
+        DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String dateString=format.format(currentDate);
+        Date date= null;
+        try {
+            date = format.parse(dateString);
+        } catch (ParseException e) {
+            log.error("解析失败",dateString);
+            e.printStackTrace();
+        }
         markDownBlog.setTime(date);
         //获得当前用户
         JwtUser user = (JwtUser) SecurityContextHolder.getContext().getAuthentication()

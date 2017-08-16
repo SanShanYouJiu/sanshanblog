@@ -33,7 +33,7 @@ public class BlogService {
 
     public Long getCurrentId() {
         Long id = blogIdGenerate.getSize();
-        for (long i = id-1; i > -1; i--) {
+        for (long i = id - 1; i > -1; i--) {
             EditorTypeEnum type = blogIdGenerate.getType(i);
             switch (type) {
                 case UEDITOR_EDITOR:
@@ -67,6 +67,7 @@ public class BlogService {
 
     /**
      * 查询对应tag标签的博客
+     *
      * @param tag
      * @return
      */
@@ -74,19 +75,21 @@ public class BlogService {
         List<BlogVO> blogVOS = new LinkedList<>();
         Set<Long> longs = blogIdGenerate.getTagMap(tag);
         if (Objects.isNull(longs))
-            return  null;
+            return null;
         Long[] a = {};
         Long[] ids = longs.toArray(a);
-        for (long i = 0; i < ids.length; i++) {
-            BlogVO blogVO = getBlog(ids[(int) i]);
-            blogVOS.add(blogVO);
+        Map<Long, String> titleMap = blogIdGenerate.getInvertIdTitleMap();
+        Map<Long, EditorTypeEnum> idMap = blogIdGenerate.getIdCopy();
+        for (int i = 0; i < ids.length; i++) {
+            long id = ids[i];
+            switchTypeAssembleBlogList(id, titleMap, blogVOS, idMap.get(id));
         }
         return blogVOS;
     }
 
     public List queryTagAll() {
         List list = new LinkedList();
-        Map<String,Set<Long>> map = blogIdGenerate.getIdTagCopy();
+        Map<String, Set<Long>> map = blogIdGenerate.getIdTagCopy();
         for (Map.Entry<String, Set<Long>> entry : map.entrySet()) {
             list.add(entry.getKey());
         }
@@ -95,7 +98,7 @@ public class BlogService {
 
     public List queryTitleAll() {
         List list = new LinkedList();
-        Map<String,Set<Long>> map = blogIdGenerate.getIdTitleCopy();
+        Map<String, Set<Long>> map = blogIdGenerate.getIdTitleCopy();
         for (Map.Entry<String, Set<Long>> entry : map.entrySet()) {
             list.add(entry.getKey());
         }
@@ -103,9 +106,9 @@ public class BlogService {
     }
 
 
-
     /**
      * 查询对应title标签的博客
+     *
      * @param title
      * @return
      */
@@ -114,20 +117,21 @@ public class BlogService {
         Set<Long> longs = blogIdGenerate.getTitleMap(title);
         if (Objects.isNull(longs))
             return null;
-        Long[] a={};
+        Long[] a = {};
         Long[] ids = longs.toArray(a);
-        for (long i = 0; i <ids.length ; i++) {
-            BlogVO blogVO = getBlog(ids[Math.toIntExact(i)]);
-            blogVOS.add(blogVO);
+        Map<Long, String> titleMap = blogIdGenerate.getInvertIdTitleMap();
+        Map<Long, EditorTypeEnum> idMap = blogIdGenerate.getIdCopy();
+        for (int i = 0; i < ids.length; i++) {
+            long id = ids[i];
+            switchTypeAssembleBlogList(id, titleMap, blogVOS, idMap.get(id));
         }
         return blogVOS;
     }
 
 
-
     public List queryDateAll() {
         List list = new LinkedList();
-        Map<Date,Set<Long>> map = blogIdGenerate.getIdDateCopy();
+        Map<Date, Set<Long>> map = blogIdGenerate.getIdDateCopy();
         for (Map.Entry<Date, Set<Long>> entry : map.entrySet()) {
             list.add(entry.getKey());
         }
@@ -136,6 +140,7 @@ public class BlogService {
 
     /**
      * 查询对应date标签的博客
+     *
      * @param date
      * @return
      */
@@ -144,11 +149,13 @@ public class BlogService {
         Set<Long> longs = blogIdGenerate.getDateMap(date);
         if (Objects.isNull(longs))
             return null;
-        Long[] a={};
+        Long[] a = {};
         Long[] ids = longs.toArray(a);
-        for (long i = 0; i <ids.length ; i++) {
-            BlogVO blogVO = getBlog(ids[Math.toIntExact(i)]);
-            blogVOS.add(blogVO);
+        Map<Long, String> titleMap = blogIdGenerate.getInvertIdTitleMap();
+        Map<Long, EditorTypeEnum> idMap = blogIdGenerate.getIdCopy();
+        for (int i = 0; i < ids.length; i++) {
+            long id = ids[i];
+            switchTypeAssembleBlogList(id, titleMap, blogVOS, idMap.get(id));
         }
         return blogVOS;
     }
@@ -160,8 +167,8 @@ public class BlogService {
         BlogVO blog = null;
         switch (type) {
             case UEDITOR_EDITOR:
-               int result= uEditorBlogService.deleteDOById(id);
-                if (result==0)
+                int result = uEditorBlogService.deleteDOById(id);
+                if (result == 0)
                     return new ResponseMsgVO().buildError(new ERROR(500, "删除对应Id为：" + id + "的博客失败"));
                 break;
             case MarkDown_EDITOR:
@@ -180,8 +187,8 @@ public class BlogService {
     public List<BlogVO> queryAll() {
         List<BlogVO> blogs = new LinkedList<>();
         Long size = blogIdGenerate.getSize();
-        for (long i = 0; i <size; i++) {
-            BlogVO blogVO=getBlog(i);
+        for (long i = 0; i < size; i++) {
+            BlogVO blogVO = getBlog(i);
             if (Objects.isNull(blogVO)) {
                 continue;
             } else {
@@ -191,31 +198,35 @@ public class BlogService {
         return blogs;
     }
 
-    public  List<BlogVO> queryAllofIdMap(){
+    public List<BlogVO> queryAllOfIdMap() {
         List<BlogVO> blogVOS = new LinkedList<>();
-        Map<Long,EditorTypeEnum>  map = blogIdGenerate.getIdCopy();
+        Map<Long, EditorTypeEnum> map = blogIdGenerate.getIdCopy();
         Map<Long, String> titleMap = blogIdGenerate.getInvertIdTitleMap();
         for (Map.Entry<Long, EditorTypeEnum> entry : map.entrySet()) {
-            long id= entry.getKey();
-            switch (entry.getValue()){
-                case UEDITOR_EDITOR:
-                    UEditorBlogDTO u = new UEditorBlogDTO();
-                    u.setId(id);
-                    u.setTitle(titleMap.get(id));
-                    blogVOS.add(new BlogVO(u));
-                    break;
-                case MarkDown_EDITOR:
-                    MarkDownBlogDTO m = new MarkDownBlogDTO();
-                    m.setId(id);
-                    m.setTitle(titleMap.get(id));
-                    blogVOS.add(new BlogVO(m));
-                    break;
-                case Void_Id:
-                    continue;
-            }
+            long id = entry.getKey();
+            switchTypeAssembleBlogList(id, titleMap, blogVOS, entry.getValue());
         }
 
         return blogVOS;
+    }
+
+    protected void switchTypeAssembleBlogList(Long id, Map<Long, String> titleMap, List<BlogVO> blogVOS, EditorTypeEnum type) {
+        switch (type) {
+            case Void_Id:
+                break;
+            case MarkDown_EDITOR:
+                MarkDownBlogDTO m = new MarkDownBlogDTO();
+                m.setId(id);
+                m.setTitle(titleMap.get(id));
+                blogVOS.add(new BlogVO(m));
+                break;
+            case UEDITOR_EDITOR:
+                UEditorBlogDTO u = new UEditorBlogDTO();
+                u.setId(id);
+                u.setTitle(titleMap.get(id));
+                blogVOS.add(new BlogVO(u));
+                break;
+        }
     }
 
 }

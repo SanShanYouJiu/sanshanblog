@@ -19,12 +19,12 @@ public class FileLoadController {
     @Autowired
     private FileLoadService fileLoadService;
 
-    @RequestMapping(value = "/images/{filename}.{suffix}" )
+    @RequestMapping(value = "/images/{filename}.{suffix}")
+    //用作用户自定义头像加载
     //暂时给任何用户观看
     //注意在使用ResponseEntity时不能加 produces选项 因为ResponseEntity与produces冲突
-    public ResponseEntity<Resource> getFileImage(@PathVariable(value = "filename")String filename, @PathVariable(value = "suffix")String suffix) throws IOException {
-
-         return fileLoadService.getFileImage(filename+"."+suffix);
+    public ResponseEntity<Resource> getFileImage(@PathVariable(value = "filename") String filename, @PathVariable(value = "suffix") String suffix) throws IOException {
+        return fileLoadService.getFileImage(filename + "." + suffix);
     }
 
 

@@ -83,7 +83,7 @@ public class MarkDownBlogService {
         try {
             date = format.parse(dateString);
         } catch (ParseException e) {
-            log.error("解析失败",dateString);
+            log.error("解析{}失败",dateString);
             e.printStackTrace();
         }
         markDownBlog.setTime(date);
@@ -110,8 +110,18 @@ public class MarkDownBlogService {
         return result;
     }
 
-
+    @Deprecated
     public MarkDownBlogDTO updateDO(MarkDownBlogDO markDownBlogDO){
+        long id=markDownBlogDO.getId();
+        String tag = markDownBlogDO.getTag();
+        Date date=markDownBlogDO.getTime();
+        String title = markDownBlogDO.getTitle();
+        //加入到索引中
+        if (tag!=null)
+            blogIdGenerate.putTag(tag,id);
+        if (title!=null)
+            blogIdGenerate.putTitle(title,id);
+        blogIdGenerate.putDate(date,id);
         return MarkDownEditorConvert.doToDto(cacheService.update(markDownBlogDO));
     }
 

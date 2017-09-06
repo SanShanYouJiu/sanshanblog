@@ -6,6 +6,7 @@ import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.info.PosCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -66,7 +67,7 @@ public class UserController {
 
     /**
      * 发送邮箱验证码
-     * @param type 对应的是CodyTypeEnum类型 1注册 2忘记密码 3更改密码
+     * @param type 对应的是CodyTypeEnum类型 1注册 2找回密码 3更改密码 4是忘记密码
      */
     @RequestMapping(value = "/email/send",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO sendEmailCode(
@@ -77,13 +78,11 @@ public class UserController {
 
     /**
      忘记密码
-     todo 忘记密码其实就应该去修改了 直接修改密码 而不是返回原密码 这里暂留 以后取消
      */
-    @RequestMapping(value = "/find-pwd", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO findPassword( @RequestParam(name = "username") String username,
-                                        @RequestParam(name = "token") String token) {
-        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
-         return  userService.findPassword(username, token, responseMsgVO);
+    @RequestMapping(value = "/forget-pwd", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseEntity<?> findPassword(@RequestParam(name = "username") String username,
+                                          @RequestParam(name = "token") String token) {
+         return  userService.forgetPassword(username, token);
     }
 
 

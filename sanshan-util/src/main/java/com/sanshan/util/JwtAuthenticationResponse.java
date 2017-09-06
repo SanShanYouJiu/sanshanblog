@@ -1,4 +1,4 @@
-package com.sanshan.web.config.javaconfig.auxiliary.jwt;
+package com.sanshan.util;
 
 import java.io.Serializable;
 

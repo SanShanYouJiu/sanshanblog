@@ -53,7 +53,7 @@ public class BlogController {
     @RequestMapping(value = "query-tag-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO queryTagAll(){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
-       List list =blogService.queryTagAll();
+        List list =blogService.queryTagAll();
         if (Objects.isNull(list))
             return responseMsgVO.buildError(new ERROR(404,"没有标签"));
         return responseMsgVO.buildOKWithData(list);
@@ -86,7 +86,7 @@ public class BlogController {
         try {
             date = format.parse(dateString);
         } catch (ParseException e) {
-           log.error("无法解析字符串{}",dateString);
+            log.error("无法解析字符串{}",dateString);
             e.printStackTrace();
         }
         List<BlogVO> list = blogService.getBlogByDate(date);
@@ -101,7 +101,7 @@ public class BlogController {
         List list =blogService.queryDateAll();
         if (Objects.isNull(list))
             return responseMsgVO.buildError(new ERROR(404,"没有日期"));
-      return  responseMsgVO.buildOKWithData(list);
+        return  responseMsgVO.buildOKWithData(list);
     }
 
 
@@ -128,7 +128,7 @@ public class BlogController {
      */
     @RequestMapping(value = "get-current-id", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO getCurrentId() {
-          Long id =  blogService.getCurrentId();
+        Long id =  blogService.getCurrentId();
         return new ResponseMsgVO().buildOKWithData(id);
     }
 

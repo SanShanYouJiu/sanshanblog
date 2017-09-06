@@ -3,19 +3,26 @@ package com.sanshan.service;
 import com.mongodb.WriteResult;
 import com.sanshan.dao.mongo.UserRepository;
 import com.sanshan.pojo.entity.UserDO;
+import com.sanshan.service.auth.JwtTokenUtil;
 import com.sanshan.service.vo.JwtUser;
 import com.sanshan.service.vo.ResponseMsgVO;
+import com.sanshan.util.JwtAuthenticationResponse;
 import com.sanshan.util.info.CodeTypeEnum;
 import com.sanshan.util.info.PosCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Objects;
+import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -34,6 +41,13 @@ public class UserService {
 
     @Autowired
     private SettingService settingService;
+
+    @Autowired
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private  JwtTokenUtil jwtTokenUtil;
+
 
     public static final String CODE_PREFIX = "sendEmailCode";
 
@@ -135,17 +149,25 @@ public class UserService {
     }
 
 
-    //找回密码
-    public ResponseMsgVO findPassword(String username, String token, ResponseMsgVO responseMsgVO) {
+    //忘记密码
+    //todo: 完成忘记密码功能
+    public ResponseEntity forgetPassword(String username, String token) {
         UserDO userDO = userRepository.findByUsername(username);
-        String key = CODE_PREFIX + CodeTypeEnum.FIND_PWD.getValue() + userDO.getEmail();
-
+        String key = CODE_PREFIX + CodeTypeEnum.CHANGE_PWD.getValue() + userDO.getEmail();
         String value = redisTemplate.opsForValue().get(key);
-        if (!Objects.isNull(value) && value.equalsIgnoreCase(token)) {
-            //todo 需要解钥
-            return responseMsgVO.buildOKWithData(userRepository.findByUsername(username).getPassword());
+        if (!Objects.isNull(value) && value.equals(token)) {
+             //通过随机生成字符串 暂时替换为密码
+            String tempPwd = RandomString(20);
+            userRepository.changePassword(username, tempPwd);
+
+            //为当前用户产生token
+            final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            final String loginToken = jwtTokenUtil.generateToken(userDetails);
+            JwtAuthenticationResponse response = new JwtAuthenticationResponse(loginToken);
+            return ResponseEntity.ok(response);
         }
-        return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "token无效");
+
+        return new ResponseEntity(new ResponseMsgVO().buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR,"token无效"), HttpStatus.OK);
     }
 
 
@@ -158,13 +180,24 @@ public class UserService {
             resultVO.buildWithPosCode(PosCodeEnum.URL_ERROR);
             return false;
         }
-        //判读用户状态
+        //判断用户状态
 
         //更新用户 已验证
         redisTemplate.delete(token);
         return true;
     }
 
+    /** 产生一个随机的字符串*/
+    private static String RandomString(int length) {
+        String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        Random random = new Random();
+        StringBuffer buf = new StringBuffer();
+        for (int i = 0; i < length; i++) {
+            int num = random.nextInt(62);
+            buf.append(str.charAt(num));
+        }
+        return buf.toString();
+    }
 
     /**
      * 查看Email存在

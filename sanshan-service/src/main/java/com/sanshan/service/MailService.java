@@ -66,8 +66,10 @@ public class MailService {
         smm.setSubject(subject);
         smm.setText(text);
         // 发送邮件
-        javaMailSender.send(smm);
-        log.info("发送邮件成功:{}", email);
+        new Thread(()->{
+            javaMailSender.send(smm);
+        }).start();
+        log.info("已发送邮件:{}", email);
     }
 
 

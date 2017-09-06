@@ -7,6 +7,7 @@
           <element id="module-output" name="sanshan-web" />
         </element>
         <element id="directory" name="lib">
+          <element id="library" level="project" name="Maven: net.spy:spymemcached:2.11.4" />
           <element id="library" level="project" name="Maven: org.springframework:spring-core:4.2.5.RELEASE" />
           <element id="library" level="project" name="Maven: commons-logging:commons-logging:1.2" />
           <element id="library" level="project" name="Maven: org.springframework:spring-web:4.2.5.RELEASE" />

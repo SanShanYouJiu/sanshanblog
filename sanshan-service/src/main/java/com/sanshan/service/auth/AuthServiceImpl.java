@@ -36,8 +36,8 @@ public class AuthServiceImpl implements AuthService {
 
      @Autowired
      private SettingService settingService;
-
-     public static final String DefaultAvatar ="http://localhost/images/defaultUser.jpg";
+      //fixme:魔法值需要小心
+     public static final String DefaultAvatar ="http://localhost/assets/images/defaultUser.png";
 
     @Autowired
     public AuthServiceImpl(

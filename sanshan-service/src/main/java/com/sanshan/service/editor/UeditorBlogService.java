@@ -85,7 +85,7 @@ public class UeditorBlogService {
         try {
             date = format.parse(dateString);
         } catch (ParseException e) {
-            log.error("解析失败",dateString);
+            log.error("解析{}失败",dateString);
             e.printStackTrace();
         }
         uEditorBlogDO.setTime(date);
@@ -111,7 +111,18 @@ public class UeditorBlogService {
         return  result;
     }
 
+    @Deprecated
     public Boolean updateDO(UEditorBlogDO uEditorBlogDO){
+        long id=uEditorBlogDO.getId();
+        String tag = uEditorBlogDO.getTag();
+        Date date=uEditorBlogDO.getTime();
+        String title = uEditorBlogDO.getTitle();
+        //加入到索引中
+        if (tag!=null)
+            blogIdGenerate.putTag(tag,id);
+        if (title!=null)
+            blogIdGenerate.putTitle(title,id);
+        blogIdGenerate.putDate(date,id);
         UeditorEditorConvert.doToDto(cacheService.update(uEditorBlogDO));
         return true;
     }

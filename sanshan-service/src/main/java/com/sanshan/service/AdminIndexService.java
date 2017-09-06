@@ -53,9 +53,9 @@ public class AdminIndexService {
     private UserRepository userRepository;
 
 
-
     private final String cacheBlogName = "tempBlogList";
 
+    private List cacheList;
 
     public List<BlogVO> queryAllBlog() {
         List<BlogVO> list = new LinkedList<>();
@@ -71,16 +71,17 @@ public class AdminIndexService {
 
         list.addAll(BlogConvert.MarkdownDoToDtoList(MarkDownEditorConvert.doToDtoList(markDownBlogDOList)));
         list.addAll(BlogConvert.UeditorDoToDtoList(UeditorEditorConvert.doToDtoList(uEditorBlogDOS)));
-
-        //加入缓存
-        redisTemplate.opsForValue().set(cacheBlogName, list, 3, TimeUnit.MINUTES);
+//加入缓存
+//        redisTemplate.opsForValue().set(cacheBlogName, list, 3, TimeUnit.MINUTES);
+        cacheList=list;
         return list;
     }
 
 
     public List<BlogVO> queryMarkdownBlogAll() {
         List<BlogVO> list;
-        if ((list = (List<BlogVO>) redisTemplate.opsForValue().get(cacheBlogName)) != null) {
+        //if ((list = (List<BlogVO>) redisTemplate.opsForValue().get(cacheBlogName)) != null) {
+       if ((list=cacheList)!=null){
             return list.stream().filter((blogVO) -> blogVO.getType() == 1).collect(Collectors.toList());
         } else {
             list = new LinkedList<>();
@@ -96,7 +97,8 @@ public class AdminIndexService {
 
     public List<BlogVO> queryUEditorBlogAll() {
         List<BlogVO> list;
-        if ((list = (List<BlogVO>) redisTemplate.opsForValue().get(cacheBlogName)) != null) {
+        //if ((list = (List<BlogVO>) redisTemplate.opsForValue().get(cacheBlogName)) != null) {
+        if ((list=cacheList)!=null){
             return list.stream().filter((blogVO) -> blogVO.getType() == 0).collect(Collectors.toList());
         } else {
             list = new LinkedList<>();

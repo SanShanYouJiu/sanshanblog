@@ -67,7 +67,7 @@ public class UserController {
 
     /**
      * 发送邮箱验证码
-     * @param type 对应的是CodyTypeEnum类型 1注册 2找回密码 3更改密码 4是忘记密码
+     * @param type 对应的是CodyTypeEnum类型 1注册 2更改密码
      */
     @RequestMapping(value = "/email/send",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO sendEmailCode(
@@ -80,21 +80,21 @@ public class UserController {
      忘记密码
      */
     @RequestMapping(value = "/forget-pwd", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseEntity<?> findPassword(@RequestParam(name = "username") String username,
-                                          @RequestParam(name = "token") String token) {
-         return  userService.forgetPassword(username, token);
+    public ResponseEntity<?> findPassword(@RequestParam(name = "email") String email,
+                                          @RequestParam(name = "code") String code) {
+         return  userService.forgetPassword(email, code);
     }
 
 
     /**
      * 作为其他功能的 目前暂留
-     * 验证邮箱token
-     * @param token token
+     * 验证邮箱code
+     * @param code code
      */
-    @RequestMapping(value = "/check/token", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO checkToken(@RequestParam(name = "token") String token) {
+    @RequestMapping(value = "/check/code", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO checkToken(@RequestParam(name = "code") String code) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO<>();
-        userService.checkEmailToken(token,responseMsgVO);
+        userService.checkEmailToken(code,responseMsgVO);
         return responseMsgVO.buildOK();
     }
 

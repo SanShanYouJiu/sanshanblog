@@ -40,9 +40,6 @@ public class UserService {
     private MailService mailService;
 
     @Autowired
-    private SettingService settingService;
-
-    @Autowired
     private UserDetailsService userDetailsService;
 
     @Autowired
@@ -127,10 +124,6 @@ public class UserService {
     public Boolean checkSendMail(CodeTypeEnum codeType, String tempKey, String email, ResponseMsgVO responseMsgVO) {
         try {
             switch (codeType) {
-                case FIND_PWD:
-                    mailService.sendCode(tempKey, email);
-                    responseMsgVO.buildOK();
-                    return true;
                 case REGISTER:
                     mailService.sendRegister(email);
                     responseMsgVO.buildOK();
@@ -150,18 +143,18 @@ public class UserService {
 
 
     //忘记密码
-    //todo: 完成忘记密码功能
-    public ResponseEntity forgetPassword(String username, String token) {
-        UserDO userDO = userRepository.findByUsername(username);
+    public ResponseEntity forgetPassword(String email, String token) {
+        //获得具体的user对象
+        UserDO userDO = userRepository.findByEmail(email);
         String key = CODE_PREFIX + CodeTypeEnum.CHANGE_PWD.getValue() + userDO.getEmail();
         String value = redisTemplate.opsForValue().get(key);
         if (!Objects.isNull(value) && value.equals(token)) {
              //通过随机生成字符串 暂时替换为密码
             String tempPwd = RandomString(20);
-            userRepository.changePassword(username, tempPwd);
+            userRepository.changePassword(userDO.getUsername(), tempPwd);
 
             //为当前用户产生token
-            final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+            final UserDetails userDetails = userDetailsService.loadUserByUsername(userDO.getUsername());
             final String loginToken = jwtTokenUtil.generateToken(userDetails);
             JwtAuthenticationResponse response = new JwtAuthenticationResponse(loginToken);
             return ResponseEntity.ok(response);
@@ -172,10 +165,10 @@ public class UserService {
 
 
     /**
-     * 其他功能的验证邮箱token
+     * 其他功能的验证邮箱code
      */
-    public Boolean checkEmailToken(String token, ResponseMsgVO resultVO) {
-        String email = redisTemplate.opsForValue().get(token);
+    public Boolean checkEmailToken(String code, ResponseMsgVO resultVO) {
+        String email = redisTemplate.opsForValue().get(code);
         if (StringUtils.isEmpty(email)) {
             resultVO.buildWithPosCode(PosCodeEnum.URL_ERROR);
             return false;
@@ -183,7 +176,7 @@ public class UserService {
         //判断用户状态
 
         //更新用户 已验证
-        redisTemplate.delete(token);
+        redisTemplate.delete(code);
         return true;
     }
 

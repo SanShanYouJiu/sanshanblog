@@ -10,6 +10,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -24,6 +26,8 @@ public class MailService {
 
     @Value("${mail.prefix}")
     private String  mailPrefix;
+
+    private ExecutorService pool = Executors.newCachedThreadPool();
 
     /**
      * 注册后发送验证邮件
@@ -66,11 +70,11 @@ public class MailService {
         smm.setSubject(subject);
         smm.setText(text);
         // 发送邮件
-        new Thread(()->{
+        pool.execute(()->{
             javaMailSender.send(smm);
-        }).start();
+            log.info("Email:{}发送成功",email);
+        });
         log.info("已发送邮件:{}", email);
     }
-
 
 }

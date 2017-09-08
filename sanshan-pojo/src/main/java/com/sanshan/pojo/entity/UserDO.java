@@ -37,6 +37,7 @@ public class UserDO extends BaseDO {
     /**
      * 电子邮箱
      */
+    @Indexed(unique = true,direction = IndexDirection.DESCENDING,dropDups = true)
     private String email;
 
     /**

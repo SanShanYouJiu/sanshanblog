@@ -5,8 +5,8 @@ import com.sanshan.service.UserService;
 import com.sanshan.service.auth.AuthService;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.info.PosCodeEnum;
-import com.sanshan.web.config.javaconfig.auxiliary.jwt.JwtAuthenticationRequest;
-import com.sanshan.web.config.javaconfig.auxiliary.jwt.JwtAuthenticationResponse;
+import com.sanshan.util.JwtAuthenticationRequest;
+import com.sanshan.util.JwtAuthenticationResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,9 +39,9 @@ public class AuthController {
             JwtAuthenticationRequest authenticationRequest) throws AuthenticationException {
         final String token = authService.login(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
-        //验证码验证
+        //fixme:验证码检测
 
-        // 检查是否能登陆
+        //检查是否能登陆
 
         // Return the token
         log.info("用户{}已登录", authenticationRequest.getUsername());
@@ -53,6 +53,8 @@ public class AuthController {
     public ResponseMsgVO register(UserDO addedUser
     ) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
+        //验证码检查
+
         //合法性检查
        if (!userService.checkPassWordLegal(addedUser.getPassword(), responseMsgVO))
            return responseMsgVO;

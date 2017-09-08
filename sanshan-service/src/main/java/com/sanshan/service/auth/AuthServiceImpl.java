@@ -54,9 +54,12 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public boolean register(UserDO userToAdd, ResponseMsgVO responseMsgVO) {
         final String username = userToAdd.getUsername();
-        if (userRepository.findByUsername(username) != null) {
+        if (userRepository.findByUsername(username) != null ) {
             responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "该用户名已存在");
             return false;
+        }
+        if (userRepository.findByEmail(userToAdd.getEmail()) != null) {
+            responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "该邮箱已存在");
         }
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         final String rawPassword = userToAdd.getPassword();

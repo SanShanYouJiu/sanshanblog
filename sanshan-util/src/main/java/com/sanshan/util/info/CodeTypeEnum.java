@@ -5,8 +5,7 @@ package com.sanshan.util.info;
  */
 public enum CodeTypeEnum {
     REGISTER(1, "注册"),
-    FIND_PWD(2, "找回密码"),
-    CHANGE_PWD(3,"更改密码");
+    CHANGE_PWD(2,"更改密码");
 
     private int value;
     private String msg;

@@ -13,45 +13,56 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Service
 @Slf4j
 public class FeedBackService {
 
-   @Autowired
-   private  FeedbackMapper feedbackMapper;
+    @Autowired
+    private FeedbackMapper feedbackMapper;
 
-   @Autowired
-   private FileOperation fileOperation;
-
-
-
-   public void store(String email, String opinion) {
-      FeedbackDO feedbackDO = new FeedbackDO();
-      feedbackDO.setEmail(email);
-      feedbackDO.setOpinion(opinion);
-      feedbackDO.setCreated(new Date());
-      feedbackDO.setUpdated(new Date());
-      feedbackMapper.save(feedbackDO);
-   }
+    @Autowired
+    private FileOperation fileOperation;
 
 
-   public void saveFile(String email,String opinion,MultipartFile multipartFile) {
-      try {
-          DBObject metedata = new BasicDBObject();
-          metedata.put("otherEmail", email);
-          metedata.put("otherOpinion", opinion);
-         fileOperation.saveFile(multipartFile.getInputStream(),"反馈文件:"+multipartFile.getOriginalFilename(),multipartFile.getContentType(),metedata);
-      } catch (IOException e) {
-          log.error("存入反馈文件出错");
-         e.printStackTrace();
-      }
-   }
+    private ExecutorService pool = Executors.newCachedThreadPool();
 
-   @Cacheable(value = {"feedback"},key ="'feedback'+#a0" )
-   public FeedbackDO get(long id){
-     return feedbackMapper.selectById(id);
-   }
+    public void store(String email, String opinion) {
+        Runnable runnable = () -> {
+            FeedbackDO feedbackDO = new FeedbackDO();
+            feedbackDO.setEmail(email);
+            feedbackDO.setOpinion(opinion);
+            feedbackDO.setCreated(new Date());
+            feedbackDO.setUpdated(new Date());
+            feedbackMapper.save(feedbackDO);
+            log.info("存入反馈信息已成功");
+        };
+        pool.execute(runnable);
+    }
+
+
+    public void saveFile(String email, String opinion, MultipartFile multipartFile) {
+        Runnable runnable = () -> {
+            try {
+                DBObject metedata = new BasicDBObject();
+                metedata.put("otherEmail", email);
+                metedata.put("otherOpinion", opinion);
+                fileOperation.saveFile(multipartFile.getInputStream(), "反馈文件:" + multipartFile.getOriginalFilename(), multipartFile.getContentType(), metedata);
+                log.info("存入文件:{}成功", multipartFile.getName());
+            } catch (IOException e) {
+                log.error("存入反馈文件出错");
+                e.printStackTrace();
+            }
+        };
+        pool.execute(runnable);
+    }
+
+    @Cacheable(value = {"feedback"}, key = "'feedback'+#a0")
+    public FeedbackDO get(long id) {
+        return feedbackMapper.selectById(id);
+    }
 
 
 }

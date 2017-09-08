@@ -63,15 +63,13 @@ public class AdminIndexController {
     public ResponseMsgVO changeUserInfo(
             @RequestParam(name = "username", required = true) String username,
             @RequestParam(name = "avatar", required = false) String avatar,
-            @RequestParam(name = "email", required = false) String email,
             @RequestParam(name = "blogLink", required = false) String blogLink
              ) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
-        if (avatar!=null||email!=null||blogLink!=null) {
-            if (avatar != "" || email != "" || blogLink != "") {
+        if (avatar!=null||blogLink!=null) {
+            if (avatar != ""|| blogLink != "") {
                 Map<String, String> mapList = new HashMap<>();
                 mapList.put("avatar", avatar);
-                mapList.put("email", email);
                 mapList.put("blogLink", blogLink);
                 if (adminIndexService.changeUserInfo(username, mapList))
                  return   responseMsgVO.buildOK();

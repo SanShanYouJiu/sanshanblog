@@ -123,16 +123,11 @@ public class AdminIndexService {
         UserDO userDO = new UserDO();
         userDO.setUsername(username);
         String avatar = mapList.get("avatar");
-        String email = mapList.get("email");
         String blogLink = mapList.get("blogLink");
         boolean avatarFlag=stringIsNotNull(avatar);
-        boolean emailFlag= stringIsNotNull(email);
         boolean blogLinFlag=stringIsNotNull(blogLink);
            if (avatarFlag){
                userDO.setAvatar(avatar);
-           }
-           if (emailFlag){
-               userDO.setEmail(email);
            }
            if (blogLinFlag){
                userDO.setBlogLink(blogLink);

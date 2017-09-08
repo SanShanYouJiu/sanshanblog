@@ -33,8 +33,6 @@ public class UserRepositoryImpl implements CustomUserRepository {
         Query query = new Query();
         query.addCriteria(new Criteria("username").is(userDO.getUsername()));
         Update update = new Update();
-        if (userDO.getEmail()!=null)
-            update.set("email", userDO.getEmail());
         if (userDO.getBlogLink()!=null)
             update.set("blogLink", userDO.getBlogLink());
         if (userDO.getAvatar()!=null)

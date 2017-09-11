@@ -10,12 +10,15 @@ import com.sanshan.util.JwtAuthenticationResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -34,26 +37,44 @@ public class AuthController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RedisTemplate<String,String> redisTemplate;
+
     @RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseEntity<?> createAuthenticationToken(
-            JwtAuthenticationRequest authenticationRequest) throws AuthenticationException {
-        final String token = authService.login(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+            JwtAuthenticationRequest authenticationRequest,@RequestParam(name = "codeid")String codeid) throws AuthenticationException {
+        ResponseMsgVO msgVO = new ResponseMsgVO();
+        //验证码检测
+        String codeValue= redisTemplate.opsForValue().get(CodeController.codeIdCachePrefix + codeid);
+        if (!authenticationRequest.getCode().equalsIgnoreCase(codeValue)) {
+            return new ResponseEntity<ResponseMsgVO>(
+                    msgVO.buildWithMsgAndStatus(
+                            PosCodeEnum.PARAM_ERROR, "验证码错误"),
+                            HttpStatus.ACCEPTED);
+         }
 
-        //fixme:验证码检测
+        final String token = authService.login(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
         //检查是否能登陆
 
         // Return the token
-        log.info("用户{}已登录", authenticationRequest.getUsername());
-        return ResponseEntity.ok(new JwtAuthenticationResponse(token));
+        log.info("用户{}登录", authenticationRequest.getUsername());
+        return ResponseEntity.ok(msgVO.buildOKWithData(new JwtAuthenticationResponse(token)));
     }
 
 
     @RequestMapping(value = "/register", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO register(UserDO addedUser
+    public ResponseMsgVO register(UserDO addedUser,
+                                  @RequestParam(name = "codeid")String codeid,
+                                  @RequestParam(name = "code") String code
     ) {
+
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         //验证码检查
+        String codeValue= redisTemplate.opsForValue().get(CodeController.codeIdCachePrefix + codeid);
+        if (!code.equalsIgnoreCase(codeValue)) {
+            return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "验证码错误");
+        }
 
         //合法性检查
        if (!userService.checkPassWordLegal(addedUser.getPassword(), responseMsgVO))

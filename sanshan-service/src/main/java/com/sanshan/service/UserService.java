@@ -101,7 +101,7 @@ public class UserService {
     /**
      * 发送邮箱验证码
      */
-    public ResponseMsgVO sendEmailCode(int type, String email) {
+    public ResponseMsgVO sendEmailCode(Integer type, String email) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         CodeTypeEnum codeType = CodeTypeEnum.of(type);
         //判空
@@ -111,7 +111,7 @@ public class UserService {
         String tempKey = CODE_PREFIX + codeType.getValue() + email;
         String tempValue = redisTemplate.opsForValue().get(tempKey);
         if (tempValue != null) {
-            return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "操作频繁,请稍后再试");
+            return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.FREQUENTLY_REQUEST, "操作频繁,请稍后再试");
         }
         if (!checkSendMail(codeType, tempKey, email, responseMsgVO)) return responseMsgVO;
 
@@ -181,7 +181,7 @@ public class UserService {
     }
 
     /** 产生一个随机的字符串*/
-    private static String RandomString(int length) {
+    private static String RandomString(Integer length) {
         String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         Random random = new Random();
         StringBuffer buf = new StringBuffer();

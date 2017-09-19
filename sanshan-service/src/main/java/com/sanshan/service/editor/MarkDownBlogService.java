@@ -116,13 +116,16 @@ public class MarkDownBlogService {
         String tag = markDownBlogDO.getTag();
         Date date=markDownBlogDO.getTime();
         String title = markDownBlogDO.getTitle();
+
+       MarkDownBlogDTO markDownBlogDTO= MarkDownEditorConvert.doToDto(cacheService.update(markDownBlogDO));
+
         //加入到索引中
         if (tag!=null)
             blogIdGenerate.putTag(tag,id);
         if (title!=null)
             blogIdGenerate.putTitle(title,id);
         blogIdGenerate.putDate(date,id);
-        return MarkDownEditorConvert.doToDto(cacheService.update(markDownBlogDO));
+        return markDownBlogDTO;
     }
 
 
@@ -133,12 +136,15 @@ public class MarkDownBlogService {
         markDownBlogDO.setUpdated(new Date());
         markDownBlogDO.setTag(tag);
         markDownBlogDO.setTitle(title);
+
+        MarkDownEditorConvert.doToDto(cacheService.updateSelective(markDownBlogDO));
+
         //加入到索引中
         if (tag!=null)
             blogIdGenerate.putTag(tag,id);
         if (title!=null)
             blogIdGenerate.putTitle(title,id);
-        MarkDownEditorConvert.doToDto(cacheService.updateSelective(markDownBlogDO));
+
         return true;
     }
 

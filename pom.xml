@@ -121,6 +121,12 @@
                 <version>${com.sanshan.dao}</version>
             </dependency>
 
+            <dependency>
+                <groupId>net.spy</groupId>
+                <artifactId>spymemcached</artifactId>
+                <version>2.11.4</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>junit</groupId>

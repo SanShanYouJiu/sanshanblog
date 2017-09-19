@@ -117,13 +117,15 @@ public class UeditorBlogService {
         String tag = uEditorBlogDO.getTag();
         Date date=uEditorBlogDO.getTime();
         String title = uEditorBlogDO.getTitle();
+
+        UeditorEditorConvert.doToDto(cacheService.update(uEditorBlogDO));
+
         //加入到索引中
         if (tag!=null)
             blogIdGenerate.putTag(tag,id);
         if (title!=null)
             blogIdGenerate.putTitle(title,id);
         blogIdGenerate.putDate(date,id);
-        UeditorEditorConvert.doToDto(cacheService.update(uEditorBlogDO));
         return true;
     }
 
@@ -134,12 +136,15 @@ public class UeditorBlogService {
         uEditorBlogDO.setUpdated(new Date());
         uEditorBlogDO.setTag(tag);
         uEditorBlogDO.setTitle(title);
+
+        UeditorEditorConvert.doToDto(cacheService.updateSelective(uEditorBlogDO));
+
         //加入到索引中
         if (tag!=null)
             blogIdGenerate.putTag(tag,id);
         if (title!=null)
             blogIdGenerate.putTitle(title,id);
-        UeditorEditorConvert.doToDto(cacheService.updateSelective(uEditorBlogDO));
+
         return true;
     }
 

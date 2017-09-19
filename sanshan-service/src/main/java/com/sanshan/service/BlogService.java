@@ -22,13 +22,13 @@ import java.util.*;
 @Slf4j
 public class BlogService {
     @Autowired
-    MarkDownBlogService markDownBlogService;
+    private MarkDownBlogService markDownBlogService;
 
     @Autowired
-    UeditorBlogService uEditorBlogService;
+    private UeditorBlogService uEditorBlogService;
 
     @Autowired
-    BlogIdGenerate blogIdGenerate;
+    private BlogIdGenerate blogIdGenerate;
 
 
     public Long getCurrentId() {
@@ -47,23 +47,6 @@ public class BlogService {
         log.error("获取当前ID错误:{}", id);
         throw new NullPointerException("未知错误");
     }
-
-    public BlogVO getBlog(Long id) {
-        EditorTypeEnum type = blogIdGenerate.getType(id);
-        BlogVO blog = null;
-        switch (type) {
-            case UEDITOR_EDITOR:
-                blog = new BlogVO(uEditorBlogService.queryDtoById(id));
-                break;
-            case MarkDown_EDITOR:
-                blog = new BlogVO(markDownBlogService.queryDtoById(id));
-                break;
-            case Void_Id:
-                break;
-        }
-        return blog;
-    }
-
 
     /**
      * 查询对应tag标签的博客
@@ -161,10 +144,25 @@ public class BlogService {
     }
 
 
+    public BlogVO getBlog(Long id) {
+        EditorTypeEnum type = blogIdGenerate.getType(id);
+        BlogVO blog = null;
+        switch (type) {
+            case UEDITOR_EDITOR:
+                blog = new BlogVO(uEditorBlogService.queryDtoById(id));
+                break;
+            case MarkDown_EDITOR:
+                blog = new BlogVO(markDownBlogService.queryDtoById(id));
+                break;
+            case Void_Id:
+                break;
+        }
+        return blog;
+    }
+
+
     public ResponseMsgVO removeBlog(Long id) {
         EditorTypeEnum type = blogIdGenerate.getType(id);
-        blogIdGenerate.remove(id);
-        BlogVO blog = null;
         switch (type) {
             case UEDITOR_EDITOR:
                 int result = uEditorBlogService.deleteDOById(id);
@@ -180,6 +178,7 @@ public class BlogService {
             case Void_Id:
                 throw new NullPointerException("无法删除 ID已失效");
         }
+        blogIdGenerate.remove(id);
         return new ResponseMsgVO().buildOK();
     }
 

@@ -1,9 +1,9 @@
 package com.sanshan.util.exception;
 
 /**
- * Created by han on 2017/5/16.
+ * 博客写入异常
  */
-public class IdMapWriteException extends  Exception{
+public class IdMapWriteException extends  CheckException{
     public IdMapWriteException(){
         super("IdMap写入过程出错");
     }

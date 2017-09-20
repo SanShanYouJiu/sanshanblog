@@ -13,8 +13,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -43,7 +41,7 @@ public class UserService {
     private UserDetailsService userDetailsService;
 
     @Autowired
-    private  JwtTokenUtil jwtTokenUtil;
+    private JwtTokenUtil jwtTokenUtil;
 
 
     public static final String CODE_PREFIX = "sendEmailCode";
@@ -54,26 +52,27 @@ public class UserService {
     private Pattern emailPattern = Pattern.compile("^([a-zA-Z0-9_\\.\\-])+\\@(([a-zA-Z0-9\\-])+\\.)+([a-zA-Z0-9]{2,4})+$");
 
     //更改密码
-    public ResponseMsgVO changePwd(String code, String password) {
-        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
+    public void changePwd(String code, String password, ResponseMsgVO responseMsgVO) {
         JwtUser jwtUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         UserDO userDO = userRepository.findByUsername(jwtUser.getUsername());
         String key = CODE_PREFIX + CodeTypeEnum.CHANGE_PWD.getValue() + userDO.getEmail();
         String value = redisTemplate.opsForValue().get(key);
         if (!StringUtils.equals(code, value)) {
-            return new ResponseMsgVO<>().buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "验证码错误");
+            responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "验证码错误");
+            return;
         }
 
-        if (!checkPassWordLegal(password, responseMsgVO)) return responseMsgVO;
+        if (!checkPassWordLegal(password, responseMsgVO)) return;
 
         // 更新到mongo数据库
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         WriteResult result = userRepository.changePassword(jwtUser.getUsername(), passwordEncoder.encode(password));
-        if (result.getN() == 0)
-            return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "更新失败");
-
-        return responseMsgVO.buildOK();
+        if (result.getN() == 0) {
+            responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "更新失败");
+            return;
+        }
+        responseMsgVO.buildOK();
     }
 
 
@@ -101,21 +100,22 @@ public class UserService {
     /**
      * 发送邮箱验证码
      */
-    public ResponseMsgVO sendEmailCode(Integer type, String email) {
-        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
+    public void sendEmailCode(Integer type, String email, ResponseMsgVO responseMsgVO) {
         CodeTypeEnum codeType = CodeTypeEnum.of(type);
         //判空
         if (Objects.isNull(codeType)) {
-            return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "错误的type类型");
+            responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "错误的type类型");
+            return;
         }
         String tempKey = CODE_PREFIX + codeType.getValue() + email;
         String tempValue = redisTemplate.opsForValue().get(tempKey);
         if (tempValue != null) {
-            return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.FREQUENTLY_REQUEST, "操作频繁,请稍后再试");
+            responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.FREQUENTLY_REQUEST, "操作频繁,请稍后再试");
+            return;
         }
-        if (!checkSendMail(codeType, tempKey, email, responseMsgVO)) return responseMsgVO;
+        if (!checkSendMail(codeType, tempKey, email, responseMsgVO)) return;
 
-        return responseMsgVO.buildOK();
+        responseMsgVO.buildOK();
     }
 
     /**
@@ -143,13 +143,13 @@ public class UserService {
 
 
     //忘记密码
-    public ResponseEntity forgetPassword(String email, String token) {
+    public void forgetPassword(String email, String token, ResponseMsgVO responseMsgVO) {
         //获得具体的user对象
         UserDO userDO = userRepository.findByEmail(email);
         String key = CODE_PREFIX + CodeTypeEnum.CHANGE_PWD.getValue() + userDO.getEmail();
         String value = redisTemplate.opsForValue().get(key);
         if (!Objects.isNull(value) && value.equals(token)) {
-             //通过随机生成字符串 暂时替换为密码
+            //通过随机生成字符串 暂时替换为密码
             String tempPwd = RandomString(20);
             userRepository.changePassword(userDO.getUsername(), tempPwd);
 
@@ -157,10 +157,12 @@ public class UserService {
             final UserDetails userDetails = userDetailsService.loadUserByUsername(userDO.getUsername());
             final String loginToken = jwtTokenUtil.generateToken(userDetails);
             JwtAuthenticationResponse response = new JwtAuthenticationResponse(loginToken);
-            return ResponseEntity.ok(response);
+            responseMsgVO.buildOKWithData(response);
+            return;
         }
 
-        return new ResponseEntity(new ResponseMsgVO().buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR,"token无效"), HttpStatus.OK);
+        responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "token无效");
+        return;
     }
 
 
@@ -180,7 +182,9 @@ public class UserService {
         return true;
     }
 
-    /** 产生一个随机的字符串*/
+    /**
+     * 产生一个随机的字符串
+     */
     private static String RandomString(Integer length) {
         String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         Random random = new Random();
@@ -223,21 +227,22 @@ public class UserService {
     /**
      * 注册后的邮箱认证
      */
-    public ResponseMsgVO checkRegisterEmailToken(String token) {
-        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
+    public void checkRegisterEmailToken(String token, ResponseMsgVO responseMsgVO) {
         JwtUser jwtUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         UserDO userDO = userRepository.findByUsername(jwtUser.getUsername());
         String email = redisTemplate.opsForValue().get(token);
         if (StringUtils.isEmpty(email)) {
-            return responseMsgVO.buildWithPosCode(PosCodeEnum.URL_ERROR);
+            responseMsgVO.buildWithPosCode(PosCodeEnum.URL_ERROR);
+            return;
         }
         if (!StringUtils.equals(email, userDO.getEmail())) {
-            return new ResponseMsgVO<>().buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "验证码错误");
+            responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "验证码错误");
+            return;
         }
         redisTemplate.delete(token);
 
-        return responseMsgVO.buildOK();
+        responseMsgVO.buildOK();
     }
 
 }

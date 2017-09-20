@@ -10,13 +10,11 @@ import com.sanshan.service.editor.UeditorBlogService;
 import com.sanshan.service.vo.BlogVO;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.BlogIdGenerate;
-import com.sanshan.util.exception.ERROR;
 import com.sanshan.util.info.EditorTypeEnum;
 import com.sanshan.util.info.PosCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -69,7 +67,6 @@ public class UEditorEditorController {
                                @PathVariable("date") String date,
                                @PathVariable("filename") String filename,
                                @PathVariable("suffix") String suffix,
-                               HttpServletRequest request,
                                HttpServletResponse response) {
         fileService.getUEditorFile(format, date, filename, suffix, response);
 
@@ -77,7 +74,6 @@ public class UEditorEditorController {
 
 
     @RequestMapping(value = "query-by-page", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @PreAuthorize("hasRole('USER')")
     public ResponseMsgVO queryByPage(@RequestParam("pagenum") Integer pagenum
             , @RequestParam("pagesize") Integer pagesize) {
         ResponseMsgVO<PageInfo<UEditorBlogDTO>> responseMsgVO = new ResponseMsgVO<>();
@@ -89,7 +85,6 @@ public class UEditorEditorController {
 
 
     @RequestMapping(value = "query-all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @PreAuthorize("hasRole('USER')")
     public ResponseMsgVO queryAll() {
         ResponseMsgVO<List<BlogVO>> responseMsgVO = new ResponseMsgVO<>();
         List<BlogVO> list ;
@@ -99,7 +94,6 @@ public class UEditorEditorController {
 
 
     @RequestMapping(value = "insert-blog", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @PreAuthorize("hasRole('USER')")
     public ResponseMsgVO insertMarkDownBlog(
             @RequestParam(value = "content", required = false) String content,
         @RequestParam(value = "title", required = false) String title,
@@ -107,7 +101,7 @@ public class UEditorEditorController {
 
         int result = uEditorBlogService.saveDO(content, title, tag);
         if (result == 0) {
-            return new ResponseMsgVO().buildError(new ERROR(500, "未插入成功"));
+            return new ResponseMsgVO().buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR,"未存入成功");
         }
         ResponseMsgVO responseMsgVO = new ResponseMsgVO().buildOK();
         return responseMsgVO;
@@ -115,12 +109,11 @@ public class UEditorEditorController {
 
 
     @RequestMapping(value = "delete-by-id", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @PreAuthorize("hasRole('USER')")
     public ResponseMsgVO deleteUeditorBlog(@RequestParam("id") Long id) {
         if (blogIdGenerate.getType(id) == EditorTypeEnum.UEDITOR_EDITOR) {
             int result = uEditorBlogService.deleteDOById(id);
             if (result == 0) {
-                return new ResponseMsgVO().buildError(new ERROR(500, "未删除成功"));
+                return new ResponseMsgVO().buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR, "未删除成功");
             }
             //id去除匹配
             blogIdGenerate.remove(id);
@@ -131,7 +124,6 @@ public class UEditorEditorController {
 
 
     @RequestMapping(value = "update-by-id", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @PreAuthorize("hasRole('USER')")
     public ResponseMsgVO update(
             @RequestParam(value = "id") Long id,
             @RequestParam(value = "content", required = false) String content,

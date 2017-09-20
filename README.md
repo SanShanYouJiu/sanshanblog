@@ -36,3 +36,4 @@ DO DTO VO 三种实体对象
 #### 注意事项
 properties文件默认不是UTF-8编码 需要自己在IDEA中设置为UTF-8 或者自己手动处理
 
+在代码中采用lombok进行缩写代码

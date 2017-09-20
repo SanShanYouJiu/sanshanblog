@@ -20,11 +20,8 @@ import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.util.ClassUtils;
 import redis.clients.jedis.JedisPoolConfig;
-import redis.clients.util.Hashing;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 

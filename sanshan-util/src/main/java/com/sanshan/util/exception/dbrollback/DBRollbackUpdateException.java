@@ -1,6 +1,8 @@
 package com.sanshan.util.exception.dbrollback;
 
-public class DBRollbackUpdateException extends Exception {
+import com.sanshan.util.exception.CheckException;
+
+public class DBRollbackUpdateException extends CheckException {
 
     public DBRollbackUpdateException(){
 

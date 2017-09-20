@@ -1,6 +1,5 @@
 package com.sanshan.service.vo;
 
-import com.sanshan.util.exception.ERROR;
 import com.sanshan.util.info.PosCodeEnum;
 import lombok.Data;
 import lombok.ToString;
@@ -44,11 +43,6 @@ public class ResponseMsgVO<T> implements Serializable {
     }
 
 
-    public ResponseMsgVO buildError(ERROR error) {
-        this.status =  error.getCode();
-        this.msg = error.getMessage();
-        return this;
-    }
 
     @SuppressWarnings("unchecked")
     public ResponseMsgVO buildOKWithData(T data) {

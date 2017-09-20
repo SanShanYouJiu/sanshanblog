@@ -7,6 +7,7 @@ import com.sanshan.service.vo.JwtUser;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.setting.Setting;
 import com.sanshan.util.info.PosCodeEnum;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,6 +24,7 @@ import java.util.Date;
 
 import static java.util.Arrays.asList;
 
+@Slf4j
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -68,6 +70,7 @@ public class AuthServiceImpl implements AuthService {
         userToAdd.setLastPasswordResetDate(new Date());
         userToAdd.setRoles(asList("ROLE_USER"));
         userRepository.insert(userToAdd);
+        log.info("{}:注册成功",username);
         responseMsgVO.buildOK();
         return true;
     }
@@ -101,6 +104,7 @@ public class AuthServiceImpl implements AuthService {
 
         // Reload password post-security so we can generate token
         //重新加载 生成token
+        log.info("用户{}登录", username);
         final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
         final String token = jwtTokenUtil.generateToken(userDetails);
         return token;

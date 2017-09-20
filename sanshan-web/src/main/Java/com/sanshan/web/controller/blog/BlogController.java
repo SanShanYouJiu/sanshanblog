@@ -3,11 +3,9 @@ package com.sanshan.web.controller.blog;
 import com.sanshan.service.BlogService;
 import com.sanshan.service.vo.BlogVO;
 import com.sanshan.service.vo.ResponseMsgVO;
-import com.sanshan.util.exception.ERROR;
-import lombok.extern.slf4j.Slf4j;
+import com.sanshan.util.info.PosCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,7 +20,6 @@ import java.util.Objects;
 
 @RequestMapping("blog")
 @RestController
-@Slf4j
 public class BlogController {
 
 
@@ -46,7 +43,7 @@ public class BlogController {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         List<BlogVO> list = blogService.getBlogByTag(tag);
         if (Objects.isNull(list))
-            return responseMsgVO.buildError(new ERROR(404,"无效的标签"));
+            return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND,"未知的标签");
         return responseMsgVO.buildOKWithData(list);
     }
 
@@ -55,7 +52,7 @@ public class BlogController {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         List list =blogService.queryTagAll();
         if (Objects.isNull(list))
-            return responseMsgVO.buildError(new ERROR(404,"没有标签"));
+            return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND,"没有标签");
         return responseMsgVO.buildOKWithData(list);
     }
 
@@ -64,7 +61,7 @@ public class BlogController {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         List<BlogVO> list = blogService.getBlogByTitle(title);
         if (Objects.isNull(list))
-            return responseMsgVO.buildError(new ERROR(404, "无效的标题"));
+            return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND,"未知的标题");
         return responseMsgVO.buildOKWithData(list);
     }
 
@@ -73,25 +70,20 @@ public class BlogController {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         List list =blogService.queryTitleAll();
         if (Objects.isNull(list))
-            return responseMsgVO.buildError(new ERROR(404,"没有标题"));
+            return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND,"没有标题");
         return responseMsgVO.buildOKWithData(list);
     }
 
 
     @RequestMapping(value = "query-by-date",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO  queryByDate(@RequestParam("date")String dateString){
+    public ResponseMsgVO  queryByDate(@RequestParam("date")String dateString) throws ParseException {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date= null;
-        try {
-            date = format.parse(dateString);
-        } catch (ParseException e) {
-            log.error("无法解析字符串{}",dateString);
-            e.printStackTrace();
-        }
+        date = format.parse(dateString);
         List<BlogVO> list = blogService.getBlogByDate(date);
         if (Objects.isNull(list))
-            return responseMsgVO.buildError(new ERROR(404, "无效的日期"));
+            return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND, "无效的日期");
         return responseMsgVO.buildOKWithData(list);
     }
 
@@ -100,7 +92,7 @@ public class BlogController {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         List list =blogService.queryDateAll();
         if (Objects.isNull(list))
-            return responseMsgVO.buildError(new ERROR(404,"没有日期"));
+            return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND, "没有日期");
         return  responseMsgVO.buildOKWithData(list);
     }
 
@@ -115,10 +107,10 @@ public class BlogController {
 
 
     @RequestMapping(value = "delete-by-id",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @PreAuthorize("hasRole('USER')")
-    public ResponseMsgVO blogState(@RequestParam("id") Long id) {
+    public ResponseMsgVO blogDelete(@RequestParam("id") Long id) {
         //id去除
-        ResponseMsgVO responseMsgVO= blogService.removeBlog(id);
+        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
+        blogService.removeBlog(id,responseMsgVO);
         return responseMsgVO;
     }
 

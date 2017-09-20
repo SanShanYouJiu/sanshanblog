@@ -7,12 +7,10 @@ import com.sanshan.service.editor.MarkDownBlogService;
 import com.sanshan.service.vo.BlogVO;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.BlogIdGenerate;
-import com.sanshan.util.exception.ERROR;
 import com.sanshan.util.info.EditorTypeEnum;
 import com.sanshan.util.info.PosCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -23,7 +21,6 @@ import java.util.stream.Collectors;
 
 @RequestMapping("markdown-editor")
 @RestController
-@PreAuthorize("hasRole('USER')")
 public class MarkDownEditorController {
 
     @Autowired
@@ -68,7 +65,7 @@ public class MarkDownEditorController {
 
         int result = markDownBlogService.saveDO(content, title, tag);
         if (result ==0){
-            return new ResponseMsgVO().buildError(new ERROR(500, "未存入成功"));
+            return new ResponseMsgVO().buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR,"未存入成功");
         }
         ResponseMsgVO responseMsgVO = new ResponseMsgVO().buildOK();
         return responseMsgVO;
@@ -80,7 +77,7 @@ public class MarkDownEditorController {
         if (blogIdGenerate.getType(id)==EditorTypeEnum.MarkDown_EDITOR){
             int result = markDownBlogService.deleteDOById(id);
             if (result == 0) {
-                return new ResponseMsgVO().buildError(new ERROR(500, "未删除成功"));
+                return new ResponseMsgVO().buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR,"未删除成功");
             }
             //id去除匹配
             blogIdGenerate.remove(id);

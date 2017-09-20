@@ -6,12 +6,10 @@ import com.sanshan.util.AuthCodeUtil;
 import com.sanshan.util.ImageBase64Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.imageio.ImageIO;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
@@ -38,12 +36,11 @@ public class CodeController {
 
     /**
      * 验证码
-     * @param request
      * @param response
      * @throws IOException
      */
     @RequestMapping("/codeValidate")
-    public ResponseEntity<ResponseMsgVO> getCode(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ResponseMsgVO getCode(HttpServletResponse response) throws IOException {
         ResponseMsgVO msgVO = new ResponseMsgVO();
 
         BufferedImage buffImg= new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
@@ -64,7 +61,7 @@ public class CodeController {
         InputStream is = new ByteArrayInputStream(os.toByteArray());
         String data= ImageBase64Utils.imageToBase64(is);
         CodeValidateVO codeValidateVO = new CodeValidateVO(data, codeId);
-        return ResponseEntity.ok(msgVO.buildOKWithData(codeValidateVO));
+        return msgVO.buildOKWithData(codeValidateVO);
     }
 
 }

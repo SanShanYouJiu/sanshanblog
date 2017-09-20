@@ -1,9 +1,8 @@
 package com.sanshan.util.exception;
 
 /**
- * Created by han on 2017/5/21.
  */
-public class EditorTypeConventException extends Exception {
+public class EditorTypeConventException extends CheckException {
 
     public EditorTypeConventException() {
         super("在EditorType转换为类型时出错");

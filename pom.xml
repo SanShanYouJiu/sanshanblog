@@ -30,8 +30,8 @@
         <!--validate-->
         <cglib>3.2.2</cglib>
         <!--aspectj-->
-        <org.aspectj-aspectjweaver>1.8.6</org.aspectj-aspectjweaver>
-        <org.aspectj-aspectjrt>1.8.6</org.aspectj-aspectjrt>
+        <org.aspectj-aspectjweaver>1.8.2</org.aspectj-aspectjweaver>
+        <aspectj-aspectjrt>1.5.2a</aspectj-aspectjrt>
         <!--log-->
         <slf4j.version>1.7.7</slf4j.version>
         <log4j.version>1.2.17</log4j.version>
@@ -225,10 +225,11 @@
             </dependency>
 
             <dependency>
-                <groupId>org.aspectj</groupId>
+                <groupId>aspectj</groupId>
                 <artifactId>aspectjrt</artifactId>
-                <version>${org.aspectj-aspectjrt}</version>
+                <version>${aspectj-aspectjrt}</version>
             </dependency>
+
             <!--aspectj end-->
 
 

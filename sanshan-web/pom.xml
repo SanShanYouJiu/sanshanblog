@@ -87,9 +87,18 @@
         </dependency>
 
         <dependency>
-            <groupId>org.aspectj</groupId>
+            <groupId>aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
         </dependency>
+<!---->
+
+        <!-- https://mvnrepository.com/artifact/aopalliance/aopalliance -->
+        <dependency>
+            <groupId>aopalliance</groupId>
+            <artifactId>aopalliance</artifactId>
+            <version>1.0</version>
+        </dependency>
+
 
         <dependency>
             <groupId>log4j</groupId>

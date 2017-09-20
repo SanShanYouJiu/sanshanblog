@@ -69,6 +69,21 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(
+                        //TODO 魔法值太多
+                        "/api/admin/index/**",
+                        "/api/user/change-pwd",
+                        "/api/user/email-check",
+                        "/api/auth/refresh",
+                        "/api/register/check/token",
+                        "/api/blog/delete-by-id",
+                        "/api/markdown-editor/**",
+                        "/api/ueditor-editor/query-by-page",//TODO 将Config与加载图片的代码分离到另外一个Controller中
+                        "/api/ueditor-editor/query-all",
+                        "/api/ueditor-editor/insert-blog",
+                        "/api/ueditor-editor/delete-by-id",
+                        "/api/ueditor-editor/update-by-id")
+                .hasAnyRole("USER")
+                .antMatchers(
                         "/",
                         //搜索引擎
                         "/solr/**",
@@ -90,7 +105,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 ).permitAll()
                 .anyRequest()
                 .authenticated();
-
 
 
         // 添加JWT filter

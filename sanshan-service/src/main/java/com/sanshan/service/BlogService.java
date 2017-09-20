@@ -7,8 +7,8 @@ import com.sanshan.service.editor.UeditorBlogService;
 import com.sanshan.service.vo.BlogVO;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.BlogIdGenerate;
-import com.sanshan.util.exception.ERROR;
 import com.sanshan.util.info.EditorTypeEnum;
+import com.sanshan.util.info.PosCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -161,25 +161,26 @@ public class BlogService {
     }
 
 
-    public ResponseMsgVO removeBlog(Long id) {
+    public void removeBlog(Long id,ResponseMsgVO responseMsgVO) {
         EditorTypeEnum type = blogIdGenerate.getType(id);
         switch (type) {
             case UEDITOR_EDITOR:
                 int result = uEditorBlogService.deleteDOById(id);
-                if (result == 0)
-                    return new ResponseMsgVO().buildError(new ERROR(500, "删除对应Id为：" + id + "的博客失败"));
-                break;
+                if (result == 0) {
+                    responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR, "删除对于Id为:" + id + "的博客失败");
+                    return;
+                }
             case MarkDown_EDITOR:
                 int result2 = markDownBlogService.deleteDOById(id);
                 if (result2 == 0) {
-                    return new ResponseMsgVO().buildError(new ERROR(500, "删除对应Id为：" + id + "的博客失败"));
+                    responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR, "删除对于Id为:" + id + "的博客失败");
+                    return;
                 }
-                break;
             case Void_Id:
                 throw new NullPointerException("无法删除 ID已失效");
         }
         blogIdGenerate.remove(id);
-        return new ResponseMsgVO().buildOK();
+        responseMsgVO.buildOK();
     }
 
 

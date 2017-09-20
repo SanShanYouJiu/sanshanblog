@@ -1,7 +1,6 @@
 package com.sanshan.web.controller.admin;
 
 import com.sanshan.service.FileLoadService;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
@@ -13,7 +12,6 @@ import java.io.IOException;
 
 @Controller
 @RequestMapping("/file")
-@Slf4j
 public class FileLoadController {
 
     @Autowired

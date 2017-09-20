@@ -1,11 +1,10 @@
 package com.sanshan.web.config.webaseconfig;
 
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter4;
+import com.sanshan.web.config.javaconfig.TransactionConfig;
+import com.sanshan.web.config.javaconfig.auxiliary.ControllerAop;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.ResourceHttpMessageConverter;
@@ -28,6 +27,8 @@ import java.util.List;
 @EnableWebMvc
 @ComponentScan("com.sanshan.web.controller")
 @PropertySource("file:D:/SanShanBlog.properties")
+@EnableAspectJAutoProxy(proxyTargetClass = true)//开启切面
+@Import(TransactionConfig.class)
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Bean
@@ -97,6 +98,11 @@ public class WebConfig extends WebMvcConfigurerAdapter {
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    @Bean
+    public ControllerAop controllerAop(){
+        return new ControllerAop();
     }
 }
 

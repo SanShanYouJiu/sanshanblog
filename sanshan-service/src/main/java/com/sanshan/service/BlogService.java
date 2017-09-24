@@ -7,6 +7,7 @@ import com.sanshan.service.editor.UeditorBlogService;
 import com.sanshan.service.vo.BlogVO;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.BlogIdGenerate;
+import com.sanshan.util.exception.MapFoundNullException;
 import com.sanshan.util.info.EditorTypeEnum;
 import com.sanshan.util.info.PosCodeEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -64,7 +65,7 @@ public class BlogService {
         Map<Long, String> titleMap = blogIdGenerate.getInvertIdTitleMap();
         Map<Long, EditorTypeEnum> idMap = blogIdGenerate.getIdCopy();
         for (int i = 0; i < ids.length; i++) {
-            long id = ids[i];
+            Long id = ids[i];
             switchTypeAssembleBlogList(id, titleMap, blogVOS, idMap.get(id));
         }
         return blogVOS;
@@ -170,16 +171,17 @@ public class BlogService {
                     responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR, "删除对于Id为:" + id + "的博客失败");
                     return;
                 }
+                break;
             case MarkDown_EDITOR:
                 int result2 = markDownBlogService.deleteDOById(id);
                 if (result2 == 0) {
                     responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR, "删除对于Id为:" + id + "的博客失败");
                     return;
                 }
+                break;
             case Void_Id:
                 throw new NullPointerException("无法删除 ID已失效");
         }
-        blogIdGenerate.remove(id);
         responseMsgVO.buildOK();
     }
 
@@ -206,11 +208,12 @@ public class BlogService {
             long id = entry.getKey();
             switchTypeAssembleBlogList(id, titleMap, blogVOS, entry.getValue());
         }
-
         return blogVOS;
     }
 
     protected void switchTypeAssembleBlogList(Long id, Map<Long, String> titleMap, List<BlogVO> blogVOS, EditorTypeEnum type) {
+        if (type==null)
+            throw new MapFoundNullException();
         switch (type) {
             case Void_Id:
                 break;

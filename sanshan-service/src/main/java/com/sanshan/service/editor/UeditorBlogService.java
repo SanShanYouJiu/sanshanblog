@@ -27,7 +27,7 @@ public class UeditorBlogService {
     private UEditorBlogCacheService cacheService;
 
     @Autowired
-    BlogIdGenerate blogIdGenerate;
+    private   BlogIdGenerate blogIdGenerate;
     /**
      * DTO查询
      *
@@ -107,7 +107,7 @@ public class UeditorBlogService {
 
         //加入IdMap对应
         blogIdGenerate.addIdMap(blogIdGenerate.getId(), EditorTypeEnum.UEDITOR_EDITOR);
-
+        log.info("用户:{}新增Ueditor博客Id为:{}",user.getUsername(),uEditorBlogDO.getId());
         return  result;
     }
 
@@ -149,6 +149,16 @@ public class UeditorBlogService {
     }
 
     public Integer deleteDOById(Long id) {
-        return cacheService.deleteById(id);
+        //获得当前用户
+        JwtUser user = (JwtUser) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        //id去除匹配
+        Integer rows = cacheService.deleteById(id);
+        if (rows==0){
+            return 0;
+        }
+        blogIdGenerate.remove(id);
+        log.info("用户:{}删除了Ueditor博客 Id为{}", user.getUsername(), id);
+        return rows;
     }
 }

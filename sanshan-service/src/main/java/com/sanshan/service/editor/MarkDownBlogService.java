@@ -106,7 +106,7 @@ public class MarkDownBlogService {
 
         //加入IdMap对应
         blogIdGenerate.addIdMap(blogIdGenerate.getId(), EditorTypeEnum.MarkDown_EDITOR);
-
+        log.info("用户:{}新增Markdown博客Id为:{}",user.getUsername(),markDownBlog.getId());
         return result;
     }
 
@@ -144,13 +144,22 @@ public class MarkDownBlogService {
             blogIdGenerate.putTag(tag,id);
         if (title!=null)
             blogIdGenerate.putTitle(title,id);
-
         return true;
     }
 
 
     public Integer deleteDOById(Long id) {
-        return cacheService.deleteById(id);
+        //获得当前用户
+        JwtUser user = (JwtUser) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        //id去除匹配
+        Integer rows = cacheService.deleteById(id);
+        if (rows==0){
+            return 0;
+        }
+        blogIdGenerate.remove(id);
+        log.info("用户:{}删除了Markdown博客 Id为{}", user.getUsername(), id);
+        return rows;
     }
 
 }

@@ -25,7 +25,7 @@ public class PropertiesConvenUtil {
      * @return
      * @throws Exception
      */
-    public final static Map fileToMap(String path, Map map, int type) throws Exception {
+    public  final static Map fileToMap(String path, Map map, int type) throws Exception {
         if (map == null) {
             map = new HashMap<String, String>();
         }
@@ -41,37 +41,37 @@ public class PropertiesConvenUtil {
             isr = new FileInputStream(path);
             r = new InputStreamReader(isr, "utf-8");
             Properties props = new Properties();
-
             props.load(r);
             Set<Entry<Object, Object>> entrySet = props.entrySet();
             for (Entry<Object, Object> entry : entrySet) {
                 if (!entry.getKey().toString().startsWith("#")) {
                     String value;
                     Set<Long> set;
-                   switch (type){
-                       case 0:
-                             value = (String) entry.getValue();
+                    switch (type) {
+                        case 0:
+                            value = (String) entry.getValue();
                             set = stringConventSet(value);
-                           map.put(((String) entry.getKey()).trim(), set);break;
-                       case 1:
-                           map.put((Long.valueOf((String) entry.getKey())), EditorTypeEnum.getEditorType((String) entry
-                                   .getValue()));
-                           break;
-                       case 2:
-                           map.put((Long.valueOf((String) entry.getKey())), entry.getValue());
-                           break;
-                       case 3:
-                           value = (String) entry.getValue();
-                           set = stringConventSet(value);
-                           DateFormat fmt =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                           Date date=fmt.parse((String) entry.getKey());
-                           map.put(date,set);
-                           break;
-                       case 4:
-                           DateFormat fmt2 =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                           Date date2=fmt2.parse((String) entry.getValue());
-                           map.put(Long.valueOf((String) entry.getKey()),date2);
-                   }
+                            map.put(((String) entry.getKey()).trim(), set);
+                            break;
+                        case 1:
+                            map.put((Long.valueOf((String) entry.getKey())), EditorTypeEnum.getEditorType((String) entry
+                                    .getValue()));
+                            break;
+                        case 2:
+                            map.put((Long.valueOf((String) entry.getKey())), entry.getValue());
+                            break;
+                        case 3:
+                            value = (String) entry.getValue();
+                            set = stringConventSet(value);
+                            DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            Date date = fmt.parse((String) entry.getKey());
+                            map.put(date, set);
+                            break;
+                        case 4:
+                            DateFormat fmt2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                            Date date2 = fmt2.parse((String) entry.getValue());
+                            map.put(Long.valueOf((String) entry.getKey()), date2);
+                    }
                 }
             }
             return map;
@@ -139,7 +139,7 @@ public class PropertiesConvenUtil {
     }
 
 
-    private  final  static Set<Long> stringConventSet(String s) {
+    private final static Set<Long> stringConventSet(String s) {
         Set<Long> longs = new HashSet<>();
         char[] chars = s.toCharArray();
         chars[0] = ' ';
@@ -160,8 +160,8 @@ public class PropertiesConvenUtil {
      * @param map
      * @throws IOException
      */
-    public final static void IdMapToFile(String path, Map<Long, EditorTypeEnum> map,String description) throws IOException {
-        if (map.size()!=0) {
+    public final static void IdMapToFile(String path, Map<Long, EditorTypeEnum> map, String description) throws IOException {
+        if (map.size() != 0) {
             Properties properties = new Properties();
             for (Entry<Long, EditorTypeEnum> key : map.entrySet()) {
                 properties.setProperty(key.getKey().toString(), key.getValue().toString());
@@ -180,8 +180,8 @@ public class PropertiesConvenUtil {
      * @param map
      * @throws IOException
      */
-    public final static void setLongStringToFile(String path, Map<String, Set<Long>> map,String description) throws IOException {
-        if (map.size()!=0) {
+    public final static void setLongStringToFile(String path, Map<String, Set<Long>> map, String description) throws IOException {
+        if (map.size() != 0) {
             Properties properties = new Properties();
             for (Entry<String, Set<Long>> key : map.entrySet()) {
                 properties.setProperty(key.getKey().toString(), key.getValue().toString());
@@ -199,8 +199,8 @@ public class PropertiesConvenUtil {
      * @param map
      * @throws IOException
      */
-    public final static void setLongDateMapToFile(String path, Map<Date, Set<Long>> map,String description) throws IOException {
-        if (map.size()!=0) {
+    public final static void setLongDateMapToFile(String path, Map<Date, Set<Long>> map, String description) throws IOException {
+        if (map.size() != 0) {
             Properties properties = new Properties();
             DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             for (Entry<Date, Set<Long>> key : map.entrySet()) {
@@ -213,8 +213,8 @@ public class PropertiesConvenUtil {
     }
 
 
-    public final static void LongStringMapToFile(String path, Map<Long, String> map,String description) throws IOException {
-        if (map.size()!=0) {
+    public final static void LongStringMapToFile(String path, Map<Long, String> map, String description) throws IOException {
+        if (map.size() != 0) {
             Properties properties = new Properties();
             for (Entry<Long, String> key : map.entrySet()) {
                 properties.setProperty(String.valueOf(key.getKey()), key.getValue());
@@ -225,8 +225,8 @@ public class PropertiesConvenUtil {
         }
     }
 
-    public final static void LongDateMapToFile(String path, Map<Long, Date> map,String description) throws IOException {
-        if (map.size()!=0) {
+    public final static void LongDateMapToFile(String path, Map<Long, Date> map, String description) throws IOException {
+        if (map.size() != 0) {
             Properties properties = new Properties();
             DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 

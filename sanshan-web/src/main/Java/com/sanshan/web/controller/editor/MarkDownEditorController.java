@@ -79,8 +79,6 @@ public class MarkDownEditorController {
             if (result == 0) {
                 return new ResponseMsgVO().buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR,"未删除成功");
             }
-            //id去除匹配
-            blogIdGenerate.remove(id);
         return new ResponseMsgVO().buildOK();
         }
         return new ResponseMsgVO().buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR,"该ID不是MarkdownEditor格式");

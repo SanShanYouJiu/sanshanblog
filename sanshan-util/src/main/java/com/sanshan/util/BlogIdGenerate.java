@@ -22,45 +22,57 @@ public final class BlogIdGenerate {
 
     private ExecutorService pool = Executors.newFixedThreadPool(7);
 
-    public BlogIdGenerate() {
-        //System.out.println("测试");
-        //System.out.println(System.getProperty("user.dir"));
-        //File file = new File("");
-        //try {
-        //    System.out.println(file.getCanonicalPath());
-        //} catch (IOException e) {
-        //    e.printStackTrace();
-        //}
-        //System.out.println(file.getAbsolutePath());
-        //TODO:  这个文件路径从当前类自动获取
-        this.filename = "D:\\Java3\\Github\\Module\\sanshanblog\\sanshan-util\\src\\main\\resources\\";
+    public BlogIdGenerate( final String filename) {
+        this.filename = filename;
         log.info("加载filename值,通过该值查找相关文件");
     }
 
 
     public final void init() {
+        Long initTime = System.currentTimeMillis();
+        Future future0 = pool.submit(() -> {
+            fileToMap(filename + "IdMap.properties", IdMap, 1);
+        });
+        Future future1 = pool.submit(() -> {
+            fileToMap(filename + "IdTitleMap.properties", IdTitleMap, 0);
+        });
+        Future future2 = pool.submit(() -> {
+            fileToMap(filename + "IdTagMap.properties", IdTagMap, 0);
+        });
+        Future future3 = pool.submit(() -> {
+            fileToMap(filename + "IdDateMap.properties", IdDateMap, 3);
+        });
+        Future future4 = pool.submit(() -> {
+            fileToMap(filename + "invertTitleMap.properties", invertTitleMap, 2);
+        });
+        Future future5 = pool.submit(() -> {
+            fileToMap(filename + "invertTagMap.properties", invertTagMap, 2);
+        });
+        Future future6 = pool.submit(() -> {
+            fileToMap(filename + "invertDateMap.properties", invertDateMap, 4);
+        });
+        getFutureResult(future0);
+        getFutureResult(future1);
+        getFutureResult(future2);
+        getFutureResult(future3);
+        getFutureResult(future4);
+        getFutureResult(future5);
+        getFutureResult(future6);
+        log.info("已加载完文件系统中的properties文件 该文件是倒排索引关键文件 耗时:{}ms", System.currentTimeMillis() - initTime);
+    }
+
+    private void fileToMap(String filename, Map map, int type) {
         try {
-            IdMap = PropertiesConvenUtil.fileToMap(filename + "IdMap.properties", new TreeMap<Long, EditorTypeEnum>(), 1);
-            IdTitleMap = PropertiesConvenUtil.fileToMap(filename + "IdTitleMap.properties", new HashMap<String, Set<Long>>(), 0);
-            IdTagMap = PropertiesConvenUtil.fileToMap(filename + "IdTagMap.properties", new HashMap<String, Set<Long>>(), 0);
-            IdDateMap = PropertiesConvenUtil.fileToMap(filename + "IdDateMap.properties", new HashMap<Date, Set<Long>>(), 3);
-            invertTitleMap = PropertiesConvenUtil.fileToMap(filename + "invertTitleMap.properties", new HashMap<Long, String>(), 2);
-            invertTagMap = PropertiesConvenUtil.fileToMap(filename + "invertTagMap.properties", new HashMap<Long, String>(), 2);
-            invertDateMap = PropertiesConvenUtil.fileToMap(filename + "invertDateMap.properties", new HashMap<Long, Date>(), 4);
-            log.info("已加载完文件系统中的properties文件 该文件是倒排索引关键文件");
+            PropertiesConvenUtil.fileToMap(filename, map, type);
         } catch (Exception e) {
-            log.error("加载失败,{}", e.getCause());
+            log.error("加载文件:{}失败,cause:{}", e.getCause());
             e.printStackTrace();
         }
     }
 
+
     //ID保存 不可轻举妄动
-    private Map<Long, EditorTypeEnum> IdMap = new TreeMap<>(
-            (o1, o2) -> {
-                if (o1 > o2) return 1;
-                else return -1;
-            }
-    );
+    private Map<Long, EditorTypeEnum> IdMap = new HashMap<>();
 
     /**
      * 将ID推到序列中
@@ -91,12 +103,22 @@ public final class BlogIdGenerate {
      * @return
      */
     public final Map<Long, EditorTypeEnum> getIdCopy() {
-        TreeMap<Long, EditorTypeEnum> hashMap = new TreeMap<>();
+        TreeMap<Long, EditorTypeEnum> copyMap = new TreeMap<>(
+                (o1, o2) -> {
+                    if (o1.equals(o2)) {
+                        return 0;
+                    } else if (o1> o2) {
+                        return -1;
+                    } else {
+                        return 1;
+                    }
+                }
+        );
         for (Map.Entry<Long, EditorTypeEnum> entry : IdMap.entrySet()) {
-            hashMap.put(entry.getKey(), entry.getValue());
+            copyMap.put(entry.getKey(), entry.getValue());
         }
         log.debug("拷贝发布IdMap集合的内容");
-        return hashMap;
+        return copyMap;
     }
 
 
@@ -128,9 +150,9 @@ public final class BlogIdGenerate {
      */
     private String preTitle;
 
-    public final void putTitle( final String title, final Long id) {
-        Set<Long> longs =  IdTitleMap.get(title);
-        if (longs!=null&&longs.contains(id)) {
+    public final void putTitle(final String title, final Long id) {
+        Set<Long> longs = IdTitleMap.get(title);
+        if (longs != null && longs.contains(id)) {
             return;
         }
         if (longs == null)
@@ -163,12 +185,12 @@ public final class BlogIdGenerate {
      * @return
      */
     public final Map<String, Set<Long>> getIdTitleCopy() {
-        HashMap<String, Set<Long>> hashMap = new HashMap<>();
+        HashMap<String, Set<Long>> copyMap = new HashMap<>();
         for (Map.Entry<String, Set<Long>> entry : IdTitleMap.entrySet()) {
-            hashMap.put(entry.getKey(), entry.getValue());
+            copyMap.put(entry.getKey(), entry.getValue());
         }
         log.debug("拷贝发布IdTitleMap集合的内容");
-        return hashMap;
+        return copyMap;
     }
 
     /**
@@ -177,12 +199,12 @@ public final class BlogIdGenerate {
      * @return
      */
     public final Map<Long, String> getInvertIdTitleMap() {
-        HashMap<Long, String> hashMap = new HashMap<>();
+        HashMap<Long, String> copyMap = new HashMap<>();
         for (Map.Entry<Long, String> entry : invertTitleMap.entrySet()) {
-            hashMap.put(entry.getKey(), entry.getValue());
+            copyMap.put(entry.getKey(), entry.getValue());
         }
         log.debug("拷贝发布IdTitleMap集合的内容");
-        return hashMap;
+        return copyMap;
     }
 
 
@@ -203,7 +225,7 @@ public final class BlogIdGenerate {
 
     public final void putTag(final String tag, final Long id) {
         Set<Long> longs = IdTagMap.get(tag);
-        if (longs!=null&&longs.contains(id)) {
+        if (longs != null && longs.contains(id)) {
             return;
         }
         if (longs == null)
@@ -236,26 +258,38 @@ public final class BlogIdGenerate {
      * @return
      */
     public final Map<String, Set<Long>> getIdTagCopy() {
-        HashMap<String, Set<Long>> hashMap = new HashMap<>();
+        HashMap<String, Set<Long>> idTagMapCopy = new HashMap<>();
         for (Map.Entry<String, Set<Long>> entry : IdTagMap.entrySet()) {
-            hashMap.put(entry.getKey(), entry.getValue());
+            idTagMapCopy.put(entry.getKey(), entry.getValue());
         }
         log.debug("拷贝发布IdTagMap集合的内容");
-        return hashMap;
+        return idTagMapCopy;
+    }
+
+    /**
+     * 拷贝发布出InvertTagMap集合中的内容
+     */
+    public final Map<Long, String> getInvertTagMap() {
+        HashMap<Long, String> invertTagMapCopy = new HashMap<>();
+        for (Map.Entry<Long, String> entry : invertTagMap.entrySet()) {
+            invertTagMapCopy.put(entry.getKey(), entry.getValue());
+        }
+        log.debug("拷贝发布InvertTagMap集合中的内容");
+        return invertTagMapCopy;
     }
 
 
     /**
      * Id Date索引
      */
-    private Map<Date, Set<Long>> IdDateMap = new HashMap<>(
-    );
+    private Map<Date, Set<Long>> IdDateMap = new HashMap<>();
 
     private Map<Long, Date> invertDateMap = new HashMap<>();
 
+
     public final void putDate(final Date date, final Long id) {
         Set<Long> longs = IdDateMap.get(date);
-        if (longs!=null&&longs.contains(id)) {
+        if (longs != null && longs.contains(id)) {
             return;
         }
         if (longs == null)
@@ -278,12 +312,32 @@ public final class BlogIdGenerate {
      * @return
      */
     public final Map<Date, Set<Long>> getIdDateCopy() {
-        HashMap<Date, Set<Long>> hashMap = new HashMap<>();
+        TreeMap<Date, Set<Long>> copyMap = new TreeMap<>(
+                (o1, o2) -> {
+                    if (o1.equals(o2)) return 0;
+                    else if (o1.before(o2)) return 1;
+                    else return -1;
+                }
+        );
         for (Map.Entry<Date, Set<Long>> entry : IdDateMap.entrySet()) {
-            hashMap.put(entry.getKey(), entry.getValue());
+            copyMap.put(entry.getKey(), entry.getValue());
         }
         log.debug("拷贝发布IdDateMap集合的内容");
-        return hashMap;
+        return copyMap;
+    }
+
+    /**
+     * 拷贝发布出InvertDateMap集合中的内容
+     *
+     * @return
+     */
+    public final Map<Long, Date> getInvertDateMap() {
+        Map<Long, Date> copyMap = new TreeMap<>();
+        for (Map.Entry<Long, Date> entry : invertDateMap.entrySet()) {
+            copyMap.put(entry.getKey(), entry.getValue());
+        }
+        log.debug("拷贝发布InvertDateMap集合的内容");
+        return copyMap;
     }
 
     /**
@@ -321,6 +375,7 @@ public final class BlogIdGenerate {
 
     //定时生成IdMap文件保存到磁盘上
     private final void saveMap() {
+        Long initTime = System.currentTimeMillis();
         Future future0 = saveMapByName("IdMap.properties", "其他properties的依赖文件 根据Id来判断是否查找哪种类型");
         Future future1 = saveMapByName("IdDateMap.properties", "Id Date索引");
         Future future2 = saveMapByName("IdTagMap.properties", "Id Tag索引");
@@ -328,20 +383,14 @@ public final class BlogIdGenerate {
         Future future4 = saveMapByName("invertTitleMap.properties", "已存在的Id的title索引2");
         Future future5 = saveMapByName("invertTagMap.properties", "已存在的Id的tag索引");
         Future future6 = saveMapByName("invertDateMap.properties", "已存在的Id的Date索引");
-        try {
-            future0.get();
-            future1.get();
-            future2.get();
-            future3.get();
-            future4.get();
-            future5.get();
-            future6.get();
-        } catch (InterruptedException e) {
-            log.error("出现中断错误:{}", e.getMessage());
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
+        getFutureResult(future0);
+        getFutureResult(future1);
+        getFutureResult(future2);
+        getFutureResult(future3);
+        getFutureResult(future4);
+        getFutureResult(future5);
+        getFutureResult(future6);
+        log.debug("已刷新最新内存中的BlogIdGenerate数据到磁盘中 耗时:{}ms", System.currentTimeMillis() - initTime);
     }
 
 
@@ -380,6 +429,18 @@ public final class BlogIdGenerate {
                 break;
             case "invertDateMap.properties":
                 PropertiesConvenUtil.LongDateMapToFile(filename + mapName, invertDateMap, description);
+                break;
+        }
+    }
+
+    private void getFutureResult(Future future) {
+        try {
+            future.get();
+        } catch (InterruptedException e) {
+            log.error("出现中断错误:{}", e.getMessage());
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
         }
     }
 }

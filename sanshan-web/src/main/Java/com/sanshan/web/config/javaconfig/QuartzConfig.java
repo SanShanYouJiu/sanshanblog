@@ -10,22 +10,23 @@ import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 
+import javax.validation.Valid;
+
 /**
  * 定时任务配置
  */
 @Configuration
 public class QuartzConfig {
 
-    @Value("${storage.location}")
-    private String storagelocation;
-
     @Value("${quartz.expression}")
     private String quartzExpression;
 
+    @Value("${blogGenerate.filename}")
+    private String blogGenerateFilename;
+
     @Bean(initMethod = "init")
     public  BlogIdGenerate blogIdGenerate(){
-        BlogIdGenerate blogIdGenerate = new BlogIdGenerate();
-        //blogIdGenerate.setFilename(storagelocation);
+        BlogIdGenerate blogIdGenerate = new BlogIdGenerate(blogGenerateFilename);
         return  blogIdGenerate;
     }
 

@@ -1,4 +1,4 @@
-package com.sanshan.service.transaction.dataprotetcd;
+package com.sanshan.service.init.container.check.dataprotetcd;
 
 import com.sanshan.dao.MarkDownBlogMapper;
 import com.sanshan.dao.UEditorBlogMapper;
@@ -9,10 +9,8 @@ import com.sanshan.util.info.EditorTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
 import java.util.TreeMap;
 
 /**
@@ -34,10 +32,12 @@ public class DataBaseRollBack {
     //检查是否需要从数据库恢复数据
     public void inspectDataConsistency() {
         //数据库与BlogIdGenerate的事物完整性检查
+        Long initTime = System.currentTimeMillis();
         log.info("进行事物完整性检查");
         List<MarkDownBlogDO> markDownBlogDOList = markDownBlogMapper.selectAll();
         List<UEditorBlogDO> uEditorBlogDOS = uEditorBlogMapper.selectAll();
         rollBackData(markDownBlogDOList, uEditorBlogDOS);
+        log.info("从数据库中将恢复properties中的数据完成 耗时:{}ms", System.currentTimeMillis() - initTime);
     }
 
     //从数据库中将恢复properties中的数据（宕机恢复使用)
@@ -66,13 +66,14 @@ public class DataBaseRollBack {
 
         //找出被删除的ID数目 也就是void_id
         TreeMap<Long, EditorTypeEnum> idMap = (TreeMap<Long, EditorTypeEnum>) blogIdGenerate.getIdCopy();
+        if (idMap.size() == 0)
+            return;
         Long id = idMap.lastKey();
         for (long i = 0; i < id; i++) {
             if (!idMap.containsKey(i)) {
                 blogIdGenerate.addIdMap(i, EditorTypeEnum.Void_Id);
             }
         }
-        log.info("从数据库中将恢复properties中的数据完成");
     }
 
 }

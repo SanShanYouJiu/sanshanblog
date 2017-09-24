@@ -57,6 +57,18 @@ public class AdminIndexController {
         return responseMsgVO.buildOKWithData(userDTO);
     }
 
+
+    @RequestMapping(value = "/update-blog-by-id")
+    public ResponseMsgVO updateBlog(@RequestParam(name = "id",required = true)Long id,
+                                    @RequestParam(name = "title",required = false)String title,
+                                    @RequestParam(name = "tag" ,required = false)String tag,
+                                    @RequestParam(name = "content",required = false)String content){
+        ResponseMsgVO msgVO = new ResponseMsgVO();
+        adminIndexService.updateBlogById(id,title,tag,content,msgVO);
+        return msgVO;
+    }
+
+
     @RequestMapping(value = "/change-user-info", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO changeUserInfo(
             @RequestParam(name = "username", required = true) String username,
@@ -75,6 +87,5 @@ public class AdminIndexController {
         }
         return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR,"没有提供修改参数值");
     }
-
 
 }

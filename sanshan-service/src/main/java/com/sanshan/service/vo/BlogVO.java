@@ -29,6 +29,9 @@ public class BlogVO  implements Serializable{
 
     private String tag;
 
+    public BlogVO(){
+
+    }
 
     public BlogVO(UEditorBlogDTO uEditorBlog) {
         this.type= EditorTypeEnum.UEDITOR_EDITOR.getIndex();

@@ -62,6 +62,7 @@ public class AuthServiceImpl implements AuthService {
         }
         if (userRepository.findByEmail(userToAdd.getEmail()) != null) {
             responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "该邮箱已存在");
+            return false;
         }
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         final String rawPassword = userToAdd.getPassword();

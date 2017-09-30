@@ -5,6 +5,7 @@ import com.sanshan.pojo.dto.MarkDownBlogDTO;
 import com.sanshan.pojo.entity.MarkDownBlogDO;
 import com.sanshan.service.convent.MarkDownEditorConvert;
 import com.sanshan.service.editor.CacheService.MarkDownBlogCacheService;
+import com.sanshan.service.user.cache.UserBlogCacheService;
 import com.sanshan.service.vo.JwtUser;
 import com.sanshan.util.BlogIdGenerate;
 import com.sanshan.util.info.EditorTypeEnum;
@@ -28,6 +29,8 @@ public class MarkDownBlogService {
     @Autowired
     private  BlogIdGenerate blogIdGenerate;
 
+    @Autowired
+    private UserBlogCacheService userBlogCacheService;
     /**
      * DTO查询
      *
@@ -97,6 +100,8 @@ public class MarkDownBlogService {
         if (result == 0) {
             return 0;
         }
+        //更新User对应的blog缓存
+        userBlogCacheService.userBlogRefresh(user.getUsername());
         //加入到索引中
         if (tag!=null)
         blogIdGenerate.putTag(tag,blogIdGenerate.getId());
@@ -119,6 +124,8 @@ public class MarkDownBlogService {
 
        MarkDownBlogDTO markDownBlogDTO= MarkDownEditorConvert.doToDto(cacheService.update(markDownBlogDO));
 
+        //更新User对应的blog缓存
+        userBlogCacheService.userBlogRefresh(markDownBlogDTO.getUser());
         //加入到索引中
         if (tag!=null)
             blogIdGenerate.putTag(tag,id);
@@ -137,8 +144,9 @@ public class MarkDownBlogService {
         markDownBlogDO.setTag(tag);
         markDownBlogDO.setTitle(title);
 
-        MarkDownEditorConvert.doToDto(cacheService.updateSelective(markDownBlogDO));
-
+        MarkDownBlogDTO markDownBlogDTO= MarkDownEditorConvert.doToDto(cacheService.updateSelective(markDownBlogDO));
+        //更新User对应的blog缓存
+        userBlogCacheService.userBlogRefresh(markDownBlogDTO.getUser());
         //加入到索引中
         if (tag!=null)
             blogIdGenerate.putTag(tag,id);
@@ -157,6 +165,7 @@ public class MarkDownBlogService {
         if (rows==0){
             return 0;
         }
+        userBlogCacheService.userBlogRefresh(user.getUsername());
         blogIdGenerate.remove(id);
         log.info("用户:{}删除了Markdown博客 Id为{}", user.getUsername(), id);
         return rows;

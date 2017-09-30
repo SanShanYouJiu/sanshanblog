@@ -57,7 +57,7 @@ public class MarkDownBlogCacheService extends BaseServiceImpl<MarkDownBlogDO> {
     }
 
 
-    @CacheEvict(value = {"markdown-blog"}, key = "'markdown-blog'+#a0",beforeInvocation = true)
+    @CacheEvict(value = {"markdown-blog"}, key = "'markdown-blog'+#a0")
     @Override
     public Integer deleteById(Long id) {
         return super.deleteById(id);

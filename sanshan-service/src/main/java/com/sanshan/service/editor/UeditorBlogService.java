@@ -5,6 +5,7 @@ import com.sanshan.pojo.dto.UEditorBlogDTO;
 import com.sanshan.pojo.entity.UEditorBlogDO;
 import com.sanshan.service.convent.UeditorEditorConvert;
 import com.sanshan.service.editor.CacheService.UEditorBlogCacheService;
+import com.sanshan.service.user.cache.UserBlogCacheService;
 import com.sanshan.service.vo.JwtUser;
 import com.sanshan.util.BlogIdGenerate;
 import com.sanshan.util.info.EditorTypeEnum;
@@ -28,6 +29,9 @@ public class UeditorBlogService {
 
     @Autowired
     private   BlogIdGenerate blogIdGenerate;
+
+    @Autowired
+    private UserBlogCacheService userBlogCacheService;
     /**
      * DTO查询
      *
@@ -98,6 +102,10 @@ public class UeditorBlogService {
         if (result == 0) {
             return 0;
         }
+
+        //更新User对应的blog缓存
+        userBlogCacheService.userBlogRefresh(user.getUsername());
+
         //加入到索引中
         if (title!=null)
         blogIdGenerate.putTag(tag,blogIdGenerate.getId());
@@ -120,6 +128,8 @@ public class UeditorBlogService {
 
         UeditorEditorConvert.doToDto(cacheService.update(uEditorBlogDO));
 
+        //更新User对应的blog缓存
+        userBlogCacheService.userBlogRefresh(uEditorBlogDO.getUser());
         //加入到索引中
         if (tag!=null)
             blogIdGenerate.putTag(tag,id);
@@ -137,8 +147,9 @@ public class UeditorBlogService {
         uEditorBlogDO.setTag(tag);
         uEditorBlogDO.setTitle(title);
 
-        UeditorEditorConvert.doToDto(cacheService.updateSelective(uEditorBlogDO));
-
+       UEditorBlogDTO uEditorBlogDTO= UeditorEditorConvert.doToDto(cacheService.updateSelective(uEditorBlogDO));
+        //更新User对应的blog缓存
+        userBlogCacheService.userBlogRefresh(uEditorBlogDTO.getUser());
         //加入到索引中
         if (tag!=null)
             blogIdGenerate.putTag(tag,id);
@@ -157,6 +168,8 @@ public class UeditorBlogService {
         if (rows==0){
             return 0;
         }
+        //更新User对应的blog缓存
+        userBlogCacheService.userBlogRefresh(user.getUsername());
         blogIdGenerate.remove(id);
         log.info("用户:{}删除了Ueditor博客 Id为{}", user.getUsername(), id);
         return rows;

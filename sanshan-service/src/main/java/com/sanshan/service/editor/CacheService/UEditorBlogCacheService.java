@@ -49,7 +49,7 @@ public class UEditorBlogCacheService extends BaseServiceImpl<UEditorBlogDO> {
     }
 
 
-    @CacheEvict(value = {"ueditor-blog"}, key = "'ueditor-blog'+#a0",beforeInvocation = true)
+    @CacheEvict(value = {"ueditor-blog"}, key = "'ueditor-blog'+#a0")
     @Override
     public Integer deleteById(Long id) {
         return super.deleteById(id);

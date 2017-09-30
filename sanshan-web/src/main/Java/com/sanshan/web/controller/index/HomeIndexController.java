@@ -5,6 +5,7 @@ import com.sanshan.service.FeedBackService;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.web.config.javaconfig.auxiliary.MultipartFileBucketValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,7 @@ public class HomeIndexController {
     }
 
 
-    @RequestMapping(value = "/advice",method = RequestMethod.POST)
+    @RequestMapping(value = "/advice",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public ResponseMsgVO handleAdvice(@RequestParam(value = "email")String email, @RequestParam(value = "opinion",required = false)String opinion){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
@@ -43,7 +44,7 @@ public class HomeIndexController {
     }
 
 
-    @RequestMapping(value = "/advice/file",method = RequestMethod.POST)
+    @RequestMapping(value = "/advice/file",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public ResponseMsgVO handleFileUpload2(
             HttpServletRequest request, @RequestParam(name = "file") MultipartFile multipartFile){

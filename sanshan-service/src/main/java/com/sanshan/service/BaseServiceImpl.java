@@ -14,7 +14,7 @@ import java.util.List;
  * 封装到子类进行供给实现
  * @param <T>
  */
-public class BaseServiceImpl<T extends BaseDO> implements BaseService<T>{
+public abstract class BaseServiceImpl<T extends BaseDO> implements BaseService<T>{
 
     //这里利用了Spring4才支持的泛型注入
     //就算父类不是被IOC容器管理，但是建立关系时添加了@Autowired注解，父类的关系会被继承下来

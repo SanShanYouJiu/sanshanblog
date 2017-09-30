@@ -65,8 +65,8 @@ public class AdminIndexService {
         markDownBlogDO.setUser(jwtUser.getUsername());
         uEditorBlogDO.setUser(jwtUser.getUsername());
 
-        List<MarkDownBlogDO> markDownBlogDOList = markDownBlogMapper.queryByUser(markDownBlogDO);
-        List<UEditorBlogDO> uEditorBlogDOS = uEditorBlogMapper.queryByUser(uEditorBlogDO);
+        List<MarkDownBlogDO> markDownBlogDOList = markDownBlogMapper.queryByUser(markDownBlogDO.getUser());
+        List<UEditorBlogDO> uEditorBlogDOS = uEditorBlogMapper.queryByUser(uEditorBlogDO.getUser());
 
         list.addAll(BlogConvert.MarkdownDoToDtoList(MarkDownEditorConvert.doToDtoList(markDownBlogDOList)));
         list.addAll(BlogConvert.UeditorDoToDtoList(UeditorEditorConvert.doToDtoList(uEditorBlogDOS)));
@@ -89,7 +89,7 @@ public class AdminIndexService {
             MarkDownBlogDO markDownBlogDO = new MarkDownBlogDO();
             JwtUser jwtUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             markDownBlogDO.setUser(jwtUser.getUsername());
-            List<MarkDownBlogDO> markDownBlogDOList = markDownBlogMapper.queryByUser(markDownBlogDO);
+            List<MarkDownBlogDO> markDownBlogDOList = markDownBlogMapper.queryByUser(markDownBlogDO.getUser());
             list.addAll(BlogConvert.MarkdownDoToDtoList(MarkDownEditorConvert.doToDtoList(markDownBlogDOList)));
             return list;
         }
@@ -105,7 +105,7 @@ public class AdminIndexService {
             UEditorBlogDO uEditorBlogDO = new UEditorBlogDO();
             JwtUser jwtUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             uEditorBlogDO.setUser(jwtUser.getUsername());
-            List<UEditorBlogDO> uEditorBlogDOS = uEditorBlogMapper.queryByUser(uEditorBlogDO);
+            List<UEditorBlogDO> uEditorBlogDOS = uEditorBlogMapper.queryByUser(uEditorBlogDO.getUser());
             list.addAll(BlogConvert.UeditorDoToDtoList(UeditorEditorConvert.doToDtoList(uEditorBlogDOS)));
             return list;
         }

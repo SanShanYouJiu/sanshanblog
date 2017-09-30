@@ -153,7 +153,7 @@ public final class BlogIdGenerate {
     //根据分页查询
     @SuppressWarnings("Duplicates")
     public final PageInfo getIdCopyByPage(long  pageRows,long pageNum){
-        PageInfo pageInfo=null;
+        PageInfo pageInfo;
         TreeMap<Long, EditorTypeEnum> copyMap = new TreeMap<>(
                  (o1, o2) -> {
                      if (o1.equals(o2)) {

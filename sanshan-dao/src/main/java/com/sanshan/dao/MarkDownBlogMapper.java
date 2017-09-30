@@ -21,11 +21,11 @@ public interface MarkDownBlogMapper extends Mapper<MarkDownBlogDO> {
 
      /**
       * 没有查询content属性 通过id进行间接的去缓存查
-      * @param markDownBlogDO
+      * @param username
       * @return
       */
-     @Select("SELECT id,title,tag,time FROM markdown_blog WHERE user= #{user}")
-     List<MarkDownBlogDO> queryByUser(MarkDownBlogDO markDownBlogDO);
+     @Select("SELECT id,title,tag,time FROM markdown_blog WHERE user= #{username}")
+     List<MarkDownBlogDO> queryByUser(String username);
 
 
      @Delete("DELETE FROM markdown_blog WHERE id = #{_parameter} ")

@@ -58,7 +58,7 @@ public class AdminIndexController {
     }
 
 
-    @RequestMapping(value = "/update-blog-by-id")
+    @RequestMapping(value = "/blog/update-by-id")
     public ResponseMsgVO updateBlog(@RequestParam(name = "id",required = true)Long id,
                                     @RequestParam(name = "title",required = false)String title,
                                     @RequestParam(name = "tag" ,required = false)String tag,

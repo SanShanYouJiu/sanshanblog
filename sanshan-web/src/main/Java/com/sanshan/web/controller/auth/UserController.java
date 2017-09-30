@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -58,7 +57,7 @@ public class UserController {
     /**
      * 注册之后的邮箱认证
      */
-    @RequestMapping(value = "/register/check/token", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/register/check/token",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO registerCheckToken(@RequestParam(name = "token") String token
     ) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();

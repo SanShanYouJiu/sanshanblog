@@ -20,7 +20,7 @@ public final class BlogIdGenerate {
 
     private final String filename;
 
-    private ExecutorService pool = Executors.newFixedThreadPool(7);
+    private ExecutorService pool = Executors.newFixedThreadPool(8);
 
     public BlogIdGenerate( final String filename) {
         this.filename = filename;
@@ -30,8 +30,11 @@ public final class BlogIdGenerate {
 
     public final void init() {
         Long initTime = System.currentTimeMillis();
-        Future future0 = pool.submit(() -> {
+        Future future = pool.submit(() -> {
             fileToMap(filename + "IdMap.properties", IdMap, 1);
+        });
+        Future future0 = pool.submit(() -> {
+            fileToMap(filename + "IdExistMap.properties", IdExistMap, 1);
         });
         Future future1 = pool.submit(() -> {
             fileToMap(filename + "IdTitleMap.properties", IdTitleMap, 0);
@@ -51,6 +54,7 @@ public final class BlogIdGenerate {
         Future future6 = pool.submit(() -> {
             fileToMap(filename + "invertDateMap.properties", invertDateMap, 4);
         });
+        getFutureResult(future);
         getFutureResult(future0);
         getFutureResult(future1);
         getFutureResult(future2);
@@ -72,7 +76,31 @@ public final class BlogIdGenerate {
 
 
     //ID保存 不可轻举妄动
-    private Map<Long, EditorTypeEnum> IdMap = new HashMap<>();
+    @SuppressWarnings("Duplicates")
+    private Map<Long, EditorTypeEnum> IdMap = new TreeMap<>(
+            (o1, o2) -> {
+                if (o1.equals(o2)) {
+                    return 0;
+                } else if (o1> o2) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+    );
+
+    @SuppressWarnings("Duplicates")
+    private Map<Long, EditorTypeEnum> IdExistMap = new TreeMap<>(
+            (o1, o2) -> {
+                if (o1.equals(o2)) {
+                    return 0;
+                } else if (o1> o2) {
+                    return -1;
+                } else {
+                    return 1;
+                }
+            }
+    );
 
     /**
      * 将ID推到序列中
@@ -82,6 +110,8 @@ public final class BlogIdGenerate {
      */
     public final void addIdMap(final Long id, final EditorTypeEnum type) {
         IdMap.put(id, type);
+        if (!(type==EditorTypeEnum.Void_Id))
+           IdExistMap.put(id, type);
         log.debug("将Id为{}与对应的类型为{}加入到IdMap集合中", id, type);
     }
 
@@ -98,10 +128,11 @@ public final class BlogIdGenerate {
     }
 
     /**
-     * 拷贝发布IdMap集合内容
+     * 拷贝发布IdExistMap集合内容
      *
      * @return
      */
+    @SuppressWarnings("Duplicates")
     public final Map<Long, EditorTypeEnum> getIdCopy() {
         TreeMap<Long, EditorTypeEnum> copyMap = new TreeMap<>(
                 (o1, o2) -> {
@@ -114,12 +145,43 @@ public final class BlogIdGenerate {
                     }
                 }
         );
-        for (Map.Entry<Long, EditorTypeEnum> entry : IdMap.entrySet()) {
-            copyMap.put(entry.getKey(), entry.getValue());
-        }
+        copyMap.putAll(IdExistMap);
         log.debug("拷贝发布IdMap集合的内容");
         return copyMap;
     }
+
+    //根据分页查询
+    @SuppressWarnings("Duplicates")
+    public final PageInfo getIdCopyByPage(long  pageRows,long pageNum){
+        PageInfo pageInfo=null;
+        TreeMap<Long, EditorTypeEnum> copyMap = new TreeMap<>(
+                 (o1, o2) -> {
+                     if (o1.equals(o2)) {
+                         return 0;
+                     } else if (o1> o2) {
+                         return -1;
+                     } else {
+                         return 1;
+                     }
+                 }
+         );
+        long preRows = pageRows * (pageNum - 1);
+        long endRows = preRows + pageRows;
+        long count=0;
+
+        for (Map.Entry<Long, EditorTypeEnum> entry : IdExistMap.entrySet()) {
+            if (count >= preRows && count<endRows) {
+                copyMap.put(entry.getKey(), entry.getValue());
+            }
+            count++;
+            if (count==endRows){
+                pageInfo = new PageInfo(copyMap,pageRows,pageNum,IdExistMap.size());
+                 return pageInfo;
+            }
+        }
+        pageInfo = new PageInfo(copyMap,pageRows,pageNum,IdExistMap.size());
+        return pageInfo;
+     }
 
 
     public final long getSize() {
@@ -186,9 +248,7 @@ public final class BlogIdGenerate {
      */
     public final Map<String, Set<Long>> getIdTitleCopy() {
         HashMap<String, Set<Long>> copyMap = new HashMap<>();
-        for (Map.Entry<String, Set<Long>> entry : IdTitleMap.entrySet()) {
-            copyMap.put(entry.getKey(), entry.getValue());
-        }
+        copyMap.putAll(IdTitleMap);
         log.debug("拷贝发布IdTitleMap集合的内容");
         return copyMap;
     }
@@ -200,13 +260,30 @@ public final class BlogIdGenerate {
      */
     public final Map<Long, String> getInvertIdTitleMap() {
         HashMap<Long, String> copyMap = new HashMap<>();
-        for (Map.Entry<Long, String> entry : invertTitleMap.entrySet()) {
-            copyMap.put(entry.getKey(), entry.getValue());
-        }
+        copyMap.putAll(invertTitleMap);
         log.debug("拷贝发布IdTitleMap集合的内容");
         return copyMap;
     }
 
+    public final  PageInfo getIdTitleByPage(long pageRows, long pageNum) {
+        PageInfo pageInfo;
+        HashMap<String, Set<Long>> copyMap = new HashMap<>();
+        long preRows = pageRows * (pageNum - 1);
+        long endRows = preRows + pageRows;
+        long count=0;
+        for (Map.Entry<String, Set<Long>> entry : IdTitleMap.entrySet()) {
+            if (count >= preRows && count<endRows) {
+                copyMap.put(entry.getKey(), entry.getValue());
+            }
+            count++;
+            if (count==endRows){
+                pageInfo = new PageInfo(copyMap,pageRows,pageNum,IdTitleMap.size());
+                return pageInfo;
+            }
+        }
+        pageInfo = new PageInfo(copyMap,pageRows,pageNum,IdTitleMap.size());
+        return pageInfo;
+    }
 
     /**
      * Id tag索引
@@ -259,21 +336,36 @@ public final class BlogIdGenerate {
      */
     public final Map<String, Set<Long>> getIdTagCopy() {
         HashMap<String, Set<Long>> idTagMapCopy = new HashMap<>();
-        for (Map.Entry<String, Set<Long>> entry : IdTagMap.entrySet()) {
-            idTagMapCopy.put(entry.getKey(), entry.getValue());
-        }
+        idTagMapCopy.putAll(IdTagMap);
         log.debug("拷贝发布IdTagMap集合的内容");
         return idTagMapCopy;
     }
 
+    public final PageInfo  getIdTagCopyByPage(long pageRows,long pageNum){
+        PageInfo pageInfo;
+        HashMap<String,Set<Long>> copyMap = new HashMap();
+        long preRows = pageRows * (pageNum - 1);
+        long endRows = preRows + pageRows;
+        long count=0;
+        for (Map.Entry<String, Set<Long>> entry : IdTagMap.entrySet()) {
+            if (count >= preRows && count<endRows) {
+                copyMap.put(entry.getKey(), entry.getValue());
+            }
+            count++;
+            if (count==endRows){
+                pageInfo = new PageInfo(copyMap, pageRows, pageNum, IdTagMap.size());
+                return pageInfo;
+            }
+        }
+        pageInfo = new PageInfo(copyMap, pageRows, pageNum, IdTagMap.size());
+        return pageInfo;
+    }
     /**
      * 拷贝发布出InvertTagMap集合中的内容
      */
     public final Map<Long, String> getInvertTagMap() {
         HashMap<Long, String> invertTagMapCopy = new HashMap<>();
-        for (Map.Entry<Long, String> entry : invertTagMap.entrySet()) {
-            invertTagMapCopy.put(entry.getKey(), entry.getValue());
-        }
+        invertTagMapCopy.putAll(invertTagMap);
         log.debug("拷贝发布InvertTagMap集合中的内容");
         return invertTagMapCopy;
     }
@@ -282,7 +374,14 @@ public final class BlogIdGenerate {
     /**
      * Id Date索引
      */
-    private Map<Date, Set<Long>> IdDateMap = new HashMap<>();
+    @SuppressWarnings("Duplicates")
+    private Map<Date, Set<Long>> IdDateMap = new TreeMap<>(
+            (o1,o2)->{
+                    if (o1.equals(o2)) return 0;
+                    else if (o1.before(o2)) return 1;
+                    else return -1;
+            }
+    );
 
     private Map<Long, Date> invertDateMap = new HashMap<>();
 
@@ -311,6 +410,7 @@ public final class BlogIdGenerate {
      *
      * @return
      */
+    @SuppressWarnings("Duplicates")
     public final Map<Date, Set<Long>> getIdDateCopy() {
         TreeMap<Date, Set<Long>> copyMap = new TreeMap<>(
                 (o1, o2) -> {
@@ -319,11 +419,36 @@ public final class BlogIdGenerate {
                     else return -1;
                 }
         );
-        for (Map.Entry<Date, Set<Long>> entry : IdDateMap.entrySet()) {
-            copyMap.put(entry.getKey(), entry.getValue());
-        }
+        copyMap.putAll(IdDateMap);
         log.debug("拷贝发布IdDateMap集合的内容");
         return copyMap;
+    }
+
+    @SuppressWarnings("Duplicates")
+    public final PageInfo getIdDateCopyByPage(long pageRows, long pageNum) {
+        PageInfo pageInfo;
+        TreeMap<Date, Set<Long>> copyMap = new TreeMap<>(
+                (o1, o2) -> {
+                    if (o1.equals(o2)) return 0;
+                    else if (o1.before(o2)) return 1;
+                    else return -1;
+                }
+        );
+        long preRows = pageRows * (pageNum - 1);
+        long endRows = preRows + pageRows;
+        long count=0;
+        for (Map.Entry<Date, Set<Long>> entry : IdDateMap.entrySet()) {
+            if (count >= preRows && count<endRows) {
+                copyMap.put(entry.getKey(), entry.getValue());
+            }
+            count++;
+            if (count==endRows){
+                pageInfo =new PageInfo(copyMap,pageRows,pageNum,IdDateMap.size());
+                return pageInfo;
+            }
+        }
+        pageInfo =new PageInfo(copyMap,pageRows,pageNum,IdDateMap.size());
+        return pageInfo;
     }
 
     /**
@@ -333,9 +458,7 @@ public final class BlogIdGenerate {
      */
     public final Map<Long, Date> getInvertDateMap() {
         Map<Long, Date> copyMap = new TreeMap<>();
-        for (Map.Entry<Long, Date> entry : invertDateMap.entrySet()) {
-            copyMap.put(entry.getKey(), entry.getValue());
-        }
+        copyMap.putAll(invertDateMap);
         log.debug("拷贝发布InvertDateMap集合的内容");
         return copyMap;
     }
@@ -376,13 +499,15 @@ public final class BlogIdGenerate {
     //定时生成IdMap文件保存到磁盘上
     private final void saveMap() {
         Long initTime = System.currentTimeMillis();
-        Future future0 = saveMapByName("IdMap.properties", "其他properties的依赖文件 根据Id来判断是否查找哪种类型");
+        Future future = saveMapByName("IdMap.properties", "其他properties的依赖文件 根据Id来判断是否查找哪种类型");
+        Future future0 = saveMapByName("IdExistMap.properties", "真实存在的博客");
         Future future1 = saveMapByName("IdDateMap.properties", "Id Date索引");
         Future future2 = saveMapByName("IdTagMap.properties", "Id Tag索引");
         Future future3 = saveMapByName("IdTitleMap.properties", "Id Title索引");
         Future future4 = saveMapByName("invertTitleMap.properties", "已存在的Id的title索引2");
         Future future5 = saveMapByName("invertTagMap.properties", "已存在的Id的tag索引");
         Future future6 = saveMapByName("invertDateMap.properties", "已存在的Id的Date索引");
+        getFutureResult(future);
         getFutureResult(future0);
         getFutureResult(future1);
         getFutureResult(future2);
@@ -411,6 +536,9 @@ public final class BlogIdGenerate {
         switch (mapName) {
             case "IdMap.properties":
                 PropertiesConvenUtil.IdMapToFile(filename + mapName, IdMap, description);
+                break;
+            case "IdExistMap.properties":
+            PropertiesConvenUtil.IdMapToFile(filename + mapName, IdExistMap, description);
                 break;
             case "IdDateMap.properties":
                 PropertiesConvenUtil.setLongDateMapToFile(filename + mapName, IdDateMap, description);

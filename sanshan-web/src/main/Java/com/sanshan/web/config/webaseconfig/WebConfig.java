@@ -1,6 +1,7 @@
 package com.sanshan.web.config.webaseconfig;
 
-import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter4;
+import com.alibaba.fastjson.support.config.FastJsonConfig;
+import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.sanshan.web.config.javaconfig.TransactionConfig;
 import com.sanshan.web.config.javaconfig.auxiliary.ControllerAop;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -82,15 +83,17 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 //        return new StandardServletMultipartResolver();
 //    }
 
-    @Autowired
-    private FastJsonHttpMessageConverter4 jsonHttpMessageConverter4;
 
     @Autowired
     private ResourceHttpMessageConverter resourceHttpMessageConverter;
 
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-        converters.add(jsonHttpMessageConverter4);
+        FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter();
+        FastJsonConfig config = new FastJsonConfig();
+        config.setDateFormat("yyyy-MM-dd HH:mm:ss");
+        fastJsonHttpMessageConverter.setFastJsonConfig(config);
+        converters.add(fastJsonHttpMessageConverter);
         converters.add(resourceHttpMessageConverter);
         super.configureMessageConverters(converters);
     }

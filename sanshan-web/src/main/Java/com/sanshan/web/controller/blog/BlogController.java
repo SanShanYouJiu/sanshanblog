@@ -3,6 +3,7 @@ package com.sanshan.web.controller.blog;
 import com.sanshan.service.BlogService;
 import com.sanshan.service.vo.BlogVO;
 import com.sanshan.service.vo.ResponseMsgVO;
+import com.sanshan.util.PageInfo;
 import com.sanshan.util.info.PosCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -56,6 +57,15 @@ public class BlogController {
         return responseMsgVO.buildOKWithData(list);
     }
 
+    @RequestMapping(value = "query-tag-by-page",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO queryTagByPage(@RequestParam(name = "pageRows")long pageRows,@RequestParam(name = "pageNum")long pageNum){
+        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
+        PageInfo pageInfo =blogService.queryTagByPage(pageRows,pageNum);
+        if (Objects.isNull(pageInfo.getCompleteData()))
+            return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND,"没有标签");
+        return responseMsgVO.buildOKWithData(pageInfo);
+    }
+
     @RequestMapping(value = "query-by-title",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO  queryByTitle(@RequestParam("title")String title){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
@@ -74,6 +84,15 @@ public class BlogController {
         return responseMsgVO.buildOKWithData(list);
     }
 
+
+    @RequestMapping(value = "query-title-by-page",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO queryTitleByPage(@RequestParam("pageRows")long pageRows,@RequestParam(name = "pageNum")long pageNum){
+        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
+        PageInfo pageInfo =blogService.queryTitleByPage(pageRows,pageNum);
+        if (Objects.isNull(pageInfo.getCompleteData()))
+            return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND,"没有标题");
+        return responseMsgVO.buildOKWithData(pageInfo);
+    }
 
     @RequestMapping(value = "query-by-date",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO  queryByDate(@RequestParam("date")String dateString) throws ParseException {
@@ -96,8 +115,16 @@ public class BlogController {
         return  responseMsgVO.buildOKWithData(list);
     }
 
+    @RequestMapping(value = "query-date-by-page", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO queryDateByPage(@RequestParam(name = "pageRows") long pageRows, @RequestParam(name = "pageNum") long pageNum) {
+        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
+        PageInfo pageInfo = blogService.queryDateByPage(pageRows, pageNum);
+        if (Objects.isNull(pageInfo.getCompleteData()))
+            return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND, "没有日期");
+        return responseMsgVO.buildOKWithData(pageInfo);
+    }
 
-    @RequestMapping(value = "query-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "query-all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO queryAllBlog() {
         ResponseMsgVO<List<BlogVO>> responseMsgVO = new ResponseMsgVO();
         //List<BlogVO> list = blogService.queryAll();
@@ -105,6 +132,12 @@ public class BlogController {
         return responseMsgVO.buildOKWithData(list);
     }
 
+    @RequestMapping(value = "query-by-page",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public  ResponseMsgVO queryByPage(@RequestParam("pageRows")long pageRows,@RequestParam("pageNum")long pageNum){
+        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
+        PageInfo pageInfo= blogService.queryByPage(pageRows, pageNum);
+        return responseMsgVO.buildOKWithData(pageInfo);
+    }
 
     @RequestMapping(value = "delete-by-id",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO blogDelete(@RequestParam("id") Long id) {

@@ -51,7 +51,7 @@ public class PropertiesConvenUtil {
                         case 0:
                             value = (String) entry.getValue();
                             set = stringConventSet(value);
-                            map.put(((String) entry.getKey()).trim(), set);
+                            map.put(((String) entry.getKey()), set);
                             break;
                         case 1:
                             map.put((Long.valueOf((String) entry.getKey())), EditorTypeEnum.getEditorType((String) entry

@@ -1,6 +1,6 @@
 {
   "domain":"http://localhost:8080",
-  "isEmailLogin":true,
+  "isEmailLogin":false,
   "accountLockCount":5,
   "accountLockTime":10,
   "isRegisterEnabled":true,

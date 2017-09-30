@@ -16,7 +16,7 @@ import java.util.Date;
 public class UserRepositoryImpl implements CustomUserRepository {
 
     @Autowired
-    MongoTemplate mongoTemplate;
+    private MongoTemplate mongoTemplate;
 
     @Override
     public WriteResult changePassword( final String username, final String password) {

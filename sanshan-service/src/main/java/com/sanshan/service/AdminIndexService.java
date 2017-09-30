@@ -1,10 +1,8 @@
 package com.sanshan.service;
 
 import com.mongodb.WriteResult;
-import com.mongodb.gridfs.GridFSDBFile;
 import com.sanshan.dao.MarkDownBlogMapper;
 import com.sanshan.dao.UEditorBlogMapper;
-import com.sanshan.dao.mongo.FileOperation;
 import com.sanshan.dao.mongo.UserRepository;
 import com.sanshan.pojo.dto.UserDTO;
 import com.sanshan.pojo.entity.MarkDownBlogDO;
@@ -23,23 +21,14 @@ import com.sanshan.util.BlogIdGenerate;
 import com.sanshan.util.info.EditorTypeEnum;
 import com.sanshan.util.info.PosCodeEnum;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service
@@ -81,8 +70,6 @@ public class AdminIndexService {
 
         list.addAll(BlogConvert.MarkdownDoToDtoList(MarkDownEditorConvert.doToDtoList(markDownBlogDOList)));
         list.addAll(BlogConvert.UeditorDoToDtoList(UeditorEditorConvert.doToDtoList(uEditorBlogDOS)));
-//加入缓存
-//        redisTemplate.opsForValue().set(cacheBlogName, list, 3, TimeUnit.MINUTES);
         Collections.sort(list,(o1,o2)->{
             if (o1.getId()>o2.getId())return -1;
             else if (o1.getId().equals(o2.getId())) return 0;
@@ -95,7 +82,6 @@ public class AdminIndexService {
 
     public List<BlogVO> queryMarkdownBlogAll() {
         List<BlogVO> list;
-        //if ((list = (List<BlogVO>) redisTemplate.opsForValue().get(cacheBlogName)) != null) {
        if ((list=cacheList)!=null){
             return list.stream().filter((blogVO) -> blogVO.getType() == 1).collect(Collectors.toList());
         } else {
@@ -112,7 +98,6 @@ public class AdminIndexService {
 
     public List<BlogVO> queryUEditorBlogAll() {
         List<BlogVO> list;
-        //if ((list = (List<BlogVO>) redisTemplate.opsForValue().get(cacheBlogName)) != null) {
         if ((list=cacheList)!=null){
             return list.stream().filter((blogVO) -> blogVO.getType() == 0).collect(Collectors.toList());
         } else {

@@ -33,7 +33,7 @@ public class DataBaseRollBack {
     public void inspectDataConsistency() {
         //数据库与BlogIdGenerate的事物完整性检查
         Long initTime = System.currentTimeMillis();
-        log.info("进行事物完整性检查");
+        log.info("进行事物一致性检查");
         List<MarkDownBlogDO> markDownBlogDOList = markDownBlogMapper.selectAll();
         List<UEditorBlogDO> uEditorBlogDOS = uEditorBlogMapper.selectAll();
         rollBackData(markDownBlogDOList, uEditorBlogDOS);

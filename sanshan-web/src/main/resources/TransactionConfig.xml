@@ -17,7 +17,7 @@
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
          <tx:attributes>
              <tx:method name="query*" isolation="READ_COMMITTED" propagation="SUPPORTS"/>
-             <tx:method name="insert*"  isolation="READ_COMMITTED" propagation="REQUIRED"
+             <tx:method name="save*"  isolation="READ_COMMITTED" propagation="REQUIRED"
                         rollback-for="com.sanshan.util.exception.dbrollback.DBRollbackInsertException"/>
              <tx:method name="update*" isolation="READ_COMMITTED" propagation="REQUIRED"
              rollback-for="com.sanshan.util.exception.dbrollback.DBRollbackUpdateException"/>
@@ -29,7 +29,7 @@
 
 
     <aop:config>
-        <aop:pointcut id="ponintcut" expression="execution(* com.sanshan.dao.*.*(..))"/>
+        <aop:pointcut id="ponintcut" expression="execution(* com.sanshan.service.*.*(..))"/>
         <aop:advisor advice-ref="txAdvice"
         pointcut-ref="ponintcut"
         ></aop:advisor>

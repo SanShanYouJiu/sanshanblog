@@ -170,6 +170,7 @@ public class UeditorBlogService {
         }
         //更新User对应的blog缓存
         userBlogCacheService.userBlogRefresh(user.getUsername());
+        //TODO: 删除Ueditor中博客对应的文件
         blogIdGenerate.remove(id);
         log.info("用户:{}删除了Ueditor博客 Id为{}", user.getUsername(), id);
         return rows;

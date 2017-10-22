@@ -11,8 +11,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.servlet.http.HttpServletRequest;
-
 @Controller()
 @RequestMapping("/index")
 public class HomeIndexController {
@@ -34,25 +32,26 @@ public class HomeIndexController {
     }
 
 
-    @RequestMapping(value = "/advice",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/advice", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public ResponseMsgVO handleAdvice(@RequestParam(value = "email")String email, @RequestParam(value = "opinion",required = false)String opinion){
+    public ResponseMsgVO handleAdvice(@RequestParam(value = "email") String email, @RequestParam(value = "opinion", required = false) String opinion, @RequestHeader(value = "X-Real-IP") String ip) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         responseMsgVO.buildOK();
-        feedBackService.store(email,opinion);
+        feedBackService.saveBaseInfo(email, opinion);
         return responseMsgVO;
     }
 
 
-    @RequestMapping(value = "/advice/file",method = RequestMethod.POST,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @RequestMapping(value = "/advice/file", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public ResponseMsgVO handleFileUpload2(
-            HttpServletRequest request, @RequestParam(name = "file") MultipartFile multipartFile){
+            @RequestHeader(value = "X-Real-IP") String ip,
+            @RequestHeader(value = "email") String email,
+            @RequestHeader(value = "opinion") String opinion,
+            @RequestParam(name = "file") MultipartFile multipartFile) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
-        String email = request.getHeader("email");
-        String opinion = request.getHeader("opinion");
-        feedBackService.store(email,"反馈文件:"+multipartFile.getOriginalFilename());
-        feedBackService.saveFile(email,opinion,multipartFile);
+        feedBackService.saveBaseInfo(email, "反馈文件:" + multipartFile.getOriginalFilename());
+        feedBackService.saveFile(email, opinion, multipartFile);
         return responseMsgVO.buildOK();
     }
 

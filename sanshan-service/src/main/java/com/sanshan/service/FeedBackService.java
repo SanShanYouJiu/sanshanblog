@@ -13,8 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+import java.util.concurrent.*;
 
 @Service
 @Slf4j
@@ -27,9 +26,16 @@ public class FeedBackService {
     private FileOperation fileOperation;
 
 
-    private ExecutorService pool = Executors.newCachedThreadPool();
+    private ExecutorService pool = new ThreadPoolExecutor(0, 4,
+            3, TimeUnit.MINUTES,
+            new SynchronousQueue<Runnable>(),(r)->{
+        Thread t = new Thread();
+        t.setName("feedback-save-thread");
+        return t;
+    });
 
-    public void store(String email, String opinion) {
+
+    public void saveBaseInfo(String email, String opinion) {
         Runnable runnable = () -> {
             FeedbackDO feedbackDO = new FeedbackDO();
             feedbackDO.setEmail(email);

@@ -492,6 +492,7 @@ public final class BlogIdGenerate {
         invertDateMap.remove(id);
 
         IdMap.put(id, EditorTypeEnum.Void_Id);
+        IdExistMap.remove(id);
         log.debug("删除该Id对应的倒排索引对应项");
     }
 

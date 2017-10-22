@@ -1,7 +1,7 @@
 # SanShanBlog
  
-> 本来想的是作为一个自己的Blog系统使用 
-1. 前端使用angular4+bootstrap 
+> 本来想的是作为一个自己的Blog系统使用  
+1. 前端使用[angular4+bootstrap][1] 
 2. 
  - 后端目前采用的图片存储于MongoDB数据库(以及User表)
  - 使用Redis作为缓存 mysql作为Blog数据库 
@@ -37,3 +37,5 @@ DO DTO VO 三种实体对象
 properties文件默认不是UTF-8编码 需要自己在IDEA中设置为UTF-8 或者自己手动处理
 
 在代码中采用lombok进行缩写代码
+
+[1]: https://github.com/SanShanYouJiu/SanShanBlog-Web

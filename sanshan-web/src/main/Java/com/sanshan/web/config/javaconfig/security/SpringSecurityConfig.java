@@ -102,7 +102,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/user/check/token",
                         "/api/user/forget-pwd",
                         "/api/file/**",
-                        "/api/user-info/**"
+                        "/api/user-info/**",
+                        "/api/vote/**"
                 ).permitAll()
                 .anyRequest()
                 .authenticated();

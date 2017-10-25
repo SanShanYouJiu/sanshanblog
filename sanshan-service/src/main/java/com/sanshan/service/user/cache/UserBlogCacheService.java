@@ -27,7 +27,7 @@ public class UserBlogCacheService {
     private MarkDownBlogMapper markDownBlogMapper;
 
 
-    @Cacheable(value = "spec-user-blogs", key = "'user-blogs'+#a0")
+    @Cacheable(value = "spec-user-blogs", key = "'user-blogs:'+#a0")
     public List<BlogVO> getUserBlogs(String username) {
         List<BlogVO> blogVOs1 = BlogConvert.UeditorDoToDtoList(UeditorEditorConvert.doToDtoList(uEditorBlogMapper.queryByUser(username)));
         List<BlogVO> blogVOS2 = BlogConvert.MarkdownDoToDtoList(MarkDownEditorConvert.doToDtoList(markDownBlogMapper.queryByUser(username)));
@@ -35,7 +35,7 @@ public class UserBlogCacheService {
         return blogVOs1;
     }
 
-    @CachePut(value = "spec-user-blogs", key = "'user-blogs'+#a0")
+    @CachePut(value = "spec-user-blogs", key = "'user-blogs:'+#a0")
     public List<BlogVO> userBlogRefresh(String username) {
         List<BlogVO> blogVOs1 = BlogConvert.UeditorDoToDtoList(UeditorEditorConvert.doToDtoList(uEditorBlogMapper.queryByUser(username)));
         List<BlogVO> blogVOS2 = BlogConvert.MarkdownDoToDtoList(MarkDownEditorConvert.doToDtoList(markDownBlogMapper.queryByUser(username)));

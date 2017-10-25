@@ -1,44 +1,80 @@
 package com.sanshan.service;
 
+import com.sanshan.dao.BlogVoteMapper;
+import com.sanshan.dao.IpBlogVoteMapper;
+import com.sanshan.pojo.dto.BlogVoteDTO;
+import com.sanshan.pojo.dto.VoteDTO;
+import com.sanshan.pojo.entity.BlogVoteDO;
 import com.sanshan.service.vo.ResponseMsgVO;
-import com.sanshan.service.vo.VoteVo;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
+import java.util.Objects;
 import java.util.concurrent.*;
 
 /**
  * 投票的相关变化
  */
 @Service
+@Slf4j
 public class VoteService {
 
     @Autowired
-    private RedisTemplate<String, String> redisTemplate;
+    private RedisTemplate redisTemplate;
+
+    @Autowired
+    private BlogVoteMapper blogVoteMapper;
+
 
     public static final String voteIpFavourZSetCachePrefix = "vote_favour_zset:ip:";
     public static final String voteIpTreadZSetCachePrefix = "vote_tread_zset:ip:";
-    public static final String voteFavoursCachePrefix = "vote:favours:";
-    public static final String voteTreadsCachePrefix = "vote:treads:";
+    public static final String blogVoteFavoursCachePrefix = "blog_vote:favours:";
+    public static final String blogVoteTreadsCachePrefix = "blog_vote:treads:";
 
     private ExecutorService pool = new ThreadPoolExecutor(0, 4,
             3, TimeUnit.MINUTES,
             new SynchronousQueue<Runnable>(), (r) -> {
-        Thread t = new Thread();
-        t.setName("vote-save-info-thread");
+        SecurityManager s = System.getSecurityManager();
+        ThreadGroup group = (s != null) ? s.getThreadGroup() :
+                Thread.currentThread().getThreadGroup();
+        Thread t = new Thread(group, r, "vote-save-info-thread");
+        if (t.isDaemon()) {
+            t.setDaemon(false);
+        }
+        if (t.getPriority() != Thread.NORM_PRIORITY) {
+            t.setPriority(Thread.NORM_PRIORITY);
+        }
         return t;
     });
 
     //用于削峰 || 或者使用消息队列 还在考虑
-    public static ConcurrentLinkedQueue<VoteVo> consumerQueue = new ConcurrentLinkedQueue<VoteVo>();
+    public static ConcurrentLinkedQueue<VoteDTO> consumerQueue = new ConcurrentLinkedQueue<VoteDTO>();
 
 
-    //TODO 查询Blog的投票
+    /**
+     查询Blog的投票
+     */
     public void queryBlogInfo(Long blogId, ResponseMsgVO responseMsgVO) {
-        Long blogFavours = Long.parseLong(redisTemplate.opsForValue().get(voteFavoursCachePrefix + blogId));
-        Long blogTreads = Long.valueOf(redisTemplate.opsForValue().get(voteTreadsCachePrefix + blogId));
-
+         Integer blogFavours   = (Integer) redisTemplate.opsForValue().get(blogVoteFavoursCachePrefix + blogId);
+        Integer blogTreads = (Integer) redisTemplate.opsForValue().get(blogVoteTreadsCachePrefix + blogId);
+        if (Objects.isNull(blogFavours) && Objects.isNull(blogTreads)) {
+            //查数据库
+            BlogVoteDO voteDO = blogVoteMapper.queryVote(blogId);
+            if (!Objects.isNull(voteDO)) {
+                blogFavours = voteDO.getFavours();
+                blogTreads = voteDO.getTreads();
+            }
+        }
+        if (Objects.isNull(blogFavours)){
+            blogFavours=0;
+        }
+        if (Objects.isNull(blogTreads)) {
+            blogTreads=0;
+        }
+        BlogVoteDTO blogVoteDTO = new BlogVoteDTO(blogId,blogFavours, blogTreads);
+        responseMsgVO.buildOKWithData(blogVoteDTO);
     }
 
     /**
@@ -50,25 +86,30 @@ public class VoteService {
 
     /**
      * 游客投票
-     * TODO: 加入redis 定时存储到Mysql上 Lazy-Store
      */
     public void anonymousVote(String ip, Long blogId, boolean vote, ResponseMsgVO responseMsgVO) {
-        redisTemplate.opsForZSet().add(voteIpFavourZSetCachePrefix + ip, String.valueOf(blogId), blogId);
-        redisTemplate.opsForZSet().add(voteIpTreadZSetCachePrefix + ip, String.valueOf(blogId), blogId);
-
+        //游客投票前判断是否已经投票过该博客 如果有则判断是否相反的操作
         if (vote) {
-            redisTemplate.opsForValue().increment(voteFavoursCachePrefix + blogId, 1);
+            redisTemplate.opsForZSet().add(voteIpFavourZSetCachePrefix + ip, blogId, blogId);
+            redisTemplate.opsForValue().increment(blogVoteFavoursCachePrefix + blogId, 1);
         } else {
-            redisTemplate.opsForValue().increment(voteTreadsCachePrefix + blogId, 1);
+            redisTemplate.opsForZSet().add(voteIpTreadZSetCachePrefix + ip, blogId, blogId);
+            redisTemplate.opsForValue().increment(blogVoteTreadsCachePrefix + blogId, 1);
         }
 
         saveBlogVoteInfo(ip, blogId, vote);
         responseMsgVO.buildOK();
     }
 
+    /**
+     * consumer线程定时对Vote信息进行处理
+     */
     public void saveBlogVoteInfo(String ip, Long blogId, boolean vote) {
         pool.execute(() -> {
-            consumerQueue.add(new VoteVo(ip, blogId, vote));
+            if (log.isDebugEnabled()) {
+                log.debug("将BlogId为:{}的投票为:{}组合而成的VoteDTO传输到Consumer线程中进行处理", blogId, vote);
+            }
+            consumerQueue.add(new VoteDTO(ip, blogId, vote));
         });
     }
 

@@ -2,10 +2,11 @@ package com.sanshan.web.controller;
 
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.info.PosCodeEnum;
-import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
 
 
 @RestController
@@ -19,9 +20,9 @@ public class  IndexController {
 
 
     @RequestMapping("error")
-    public ResponseMsgVO error(@RequestHeader(value = "errorMessage")String msg){
+    public ResponseMsgVO error(HttpServletRequest request){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
-       return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR, msg);
+       return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR, (String) request.getAttribute("errorMessage"));
     }
 
 }

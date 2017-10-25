@@ -29,7 +29,7 @@ public class UEditorBlogCacheService extends BaseServiceImpl<UEditorBlogDO> {
         return super.queryListByWhere(example);
     }
 
-    @Cacheable(value = {"ueditor-blog"},key = "'ueditor-blog'+#a0")
+    @Cacheable(value = {"ueditor-blog"},key = "'ueditor-blog:'+#a0")
     @Override
     public UEditorBlogDO queryById(Long id) {
         return super.queryById(id);
@@ -49,21 +49,21 @@ public class UEditorBlogCacheService extends BaseServiceImpl<UEditorBlogDO> {
     }
 
 
-    @CacheEvict(value = {"ueditor-blog"}, key = "'ueditor-blog'+#a0")
+    @CacheEvict(value = {"ueditor-blog"}, key = "'ueditor-blog:'+#a0")
     @Override
     public Integer deleteById(Long id) {
         return super.deleteById(id);
     }
 
 
-    @CachePut(value = {"ueditor-blog"},key = "'ueditor-blog'+#a0.id")
+    @CachePut(value = {"ueditor-blog"},key = "'ueditor-blog:'+#a0.id")
     @Override
     public UEditorBlogDO update(UEditorBlogDO uEditorBlogDO) {
         return super.update(uEditorBlogDO);
     }
 
 
-    @CachePut(value = {"ueditor-blog"},key = "'ueditor-blog'+#a0.id")
+    @CachePut(value = {"ueditor-blog"},key = "'ueditor-blog:'+#a0.id")
     public UEditorBlogDO updateSelective(UEditorBlogDO uEditorBlogDO) {
         super.updateSelective(uEditorBlogDO);
         //cache注解是通过切面实现的 调用同一类中的方法不会用到缓存 直接访问数据库获取

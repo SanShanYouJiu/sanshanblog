@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 投票相关
  */
 @RestController
-@RequestMapping("/vote")
+@RequestMapping("/blog/vote")
 public class VoteController {
 
     @Autowired

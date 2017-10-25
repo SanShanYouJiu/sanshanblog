@@ -10,9 +10,18 @@ import lombok.ToString;
 @Data
 @ToString
 public class BlogVoteDTO {
+
+    private long id;
+
     private long blogId;
 
     private int favours;
 
     private int treads;
+
+    public BlogVoteDTO(long blogId, int favours, int treads) {
+        this.blogId = blogId;
+        this.favours = favours;
+        this.treads = treads;
+    }
 }

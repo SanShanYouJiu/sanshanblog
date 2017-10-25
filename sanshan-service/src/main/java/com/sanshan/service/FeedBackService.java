@@ -29,7 +29,7 @@ public class FeedBackService {
     private ExecutorService pool = new ThreadPoolExecutor(0, 4,
             3, TimeUnit.MINUTES,
             new SynchronousQueue<Runnable>(),(r)->{
-        Thread t = new Thread();
+        Thread t = new Thread(r);
         t.setName("feedback-save-thread");
         return t;
     });

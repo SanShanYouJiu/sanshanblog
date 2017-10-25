@@ -74,9 +74,15 @@ public class GlobalException {
      * @param url 链接
      */
     private void redirect(String url,HttpStatus status,HttpServletRequest request,
-                          HttpServletResponse response) throws ServletException, IOException {
+                          HttpServletResponse response)   {
             response.setStatus(status.value());
+        try {
             request.getRequestDispatcher(url).forward(request,response);
+        } catch (ServletException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

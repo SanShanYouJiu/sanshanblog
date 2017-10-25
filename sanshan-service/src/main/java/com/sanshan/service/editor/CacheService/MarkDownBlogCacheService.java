@@ -36,7 +36,7 @@ public class MarkDownBlogCacheService extends BaseServiceImpl<MarkDownBlogDO> {
 
 
 
-    @Cacheable(value = {"markdown-blog"},key = "'markdown-blog'+#a0")
+    @Cacheable(value = {"markdown-blog"},key = "'markdown-blog:'+#a0")
     @Override
     public MarkDownBlogDO queryById(Long id) {
         return super.queryById(id);
@@ -57,21 +57,21 @@ public class MarkDownBlogCacheService extends BaseServiceImpl<MarkDownBlogDO> {
     }
 
 
-    @CacheEvict(value = {"markdown-blog"}, key = "'markdown-blog'+#a0")
+    @CacheEvict(value = {"markdown-blog"}, key = "'markdown-blog:'+#a0")
     @Override
     public Integer deleteById(Long id) {
         return super.deleteById(id);
     }
 
 
-    @CachePut(value = {"markdown-blog"},key = "'markdown-blog'+#a0.id")
+    @CachePut(value = {"markdown-blog"},key = "'markdown-blog:'+#a0.id")
     @Override
     public MarkDownBlogDO update(MarkDownBlogDO markDownBlogDO) {
         return super.update(markDownBlogDO);
     }
 
 
-    @CachePut(value = {"markdown-blog"},key = "'markdown-blog'+#a0.id")
+    @CachePut(value = {"markdown-blog"},key = "'markdown-blog:'+#a0.id")
     public MarkDownBlogDO updateSelective(MarkDownBlogDO markDownBlogDO) {
         super.updateSelective(markDownBlogDO);
         //cache注解是通过切面实现的 调用同一类中的方法不会用到缓存 直接访问数据库获取

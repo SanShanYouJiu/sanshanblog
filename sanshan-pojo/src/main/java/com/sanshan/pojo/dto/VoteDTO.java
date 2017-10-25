@@ -1,4 +1,4 @@
-package com.sanshan.service.vo;
+package com.sanshan.pojo.dto;
 
 import lombok.Data;
 
@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  */
 @Data
-public class VoteVo implements Serializable {
+public class VoteDTO implements Serializable {
     private static final long serialVersionUID = -7033015867655070467L;
 
     private String id;
@@ -16,10 +16,10 @@ public class VoteVo implements Serializable {
 
     private boolean vote;
 
-    public VoteVo() {
+    public VoteDTO() {
     }
 
-    public VoteVo(String id, long blogId, boolean vote) {
+    public VoteDTO(String id, long blogId, boolean vote) {
         this.id = id;
         this.blogId = blogId;
         this.vote = vote;

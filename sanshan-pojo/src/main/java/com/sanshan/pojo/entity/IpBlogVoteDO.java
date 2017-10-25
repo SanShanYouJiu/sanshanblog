@@ -7,6 +7,7 @@ import lombok.ToString;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Date;
 
 /**
  */
@@ -20,15 +21,6 @@ public class IpBlogVoteDO extends BaseDO{
 
     private String ip;
 
-    public IpBlogVoteDO(String ip, long blogId, boolean vote) {
-        this.ip = ip;
-        this.blogId = blogId;
-        if (vote)
-            favour=true;
-        else
-            tread=true;
-    }
-
     @Column(name = "blog_id")
     private long blogId;
 
@@ -37,4 +29,15 @@ public class IpBlogVoteDO extends BaseDO{
     private boolean tread;
 
     private String extra;
+
+    public IpBlogVoteDO(Date created,Date updated,String ip, long blogId, boolean vote) {
+        super.setCreated(created);
+        super.setUpdated(updated);
+        this.ip = ip;
+        this.blogId = blogId;
+        if (vote)
+            favour = true;
+        else
+            tread = true;
+    }
 }

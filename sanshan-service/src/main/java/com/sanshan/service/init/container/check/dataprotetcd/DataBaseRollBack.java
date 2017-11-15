@@ -66,9 +66,10 @@ public class DataBaseRollBack {
 
         //找出被删除的ID数目 也就是void_id
         TreeMap<Long, EditorTypeEnum> idMap = (TreeMap<Long, EditorTypeEnum>) blogIdGenerate.getIdCopy();
-        if (idMap.size() == 0)
+        if (idMap.size() == 0) {
             return;
-        Long id = idMap.lastKey();
+        }
+        Long id = idMap.firstKey();
         for (long i = 0; i < id; i++) {
             if (!idMap.containsKey(i)) {
                 blogIdGenerate.addIdMap(i, EditorTypeEnum.Void_Id);

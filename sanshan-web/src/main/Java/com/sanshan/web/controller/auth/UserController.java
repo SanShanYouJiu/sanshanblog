@@ -1,7 +1,7 @@
 package com.sanshan.web.controller.auth;
 
 import com.sanshan.dao.mongo.UserRepository;
-import com.sanshan.service.UserService;
+import com.sanshan.service.user.UserService;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.info.PosCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;

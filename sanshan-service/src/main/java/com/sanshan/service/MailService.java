@@ -10,9 +10,8 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @Slf4j
@@ -27,7 +26,13 @@ public class MailService {
     @Value("${mail.prefix}")
     private String  mailPrefix;
 
-    private ExecutorService pool = Executors.newCachedThreadPool();
+
+    private static final AtomicInteger poolNumber = new AtomicInteger(1);
+    private ExecutorService pool =  new ThreadPoolExecutor(0,4,3,TimeUnit.MINUTES,new SynchronousQueue<>(),(r)->{
+        Thread t = new Thread(r);
+        t.setName("mail-thread:"+poolNumber);
+        return t;
+    });
 
     /**
      * 注册后发送验证邮件

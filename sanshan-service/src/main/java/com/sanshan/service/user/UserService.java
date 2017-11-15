@@ -1,8 +1,9 @@
-package com.sanshan.service;
+package com.sanshan.service.user;
 
 import com.mongodb.WriteResult;
 import com.sanshan.dao.mongo.UserRepository;
 import com.sanshan.pojo.entity.UserDO;
+import com.sanshan.service.MailService;
 import com.sanshan.service.auth.JwtTokenUtil;
 import com.sanshan.service.vo.JwtUser;
 import com.sanshan.service.vo.ResponseMsgVO;

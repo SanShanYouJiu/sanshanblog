@@ -38,7 +38,7 @@ public class AuthServiceImpl implements AuthService {
 
      @Autowired
      private SettingService settingService;
-      //fixme:魔法值需要小心
+      //fixme:魔法值需要小心 需要改为域名或Ip地址 暂时为本机
      public static final String DefaultAvatar ="http://localhost/assets/images/defaultUser.png";
 
     @Autowired

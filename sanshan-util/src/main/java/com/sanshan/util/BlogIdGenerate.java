@@ -5,10 +5,8 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 组件ID生成器
@@ -20,7 +18,13 @@ public final class BlogIdGenerate {
 
     private final String filename;
 
-    private ExecutorService pool = Executors.newFixedThreadPool(8);
+    final AtomicInteger poolNumber = new AtomicInteger(1);
+
+    private ExecutorService pool = new ThreadPoolExecutor(4,9,1,TimeUnit.MINUTES,new LinkedBlockingDeque<Runnable>(),(r)->{
+        Thread t = new Thread(r);
+        t.setName("BlogIdGenerate-thread:"+poolNumber.incrementAndGet());
+        return t;
+    });
 
     public BlogIdGenerate( final String filename) {
         this.filename = filename;
@@ -125,6 +129,15 @@ public final class BlogIdGenerate {
         log.debug("获取当前系统新的博客Id,可能是用于新增博客");
         return IdMap.size();
 
+    }
+
+    /**
+     * 查看是否包含该Id
+     * @param id
+     * @return
+     */
+    public final boolean containsId(Long id) {
+        return IdExistMap.containsKey(id);
     }
 
     /**

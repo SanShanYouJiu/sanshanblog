@@ -1,7 +1,7 @@
 package com.sanshan.web.controller.auth;
 
 import com.sanshan.pojo.entity.UserDO;
-import com.sanshan.service.UserService;
+import com.sanshan.service.user.UserService;
 import com.sanshan.service.auth.AuthService;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.JwtAuthenticationRequest;

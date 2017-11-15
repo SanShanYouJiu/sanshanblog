@@ -104,6 +104,8 @@ public class StorageManager {
 
             //存入mongoDB中
             DBObject metedata = new BasicDBObject();
+            //对应的博客ID
+            //metedata.put("blog_id",)
             //元数据
             try {
                 staticueditorFileService.saveFile(new FileInputStream(tmpFile), path, suffix, metedata);

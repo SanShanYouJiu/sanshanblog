@@ -6,6 +6,8 @@ import com.sanshan.pojo.dto.BlogVoteDTO;
 import com.sanshan.pojo.dto.VoteDTO;
 import com.sanshan.pojo.entity.BlogVoteDO;
 import com.sanshan.service.vo.ResponseMsgVO;
+import com.sanshan.util.BlogIdGenerate;
+import com.sanshan.util.info.PosCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Objects;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 投票的相关变化
@@ -27,19 +30,23 @@ public class VoteService {
     @Autowired
     private BlogVoteMapper blogVoteMapper;
 
+    @Autowired
+    private BlogIdGenerate blogIdGenerate;
+
 
     public static final String voteIpFavourZSetCachePrefix = "vote_favour_zset:ip:";
     public static final String voteIpTreadZSetCachePrefix = "vote_tread_zset:ip:";
     public static final String blogVoteFavoursCachePrefix = "blog_vote:favours:";
     public static final String blogVoteTreadsCachePrefix = "blog_vote:treads:";
 
+    private static final AtomicInteger poolNumber = new AtomicInteger(1);
     private ExecutorService pool = new ThreadPoolExecutor(0, 4,
             3, TimeUnit.MINUTES,
             new SynchronousQueue<Runnable>(), (r) -> {
         SecurityManager s = System.getSecurityManager();
         ThreadGroup group = (s != null) ? s.getThreadGroup() :
                 Thread.currentThread().getThreadGroup();
-        Thread t = new Thread(group, r, "vote-save-info-thread");
+        Thread t = new Thread(group, r, "vote-save-info-thread:" + poolNumber.incrementAndGet());
         if (t.isDaemon()) {
             t.setDaemon(false);
         }
@@ -54,26 +61,35 @@ public class VoteService {
 
 
     /**
-     查询Blog的投票
+     * 查询Blog的投票
+     * @param blogId
+     * @param responseMsgVO
      */
     public void queryBlogInfo(Long blogId, ResponseMsgVO responseMsgVO) {
-         Integer blogFavours   = (Integer) redisTemplate.opsForValue().get(blogVoteFavoursCachePrefix + blogId);
+        Integer blogFavours = (Integer) redisTemplate.opsForValue().get(blogVoteFavoursCachePrefix + blogId);
         Integer blogTreads = (Integer) redisTemplate.opsForValue().get(blogVoteTreadsCachePrefix + blogId);
         if (Objects.isNull(blogFavours) && Objects.isNull(blogTreads)) {
-            //查数据库
-            BlogVoteDO voteDO = blogVoteMapper.queryVote(blogId);
-            if (!Objects.isNull(voteDO)) {
-                blogFavours = voteDO.getFavours();
-                blogTreads = voteDO.getTreads();
+            //首先查BlogIdGenerator的Id是否存在
+            Boolean flag = blogIdGenerate.containsId(blogId);
+            if (flag) {
+                //查数据库
+                BlogVoteDO voteDO = blogVoteMapper.queryVote(blogId);
+                if (!Objects.isNull(voteDO)) {
+                    blogFavours = voteDO.getFavours();
+                    blogTreads = voteDO.getTreads();
+                }
+            } else {
+                responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND, "该Id对应的博客不存在");
+                return;
             }
         }
-        if (Objects.isNull(blogFavours)){
-            blogFavours=0;
+        if (Objects.isNull(blogFavours)) {
+            blogFavours = 0;
         }
         if (Objects.isNull(blogTreads)) {
-            blogTreads=0;
+            blogTreads = 0;
         }
-        BlogVoteDTO blogVoteDTO = new BlogVoteDTO(blogId,blogFavours, blogTreads);
+        BlogVoteDTO blogVoteDTO = new BlogVoteDTO(blogId, blogFavours, blogTreads);
         responseMsgVO.buildOKWithData(blogVoteDTO);
     }
 
@@ -86,6 +102,10 @@ public class VoteService {
 
     /**
      * 游客投票
+     * @param ip
+     * @param blogId
+     * @param vote
+     * @param responseMsgVO
      */
     public void anonymousVote(String ip, Long blogId, boolean vote, ResponseMsgVO responseMsgVO) {
         //游客投票前判断是否已经投票过该博客 如果有则判断是否相反的操作

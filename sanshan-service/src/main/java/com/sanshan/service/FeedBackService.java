@@ -14,6 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.Date;
 import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @Slf4j
@@ -25,12 +26,13 @@ public class FeedBackService {
     @Autowired
     private FileOperation fileOperation;
 
+    private static final AtomicInteger poolNumber = new AtomicInteger(1);
 
     private ExecutorService pool = new ThreadPoolExecutor(0, 4,
             3, TimeUnit.MINUTES,
             new SynchronousQueue<Runnable>(),(r)->{
         Thread t = new Thread(r);
-        t.setName("feedback-save-thread");
+        t.setName("feedback-save-thread:"+poolNumber.incrementAndGet());
         return t;
     });
 

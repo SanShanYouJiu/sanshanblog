@@ -12,6 +12,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,8 +39,7 @@ public class AuthServiceImpl implements AuthService {
 
      @Autowired
      private SettingService settingService;
-      //fixme:魔法值需要小心 需要改为域名或Ip地址 暂时为本机
-     public static final String DefaultAvatar ="http://localhost/assets/images/defaultUser.png";
+     public static final String DefaultAvatar ="/assets/images/defaultUser.png";
 
     @Autowired
     public AuthServiceImpl(
@@ -66,7 +66,9 @@ public class AuthServiceImpl implements AuthService {
         }
         BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
         final String rawPassword = userToAdd.getPassword();
-        userToAdd.setAvatar(DefaultAvatar);
+        Setting setting = settingService.getSetting();
+        String domain=setting.getDomain();
+        userToAdd.setAvatar(domain+DefaultAvatar);
         userToAdd.setPassword(encoder.encode(rawPassword));
         userToAdd.setLastPasswordResetDate(new Date());
         userToAdd.setRoles(asList("ROLE_USER"));
@@ -100,14 +102,21 @@ public class AuthServiceImpl implements AuthService {
     public String login(String username, String password) {
         UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(username, password);
         // 执行安全检测
-        final Authentication authentication = authenticationManager.authenticate(upToken);
+        final Authentication authentication;
+        final String token;
+        try {
+            authentication = authenticationManager.authenticate(upToken);
+        } catch (BadCredentialsException e) {
+            token=null;
+            return token;
+        }
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         // Reload password post-security so we can generate token
         //重新加载 生成token
         log.info("用户{}登录", username);
         final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-        final String token = jwtTokenUtil.generateToken(userDetails);
+         token = jwtTokenUtil.generateToken(userDetails);
         return token;
     }
 

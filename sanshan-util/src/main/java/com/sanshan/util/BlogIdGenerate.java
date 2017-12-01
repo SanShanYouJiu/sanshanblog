@@ -205,7 +205,11 @@ public final class BlogIdGenerate {
 
     public final EditorTypeEnum getType(final Long id) {
         log.debug("获取ID为{}的博客类型", id);
-        return IdMap.get(id);
+        if (IdMap.containsKey(id)){
+            return IdMap.get(id);
+        }else {
+            return null;
+        }
     }
 
 

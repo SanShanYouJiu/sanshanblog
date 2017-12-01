@@ -108,7 +108,7 @@ public class VoteService {
      * @param responseMsgVO
      */
     public void anonymousVote(String ip, Long blogId, boolean vote, ResponseMsgVO responseMsgVO) {
-        //游客投票前判断是否已经投票过该博客 如果有则判断是否相反的操作
+        //TODO 游客投票前判断是否已经投票过该博客 如果有则判断是否相反的操作
         if (vote) {
             redisTemplate.opsForZSet().add(voteIpFavourZSetCachePrefix + ip, blogId, blogId);
             redisTemplate.opsForValue().increment(blogVoteFavoursCachePrefix + blogId, 1);

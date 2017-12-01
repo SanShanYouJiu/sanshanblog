@@ -41,6 +41,9 @@ public class RedisCacheConfig  implements CachingConfigurer  {
     @Value("${redis.maxWaitMillis}")
     private int maxWaitMillis;
 
+    @Value("${redis.hostName}")
+    private  String hostName;
+
 
     @Bean
     public CacheManager cacheManager(RedisTemplate redisTemplate) {
@@ -52,7 +55,8 @@ public class RedisCacheConfig  implements CachingConfigurer  {
     public JedisConnectionFactory jedisConnectionFactory(JedisPoolConfig jedisPoolConfig) {
         JedisConnectionFactory jedisConnectionFactory
                 = new JedisConnectionFactory();
-         jedisConnectionFactory.setPoolConfig(jedisPoolConfig);
+        jedisConnectionFactory.setPoolConfig(jedisPoolConfig);
+        jedisConnectionFactory.setHostName(hostName);
         jedisConnectionFactory.afterPropertiesSet();
         return jedisConnectionFactory;
     }

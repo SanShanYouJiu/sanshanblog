@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/auth")
@@ -45,9 +46,11 @@ public class AuthController {
             return msgVO.buildWithMsgAndStatus(
                             PosCodeEnum.PARAM_ERROR, "验证码错误");
         }
-
         final String token = authService.login(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-
+        if (Objects.isNull(token)) {
+            msgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "账户或密码错误");
+            return msgVO;
+        }
         //检查是否能登陆
         return msgVO.buildOKWithData(new JwtAuthenticationResponse(token));
     }

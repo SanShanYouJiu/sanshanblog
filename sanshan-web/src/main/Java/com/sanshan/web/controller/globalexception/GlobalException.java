@@ -20,15 +20,15 @@ import java.io.IOException;
 @RestController
 public class GlobalException {
 
-    @ExceptionHandler(NullPointerException.class)
-    @ResponseStatus(HttpStatus.OK)//前端不支持非200的异常
-    public ResponseMsgVO NotFoundExceptionHandler(NullPointerException e) {
-        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
-        return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR, "出错 NullPointerException空指针异常 可能是没有对应的ID的Blog 或是没有权限执行此操作" +
-                ":" + e +
-                " message:" + e.getMessage()
-                + "  cause:" + e.getCause());
-    }
+    //@ExceptionHandler(NullPointerException.class)
+    //@ResponseStatus(HttpStatus.OK)//前端不支持非200的异常
+    //public ResponseMsgVO NotFoundExceptionHandler(NullPointerException e) {
+    //    ResponseMsgVO responseMsgVO = new ResponseMsgVO();
+    //    return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR, "出错 NullPointerException空指针异常 可能是没有对应的ID的Blog 或是没有权限执行此操作" +
+    //            ":" + e +
+    //            " message:" + e.getMessage()
+    //            + "  cause:" + e.getCause());
+    //}
 
 
     @ExceptionHandler(IdMapWriteException.class)

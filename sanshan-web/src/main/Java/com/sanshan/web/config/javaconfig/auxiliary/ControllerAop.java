@@ -40,6 +40,7 @@ public class ControllerAop {
             log.info("method:"+pjp.getSignature() + " use time:" + (System.currentTimeMillis() - startTime)+"ms");
         } catch (Throwable e) {
             result = handlerException(pjp, e);
+            log.info("method:"+pjp.getSignature() + " use time:" + (System.currentTimeMillis() - startTime)+"ms");
         }
 
         return result;
@@ -57,6 +58,7 @@ public class ControllerAop {
             log.info("method:"+pjp.getSignature() + " use time:" + (System.currentTimeMillis() - startTime)+"ms");
         } catch (Throwable e) {
             result = handlerFileException(pjp, e);
+            log.info("method:"+pjp.getSignature() + " use time:" + (System.currentTimeMillis() - startTime)+"ms");
         }
 
         return result;

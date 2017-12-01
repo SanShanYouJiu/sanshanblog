@@ -183,6 +183,9 @@ public class BlogService {
     public BlogVO getBlog(Long id) {
         EditorTypeEnum type = blogIdGenerate.getType(id);
         BlogVO blog = null;
+        if (Objects.isNull(type)){
+            return blog;
+        }
         switch (type) {
             case UEDITOR_EDITOR:
                 blog = new BlogVO(uEditorBlogService.queryDtoById(id));

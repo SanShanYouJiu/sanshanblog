@@ -1,19 +1,12 @@
 package com.baidu.ueditor;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.util.HashMap;
-import java.util.Map;
-
+import com.baidu.ueditor.define.ActionMap;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.baidu.ueditor.define.ActionMap;
+import java.io.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 配置管理器
@@ -176,7 +169,7 @@ public final class ConfigManager {
 	 */
 	private String getConfigPath () {
 
-		String classpath = this.getClass().getClassLoader().getResource("config.json").getPath();
+		String classpath = this.getClass().getClassLoader().getResource(configFileName).getPath();
 		return classpath;
 //		return this.parentPath + File.separator + ConfigManager.configFileName;
 	}

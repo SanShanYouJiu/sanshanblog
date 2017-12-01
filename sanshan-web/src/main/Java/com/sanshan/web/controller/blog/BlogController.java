@@ -4,6 +4,7 @@ import com.sanshan.service.BlogService;
 import com.sanshan.service.vo.BlogVO;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.PageInfo;
+import com.sanshan.util.exception.NotFoundBlogException;
 import com.sanshan.util.info.PosCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -33,7 +34,7 @@ public class BlogController {
         ResponseMsgVO<BlogVO> responseMsgVO = new ResponseMsgVO<>();
         BlogVO blog = blogService.getBlog(id);
         if (Objects.isNull(blog)) {
-            throw new NullPointerException("ID已失效");
+             throw   new NotFoundBlogException("该ID无对应博客");
         }
         return responseMsgVO.buildOKWithData(blog);
     }

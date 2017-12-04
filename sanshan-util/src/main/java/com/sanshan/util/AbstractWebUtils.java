@@ -43,7 +43,7 @@ import java.util.*;
 /**
  * WEB连接中常用到的方法
  */
-public abstract class WebUtils {
+public abstract class AbstractWebUtils {
 
     /**
      * PoolingHttpClientConnectionManager 配置连接池
@@ -251,7 +251,9 @@ public abstract class WebUtils {
             e.printStackTrace();
         } finally {
             try {
-                if (response != null) response.close();
+                if (response != null) {
+                    response.close();
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

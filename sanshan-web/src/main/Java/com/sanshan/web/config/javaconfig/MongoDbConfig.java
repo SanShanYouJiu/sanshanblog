@@ -14,7 +14,7 @@ import org.springframework.data.mongodb.repository.config.EnableMongoRepositorie
 @Configuration
 @EnableMongoRepositories(basePackages = "com.sanshan.dao.mongo")
 @ComponentScan(basePackages = "com.sanshan.dao.mongo")
-public class MongoDBConfig extends AbstractMongoConfiguration {
+public class MongoDbConfig extends AbstractMongoConfiguration {
 
     //我个人推荐的是采用密码账号进行保护的 但是mongo的docker镜像并不支持 所以暂时注释掉
     @Value("${mongo.hostName}")

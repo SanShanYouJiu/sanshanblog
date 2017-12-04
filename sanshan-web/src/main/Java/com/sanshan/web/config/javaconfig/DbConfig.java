@@ -11,7 +11,7 @@ import java.sql.SQLException;
 
 @Configuration
 @PropertySource("file:D:/SanShanBlog.properties")
-public class DBConfig {
+public class DbConfig {
 
     @Value("${druid.driver}")
     private String driver;

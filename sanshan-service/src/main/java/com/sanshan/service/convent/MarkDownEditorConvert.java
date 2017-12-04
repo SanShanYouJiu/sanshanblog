@@ -12,18 +12,18 @@ import java.util.Objects;
 
 public class MarkDownEditorConvert {
 
-    private static final ModelMapper modelMapper = new ModelMapper();
+    private static final ModelMapper MODEL_MAPPER = new ModelMapper();
 
     public static MarkDownBlogDTO doToDto(MarkDownBlogDO markDownBlogDO) {
         if (Objects.isNull(markDownBlogDO)) {
             return null;
         }
-        return modelMapper.map(markDownBlogDO, MarkDownBlogDTO.class);
+        return MODEL_MAPPER.map(markDownBlogDO, MarkDownBlogDTO.class);
      }
 
 
     public static List<MarkDownBlogDTO> doToDtoList(List<MarkDownBlogDO> markDownBlogDOS) {
-        return modelMapper.map(markDownBlogDOS,new TypeToken<List<MarkDownBlogDTO>>(){}.getType());
+        return MODEL_MAPPER.map(markDownBlogDOS,new TypeToken<List<MarkDownBlogDTO>>(){}.getType());
     }
 
 

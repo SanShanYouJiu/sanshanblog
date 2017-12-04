@@ -27,10 +27,10 @@ public class MailService {
     private String  mailPrefix;
 
 
-    private static final AtomicInteger poolNumber = new AtomicInteger(1);
+    private static final AtomicInteger POOL_NUMBER = new AtomicInteger(1);
     private ExecutorService pool =  new ThreadPoolExecutor(0,4,3,TimeUnit.MINUTES,new SynchronousQueue<>(),(r)->{
         Thread t = new Thread(r);
-        t.setName("mail-thread:"+poolNumber);
+        t.setName("mail-thread:"+POOL_NUMBER);
         return t;
     });
 

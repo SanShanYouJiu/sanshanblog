@@ -18,22 +18,23 @@ import java.util.Date;
 public class BlogVoteDO extends BaseDO{
 
     @Id
-    private long id;
+    private Long id;
 
     @Column(name = "blog_id")
-    private long blogId;
+    private Long blogId;
 
-    private int favours;
+    private Integer favours;
 
-    private int treads;
+    private Integer treads;
 
     private String extra;
 
-    public BlogVoteDO(Date created,Date updated, long blogId, int favours, int treads) {
+    public BlogVoteDO(Date created,Date updated, Long blogId, Integer favours, Integer treads) {
         super.setCreated(created);
         super.setUpdated(updated);
         this.blogId = blogId;
         this.favours = favours;
         this.treads = treads;
     }
+
 }

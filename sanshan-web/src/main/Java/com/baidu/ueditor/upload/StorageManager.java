@@ -5,7 +5,7 @@ import com.baidu.ueditor.define.BaseState;
 import com.baidu.ueditor.define.State;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import com.sanshan.service.editor.UEditorFileService;
+import com.sanshan.service.editor.UeditorFileService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +23,9 @@ public class StorageManager {
 //    private static DBCollection collection = db.getCollection("MyImage");
 
     @Autowired
-    private UEditorFileService ueditorFileService;
+    private UeditorFileService ueditorFileService;
 
-    private static UEditorFileService staticueditorFileService;
+    private static UeditorFileService staticueditorFileService;
 
     /**
      * 通过PostConstruct方法间接静态注入UEditorFileService

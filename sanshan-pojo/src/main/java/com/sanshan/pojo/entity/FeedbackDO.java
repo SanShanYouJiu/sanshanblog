@@ -17,7 +17,7 @@ public class FeedbackDO extends BaseDO implements Serializable {
     private static final long serialVersionUID = -3306932378732722579L;
 
     @Id
-    private long id;
+    private Long id;
 
     private String email;
 

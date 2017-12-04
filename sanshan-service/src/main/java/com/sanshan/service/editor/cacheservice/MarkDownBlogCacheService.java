@@ -1,4 +1,4 @@
-package com.sanshan.service.editor.CacheService;
+package com.sanshan.service.editor.cacheservice;
 
 import com.github.pagehelper.PageInfo;
 import com.sanshan.pojo.entity.MarkDownBlogDO;
@@ -72,6 +72,7 @@ public class MarkDownBlogCacheService extends BaseServiceImpl<MarkDownBlogDO> {
 
 
     @CachePut(value = {"markdown-blog"},key = "'markdown-blog:'+#a0.id")
+    @Override
     public MarkDownBlogDO updateSelective(MarkDownBlogDO markDownBlogDO) {
         super.updateSelective(markDownBlogDO);
         //cache注解是通过切面实现的 调用同一类中的方法不会用到缓存 直接访问数据库获取

@@ -1,17 +1,13 @@
-package com.sanshan.pojo.dto;
+package com.sanshan.pojo.entity;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 import java.util.Date;
 
 @Data
 @NoArgsConstructor
-@ToString
-public class UEditorBlogDTO {
-
-    private  Long id;
+public  abstract class BaseEditorDO extends BaseDO {
 
     private String user;
 
@@ -22,4 +18,5 @@ public class UEditorBlogDTO {
     private Date time;
 
     private String tag;
+
 }

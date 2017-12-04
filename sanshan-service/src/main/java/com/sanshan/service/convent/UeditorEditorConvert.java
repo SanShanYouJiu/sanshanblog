@@ -1,8 +1,8 @@
 package com.sanshan.service.convent;
 
 import com.github.pagehelper.PageInfo;
-import com.sanshan.pojo.dto.UEditorBlogDTO;
-import com.sanshan.pojo.entity.UEditorBlogDO;
+import com.sanshan.pojo.dto.UeditorBlogDTO;
+import com.sanshan.pojo.entity.UeditorBlogDO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 
@@ -11,24 +11,24 @@ import java.util.Objects;
 
 public class UeditorEditorConvert {
 
-    private static final ModelMapper modelMapper = new ModelMapper();
+    private static final ModelMapper MODEL_MAPPER = new ModelMapper();
 
-    public static UEditorBlogDTO doToDto(UEditorBlogDO uEditorBlogDO) {
+    public static UeditorBlogDTO doToDto(UeditorBlogDO uEditorBlogDO) {
         if (Objects.isNull(uEditorBlogDO)) {
             return null;
         }
-        return modelMapper.map(uEditorBlogDO, UEditorBlogDTO.class);
+        return MODEL_MAPPER.map(uEditorBlogDO, UeditorBlogDTO.class);
     }
 
-    public static List<UEditorBlogDTO> doToDtoList(List<UEditorBlogDO> uEditorBlogDOS) {
-        return modelMapper.map(uEditorBlogDOS,new TypeToken<List<UEditorBlogDTO>>(){}.getType());
+    public static List<UeditorBlogDTO> doToDtoList(List<UeditorBlogDO> uEditorBlogDOS) {
+        return MODEL_MAPPER.map(uEditorBlogDOS,new TypeToken<List<UeditorBlogDTO>>(){}.getType());
     }
 
 
-    public static PageInfo<UEditorBlogDTO> doToDtoPage(PageInfo<UEditorBlogDO> uEditorBlogDTOPageInfo) {
-        List<UEditorBlogDO> list = uEditorBlogDTOPageInfo.getList();
-        List<UEditorBlogDTO> uEditorBlogDTOS = UeditorEditorConvert.doToDtoList(list);
-        return new PageInfo<UEditorBlogDTO>(uEditorBlogDTOS);
+    public static PageInfo<UeditorBlogDTO> doToDtoPage(PageInfo<UeditorBlogDO> uEditorBlogDTOPageInfo) {
+        List<UeditorBlogDO> list = uEditorBlogDTOPageInfo.getList();
+        List<UeditorBlogDTO> uEditorBlogDTOS = UeditorEditorConvert.doToDtoList(list);
+        return new PageInfo<UeditorBlogDTO>(uEditorBlogDTOS);
     }
 
 

@@ -43,9 +43,9 @@ public class MybatisConfig {
      */
     @Bean
     public MapperScannerConfigurer mapperScannerConfigurer() {
-        MapperScannerConfigurer M = new MapperScannerConfigurer();
-        M.setBasePackage("com.sanshan.dao");
-        return M;
+        MapperScannerConfigurer m = new MapperScannerConfigurer();
+        m.setBasePackage("com.sanshan.dao");
+        return m;
     }
 
 

@@ -39,7 +39,7 @@ public class AuthServiceImpl implements AuthService {
 
      @Autowired
      private SettingService settingService;
-     public static final String DefaultAvatar ="/assets/images/defaultUser.png";
+     public static final String DEFAULT_AVATAR ="/assets/images/defaultUser.png";
 
     @Autowired
     public AuthServiceImpl(
@@ -68,7 +68,7 @@ public class AuthServiceImpl implements AuthService {
         final String rawPassword = userToAdd.getPassword();
         Setting setting = settingService.getSetting();
         String domain=setting.getDomain();
-        userToAdd.setAvatar(domain+DefaultAvatar);
+        userToAdd.setAvatar(domain+DEFAULT_AVATAR);
         userToAdd.setPassword(encoder.encode(rawPassword));
         userToAdd.setLastPasswordResetDate(new Date());
         userToAdd.setRoles(asList("ROLE_USER"));
@@ -84,8 +84,11 @@ public class AuthServiceImpl implements AuthService {
      * @param username 用户名
      * @return true被禁用
      */
+    @Override
     public boolean usernameIsDisabled(String username) {
-        if (StringUtils.isEmpty(username)) return false;
+        if (StringUtils.isEmpty(username)){
+            return false;
+        }
         Setting setting = settingService.getSetting();
         String[] disabledName = setting.getDisabledUsernames().split(",");
         for (String s : disabledName) {

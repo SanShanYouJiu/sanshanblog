@@ -1,5 +1,6 @@
 package com.sanshan.util;
 
+import com.sanshan.util.exception.PropertiesConventException;
 import com.sanshan.util.info.EditorTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 
@@ -71,6 +72,8 @@ public class PropertiesConvenUtil {
                             DateFormat fmt2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                             Date date2 = fmt2.parse((String) entry.getValue());
                             map.put(Long.valueOf((String) entry.getKey()), date2);
+                         default:
+                             throw  new PropertiesConventException("没有这个转换类型");
                     }
                 }
             }
@@ -160,7 +163,7 @@ public class PropertiesConvenUtil {
      * @param map
      * @throws IOException
      */
-    public final static void IdMapToFile(String path, Map<Long, EditorTypeEnum> map, String description) throws IOException {
+    public final static void idMapToFile(String path, Map<Long, EditorTypeEnum> map, String description) throws IOException {
         if (map.size() != 0) {
             Properties properties = new Properties();
             for (Entry<Long, EditorTypeEnum> key : map.entrySet()) {
@@ -213,7 +216,7 @@ public class PropertiesConvenUtil {
     }
 
 
-    public final static void LongStringMapToFile(String path, Map<Long, String> map, String description) throws IOException {
+    public final static void longStringMapToFile(String path, Map<Long, String> map, String description) throws IOException {
         if (map.size() != 0) {
             Properties properties = new Properties();
             for (Entry<Long, String> key : map.entrySet()) {
@@ -225,7 +228,7 @@ public class PropertiesConvenUtil {
         }
     }
 
-    public final static void LongDateMapToFile(String path, Map<Long, Date> map, String description) throws IOException {
+    public final static void longDateMapToFile(String path, Map<Long, Date> map, String description) throws IOException {
         if (map.size() != 0) {
             Properties properties = new Properties();
             DateFormat fmt = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

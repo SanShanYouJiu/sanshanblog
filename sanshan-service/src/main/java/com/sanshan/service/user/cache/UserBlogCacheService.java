@@ -1,7 +1,7 @@
 package com.sanshan.service.user.cache;
 
 import com.sanshan.dao.MarkDownBlogMapper;
-import com.sanshan.dao.UEditorBlogMapper;
+import com.sanshan.dao.UeditorBlogMapper;
 import com.sanshan.service.convent.BlogConvert;
 import com.sanshan.service.convent.MarkDownEditorConvert;
 import com.sanshan.service.convent.UeditorEditorConvert;
@@ -21,7 +21,7 @@ import java.util.List;
 public class UserBlogCacheService {
 
     @Autowired
-    private UEditorBlogMapper uEditorBlogMapper;
+    private UeditorBlogMapper uEditorBlogMapper;
 
     @Autowired
     private MarkDownBlogMapper markDownBlogMapper;
@@ -29,16 +29,16 @@ public class UserBlogCacheService {
 
     @Cacheable(value = "spec-user-blogs", key = "'user-blogs:'+#a0")
     public List<BlogVO> getUserBlogs(String username) {
-        List<BlogVO> blogVOs1 = BlogConvert.UeditorDoToDtoList(UeditorEditorConvert.doToDtoList(uEditorBlogMapper.queryByUser(username)));
-        List<BlogVO> blogVOS2 = BlogConvert.MarkdownDoToDtoList(MarkDownEditorConvert.doToDtoList(markDownBlogMapper.queryByUser(username)));
+        List<BlogVO> blogVOs1 = BlogConvert.ueditorDoToDtoList(UeditorEditorConvert.doToDtoList(uEditorBlogMapper.queryByUser(username)));
+        List<BlogVO> blogVOS2 = BlogConvert.markdownDoToDtoList(MarkDownEditorConvert.doToDtoList(markDownBlogMapper.queryByUser(username)));
         blogVOs1.addAll(blogVOS2);
         return blogVOs1;
     }
 
     @CachePut(value = "spec-user-blogs", key = "'user-blogs:'+#a0")
     public List<BlogVO> userBlogRefresh(String username) {
-        List<BlogVO> blogVOs1 = BlogConvert.UeditorDoToDtoList(UeditorEditorConvert.doToDtoList(uEditorBlogMapper.queryByUser(username)));
-        List<BlogVO> blogVOS2 = BlogConvert.MarkdownDoToDtoList(MarkDownEditorConvert.doToDtoList(markDownBlogMapper.queryByUser(username)));
+        List<BlogVO> blogVOs1 = BlogConvert.ueditorDoToDtoList(UeditorEditorConvert.doToDtoList(uEditorBlogMapper.queryByUser(username)));
+        List<BlogVO> blogVOS2 = BlogConvert.markdownDoToDtoList(MarkDownEditorConvert.doToDtoList(markDownBlogMapper.queryByUser(username)));
         blogVOs1.addAll(blogVOS2);
         return blogVOs1;
     }

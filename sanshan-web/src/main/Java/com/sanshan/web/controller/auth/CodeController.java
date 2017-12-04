@@ -22,17 +22,17 @@ import java.util.concurrent.atomic.AtomicLong;
 @RestController()
 public class CodeController {
 
-    private final static int width = 90;//验证码宽度
-    private final static int height = 40;//验证码高度
-    private final static int codeCount = 4;//验证码个数
-    private final static int lineCount = 19;//混淆线个数
+    private final static int WIDTH = 90;//验证码宽度
+    private final static int HEIGHT = 40;//验证码高度
+    private final static int CODE_COUNT = 4;//验证码个数
+    private final static int LINE_COUNT = 19;//混淆线个数
 
      @Autowired
      private RedisTemplate<String,String>redisTemplate;
 
      private AtomicLong atomicLong = new AtomicLong(0);
 
-    public static final String codeIdCachePrefix = "codeValidate:";
+    public static final String CODE_ID_PREFIX = "codeValidate:";
 
     /**
      * 验证码
@@ -43,8 +43,8 @@ public class CodeController {
     public ResponseMsgVO getCode(HttpServletResponse response) throws IOException {
         ResponseMsgVO msgVO = new ResponseMsgVO();
 
-        BufferedImage buffImg= new BufferedImage(width,height,BufferedImage.TYPE_INT_RGB);
-        String resultCode = AuthCodeUtil.createCodeImage(buffImg, width, height, lineCount, codeCount);
+        BufferedImage buffImg= new BufferedImage(WIDTH,HEIGHT,BufferedImage.TYPE_INT_RGB);
+        String resultCode = AuthCodeUtil.createCodeImage(buffImg, WIDTH, HEIGHT, LINE_COUNT, CODE_COUNT);
         //将resultCode存入session
         response.setHeader("Pragma", "no-cache");
         response.setHeader("Cache-Control", "no-cache");
@@ -53,7 +53,7 @@ public class CodeController {
 
         //生成一个codeID对应 在三分钟内有效
         Long codeId=atomicLong.incrementAndGet();
-        redisTemplate.opsForValue().set(codeIdCachePrefix+String.valueOf(codeId), resultCode,3, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(CODE_ID_PREFIX+String.valueOf(codeId), resultCode,3, TimeUnit.MINUTES);
 
         //将图片转换为BASE64编码
         ByteArrayOutputStream os = new ByteArrayOutputStream();

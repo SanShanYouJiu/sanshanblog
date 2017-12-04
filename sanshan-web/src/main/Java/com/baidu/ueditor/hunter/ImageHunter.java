@@ -82,8 +82,7 @@ public class ImageHunter {
 
 			String savePath = this.getPath( this.savePath, this.filename, suffix );
 
-            StorageManager storageManager = new StorageManager();
-            State state = storageManager.saveFileByInputStream( connection.getInputStream(), savePath,suffix );
+            State state = StorageManager.saveFileByInputStream( connection.getInputStream(), savePath,suffix );
 
 			if ( state.isSuccess() ) {
 				state.putInfo( "url", PathFormat.format( savePath ) );

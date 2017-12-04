@@ -44,14 +44,16 @@ public class UserController {
     public ResponseMsgVO checkUsername(@RequestParam(name = "email") String email) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         //查看是否存在邮箱
-        if (userService.judgeEmail(email))
-              return  responseMsgVO.buildWithPosCode(PosCodeEnum.Email_EXIST);
+        if (userService.judgeEmail(email)){
+            return  responseMsgVO.buildWithPosCode(PosCodeEnum.Email_EXIST);
+        }
         //合法性检测
-        if (!userService.checkEmailLegal(email, responseMsgVO))
-             return  responseMsgVO;
+        if (!userService.checkEmailLegal(email, responseMsgVO)) {
+            return responseMsgVO;
+        }
 
-        return responseMsgVO;
-    }
+            return responseMsgVO;
+        }
 
 
     /**
@@ -79,7 +81,7 @@ public class UserController {
             @RequestParam(name = "code") String code) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
           //验证码
-        String codeValidate = redisTemplate.opsForValue().get(CodeController.codeIdCachePrefix + codeid);
+        String codeValidate = redisTemplate.opsForValue().get(CodeController.CODE_ID_PREFIX + codeid);
         if (!code.equalsIgnoreCase(codeValidate)) {
             return new ResponseMsgVO().buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "验证码错误");
         }

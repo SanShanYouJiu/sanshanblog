@@ -4,7 +4,7 @@ import com.github.pagehelper.PageInfo;
 import com.sanshan.pojo.dto.MarkDownBlogDTO;
 import com.sanshan.pojo.entity.MarkDownBlogDO;
 import com.sanshan.service.convent.MarkDownEditorConvert;
-import com.sanshan.service.editor.CacheService.MarkDownBlogCacheService;
+import com.sanshan.service.editor.cacheservice.MarkDownBlogCacheService;
 import com.sanshan.service.user.cache.UserBlogCacheService;
 import com.sanshan.service.vo.JwtUser;
 import com.sanshan.util.BlogIdGenerate;
@@ -103,10 +103,12 @@ public class MarkDownBlogService {
         //更新User对应的blog缓存
         userBlogCacheService.userBlogRefresh(user.getUsername());
         //加入到索引中
-        if (tag!=null)
-        blogIdGenerate.putTag(tag,blogIdGenerate.getId());
-        if (title!=null)
-        blogIdGenerate.putTitle(title,blogIdGenerate.getId());
+        if (tag!=null){
+            blogIdGenerate.putTag(tag,blogIdGenerate.getId());
+        }
+        if (title!=null){
+            blogIdGenerate.putTitle(title,blogIdGenerate.getId());
+        }
         blogIdGenerate.putDate(date,blogIdGenerate.getId());
 
         //加入IdMap对应
@@ -127,10 +129,12 @@ public class MarkDownBlogService {
         //更新User对应的blog缓存
         userBlogCacheService.userBlogRefresh(markDownBlogDTO.getUser());
         //加入到索引中
-        if (tag!=null)
+        if (tag!=null){
             blogIdGenerate.putTag(tag,id);
-        if (title!=null)
+        }
+        if (title!=null){
             blogIdGenerate.putTitle(title,id);
+        }
         blogIdGenerate.putDate(date,id);
         return markDownBlogDTO;
     }
@@ -148,10 +152,12 @@ public class MarkDownBlogService {
         //更新User对应的blog缓存
         userBlogCacheService.userBlogRefresh(markDownBlogDTO.getUser());
         //加入到索引中
-        if (tag!=null)
+        if (tag!=null){
             blogIdGenerate.putTag(tag,id);
-        if (title!=null)
+        }
+        if (title!=null){
             blogIdGenerate.putTitle(title,id);
+        }
         return true;
     }
 

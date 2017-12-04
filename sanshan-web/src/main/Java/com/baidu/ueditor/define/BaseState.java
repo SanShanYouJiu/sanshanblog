@@ -30,7 +30,8 @@ public class BaseState implements State {
 		this.setState( state );
 		this.info = AppInfo.getStateInfo( infoCode );
 	}
-	
+
+	@Override
 	public boolean isSuccess () {
 		return this.state;
 	}
@@ -51,7 +52,8 @@ public class BaseState implements State {
 	public String toJSONString() {
 		return this.toString();
 	}
-	
+
+	@Override
 	public String toString () {
 		
 		String key = null;

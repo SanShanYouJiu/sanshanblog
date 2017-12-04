@@ -12,9 +12,9 @@ public class VoteDTO implements Serializable {
 
     private String id;
 
-    private long blogId;
+    private Long blogId;
 
-    private boolean vote;
+    private Boolean vote;
 
     public VoteDTO() {
     }

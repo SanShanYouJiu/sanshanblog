@@ -15,7 +15,7 @@ import java.util.List;
 
 @Slf4j
 @Service
-public class UEditorFileService {
+public class UeditorFileService {
 
     @Autowired
     FileOperation fileOperation;
@@ -42,13 +42,13 @@ public class UEditorFileService {
      * @param response 当前环境的HttpServletResponse
      */
     public void getUEditorFile(String format, String date, String filename, String suffix, HttpServletResponse response){
-        String FileFullName = "/api/ueditor-editor/upload/" + format + "/" + date + "/" + filename + "." + suffix;//这里注意 前缀是写死的
+        String fileFullName = "/api/ueditor-editor/upload/" + format + "/" + date + "/" + filename + "." + suffix;//这里注意 前缀是写死的
         response.setContentType(format+"\\"+suffix);
-        List<GridFSDBFile> gridFSDBFiles = fileOperation.getFile(FileFullName);
-        GridFSDBFile Gfile = gridFSDBFiles.get(0);
+        List<GridFSDBFile> gridFSDBFiles = fileOperation.getFile(fileFullName);
+        GridFSDBFile gfile = gridFSDBFiles.get(0);
         try {
             OutputStream ot = response.getOutputStream();
-            byte[] btImg = readStream(Gfile.getInputStream());
+            byte[] btImg = readStream(gfile.getInputStream());
             ot.write(btImg);
             ot.flush();
         } catch (IOException e) {

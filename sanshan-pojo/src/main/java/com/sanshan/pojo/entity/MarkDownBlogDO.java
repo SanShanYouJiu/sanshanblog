@@ -12,11 +12,11 @@ import javax.persistence.Table;
 @Table(name = "markdown_blog")
 @NoArgsConstructor()
 @Data
-public class MarkDownBlogDO extends EditorDO {
+public class MarkDownBlogDO extends BaseEditorDO {
 
     private static final long serialVersionUID = 2532923739523906290L;
 
     @Id
-    private long id;
+    private Long id;
 
 }

@@ -1,9 +1,7 @@
 package com.sanshan.service.convent;
 
 import com.github.pagehelper.PageInfo;
-import com.sanshan.pojo.dto.MarkDownBlogDTO;
 import com.sanshan.pojo.dto.UserDTO;
-import com.sanshan.pojo.entity.MarkDownBlogDO;
 import com.sanshan.pojo.entity.UserDO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -13,17 +11,17 @@ import java.util.Objects;
 
 public class UserConvert {
 
-    private static final ModelMapper modelMapper = new ModelMapper();
+    private static final ModelMapper MODEL_MAPPER = new ModelMapper();
 
     public static UserDTO doToDto(UserDO userDO) {
         if (Objects.isNull(userDO)){
             return null;
         }
-        return modelMapper.map(userDO,UserDTO.class);
+        return MODEL_MAPPER.map(userDO,UserDTO.class);
     }
 
     public static List<UserDTO> doToDtoList(List<UserDO> userDOS) {
-        return modelMapper.map(userDOS,new TypeToken<List<UserDTO>>(){}.getType());
+        return MODEL_MAPPER.map(userDOS,new TypeToken<List<UserDTO>>(){}.getType());
     }
 
 

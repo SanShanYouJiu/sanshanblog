@@ -11,17 +11,17 @@ import java.util.Objects;
 /**
  */
 public class BlogVoteConvert {
-    private static final ModelMapper modelMapper = new ModelMapper();
+    private static final ModelMapper MODEL_MAPPER = new ModelMapper();
 
     public static BlogVoteDTO doToDto(BlogVoteDO blogVoteDO) {
         if (Objects.isNull(blogVoteDO)) {
             return null;
         }
-        return modelMapper.map(blogVoteDO, BlogVoteDTO.class);
+        return MODEL_MAPPER.map(blogVoteDO, BlogVoteDTO.class);
     }
 
 
     public static List<BlogVoteDTO> doToDtoList(List<BlogVoteDO> blogVoteDOS) {
-        return modelMapper.map(blogVoteDOS,new TypeToken<List<BlogVoteDTO>>(){}.getType());
+        return MODEL_MAPPER.map(blogVoteDOS,new TypeToken<List<BlogVoteDTO>>(){}.getType());
     }
 }

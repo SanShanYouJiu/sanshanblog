@@ -8,10 +8,12 @@ import org.springframework.validation.Validator;
 @Component
 public class MultipartFileBucketValidator implements Validator {
 
+    @Override
     public boolean supports(Class<?> clazz) {
         return MultipartFileBucket.class.isAssignableFrom(clazz);
     }
 
+    @Override
     public void validate(Object obj, Errors errors) {
         MultipartFileBucket multipartFileBucket = (MultipartFileBucket) obj;
         if (multipartFileBucket.getMultipartFile() != null) {

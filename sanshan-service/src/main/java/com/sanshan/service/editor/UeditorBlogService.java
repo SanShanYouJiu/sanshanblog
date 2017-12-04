@@ -1,10 +1,10 @@
 package com.sanshan.service.editor;
 
 import com.github.pagehelper.PageInfo;
-import com.sanshan.pojo.dto.UEditorBlogDTO;
-import com.sanshan.pojo.entity.UEditorBlogDO;
+import com.sanshan.pojo.dto.UeditorBlogDTO;
+import com.sanshan.pojo.entity.UeditorBlogDO;
 import com.sanshan.service.convent.UeditorEditorConvert;
-import com.sanshan.service.editor.CacheService.UEditorBlogCacheService;
+import com.sanshan.service.editor.cacheservice.UeditorBlogCacheService;
 import com.sanshan.service.user.cache.UserBlogCacheService;
 import com.sanshan.service.vo.JwtUser;
 import com.sanshan.util.BlogIdGenerate;
@@ -25,7 +25,7 @@ import java.util.List;
 public class UeditorBlogService {
 
     @Autowired
-    private UEditorBlogCacheService cacheService;
+    private UeditorBlogCacheService cacheService;
 
     @Autowired
     private   BlogIdGenerate blogIdGenerate;
@@ -37,7 +37,7 @@ public class UeditorBlogService {
      *
      * @return
      */
-    public List<UEditorBlogDTO> queryDtoAll() {
+    public List<UeditorBlogDTO> queryDtoAll() {
         return UeditorEditorConvert.doToDtoList(cacheService.queryAll());
     }
 
@@ -46,7 +46,7 @@ public class UeditorBlogService {
      * @param example 条件
      * @return
      */
-    public List<UEditorBlogDTO> queryDtoListByWhere(UEditorBlogDO example) {
+    public List<UeditorBlogDTO> queryDtoListByWhere(UeditorBlogDO example) {
         return UeditorEditorConvert.doToDtoList(cacheService.queryListByWhere(example));
     }
 
@@ -57,8 +57,8 @@ public class UeditorBlogService {
      * @param rows    行数
      * @return
      */
-    public PageInfo<UEditorBlogDTO> queryDtoPageListByWhere(UEditorBlogDO example, Integer page, Integer rows){
-        PageInfo<UEditorBlogDO>  uEditorBlogDOPageInfo=cacheService.queryPageListByWhere(example, page, rows);
+    public PageInfo<UeditorBlogDTO> queryDtoPageListByWhere(UeditorBlogDO example, Integer page, Integer rows){
+        PageInfo<UeditorBlogDO>  uEditorBlogDOPageInfo=cacheService.queryPageListByWhere(example, page, rows);
         return UeditorEditorConvert.doToDtoPage(uEditorBlogDOPageInfo);
     }
 
@@ -68,13 +68,13 @@ public class UeditorBlogService {
      * @param id 查询ID
      * @return
      */
-    public  UEditorBlogDTO queryDtoById(Long id){
+    public UeditorBlogDTO queryDtoById(Long id){
         return UeditorEditorConvert.doToDto(cacheService.queryById(id));
     }
 
 
     public Integer saveDO(String content, String title, String tag) {
-        UEditorBlogDO uEditorBlogDO = new UEditorBlogDO();
+        UeditorBlogDO uEditorBlogDO = new UeditorBlogDO();
         //使用IdMap生成的Id
         uEditorBlogDO.setId(blogIdGenerate.getId());
         uEditorBlogDO.setContent(content);
@@ -107,10 +107,12 @@ public class UeditorBlogService {
         userBlogCacheService.userBlogRefresh(user.getUsername());
 
         //加入到索引中
-        if (title!=null)
-        blogIdGenerate.putTag(tag,blogIdGenerate.getId());
-        if (tag!=null)
-        blogIdGenerate.putTitle(title,blogIdGenerate.getId());
+        if (tag!=null){
+            blogIdGenerate.putTag(tag,blogIdGenerate.getId());
+        }
+        if (title!=null){
+            blogIdGenerate.putTitle(title,blogIdGenerate.getId());
+        }
         blogIdGenerate.putDate(date,blogIdGenerate.getId());
 
         //加入IdMap对应
@@ -120,7 +122,7 @@ public class UeditorBlogService {
     }
 
     @Deprecated
-    public Boolean updateDO(UEditorBlogDO uEditorBlogDO){
+    public Boolean updateDO(UeditorBlogDO uEditorBlogDO){
         long id=uEditorBlogDO.getId();
         String tag = uEditorBlogDO.getTag();
         Date date=uEditorBlogDO.getTime();
@@ -131,31 +133,34 @@ public class UeditorBlogService {
         //更新User对应的blog缓存
         userBlogCacheService.userBlogRefresh(uEditorBlogDO.getUser());
         //加入到索引中
-        if (tag!=null)
+        if (tag!=null){
             blogIdGenerate.putTag(tag,id);
-        if (title!=null)
+        }
+        if (title!=null){
             blogIdGenerate.putTitle(title,id);
+        }
         blogIdGenerate.putDate(date,id);
         return true;
     }
 
     public Boolean  updateSelectiveDO(Long id,String content,String title,String tag){
-        UEditorBlogDO uEditorBlogDO = new UEditorBlogDO();
+        UeditorBlogDO uEditorBlogDO = new UeditorBlogDO();
         uEditorBlogDO.setId(id);
         uEditorBlogDO.setContent(content);
         uEditorBlogDO.setUpdated(new Date());
         uEditorBlogDO.setTag(tag);
         uEditorBlogDO.setTitle(title);
 
-       UEditorBlogDTO uEditorBlogDTO= UeditorEditorConvert.doToDto(cacheService.updateSelective(uEditorBlogDO));
+       UeditorBlogDTO uEditorBlogDTO= UeditorEditorConvert.doToDto(cacheService.updateSelective(uEditorBlogDO));
         //更新User对应的blog缓存
         userBlogCacheService.userBlogRefresh(uEditorBlogDTO.getUser());
         //加入到索引中
-        if (tag!=null)
+        if (tag!=null){
             blogIdGenerate.putTag(tag,id);
-        if (title!=null)
+        }
+        if (title!=null){
             blogIdGenerate.putTitle(title,id);
-
+        }
         return true;
     }
 

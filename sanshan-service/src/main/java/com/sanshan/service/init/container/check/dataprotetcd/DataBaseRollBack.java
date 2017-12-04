@@ -1,9 +1,9 @@
 package com.sanshan.service.init.container.check.dataprotetcd;
 
 import com.sanshan.dao.MarkDownBlogMapper;
-import com.sanshan.dao.UEditorBlogMapper;
+import com.sanshan.dao.UeditorBlogMapper;
 import com.sanshan.pojo.entity.MarkDownBlogDO;
-import com.sanshan.pojo.entity.UEditorBlogDO;
+import com.sanshan.pojo.entity.UeditorBlogDO;
 import com.sanshan.util.BlogIdGenerate;
 import com.sanshan.util.info.EditorTypeEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -27,25 +27,25 @@ public class DataBaseRollBack {
     private MarkDownBlogMapper markDownBlogMapper;
 
     @Autowired
-    private UEditorBlogMapper uEditorBlogMapper;
+    private UeditorBlogMapper uEditorBlogMapper;
 
     @Autowired
     private BlogIdGenerate blogIdGenerate;
 
     //检查是否需要从数据库恢复数据
-    @Transactional(isolation = Isolation.READ_COMMITTED,propagation = Propagation.REQUIRED)
+    @Transactional(isolation = Isolation.READ_COMMITTED,propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     public void inspectDataConsistency() {
         //数据库与BlogIdGenerate的事物完整性检查
         Long initTime = System.currentTimeMillis();
         log.info("进行事物一致性检查");
         List<MarkDownBlogDO> markDownBlogDOList = markDownBlogMapper.selectAll();
-        List<UEditorBlogDO> uEditorBlogDOS = uEditorBlogMapper.selectAll();
+        List<UeditorBlogDO> uEditorBlogDOS = uEditorBlogMapper.selectAll();
         rollBackData(markDownBlogDOList, uEditorBlogDOS);
         log.info("从数据库中将恢复properties中的数据完成 耗时:{}ms", System.currentTimeMillis() - initTime);
     }
 
     //从数据库中将恢复properties中的数据（宕机恢复使用)
-    private void rollBackData(List<MarkDownBlogDO> markDownBlogDOList, List<UEditorBlogDO> uEditorBlogDOS) {
+    private void rollBackData(List<MarkDownBlogDO> markDownBlogDOList, List<UeditorBlogDO> uEditorBlogDOS) {
         for (MarkDownBlogDO m : markDownBlogDOList) {
             blogIdGenerate.addIdMap(m.getId(), EditorTypeEnum.MarkDown_EDITOR);
             if (m.getTitle() != null) {
@@ -57,7 +57,7 @@ public class DataBaseRollBack {
             blogIdGenerate.putDate(m.getTime(), m.getId());
         }
 
-        for (UEditorBlogDO u : uEditorBlogDOS) {
+        for (UeditorBlogDO u : uEditorBlogDOS) {
             blogIdGenerate.addIdMap(u.getId(), EditorTypeEnum.UEDITOR_EDITOR);
             if (u.getTitle() != null) {
                 blogIdGenerate.putTitle(u.getTitle(), u.getId());

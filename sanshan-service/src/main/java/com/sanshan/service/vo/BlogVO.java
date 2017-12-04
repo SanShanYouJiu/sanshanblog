@@ -1,7 +1,7 @@
 package com.sanshan.service.vo;
 
 import com.sanshan.pojo.dto.MarkDownBlogDTO;
-import com.sanshan.pojo.dto.UEditorBlogDTO;
+import com.sanshan.pojo.dto.UeditorBlogDTO;
 import com.sanshan.util.info.EditorTypeEnum;
 import lombok.Data;
 
@@ -15,7 +15,7 @@ public class BlogVO  implements Serializable{
      * 1为markdown-blog
      * 0则为UEditor-blog
      */
-    private int type;
+    private Integer type;
 
     private Long id;
 
@@ -33,7 +33,7 @@ public class BlogVO  implements Serializable{
 
     }
 
-    public BlogVO(UEditorBlogDTO uEditorBlog) {
+    public BlogVO(UeditorBlogDTO uEditorBlog) {
         this.type= EditorTypeEnum.UEDITOR_EDITOR.getIndex();
         this.id = uEditorBlog.getId();
         this.user  =uEditorBlog.getUser();

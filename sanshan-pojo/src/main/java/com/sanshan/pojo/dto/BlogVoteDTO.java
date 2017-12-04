@@ -11,15 +11,15 @@ import lombok.ToString;
 @ToString
 public class BlogVoteDTO {
 
-    private long id;
+    private Long id;
 
-    private long blogId;
+    private Long blogId;
 
-    private int favours;
+    private Integer favours;
 
-    private int treads;
+    private Integer treads;
 
-    public BlogVoteDTO(long blogId, int favours, int treads) {
+    public BlogVoteDTO(Long blogId, Integer favours, Integer treads) {
         this.blogId = blogId;
         this.favours = favours;
         this.treads = treads;

@@ -26,13 +26,13 @@ public class FeedBackService {
     @Autowired
     private FileOperation fileOperation;
 
-    private static final AtomicInteger poolNumber = new AtomicInteger(1);
+    private static final AtomicInteger POOL_NUMBER = new AtomicInteger(1);
 
     private ExecutorService pool = new ThreadPoolExecutor(0, 4,
             3, TimeUnit.MINUTES,
             new SynchronousQueue<Runnable>(),(r)->{
         Thread t = new Thread(r);
-        t.setName("feedback-save-thread:"+poolNumber.incrementAndGet());
+        t.setName("feedback-save-thread:"+POOL_NUMBER.incrementAndGet());
         return t;
     });
 

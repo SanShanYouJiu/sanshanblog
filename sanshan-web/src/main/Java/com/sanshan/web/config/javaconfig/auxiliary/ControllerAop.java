@@ -20,16 +20,16 @@ public class ControllerAop {
 
 
     @Pointcut("execution(public com.sanshan.service.vo.ResponseMsgVO *(..))")
-    public void ResponseMsgVoPointcut() {
+    public void responseMsgVoPointcut() {
     }
 
     //在加载文件的FileLoadController中使用了ResponseEntity<Resources>
     @Pointcut("execution(public org.springframework.http.ResponseEntity *(..))")
-    public void ResponseEntityPointcut(){
+    public void responseEntityPointcut(){
     }
 
 
-    @Around("ResponseMsgVoPointcut()")
+    @Around("responseMsgVoPointcut()")
     public Object handlerControllerMethod(ProceedingJoinPoint pjp) {
         long startTime = System.currentTimeMillis();
 
@@ -47,7 +47,7 @@ public class ControllerAop {
     }
 
 
-    @Around("ResponseEntityPointcut()")
+    @Around("responseEntityPointcut()")
     public Object handlerControllerFileMethod(ProceedingJoinPoint pjp) {
         long startTime = System.currentTimeMillis();
 

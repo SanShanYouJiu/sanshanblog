@@ -22,6 +22,8 @@ import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
+ * @author sanshan
+ * www.85432173@qq.com
  * 投票的相关变化
  */
 @Service
@@ -39,20 +41,20 @@ public class VoteService {
     private BlogVoteMapper blogVoteMapper;
 
 
-    public static final String voteIpFavourPrefix = "ip_vote:favour:";
-    public static final String voteIpTreadPrefix = "ip_vote:tread:";
-    public static final String blogVoteFavoursPrefix = "blog_vote:favours:";
-    public static final String blogVoteTreadsPrefix = "blog_vote:treads:";
-    public static final String IpVoteBlogIdExistPrefix = "ip_vote:exist:";
+    public static final String VOTE_IP_FAVOUR_PREFIX = "ip_vote:favour:";
+    public static final String VOTE_IP_TREAD_PREFIX = "ip_vote:tread:";
+    public static final String BLOG_VOTE_FAVOURS_PREFIX = "blog_vote:favours:";
+    public static final String BLOG_VOTE_THREADS_PREFIX = "blog_vote:treads:";
+    public static final String IP_VOTE_BLOG_ID_EXIST_PREFIX = "ip_vote:exist:";
 
-    private static final AtomicInteger poolNumber = new AtomicInteger(1);
+    private static final AtomicInteger POOL_NUMBER = new AtomicInteger(1);
     private ExecutorService pool = new ThreadPoolExecutor(0, 4,
             3, TimeUnit.MINUTES,
             new SynchronousQueue<Runnable>(), (r) -> {
         SecurityManager s = System.getSecurityManager();
         ThreadGroup group = (s != null) ? s.getThreadGroup() :
                 Thread.currentThread().getThreadGroup();
-        Thread t = new Thread(group, r, "vote-save-info-thread:" + poolNumber.incrementAndGet());
+        Thread t = new Thread(group, r, "vote-save-info-thread:" + POOL_NUMBER.incrementAndGet());
         if (t.isDaemon()) {
             t.setDaemon(false);
         }
@@ -83,21 +85,21 @@ public class VoteService {
      * @param vote
      * @param responseMsgVO
      */
-    @Transactional(isolation = Isolation.READ_COMMITTED,propagation = Propagation.REQUIRES_NEW)
+    @Transactional(isolation = Isolation.READ_COMMITTED,propagation = Propagation.REQUIRES_NEW,rollbackFor = RuntimeException.class)
     public void anonymousVote(String ip, Long blogId, boolean vote, ResponseMsgVO responseMsgVO) {
         //首先检查是否可以投票
         if (inspectVote(ip, blogId, vote, responseMsgVO)) {
             //进行投票
             if (vote) {
-                redisTemplate.opsForHash().put(voteIpFavourPrefix + ip, blogId,true);
-                redisTemplate.opsForValue().increment(blogVoteFavoursPrefix + blogId, 1);
+                redisTemplate.opsForHash().put(VOTE_IP_FAVOUR_PREFIX + ip, blogId,true);
+                redisTemplate.opsForValue().increment(BLOG_VOTE_FAVOURS_PREFIX + blogId, 1);
             } else {
-                redisTemplate.opsForHash().put(voteIpTreadPrefix + ip, blogId,true);
-                redisTemplate.opsForValue().increment(blogVoteTreadsPrefix + blogId, 1);
+                redisTemplate.opsForHash().put(VOTE_IP_TREAD_PREFIX + ip, blogId,true);
+                redisTemplate.opsForValue().increment(BLOG_VOTE_THREADS_PREFIX + blogId, 1);
             }
             voteTransactionConsistentCheck(ip,blogId,vote);
             //加入到已投票域中
-            redisTemplate.opsForHash().put(IpVoteBlogIdExistPrefix + ip, blogId, vote);
+            redisTemplate.opsForHash().put(IP_VOTE_BLOG_ID_EXIST_PREFIX + ip, blogId, vote);
             saveBlogVoteInfo(ip, blogId, vote);
             responseMsgVO.buildOK();
         }
@@ -112,8 +114,8 @@ public class VoteService {
      * @return
      */
     private Boolean inspectVote(String ip, Long blogId, Boolean vote, ResponseMsgVO responseMsgVO) {
-        Boolean flag = (Boolean) redisTemplate.opsForHash().get(IpVoteBlogIdExistPrefix + ip, blogId);
-        if (!Objects.isNull(flag) && flag == vote) {
+        Boolean flag = (Boolean) redisTemplate.opsForHash().get(IP_VOTE_BLOG_ID_EXIST_PREFIX + ip, blogId);
+        if (!Objects.isNull(flag) && flag.equals(vote) ) {
             responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.URL_ERROR, "已对Id为:" + blogId + "的博客投票过");
             return false;
         } else {
@@ -129,7 +131,7 @@ public class VoteService {
     private void voteTransactionConsistentCheck(String ip,Long blogId,Boolean vote) {
         setReverseVote(ip,blogId,vote);
         //具分为俩种情况 一种是没有投过的 一种是投过但是这次投了相反的票
-        Boolean ipVote = (Boolean) redisTemplate.opsForHash().get(IpVoteBlogIdExistPrefix + ip, blogId);
+        Boolean ipVote = (Boolean) redisTemplate.opsForHash().get(IP_VOTE_BLOG_ID_EXIST_PREFIX + ip, blogId);
         if (Objects.isNull(ipVote)) {
         }else {
             decrReverseVotes(ip,blogId, vote);
@@ -145,24 +147,25 @@ public class VoteService {
      */
     private void setReverseVote(String ip,Long blogId,Boolean vote){
         if (vote) {
-            redisTemplate.opsForHash().put(voteIpTreadPrefix + ip, blogId, false);
+            redisTemplate.opsForHash().put(VOTE_IP_TREAD_PREFIX + ip, blogId, false);
         } else {
-            redisTemplate.opsForHash().put(voteIpFavourPrefix + ip, blogId, false);
+            redisTemplate.opsForHash().put(VOTE_IP_FAVOUR_PREFIX + ip, blogId, false);
         }
     }
 
     /**
      *减少本次投票相反的一方数目减一
+     * TODO 讲这里的数据库操作定期执行 否则打开数据库连接会太过频繁
      * @param blogId
      * @param vote
      */
     public void   decrReverseVotes(String ip,Long blogId,Boolean vote) {
         if (vote) {
-            redisTemplate.opsForValue().increment(blogVoteTreadsPrefix + blogId, -1);
+            redisTemplate.opsForValue().increment(BLOG_VOTE_THREADS_PREFIX + blogId, -1);
             blogVoteMapper.decrTreads(blogId);
             ipBlogVoteMapper.deleteVoteTreadByBlogId(ip, blogId);
         } else {
-            redisTemplate.opsForValue().increment(blogVoteFavoursPrefix + blogId, -1);
+            redisTemplate.opsForValue().increment(BLOG_VOTE_FAVOURS_PREFIX + blogId, -1);
             blogVoteMapper.decrFavours(blogId);
             ipBlogVoteMapper.deleteVoteFavourByBlogId(ip, blogId);
 

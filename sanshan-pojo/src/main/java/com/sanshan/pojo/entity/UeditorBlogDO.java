@@ -9,11 +9,11 @@ import javax.persistence.Table;
 @Table(name = "ueditor_blog")
 @Data
 @NoArgsConstructor
-public class UEditorBlogDO extends EditorDO {
+public class UeditorBlogDO extends BaseEditorDO {
 
     private static final long serialVersionUID = 4108703926461957019L;
 
     @Id
-    private long id;
+    private Long id;
 
 }

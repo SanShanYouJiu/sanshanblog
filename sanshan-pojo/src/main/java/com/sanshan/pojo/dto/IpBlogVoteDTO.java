@@ -16,14 +16,14 @@ import javax.persistence.Id;
 public class IpBlogVoteDTO {
 
     @Id
-    private long id;
+    private Long id;
 
     private String ip;
 
-    private long blogId;
+    private Long blogId;
 
-    private boolean favour;
+    private Boolean favour;
 
-    private boolean tread;
+    private Boolean tread;
 
 }

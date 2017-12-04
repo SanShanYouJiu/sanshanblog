@@ -51,14 +51,7 @@ public class Setting implements Serializable {
      * 禁止注册的用户名
      */
     private String disabledUsernames;
-    /**
-     * 侧边栏标签数
-     */
-    private Integer aside_tags;
-    /**
-     * 侧边栏文章数
-     */
-    private Integer aside_articles;
+
     /**
      * isCommentEnabled : true
      * isCommentChecked : false
@@ -71,10 +64,6 @@ public class Setting implements Serializable {
      * 是否开启评论审核
      */
     private Boolean isCommentChecked;
-    /**
-     * 通知数量
-     */
-    private Integer notify_count;
 
 
 }

@@ -78,11 +78,12 @@ public class AdminIndexController {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         if (avatar!=null||blogLink!=null) {
             if (avatar != ""|| blogLink != "") {
-                Map<String, String> mapList = new HashMap<>();
+                Map<String, String> mapList = new HashMap<>(5);
                 mapList.put("avatar", avatar);
                 mapList.put("blogLink", blogLink);
-                if (adminIndexService.changeUserInfo(username, mapList))
-                 return   responseMsgVO.buildOK();
+                if (adminIndexService.changeUserInfo(username, mapList)){
+                    return   responseMsgVO.buildOK();
+                }
             }
         }
         return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR,"没有提供修改参数值");

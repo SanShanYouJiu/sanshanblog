@@ -34,8 +34,8 @@ public class BlogVoteInfoService {
      * @param responseMsgVO
      */
     public void queryBlogInfo(Long blogId, ResponseMsgVO responseMsgVO) {
-        Integer blogFavours = (Integer) redisTemplate.opsForValue().get(VoteService.blogVoteFavoursPrefix + blogId);
-        Integer blogTreads = (Integer) redisTemplate.opsForValue().get(VoteService.blogVoteTreadsPrefix + blogId);
+        Integer blogFavours = (Integer) redisTemplate.opsForValue().get(VoteService.BLOG_VOTE_FAVOURS_PREFIX + blogId);
+        Integer blogTreads = (Integer) redisTemplate.opsForValue().get(VoteService.BLOG_VOTE_THREADS_PREFIX + blogId);
         //TODO 检查是否真的强一致 并且将这一大段拆为一个方法
         if (Objects.isNull(blogFavours) && Objects.isNull(blogTreads)) {
             //首先查BlogIdGenerator的Id是否存在
@@ -55,12 +55,12 @@ public class BlogVoteInfoService {
         if (Objects.isNull(blogFavours)) {
             blogFavours = 0;
         } else {
-            redisTemplate.opsForValue().set(VoteService.blogVoteFavoursPrefix + blogId, blogFavours);
+            redisTemplate.opsForValue().set(VoteService.BLOG_VOTE_FAVOURS_PREFIX + blogId, blogFavours);
         }
         if (Objects.isNull(blogTreads)) {
             blogTreads = 0;
         } else {
-            redisTemplate.opsForValue().set(VoteService.blogVoteTreadsPrefix + blogId, blogTreads);
+            redisTemplate.opsForValue().set(VoteService.BLOG_VOTE_THREADS_PREFIX + blogId, blogTreads);
         }
         BlogVoteDTO blogVoteDTO = new BlogVoteDTO(blogId, blogFavours, blogTreads);
         responseMsgVO.buildOKWithData(blogVoteDTO);

@@ -11,19 +11,19 @@ import java.util.Objects;
 /**
  */
 public class IpBlogVoteConvert {
-    private static final ModelMapper modelMapper = new ModelMapper();
+    private static final ModelMapper MODEL_MAPPER = new ModelMapper();
 
 
     public static IpBlogVoteDTO doToDto(IpBlogVoteDO ipBlogVoteDO) {
         if (Objects.isNull(ipBlogVoteDO)) {
             return null;
         }
-        return modelMapper.map(ipBlogVoteDO, IpBlogVoteDTO.class);
+        return MODEL_MAPPER.map(ipBlogVoteDO, IpBlogVoteDTO.class);
     }
 
 
     public static List<IpBlogVoteDTO> doToDtoList(List<IpBlogVoteDO> ipBlogVoteDOS) {
-        return modelMapper.map(ipBlogVoteDOS,new TypeToken<List<IpBlogVoteDTO>>(){}.getType());
+        return MODEL_MAPPER.map(ipBlogVoteDOS,new TypeToken<List<IpBlogVoteDTO>>(){}.getType());
     }
 
 }

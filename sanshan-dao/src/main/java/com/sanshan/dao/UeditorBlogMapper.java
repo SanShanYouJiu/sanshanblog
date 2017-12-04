@@ -1,19 +1,19 @@
 package com.sanshan.dao;
 
-import com.sanshan.pojo.entity.UEditorBlogDO;
+import com.sanshan.pojo.entity.UeditorBlogDO;
 import org.apache.ibatis.annotations.Select;
 import tk.mybatis.mapper.common.Mapper;
 
 import java.util.List;
 
-public interface UEditorBlogMapper extends Mapper<UEditorBlogDO> {
+public interface UeditorBlogMapper extends Mapper<UeditorBlogDO> {
 
 
     @Select("SELECT * FROM ueditor_blog WHERE tag= #{tag}")
-    List<UEditorBlogDO> queryByTag(UEditorBlogDO uEditorBlogDO);
+    List<UeditorBlogDO> queryByTag(UeditorBlogDO uEditorBlogDO);
 
     @Select("SELECT * FROM ueditor_blog WHERE title= #{title}")
-    List<UEditorBlogDO> queryByTitle(UEditorBlogDO uEditorBlogDO);
+    List<UeditorBlogDO> queryByTitle(UeditorBlogDO uEditorBlogDO);
 
 
     /**
@@ -22,7 +22,7 @@ public interface UEditorBlogMapper extends Mapper<UEditorBlogDO> {
      * @return
      */
     @Select("SELECT id,title,tag,user,time FROM ueditor_blog WHERE user= #{username}")
-    List<UEditorBlogDO> queryByUser(String  username);
+    List<UeditorBlogDO> queryByUser(String  username);
 
 
 }

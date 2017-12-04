@@ -24,6 +24,7 @@ public enum EditorTypeEnum {
             case "UEDITOR_EDITOR" :return EditorTypeEnum.UEDITOR_EDITOR;
             case "MarkDown_EDITOR":return  EditorTypeEnum.MarkDown_EDITOR;
             case "Void_Id":return EditorTypeEnum.Void_Id;
+            default:break;
         }
         log.error("转换出错");
         throw new EditorTypeConventException();

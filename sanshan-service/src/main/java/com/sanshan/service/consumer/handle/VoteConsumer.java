@@ -23,7 +23,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 @Slf4j
-@Transactional(isolation = Isolation.READ_COMMITTED,propagation = Propagation.REQUIRES_NEW)
+@Transactional(isolation = Isolation.READ_COMMITTED,propagation = Propagation.REQUIRES_NEW,rollbackFor = Exception.class)
 public class VoteConsumer {
 
     @Autowired
@@ -48,9 +48,9 @@ public class VoteConsumer {
                 }
                 VoteDTO voteVo = VoteService.consumerQueue.poll();
                 //将VoteVo存储到Mysql中
-                IpBlogVoteDO ipBlogVoteDO = new IpBlogVoteDO(new Date(),new Date(),voteVo.getId(), voteVo.getBlogId(), voteVo.isVote());
+                IpBlogVoteDO ipBlogVoteDO = new IpBlogVoteDO(new Date(),new Date(),voteVo.getId(), voteVo.getBlogId(), voteVo.getVote());
                 ipBlogVoteMapper.insert(ipBlogVoteDO);
-                if (voteVo.isVote()){
+                if (voteVo.getVote()){
                     int rows = blogVoteMapper.incrFavours(voteVo.getBlogId());
                     if (rows == 0) {
                         if (log.isDebugEnabled()){

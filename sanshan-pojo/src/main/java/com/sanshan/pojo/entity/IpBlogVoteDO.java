@@ -17,27 +17,29 @@ import java.util.Date;
 @ToString
 public class IpBlogVoteDO extends BaseDO{
     @Id
-    private long id;
+    private Long id;
 
     private String ip;
 
     @Column(name = "blog_id")
-    private long blogId;
+    private Long blogId;
 
-    private boolean favour;
+    private Boolean favour;
 
-    private boolean tread;
+    private Boolean tread;
 
     private String extra;
 
-    public IpBlogVoteDO(Date created,Date updated,String ip, long blogId, boolean vote) {
+    public IpBlogVoteDO(Date created,Date updated,String ip, Long blogId, Boolean vote) {
         super.setCreated(created);
         super.setUpdated(updated);
         this.ip = ip;
         this.blogId = blogId;
-        if (vote)
+        if (vote){
             favour = true;
-        else
+        }
+        else{
             tread = true;
+        }
     }
 }

@@ -33,10 +33,12 @@ public class UserRepositoryImpl implements CustomUserRepository {
         Query query = new Query();
         query.addCriteria(new Criteria("username").is(userDO.getUsername()));
         Update update = new Update();
-        if (userDO.getBlogLink()!=null)
+        if (userDO.getBlogLink()!=null){
             update.set("blogLink", userDO.getBlogLink());
-        if (userDO.getAvatar()!=null)
+        }
+        if (userDO.getAvatar()!=null){
             update.set("avatar", userDO.getAvatar());
+        }
         return this.mongoTemplate.upsert(query, update, UserDO.class);
     }
 

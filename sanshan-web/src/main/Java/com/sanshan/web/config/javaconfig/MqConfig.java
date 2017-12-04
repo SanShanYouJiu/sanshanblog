@@ -17,7 +17,7 @@ import java.util.*;
  用的是Redis自带的 消息发布订阅配置 这个Redis自带的MQ性能不是很好 暂时在这里吧
  */
 @Configuration
-public class MQConfig {
+public class MqConfig {
     @Autowired
     JedisConnectionFactory connectionFactory;
 
@@ -25,7 +25,7 @@ public class MQConfig {
     BlogOperationListener listener;
 
     @Bean
-    public PatternTopic CacheTopic(){
+    public PatternTopic cacheTopic(){
         PatternTopic patternTopic = new PatternTopic("blog");
         return patternTopic;
     }
@@ -35,7 +35,7 @@ public class MQConfig {
                                                                         PatternTopic patternTopic){
          RedisMessageListenerContainer redisMessageListenerContainer = new RedisMessageListenerContainer();
          redisMessageListenerContainer.setConnectionFactory(connectionFactory);
-         Map<MessageListenerAdapter, Collection<? extends Topic>>map = new HashMap<>();
+         Map<MessageListenerAdapter, Collection<? extends Topic>>map = new HashMap<>(5);
          List<Topic> list = new ArrayList<Topic>();
          list.add(patternTopic);
          map.put(listenerAdapter, list);

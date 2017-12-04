@@ -1,7 +1,7 @@
 package com.sanshan.service.convent;
 
 import com.sanshan.pojo.dto.MarkDownBlogDTO;
-import com.sanshan.pojo.dto.UEditorBlogDTO;
+import com.sanshan.pojo.dto.UeditorBlogDTO;
 import com.sanshan.service.vo.BlogVO;
 
 import java.util.LinkedList;
@@ -15,7 +15,7 @@ public class BlogConvert {
      * @param markDownBlogDOS
      * @return
      */
-    public static List<BlogVO> MarkdownDoToDtoList(List<MarkDownBlogDTO> markDownBlogDOS) {
+    public static List<BlogVO> markdownDoToDtoList(List<MarkDownBlogDTO> markDownBlogDOS) {
         List<BlogVO> blogVOS = new LinkedList<>();
         for (int i = 0; i <markDownBlogDOS.size() ; i++) {
              blogVOS.add(new BlogVO(markDownBlogDOS.get(i)));
@@ -29,7 +29,7 @@ public class BlogConvert {
       * @param uEditorBlogDOS
      * @return
      */
-    public static List<BlogVO> UeditorDoToDtoList(List<UEditorBlogDTO> uEditorBlogDOS) {
+    public static List<BlogVO> ueditorDoToDtoList(List<UeditorBlogDTO> uEditorBlogDOS) {
         List<BlogVO> blogVOS = new LinkedList<>();
         for (int i = 0; i <uEditorBlogDOS.size() ; i++) {
             blogVOS.add(new BlogVO(uEditorBlogDOS.get(i)));

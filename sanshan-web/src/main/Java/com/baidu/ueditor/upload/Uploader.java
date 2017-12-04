@@ -27,10 +27,10 @@ public class Uploader {
 		State state = null;
 
 		if ("true".equals(this.conf.get("isBase64"))) {
-			state = base64Uploader.save(this.request.getParameter(filedName),
+			state = Base64Uploader.save(this.request.getParameter(filedName),
 					this.conf);
 		} else {
-			state = binaryUploader.save(this.request, this.conf);
+			state = BinaryUploader.save(this.request, this.conf);
 		}
 
 		return state;

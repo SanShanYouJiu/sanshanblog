@@ -41,7 +41,7 @@ public class AuthController {
             JwtAuthenticationRequest authenticationRequest, @RequestParam(name = "codeid") String codeid) throws AuthenticationException {
         ResponseMsgVO msgVO = new ResponseMsgVO();
         //验证码检测
-        String codeValue = redisTemplate.opsForValue().get(CodeController.codeIdCachePrefix + codeid);
+        String codeValue = redisTemplate.opsForValue().get(CodeController.CODE_ID_PREFIX + codeid);
         if (!authenticationRequest.getCode().equalsIgnoreCase(codeValue)) {
             return msgVO.buildWithMsgAndStatus(
                             PosCodeEnum.PARAM_ERROR, "验证码错误");
@@ -64,20 +64,23 @@ public class AuthController {
 
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         //验证码检查
-        String codeValue = redisTemplate.opsForValue().get(CodeController.codeIdCachePrefix + codeid);
+        String codeValue = redisTemplate.opsForValue().get(CodeController.CODE_ID_PREFIX + codeid);
         if (!code.equalsIgnoreCase(codeValue)) {
             return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "验证码错误");
         }
 
         //合法性检查
-        if (!userService.checkPassWordLegal(addedUser.getPassword(), responseMsgVO))
+        if (!userService.checkPassWordLegal(addedUser.getPassword(), responseMsgVO)){
             return responseMsgVO;
+        }
         // 是否含有违规字段
-        if (authService.usernameIsDisabled(addedUser.getUsername()))
+        if (authService.usernameIsDisabled(addedUser.getUsername())){
             return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.USERNAME_NOALLOW, "用户名含有违规字段");
+        }
         //注册
-        if (!authService.register(addedUser, responseMsgVO))
+        if (!authService.register(addedUser, responseMsgVO)){
             return responseMsgVO;
+        }
         return responseMsgVO;
     }
 

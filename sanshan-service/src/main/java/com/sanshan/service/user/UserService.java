@@ -25,6 +25,10 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @author sanshan
+ * www.85432173@qq.com
+ */
 @Service
 @Slf4j
 public class UserService {
@@ -44,6 +48,9 @@ public class UserService {
     @Autowired
     private JwtTokenUtil jwtTokenUtil;
 
+    private static  final  Integer PASSWORD_MIN_LENGTH=6;
+    private static  final  Integer PASSWORD_MAX_LENGTH=30;
+
 
     public static final String CODE_PREFIX = "sendEmailCode";
 
@@ -52,7 +59,12 @@ public class UserService {
      */
     private Pattern emailPattern = Pattern.compile("^([a-zA-Z0-9_\\.\\-])+\\@(([a-zA-Z0-9\\-])+\\.)+([a-zA-Z0-9]{2,4})+$");
 
-    //更改密码
+    /**
+     * 更改密码
+     * @param code
+     * @param password
+     * @param responseMsgVO
+     */
     public void changePwd(String code, String password, ResponseMsgVO responseMsgVO) {
         JwtUser jwtUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
@@ -64,7 +76,9 @@ public class UserService {
             return;
         }
 
-        if (!checkPassWordLegal(password, responseMsgVO)) return;
+        if (!checkPassWordLegal(password, responseMsgVO)){
+            return;
+        }
 
         // 更新到mongo数据库
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -86,11 +100,11 @@ public class UserService {
             responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "密码为空");
             return false;
         }
-        if (password.length() < 6) {
+        if (password.length() < PASSWORD_MIN_LENGTH) {
             responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "密码长度太小 小于6位数");
             return false;
         }
-        if (password.length() > 30) {
+        if (password.length() > PASSWORD_MAX_LENGTH) {
             responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "密码长度太长 大于30位");
             return false;
         }
@@ -114,7 +128,9 @@ public class UserService {
             responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.FREQUENTLY_REQUEST, "操作频繁,请稍后再试");
             return;
         }
-        if (!checkSendMail(codeType, tempKey, email, responseMsgVO)) return;
+        if (!checkSendMail(codeType, tempKey, email, responseMsgVO)){
+            return;
+        }
 
         responseMsgVO.buildOK();
     }
@@ -133,17 +149,23 @@ public class UserService {
                     mailService.sendCode(tempKey, email);
                     responseMsgVO.buildOK();
                     return true;
+                default:
+                    return false;
             }
         } catch (Exception e) {
             log.error("send  mail:{} fail", email);
             responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR, "发送失败");
             return false;
         }
-        return false;
     }
 
 
-    //忘记密码
+    /**
+     * 忘记密码
+     * @param email
+     * @param token
+     * @param responseMsgVO
+     */
     public void forgetPassword(String email, String token, ResponseMsgVO responseMsgVO) {
         //获得具体的user对象
         UserDO userDO = userRepository.findByEmail(email);
@@ -151,7 +173,7 @@ public class UserService {
         String value = redisTemplate.opsForValue().get(key);
         if (!Objects.isNull(value) && value.equals(token)) {
             //通过随机生成字符串 暂时替换为密码
-            String tempPwd = RandomString(20);
+            String tempPwd = randomString(20);
             userRepository.changePassword(userDO.getUsername(), tempPwd);
 
             //为当前用户产生token
@@ -186,7 +208,7 @@ public class UserService {
     /**
      * 产生一个随机的字符串
      */
-    private static String RandomString(Integer length) {
+    private static String randomString(Integer length) {
         String str = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
         Random random = new Random();
         StringBuffer buf = new StringBuffer();

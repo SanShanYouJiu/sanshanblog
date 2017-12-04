@@ -1,7 +1,7 @@
 package com.sanshan.web.controller.globalexception;
 
 import com.sanshan.service.vo.ResponseMsgVO;
-import com.sanshan.util.WebUtils;
+import com.sanshan.util.AbstractWebUtils;
 import com.sanshan.util.exception.IdMapWriteException;
 import com.sanshan.util.info.PosCodeEnum;
 import org.apache.commons.lang3.StringUtils;
@@ -20,20 +20,11 @@ import java.io.IOException;
 @RestController
 public class GlobalException {
 
-    //@ExceptionHandler(NullPointerException.class)
-    //@ResponseStatus(HttpStatus.OK)//前端不支持非200的异常
-    //public ResponseMsgVO NotFoundExceptionHandler(NullPointerException e) {
-    //    ResponseMsgVO responseMsgVO = new ResponseMsgVO();
-    //    return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR, "出错 NullPointerException空指针异常 可能是没有对应的ID的Blog 或是没有权限执行此操作" +
-    //            ":" + e +
-    //            " message:" + e.getMessage()
-    //            + "  cause:" + e.getCause());
-    //}
 
 
     @ExceptionHandler(IdMapWriteException.class)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseMsgVO IdMapSaveExceptionHandler(Exception e) {
+    public ResponseMsgVO idMapSaveExceptionHandler(Exception e) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR, "IO出错 IdMap写入错误:" + e.getMessage());
     }
@@ -42,11 +33,11 @@ public class GlobalException {
     //拦住exception不是一个好选择
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.OK)
-    public Object ExceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception ex) throws ServletException, IOException {
+    public Object exceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception ex) throws ServletException, IOException {
 
         //TODO 目前前端用的不是ajax
         //判断是否为ajax请求
-        String xRequested = WebUtils.getHeader("x-requested-with",null,request);
+        String xRequested = AbstractWebUtils.getHeader("x-requested-with",null,request);
         if (StringUtils.equalsIgnoreCase(xRequested,"XMLHttpRequest")){
             return handlerAjax(ex);
         }

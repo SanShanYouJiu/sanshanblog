@@ -12,6 +12,7 @@ import com.sanshan.service.vo.BlogVO;
 import com.sanshan.service.vo.JwtUser;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.BlogIdGenerate;
+import com.sanshan.util.exception.NotFoundBlogException;
 import com.sanshan.util.info.EditorTypeEnum;
 import com.sanshan.util.info.PosCodeEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -50,9 +51,15 @@ public class AdminIndexService {
         JwtUser jwtUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<BlogVO> list = userInfoService.getUserBlogs(jwtUser.getUsername());
         Collections.sort(list,(o1,o2)->{
-            if (o1.getId()>o2.getId())return -1;
-            else if (o1.getId().equals(o2.getId())) return 0;
-            else return 1;
+            if (o1.getId()>o2.getId()){
+                return -1;
+            }
+            else if (o1.getId().equals(o2.getId())) {
+                return 0;
+            }
+            else{
+                return 1;
+            }
         });
         cacheList.set(list);
         return list;
@@ -121,13 +128,16 @@ public class AdminIndexService {
                 return;
             case Void_Id:
                 responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR, "更新错误 更新节点已被删除");
-                throw new NullPointerException("该节点已被删除");
+                throw new NotFoundBlogException("该节点已被删除");
+            default:
+                throw new NotFoundBlogException("更新对应的博客类型不存在");
         }
     }
 
     private  boolean stringIsNotNull(String s){
-        if (s!=null&&s!="")
+        if (s!=null&&s!=""){
             return true;
+        }
         return false;
     }
 

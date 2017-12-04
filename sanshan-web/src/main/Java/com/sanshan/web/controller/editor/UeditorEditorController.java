@@ -3,9 +3,9 @@ package com.sanshan.web.controller.editor;
 import com.baidu.ueditor.ActionEnter;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.sanshan.pojo.dto.UEditorBlogDTO;
+import com.sanshan.pojo.dto.UeditorBlogDTO;
 import com.sanshan.service.BlogService;
-import com.sanshan.service.editor.UEditorFileService;
+import com.sanshan.service.editor.UeditorFileService;
 import com.sanshan.service.editor.UeditorBlogService;
 import com.sanshan.service.vo.BlogVO;
 import com.sanshan.service.vo.ResponseMsgVO;
@@ -28,11 +28,11 @@ import java.util.stream.Collectors;
 @Slf4j
 @RestController
 @RequestMapping("ueditor-editor")
-public class UEditorEditorController {
+public class UeditorEditorController {
 
 
     @Autowired
-    private UEditorFileService fileService;
+    private UeditorFileService fileService;
 
     @Autowired
     private UeditorBlogService uEditorBlogService;
@@ -76,10 +76,10 @@ public class UEditorEditorController {
     @RequestMapping(value = "query-by-page", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO queryByPage(@RequestParam("pagenum") Integer pagenum
             , @RequestParam("pagesize") Integer pagesize) {
-        ResponseMsgVO<PageInfo<UEditorBlogDTO>> responseMsgVO = new ResponseMsgVO<>();
+        ResponseMsgVO<PageInfo<UeditorBlogDTO>> responseMsgVO = new ResponseMsgVO<>();
         PageHelper.startPage(pagenum, pagesize);
-        List<UEditorBlogDTO> list = uEditorBlogService.queryDtoAll();
-        PageInfo<UEditorBlogDTO> info = new PageInfo(list);
+        List<UeditorBlogDTO> list = uEditorBlogService.queryDtoAll();
+        PageInfo<UeditorBlogDTO> info = new PageInfo(list);
         return responseMsgVO.buildOKWithData(info);
     }
 

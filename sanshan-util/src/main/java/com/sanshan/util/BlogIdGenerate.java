@@ -114,8 +114,9 @@ public final class BlogIdGenerate {
      */
     public final void addIdMap(final Long id, final EditorTypeEnum type) {
         IdMap.put(id, type);
-        if (!(type==EditorTypeEnum.Void_Id))
-           IdExistMap.put(id, type);
+        if (!(type.equals(EditorTypeEnum.Void_Id))){
+            IdExistMap.put(id, type);
+        }
         //log.debug("将Id为{}与对应的类型为{}加入到IdMap集合中", id, type);
     }
 
@@ -234,8 +235,9 @@ public final class BlogIdGenerate {
         if (longs != null && longs.contains(id)) {
             return;
         }
-        if (longs == null)
+        if (longs == null){
             longs = new HashSet<>();
+        }
         //查找之前id对应的key
         preTitle = invertTitleMap.get(id);
         if (!Objects.isNull(preTitle) && preTitle != title) {
@@ -322,8 +324,9 @@ public final class BlogIdGenerate {
         if (longs != null && longs.contains(id)) {
             return;
         }
-        if (longs == null)
+        if (longs == null){
             longs = new HashSet<>();
+        }
         //查找之前id对应的key
         preTag = invertTagMap.get(id);
         if (!Objects.isNull(preTag) && preTag != tag) {
@@ -394,9 +397,15 @@ public final class BlogIdGenerate {
     @SuppressWarnings("Duplicates")
     private Map<Date, Set<Long>> IdDateMap = new TreeMap<>(
             (o1,o2)->{
-                    if (o1.equals(o2)) return 0;
-                    else if (o1.before(o2)) return 1;
-                    else return -1;
+                    if (o1.equals(o2)) {
+                        return 0;
+                    }
+                    else if (o1.before(o2)) {
+                        return 1;
+                    }
+                    else{
+                        return -1;
+                    }
             }
     );
 
@@ -408,8 +417,9 @@ public final class BlogIdGenerate {
         if (longs != null && longs.contains(id)) {
             return;
         }
-        if (longs == null)
+        if (longs == null){
             longs = new HashSet<>();
+        }
         longs.add(id);
         IdDateMap.put(date, longs);
         invertDateMap.put(id, date);
@@ -431,9 +441,15 @@ public final class BlogIdGenerate {
     public final Map<Date, Set<Long>> getIdDateCopy() {
         TreeMap<Date, Set<Long>> copyMap = new TreeMap<>(
                 (o1, o2) -> {
-                    if (o1.equals(o2)) return 0;
-                    else if (o1.before(o2)) return 1;
-                    else return -1;
+                    if (o1.equals(o2)) {
+                        return 0;
+                    }
+                    else if (o1.before(o2)){
+                        return 1;
+                    }
+                    else{
+                        return -1;
+                    }
                 }
         );
         copyMap.putAll(IdDateMap);
@@ -446,9 +462,15 @@ public final class BlogIdGenerate {
         PageInfo pageInfo;
         TreeMap<Date, Set<Long>> copyMap = new TreeMap<>(
                 (o1, o2) -> {
-                    if (o1.equals(o2)) return 0;
-                    else if (o1.before(o2)) return 1;
-                    else return -1;
+                    if (o1.equals(o2)) {
+                        return 0;
+                    }
+                    else if (o1.before(o2)){
+                        return 1;
+                    }
+                    else{
+                        return -1;
+                    }
                 }
         );
         long preRows = pageRows * (pageNum - 1);
@@ -490,22 +512,25 @@ public final class BlogIdGenerate {
         String title = invertTitleMap.get(id);
         Set<Long> titlelongs = IdTitleMap.get(title);
         titlelongs.remove(id);
-        if (titlelongs.size() == 0)
+        if (titlelongs.size() == 0){
             IdTitleMap.remove(title);
+        }
         invertTitleMap.remove(id);
 
         String tag = invertTagMap.get(id);
         Set<Long> taglongs = IdTagMap.get(tag);
         taglongs.remove(id);
-        if (taglongs.size() == 0)
+        if (taglongs.size() == 0){
             IdTagMap.remove(tag);
+        }
         invertTagMap.remove(id);
 
         Date date = invertDateMap.get(id);
         Set<Long> datelongs = IdDateMap.get(date);
         datelongs.remove(id);
-        if (datelongs.size() == 0)
+        if (datelongs.size() == 0){
             IdDateMap.remove(date);
+        }
         invertDateMap.remove(id);
 
         IdMap.put(id, EditorTypeEnum.Void_Id);
@@ -553,10 +578,10 @@ public final class BlogIdGenerate {
     private void switchTypePropertiesToFile(final String mapName, final String description) throws IOException {
         switch (mapName) {
             case "IdMap.properties":
-                PropertiesConvenUtil.IdMapToFile(filename + mapName, IdMap, description);
+                PropertiesConvenUtil.idMapToFile(filename + mapName, IdMap, description);
                 break;
             case "IdExistMap.properties":
-            PropertiesConvenUtil.IdMapToFile(filename + mapName, IdExistMap, description);
+            PropertiesConvenUtil.idMapToFile(filename + mapName, IdExistMap, description);
                 break;
             case "IdDateMap.properties":
                 PropertiesConvenUtil.setLongDateMapToFile(filename + mapName, IdDateMap, description);
@@ -568,14 +593,16 @@ public final class BlogIdGenerate {
                 PropertiesConvenUtil.setLongStringToFile(filename + mapName, IdTitleMap, description);
                 break;
             case "invertTitleMap.properties":
-                PropertiesConvenUtil.LongStringMapToFile(filename + mapName, invertTitleMap, description);
+                PropertiesConvenUtil.longStringMapToFile(filename + mapName, invertTitleMap, description);
                 break;
             case "invertTagMap.properties":
-                PropertiesConvenUtil.LongStringMapToFile(filename + mapName, invertTagMap, description);
+                PropertiesConvenUtil.longStringMapToFile(filename + mapName, invertTagMap, description);
                 break;
             case "invertDateMap.properties":
-                PropertiesConvenUtil.LongDateMapToFile(filename + mapName, invertDateMap, description);
+                PropertiesConvenUtil.longDateMapToFile(filename + mapName, invertDateMap, description);
                 break;
+             default:
+                 break;
         }
     }
 

@@ -44,8 +44,9 @@ public class BlogController {
     public ResponseMsgVO queryByTag(@RequestParam("tag")String tag){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         List<BlogVO> list = blogService.getBlogByTag(tag);
-        if (Objects.isNull(list))
+        if (Objects.isNull(list)){
             return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND,"未知的标签");
+        }
         return responseMsgVO.buildOKWithData(list);
     }
 
@@ -53,8 +54,9 @@ public class BlogController {
     public ResponseMsgVO queryTagAll(){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         List list =blogService.queryTagAll();
-        if (Objects.isNull(list))
+        if (Objects.isNull(list)){
             return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND,"没有标签");
+        }
         return responseMsgVO.buildOKWithData(list);
     }
 
@@ -62,8 +64,9 @@ public class BlogController {
     public ResponseMsgVO queryTagByPage(@RequestParam(name = "pageRows")long pageRows,@RequestParam(name = "pageNum")long pageNum){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         PageInfo pageInfo =blogService.queryTagByPage(pageRows,pageNum);
-        if (Objects.isNull(pageInfo.getCompleteData()))
+        if (Objects.isNull(pageInfo.getCompleteData())){
             return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND,"没有标签");
+        }
         return responseMsgVO.buildOKWithData(pageInfo);
     }
 
@@ -71,8 +74,9 @@ public class BlogController {
     public ResponseMsgVO  queryByTitle(@RequestParam("title")String title){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         List<BlogVO> list = blogService.getBlogByTitle(title);
-        if (Objects.isNull(list))
+        if (Objects.isNull(list)){
             return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND,"未知的标题");
+        }
         return responseMsgVO.buildOKWithData(list);
     }
 
@@ -80,8 +84,9 @@ public class BlogController {
     public ResponseMsgVO queryTitleAll(){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         List list =blogService.queryTitleAll();
-        if (Objects.isNull(list))
+        if (Objects.isNull(list)){
             return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND,"没有标题");
+        }
         return responseMsgVO.buildOKWithData(list);
     }
 
@@ -90,8 +95,9 @@ public class BlogController {
     public ResponseMsgVO queryTitleByPage(@RequestParam("pageRows")long pageRows,@RequestParam(name = "pageNum")long pageNum){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         PageInfo pageInfo =blogService.queryTitleByPage(pageRows,pageNum);
-        if (Objects.isNull(pageInfo.getCompleteData()))
+        if (Objects.isNull(pageInfo.getCompleteData())){
             return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND,"没有标题");
+        }
         return responseMsgVO.buildOKWithData(pageInfo);
     }
 
@@ -102,8 +108,9 @@ public class BlogController {
         Date date= null;
         date = format.parse(dateString);
         List<BlogVO> list = blogService.getBlogByDate(date);
-        if (Objects.isNull(list))
+        if (Objects.isNull(list)){
             return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND, "无效的日期");
+        }
         return responseMsgVO.buildOKWithData(list);
     }
 
@@ -111,8 +118,9 @@ public class BlogController {
     public ResponseMsgVO queryDateAll(){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         List list =blogService.queryDateAll();
-        if (Objects.isNull(list))
+        if (Objects.isNull(list)){
             return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND, "没有日期");
+        }
         return  responseMsgVO.buildOKWithData(list);
     }
 
@@ -120,8 +128,9 @@ public class BlogController {
     public ResponseMsgVO queryDateByPage(@RequestParam(name = "pageRows") long pageRows, @RequestParam(name = "pageNum") long pageNum) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         PageInfo pageInfo = blogService.queryDateByPage(pageRows, pageNum);
-        if (Objects.isNull(pageInfo.getCompleteData()))
+        if (Objects.isNull(pageInfo.getCompleteData())){
             return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND, "没有日期");
+        }
         return responseMsgVO.buildOKWithData(pageInfo);
     }
 

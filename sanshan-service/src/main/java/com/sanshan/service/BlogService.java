@@ -1,7 +1,7 @@
 package com.sanshan.service;
 
 import com.sanshan.pojo.dto.MarkDownBlogDTO;
-import com.sanshan.pojo.dto.UEditorBlogDTO;
+import com.sanshan.pojo.dto.UeditorBlogDTO;
 import com.sanshan.service.editor.MarkDownBlogService;
 import com.sanshan.service.editor.UeditorBlogService;
 import com.sanshan.service.vo.BlogVO;
@@ -9,6 +9,7 @@ import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.BlogIdGenerate;
 import com.sanshan.util.PageInfo;
 import com.sanshan.util.exception.MapFoundNullException;
+import com.sanshan.util.exception.NotFoundBlogException;
 import com.sanshan.util.info.EditorTypeEnum;
 import com.sanshan.util.info.PosCodeEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -44,10 +45,12 @@ public class BlogService {
                     return i;
                 case Void_Id:
                     continue;
+                default:
+                     break;
             }
         }
         log.error("获取当前ID错误:{}", id);
-        throw new NullPointerException("未知错误");
+        throw new NotFoundBlogException("未找到当前博客Id");
     }
 
     /**
@@ -59,8 +62,9 @@ public class BlogService {
     public List<BlogVO> getBlogByTag(String tag) {
         List<BlogVO> blogVOS = new LinkedList<>();
         Set<Long> longs = blogIdGenerate.getTagMap(tag);
-        if (Objects.isNull(longs))
+        if (Objects.isNull(longs)){
             return null;
+        }
         Long[] a = {};
         Long[] ids = longs.toArray(a);
         Map<Long, String> titleMap = blogIdGenerate.getInvertIdTitleMap();
@@ -111,8 +115,9 @@ public class BlogService {
     public List<BlogVO> getBlogByTitle(String title) {
         List<BlogVO> blogVOS = new LinkedList<>();
         Set<Long> longs = blogIdGenerate.getTitleMap(title);
-        if (Objects.isNull(longs))
+        if (Objects.isNull(longs)){
             return null;
+        }
         Long[] a = {};
         Long[] ids = longs.toArray(a);
         Map<Long, String> titleMap = blogIdGenerate.getInvertIdTitleMap();
@@ -166,8 +171,9 @@ public class BlogService {
     public List<BlogVO> getBlogByDate(Date date) {
         List<BlogVO> blogVOS = new LinkedList<>();
         Set<Long> longs = blogIdGenerate.getDateMap(date);
-        if (Objects.isNull(longs))
+        if (Objects.isNull(longs)){
             return null;
+        }
         Long[] a = {};
         Long[] ids = longs.toArray(a);
         Map<Long, String> titleMap = blogIdGenerate.getInvertIdTitleMap();
@@ -195,6 +201,8 @@ public class BlogService {
                 break;
             case Void_Id:
                 break;
+            default:
+                 break;
         }
         return blog;
     }
@@ -218,7 +226,9 @@ public class BlogService {
                 }
                 break;
             case Void_Id:
-                throw new NullPointerException("无法删除 ID已失效");
+                throw new NotFoundBlogException("无法删除 ID已失效");
+             default:
+                 break;
         }
         responseMsgVO.buildOK();
     }
@@ -264,8 +274,9 @@ public class BlogService {
     }
 
     protected void switchTypeAssembleBlogList(Long id, Map<Long, String> titleMap, List<BlogVO> blogVOS, EditorTypeEnum type) {
-        if (type==null)
+        if (type==null){
             throw new MapFoundNullException();
+        }
         switch (type) {
             case MarkDown_EDITOR:
                 MarkDownBlogDTO m = new MarkDownBlogDTO();
@@ -274,13 +285,15 @@ public class BlogService {
                 blogVOS.add(new BlogVO(m));
                 break;
             case UEDITOR_EDITOR:
-                UEditorBlogDTO u = new UEditorBlogDTO();
+                UeditorBlogDTO u = new UeditorBlogDTO();
                 u.setId(id);
                 u.setTitle(titleMap.get(id));
                 blogVOS.add(new BlogVO(u));
                 break;
             case Void_Id:
                 break;
+             default:
+                 break;
         }
     }
 

@@ -116,7 +116,7 @@ public final class BlogIdGenerate {
         IdMap.put(id, type);
         if (!(type==EditorTypeEnum.Void_Id))
            IdExistMap.put(id, type);
-        log.debug("将Id为{}与对应的类型为{}加入到IdMap集合中", id, type);
+        //log.debug("将Id为{}与对应的类型为{}加入到IdMap集合中", id, type);
     }
 
 
@@ -126,7 +126,7 @@ public final class BlogIdGenerate {
      * @return 返回设置ID
      */
     public final long getId() {
-        log.debug("获取当前系统新的博客Id,可能是用于新增博客");
+        //log.debug("获取当前系统新的博客Id,可能是用于新增博客");
         return IdMap.size();
 
     }
@@ -159,7 +159,7 @@ public final class BlogIdGenerate {
                 }
         );
         copyMap.putAll(IdExistMap);
-        log.debug("拷贝发布IdMap集合的内容");
+        //log.debug("拷贝发布IdMap集合的内容");
         return copyMap;
     }
 
@@ -198,13 +198,13 @@ public final class BlogIdGenerate {
 
 
     public final long getSize() {
-        log.debug("获取当前IdMap文件长度");
+        //log.debug("获取当前IdMap文件长度");
         return IdMap.size();
     }
 
 
     public final EditorTypeEnum getType(final Long id) {
-        log.debug("获取ID为{}的博客类型", id);
+        //log.debug("获取ID为{}的博客类型", id);
         if (IdMap.containsKey(id)){
             return IdMap.get(id);
         }else {
@@ -249,12 +249,12 @@ public final class BlogIdGenerate {
         IdTitleMap.put(title, longs);
         //加入到已经成为该Id对应的Title序列中
         invertTitleMap.put(id, title);
-        log.debug("上传标题为{},id为{}的新IdTitle索引 或许该索引项已存在 则不加", title, id);
+        //log.debug("上传标题为{},id为{}的新IdTitle索引 或许该索引项已存在 则不加", title, id);
     }
 
     public final Set<Long> getTitleMap(final String title) {
         Set<Long> longs = IdTitleMap.get(title);
-        log.debug("查找title为{}的Id集合", title);
+        //log.debug("查找title为{}的Id集合", title);
         return longs;
     }
 
@@ -266,7 +266,7 @@ public final class BlogIdGenerate {
     public final Map<String, Set<Long>> getIdTitleCopy() {
         HashMap<String, Set<Long>> copyMap = new HashMap<>();
         copyMap.putAll(IdTitleMap);
-        log.debug("拷贝发布IdTitleMap集合的内容");
+        //log.debug("拷贝发布IdTitleMap集合的内容");
         return copyMap;
     }
 
@@ -278,7 +278,7 @@ public final class BlogIdGenerate {
     public final Map<Long, String> getInvertIdTitleMap() {
         HashMap<Long, String> copyMap = new HashMap<>();
         copyMap.putAll(invertTitleMap);
-        log.debug("拷贝发布IdTitleMap集合的内容");
+        //log.debug("拷贝发布IdTitleMap集合的内容");
         return copyMap;
     }
 
@@ -337,12 +337,12 @@ public final class BlogIdGenerate {
         IdTagMap.put(tag, longs);
         //加入到已经成为该Id对应的tag序列中
         invertTagMap.put(id, tag);
-        log.debug("上传标签为{},id为{}的新IdTag索引 或许该索引项已存在 则不加", tag, id);
+        //log.debug("上传标签为{},id为{}的新IdTag索引 或许该索引项已存在 则不加", tag, id);
     }
 
     public final Set<Long> getTagMap(final String tag) {
         Set<Long> longs = IdTagMap.get(tag);
-        log.debug("查找tag为{}的Id集合", tag);
+        //log.debug("查找tag为{}的Id集合", tag);
         return longs;
     }
 
@@ -354,7 +354,7 @@ public final class BlogIdGenerate {
     public final Map<String, Set<Long>> getIdTagCopy() {
         HashMap<String, Set<Long>> idTagMapCopy = new HashMap<>();
         idTagMapCopy.putAll(IdTagMap);
-        log.debug("拷贝发布IdTagMap集合的内容");
+        //log.debug("拷贝发布IdTagMap集合的内容");
         return idTagMapCopy;
     }
 
@@ -383,7 +383,7 @@ public final class BlogIdGenerate {
     public final Map<Long, String> getInvertTagMap() {
         HashMap<Long, String> invertTagMapCopy = new HashMap<>();
         invertTagMapCopy.putAll(invertTagMap);
-        log.debug("拷贝发布InvertTagMap集合中的内容");
+        //log.debug("拷贝发布InvertTagMap集合中的内容");
         return invertTagMapCopy;
     }
 
@@ -413,12 +413,12 @@ public final class BlogIdGenerate {
         longs.add(id);
         IdDateMap.put(date, longs);
         invertDateMap.put(id, date);
-        log.debug("上传日期为{},id为{}的新IdDate索引 或许该索引项已存在 则不加", date, id);
+        //log.debug("上传日期为{},id为{}的新IdDate索引 或许该索引项已存在 则不加", date, id);
     }
 
     public final Set<Long> getDateMap(final Date date) {
         Set<Long> longs = IdDateMap.get(date);
-        log.debug("查找日期为{}的博客", date);
+        //log.debug("查找日期为{}的博客", date);
         return longs;
     }
 
@@ -437,7 +437,7 @@ public final class BlogIdGenerate {
                 }
         );
         copyMap.putAll(IdDateMap);
-        log.debug("拷贝发布IdDateMap集合的内容");
+        //log.debug("拷贝发布IdDateMap集合的内容");
         return copyMap;
     }
 
@@ -476,7 +476,7 @@ public final class BlogIdGenerate {
     public final Map<Long, Date> getInvertDateMap() {
         Map<Long, Date> copyMap = new TreeMap<>();
         copyMap.putAll(invertDateMap);
-        log.debug("拷贝发布InvertDateMap集合的内容");
+        //log.debug("拷贝发布InvertDateMap集合的内容");
         return copyMap;
     }
 
@@ -510,7 +510,7 @@ public final class BlogIdGenerate {
 
         IdMap.put(id, EditorTypeEnum.Void_Id);
         IdExistMap.remove(id);
-        log.debug("删除该Id对应的倒排索引对应项");
+        //log.debug("删除该Id对应的倒排索引对应项");
     }
 
 

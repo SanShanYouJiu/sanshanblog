@@ -9,6 +9,9 @@ import com.sanshan.util.info.EditorTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Isolation;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.TreeMap;
@@ -30,6 +33,7 @@ public class DataBaseRollBack {
     private BlogIdGenerate blogIdGenerate;
 
     //检查是否需要从数据库恢复数据
+    @Transactional(isolation = Isolation.READ_COMMITTED,propagation = Propagation.REQUIRED)
     public void inspectDataConsistency() {
         //数据库与BlogIdGenerate的事物完整性检查
         Long initTime = System.currentTimeMillis();

@@ -77,7 +77,7 @@ public class ControllerAop {
             //result.setCode(ResultBean.NO_LOGIN);
         } else {
             log.error(pjp.getSignature() + " error ", e);
-            //TODO 未知的异常，应该格外注意，可以发送邮件通知等
+            //TODO 未知的异常，应该格外注意，可以发送邮件通知等 生产环境关闭
             result.setMsg(e.toString());
             result.setStatus(PosCodeEnum.INTER_ERROR.getStatus());
         }

@@ -2,7 +2,6 @@ package com.sanshan.web.config.webaseconfig;
 
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
-import com.sanshan.web.config.javaconfig.TransactionConfig;
 import com.sanshan.web.config.javaconfig.auxiliary.ControllerAop;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
@@ -26,10 +25,13 @@ import java.util.List;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan("com.sanshan.web.controller")
+@ComponentScan(value = "com.sanshan.web.controller",excludeFilters = {
+        @ComponentScan.Filter(
+                type= FilterType.ANNOTATION,
+                value = {Configuration.class})
+})
 @PropertySource("file:D:/SanShanBlog.properties")
 @EnableAspectJAutoProxy(proxyTargetClass = true)//开启切面
-@Import(TransactionConfig.class)
 public class WebConfig extends WebMvcConfigurerAdapter {
 
     @Bean

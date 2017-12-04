@@ -1,6 +1,7 @@
 package com.sanshan.web.controller.vote;
 
-import com.sanshan.service.VoteService;
+import com.sanshan.service.vote.BlogVoteInfoService;
+import com.sanshan.service.vote.VoteService;
 import com.sanshan.service.vo.ResponseMsgVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -18,6 +19,9 @@ public class VoteController {
 
     @Autowired
     private VoteService voteService;
+
+    @Autowired
+    private BlogVoteInfoService blogInfoService;
 
 
     @RequestMapping(value = "/favour",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -37,8 +41,15 @@ public class VoteController {
     @RequestMapping(value = "/blog-info", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO blogInfo(@RequestParam(value = "blogId") Long blogId) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
-        voteService.queryBlogInfo(blogId,responseMsgVO);
+        blogInfoService.queryBlogInfo(blogId,responseMsgVO);
         return responseMsgVO;
+    }
+
+    @RequestMapping(value = "/ip-vote-info",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public  ResponseMsgVO ipVoteInfo(@RequestParam(value = "ip")String ip){
+        ResponseMsgVO msgVO = new ResponseMsgVO();
+        voteService.ipVoteInfo(ip, msgVO);
+        return msgVO;
     }
 
 }

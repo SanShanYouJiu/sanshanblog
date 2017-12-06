@@ -22,8 +22,8 @@ public class IpBlogVoteDTO {
 
     private Long blogId;
 
-    private Boolean favour;
+    private Boolean favour =false;
 
-    private Boolean tread;
+    private Boolean tread = false;
 
 }

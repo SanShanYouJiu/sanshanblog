@@ -95,7 +95,6 @@ public class ControllerAop {
             result= ResponseEntity.badRequest().body(msgVO);
         }else {
             log.error(pjp.getSignature() + " error ", e);
-            //TODO 未知的异常，应该格外注意，可以发送邮件通知等
            result= ResponseEntity.badRequest().body(msgVO.buildWithPosCode(PosCodeEnum.UNKONW_EXCEPTION));
         }
         return result;

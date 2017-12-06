@@ -24,9 +24,9 @@ public class IpBlogVoteDO extends BaseDO{
     @Column(name = "blog_id")
     private Long blogId;
 
-    private Boolean favour;
+    private Boolean favour = false;
 
-    private Boolean tread;
+    private Boolean tread = false;
 
     private String extra;
 
@@ -37,9 +37,11 @@ public class IpBlogVoteDO extends BaseDO{
         this.blogId = blogId;
         if (vote){
             favour = true;
+            tread=false;
         }
         else{
             tread = true;
+            favour=false;
         }
     }
 }

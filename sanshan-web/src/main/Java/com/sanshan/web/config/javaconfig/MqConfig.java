@@ -1,55 +1,77 @@
 package com.sanshan.web.config.javaconfig;
 
-
-import com.sanshan.web.config.javaconfig.auxiliary.BlogOperationListener;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.sanshan.web.config.javaconfig.auxiliary.Receiver;
+import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.connection.CachingConnectionFactory;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
+import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
-import org.springframework.data.redis.listener.PatternTopic;
-import org.springframework.data.redis.listener.RedisMessageListenerContainer;
-import org.springframework.data.redis.listener.Topic;
-import org.springframework.data.redis.listener.adapter.MessageListenerAdapter;
-
-import java.util.*;
 
 /**
- 用的是Redis自带的 消息发布订阅配置 这个Redis自带的MQ性能不是很好 暂时在这里吧
+ * 采用RabbitMQ作为MQ
+ * 为了以后可能多个集群需要通信的情况下使用
  */
 @Configuration
 public class MqConfig {
-    @Autowired
-    JedisConnectionFactory connectionFactory;
 
-    @Autowired
-    BlogOperationListener listener;
+    public final static String queueName = "sanshanblog-data";
+
+    @Value("${rabbitMq.hostName}")
+    private String hostName;
+
 
     @Bean
-    public PatternTopic cacheTopic(){
-        PatternTopic patternTopic = new PatternTopic("blog");
-        return patternTopic;
+    public ConnectionFactory connectionFactory() {
+        return new CachingConnectionFactory(hostName);
+    }
+
+
+    @Bean
+    public AmqpAdmin amqpAdmin() {
+        return new RabbitAdmin(connectionFactory());
     }
 
     @Bean
-     public RedisMessageListenerContainer redisMessageListenerContainer(MessageListenerAdapter listenerAdapter,
-                                                                        PatternTopic patternTopic){
-         RedisMessageListenerContainer redisMessageListenerContainer = new RedisMessageListenerContainer();
-         redisMessageListenerContainer.setConnectionFactory(connectionFactory);
-         Map<MessageListenerAdapter, Collection<? extends Topic>>map = new HashMap<>(5);
-         List<Topic> list = new ArrayList<Topic>();
-         list.add(patternTopic);
-         map.put(listenerAdapter, list);
-         redisMessageListenerContainer.setMessageListeners(map);
-         return redisMessageListenerContainer;
-     }
+    public RabbitTemplate rabbitTemplate() {
+        return new RabbitTemplate(connectionFactory());
+    }
+
+    @Bean
+    Queue queue() {
+        return new Queue(queueName, false);
+    }
+
+    @Bean
+    TopicExchange exchange() {
+        return new TopicExchange("sanshanblog-data-exchange");
+    }
+
+    @Bean
+    Binding binding(Queue queue, TopicExchange exchange) {
+        return BindingBuilder.bind(queue).to(exchange).with(queueName);
+    }
 
 
-     @Bean
-     public MessageListenerAdapter listenerAdapter(){
-         MessageListenerAdapter messageListenerAdapter = new MessageListenerAdapter(listener,
-                 "handle");
-        return messageListenerAdapter;
-     }
+    @Bean
+    SimpleMessageListenerContainer container(ConnectionFactory connectionFactory,
+                                             MessageListenerAdapter listenerAdapter) {
+        SimpleMessageListenerContainer container = new SimpleMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        container.setQueueNames(queueName);
+        container.setMessageListener(listenerAdapter);
+        return container;
+    }
 
+
+
+    @Bean
+    MessageListenerAdapter listenerAdapter(Receiver receiver) {
+        return new MessageListenerAdapter(receiver, "receiveMessage");
+    }
 
 }

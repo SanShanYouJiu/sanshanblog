@@ -86,7 +86,7 @@ public class VoteService {
      * @param responseMsgVO
      */
     @Transactional(isolation = Isolation.READ_COMMITTED,propagation = Propagation.REQUIRES_NEW,rollbackFor = RuntimeException.class)
-    public void anonymousVote(String ip, Long blogId, boolean vote, ResponseMsgVO responseMsgVO) {
+    public synchronized void anonymousVote(String ip, Long blogId, boolean vote, ResponseMsgVO responseMsgVO) {
         //首先检查是否可以投票
         if (inspectVote(ip, blogId, vote, responseMsgVO)) {
             //进行投票
@@ -128,7 +128,7 @@ public class VoteService {
      * 投票事务一致性检查
      * @return
      */
-    private void voteTransactionConsistentCheck(String ip,Long blogId,Boolean vote) {
+    private   void voteTransactionConsistentCheck(String ip,Long blogId,Boolean vote) {
         setReverseVote(ip,blogId,vote);
         //具分为俩种情况 一种是没有投过的 一种是投过但是这次投了相反的票
         Boolean ipVote = (Boolean) redisTemplate.opsForHash().get(IP_VOTE_BLOG_ID_EXIST_PREFIX + ip, blogId);

@@ -72,6 +72,7 @@ public class PropertiesConvenUtil {
                             DateFormat fmt2 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
                             Date date2 = fmt2.parse((String) entry.getValue());
                             map.put(Long.valueOf((String) entry.getKey()), date2);
+                            break;
                          default:
                              throw  new PropertiesConventException("没有这个转换类型");
                     }

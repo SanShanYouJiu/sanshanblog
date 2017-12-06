@@ -112,7 +112,7 @@ public final class BlogIdGenerate {
      * @param id
      * @param type
      */
-    public final void addIdMap(final Long id, final EditorTypeEnum type) {
+    public final  synchronized  void addIdMap(final Long id, final EditorTypeEnum type) {
         IdMap.put(id, type);
         if (!(type.equals(EditorTypeEnum.Void_Id))){
             IdExistMap.put(id, type);
@@ -230,7 +230,7 @@ public final class BlogIdGenerate {
      */
     private String preTitle;
 
-    public final void putTitle(final String title, final Long id) {
+    public final synchronized void putTitle(final String title, final Long id) {
         Set<Long> longs = IdTitleMap.get(title);
         if (longs != null && longs.contains(id)) {
             return;
@@ -319,7 +319,7 @@ public final class BlogIdGenerate {
      */
     private String preTag;
 
-    public final void putTag(final String tag, final Long id) {
+    public final synchronized void putTag(final String tag, final Long id) {
         Set<Long> longs = IdTagMap.get(tag);
         if (longs != null && longs.contains(id)) {
             return;
@@ -412,7 +412,7 @@ public final class BlogIdGenerate {
     private Map<Long, Date> invertDateMap = new HashMap<>();
 
 
-    public final void putDate(final Date date, final Long id) {
+    public final synchronized void putDate(final Date date, final Long id) {
         Set<Long> longs = IdDateMap.get(date);
         if (longs != null && longs.contains(id)) {
             return;

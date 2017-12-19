@@ -12,9 +12,7 @@
 3. 目前使用的是JWT+Spring security进行单点登录的安全解决方案
 
 4. 对Tomcat进行了GC参数调整 目前参数为下：
-> JAVA_OPTS="-server -Xms400m -Xmx400m -XX:PermSize=32M -XX:MaxNewSize=128m -XX:MaxPermSize=64m -XX:NewRatio=3 -Djava.awt.headless=true "
-
-粘贴到Tomcat目录下的catalina.sh(linux环境)或catalina.bat(windows环境) 中第一行进行使用
+> JAVA_OPTS="-server -Xms800m -Xmx800m -XX:PermSize=64M -XX:MaxNewSize=256m -XX:MaxPermSize=128m   -Djava.awt.headless=true "
 
 
 ##  总体设计 

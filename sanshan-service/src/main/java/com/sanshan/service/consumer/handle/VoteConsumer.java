@@ -39,40 +39,66 @@ public class VoteConsumer {
         return t;
     });
 
-    //TODO 太长了  必须拆
+
     protected void voteConsumerProcess() {
         pool.execute(() -> {
             while (!VoteService.consumerQueue.isEmpty()) {
                 if (log.isDebugEnabled()){
                     log.debug("从VoteService中的consumer获得数据,即将存入Mysql中");
                 }
-                VoteDTO voteVo = VoteService.consumerQueue.poll();
-                //将VoteVo存储到Mysql中
-                IpBlogVoteDO ipBlogVoteDO = new IpBlogVoteDO(new Date(),new Date(),voteVo.getId(), voteVo.getBlogId(), voteVo.getVote());
-                ipBlogVoteMapper.insert(ipBlogVoteDO);
-                if (voteVo.getVote()){
-                    int rows = blogVoteMapper.incrFavours(voteVo.getBlogId());
-                    if (rows == 0) {
-                        if (log.isDebugEnabled()){
-                            log.debug("blogVote表中不存在该行记录,改为插入一条新纪录");
-                        }
-                        BlogVoteDO blogVoteDO = new BlogVoteDO(new Date(),new Date(),voteVo.getBlogId(), 1, 0);
-                        blogVoteMapper.insert(blogVoteDO);
-                    }
+                VoteDTO voteDTO = VoteService.consumerQueue.poll();
+                //将VoteVo拆为IpBlogVote部分存储到Mysql中
+                saveIpBlogVoteDO(voteDTO);
+                if (voteDTO.getVote()){
+                    incrFavour(voteDTO);
                 }
                 else {
-                    int rows = blogVoteMapper.incrTreads(voteVo.getBlogId());
-                    if (rows == 0) {
-                        if (log.isDebugEnabled()){
-                            log.debug("blogVote表中不存在该行记录,改为插入一条新纪录");
-                        }
-                        BlogVoteDO blogVoteDO = new BlogVoteDO(new Date(),new Date(),voteVo.getBlogId(),0,1);
-                        blogVoteMapper.insert(blogVoteDO);
-                    }
+                    incrTreads(voteDTO);
                 }
             }
         });
     }
+
+    /**
+     *
+     * @param voteDTO
+     */
+    private  void saveIpBlogVoteDO(VoteDTO voteDTO){
+        //将VoteDTO存储到Mysql中
+        IpBlogVoteDO ipBlogVoteDO = new IpBlogVoteDO(new Date(),new Date(),voteDTO.getId(), voteDTO.getBlogId(), voteDTO.getVote());
+        ipBlogVoteMapper.insert(ipBlogVoteDO);
+    }
+
+    /**
+     *
+     * @param voteDTO
+     */
+    private void incrFavour(VoteDTO voteDTO){
+        int rows = blogVoteMapper.incrFavours(voteDTO.getBlogId());
+        if (rows == 0) {
+            if (log.isDebugEnabled()){
+                log.debug("blogVote表中不存在该行记录,改为插入一条新纪录");
+            }
+            BlogVoteDO blogVoteDO = new BlogVoteDO(new Date(),new Date(),voteDTO.getBlogId(), 1, 0);
+            blogVoteMapper.insert(blogVoteDO);
+        }
+    }
+
+    /**
+     *
+     * @param voteDTO
+     */
+    private void  incrTreads(VoteDTO voteDTO){
+        int rows = blogVoteMapper.incrTreads(voteDTO.getBlogId());
+        if (rows == 0) {
+            if (log.isDebugEnabled()){
+                log.debug("blogVote表中不存在该行记录,改为插入一条新纪录");
+            }
+            BlogVoteDO blogVoteDO = new BlogVoteDO(new Date(),new Date(),voteDTO.getBlogId(),0,1);
+            blogVoteMapper.insert(blogVoteDO);
+        }
+    }
+
 
 
 }

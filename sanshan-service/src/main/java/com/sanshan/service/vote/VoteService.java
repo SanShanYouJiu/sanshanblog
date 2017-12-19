@@ -155,7 +155,7 @@ public class VoteService {
 
     /**
      *减少本次投票相反的一方数目减一
-     * TODO 讲这里的数据库操作定期执行 否则打开数据库连接会太过频繁
+     * TODO 讲这里的数据库操作定期执行（存入到相关的consumer中 否则打开数据库连接会太过频繁
      * @param blogId
      * @param vote
      */

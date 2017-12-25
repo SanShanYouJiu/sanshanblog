@@ -8,9 +8,10 @@ import java.io.Serializable;
  */
 @Data
 public class VoteDTO implements Serializable {
-    private static final long serialVersionUID = -7033015867655070467L;
 
-    private String id;
+    private static final long serialVersionUID = -7095218826096566909L;
+
+    private String ip;
 
     private Long blogId;
 
@@ -19,16 +20,24 @@ public class VoteDTO implements Serializable {
     public VoteDTO() {
     }
 
-    public VoteDTO(String id, long blogId, boolean vote) {
-        this.id = id;
+   public   VoteDTO addVote(String ip, long blogId, boolean vote){
+       this.ip = ip;
+       this.blogId = blogId;
+       this.vote = vote;
+       return  this;
+   }
+
+    public  VoteDTO decrVote(String ip, long blogId, boolean vote){
+        this.ip = ip;
         this.blogId = blogId;
         this.vote = vote;
+        return  this;
     }
 
     @Override
     public String toString() {
-        return "VoteVo{" +
-                "id=" + id +
+        return "VoteDTO{" +
+                "ip='" + ip + '\'' +
                 ", blogId=" + blogId +
                 ", vote=" + vote +
                 '}';

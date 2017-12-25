@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author sanshan
  * www.85432173@qq.com
  * 投票的相关变化
+ * TODO  缓存必须要保证不需要可用性
  */
 @Service
 @Slf4j
@@ -64,8 +64,12 @@ public class VoteService {
         return t;
     });
 
-    //用于削峰 || 或者使用消息队列 还在考虑
-    public static ConcurrentLinkedQueue<VoteDTO> consumerQueue = new ConcurrentLinkedQueue<VoteDTO>();
+    //投票增加的处理队列
+    public static ConcurrentLinkedQueue<VoteDTO> voteAddConsumerQueue = new ConcurrentLinkedQueue<VoteDTO>();
+
+    //投票减少的处理队列
+    public static ConcurrentLinkedQueue<VoteDTO> voteDecrConsumerQueue = new ConcurrentLinkedQueue<VoteDTO>();
+
 
 
 
@@ -155,21 +159,18 @@ public class VoteService {
 
     /**
      *减少本次投票相反的一方数目减一
-     * TODO 讲这里的数据库操作定期执行（存入到相关的consumer中 否则打开数据库连接会太过频繁
+     * 这里的数据库操作定期执行（存入到相关的consumer中 否则打开数据库连接会太过频繁
      * @param blogId
      * @param vote
      */
     public void   decrReverseVotes(String ip,Long blogId,Boolean vote) {
         if (vote) {
             redisTemplate.opsForValue().increment(BLOG_VOTE_THREADS_PREFIX + blogId, -1);
-            blogVoteMapper.decrTreads(blogId);
-            ipBlogVoteMapper.deleteVoteTreadByBlogId(ip, blogId);
         } else {
             redisTemplate.opsForValue().increment(BLOG_VOTE_FAVOURS_PREFIX + blogId, -1);
-            blogVoteMapper.decrFavours(blogId);
-            ipBlogVoteMapper.deleteVoteFavourByBlogId(ip, blogId);
-
         }
+        VoteDTO voteDTO = new VoteDTO();
+        voteDecrConsumerQueue.add(voteDTO.decrVote(ip,blogId,vote));
     }
 
 
@@ -188,7 +189,7 @@ public class VoteService {
 
     /**
      * consumer线程定时对Vote信息进行处理
-     *
+     * 这里是增加的投票信息
      * @param ip
      * @param blogId
      * @param vote
@@ -196,9 +197,10 @@ public class VoteService {
     public void saveBlogVoteInfo(String ip, Long blogId, Boolean vote) {
         pool.execute(() -> {
             if (log.isDebugEnabled()) {
-                log.debug("将BlogId为:{}的投票为:{}组合而成的VoteDTO传输到Consumer线程中进行处理", blogId, vote);
+                log.debug("将BlogId为:{}的投票为:{}组合而成的VoteDTO传输到voteAddConsumerQueue线程中进行处理", blogId, vote);
             }
-            consumerQueue.add(new VoteDTO(ip, blogId, vote));
+            VoteDTO voteDTO = new VoteDTO();
+            voteAddConsumerQueue.add(voteDTO.addVote(ip,blogId,vote));
         });
     }
 

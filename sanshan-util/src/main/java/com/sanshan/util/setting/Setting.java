@@ -65,5 +65,44 @@ public class Setting implements Serializable {
      */
     private Boolean isCommentChecked;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Setting)) return false;
+        Setting setting = (Setting) o;
+        if (getDomain() != null ? !getDomain().equals(setting.getDomain()) : setting.getDomain() != null) return false;
+        if (getIsEmailLogin() != null ? !getIsEmailLogin().equals(setting.getIsEmailLogin()) : setting.getIsEmailLogin() != null)
+            return false;
+        if (getAccountLockCount() != null ? !getAccountLockCount().equals(setting.getAccountLockCount()) : setting.getAccountLockCount() != null)
+            return false;
+        if (getAccountLockTime() != null ? !getAccountLockTime().equals(setting.getAccountLockTime()) : setting.getAccountLockTime() != null)
+            return false;
+        if (getCookiePath() != null ? !getCookiePath().equals(setting.getCookiePath()) : setting.getCookiePath() != null)
+            return false;
+        if (getCookieDomain() != null ? !getCookieDomain().equals(setting.getCookieDomain()) : setting.getCookieDomain() != null)
+            return false;
+        if (getIsRegisterEnabled() != null ? !getIsRegisterEnabled().equals(setting.getIsRegisterEnabled()) : setting.getIsRegisterEnabled() != null)
+            return false;
+        if (getDisabledUsernames() != null ? !getDisabledUsernames().equals(setting.getDisabledUsernames()) : setting.getDisabledUsernames() != null)
+            return false;
+        if (getIsCommentEnabled() != null ? !getIsCommentEnabled().equals(setting.getIsCommentEnabled()) : setting.getIsCommentEnabled() != null)
+            return false;
+        return getIsCommentChecked() != null ? getIsCommentChecked().equals(setting.getIsCommentChecked()) : setting.getIsCommentChecked() == null;
+    }
 
+    @Override
+    public int hashCode() {
+        int result = super.hashCode();
+        result = 31 * result + (getDomain() != null ? getDomain().hashCode() : 0);
+        result = 31 * result + (getIsEmailLogin() != null ? getIsEmailLogin().hashCode() : 0);
+        result = 31 * result + (getAccountLockCount() != null ? getAccountLockCount().hashCode() : 0);
+        result = 31 * result + (getAccountLockTime() != null ? getAccountLockTime().hashCode() : 0);
+        result = 31 * result + (getCookiePath() != null ? getCookiePath().hashCode() : 0);
+        result = 31 * result + (getCookieDomain() != null ? getCookieDomain().hashCode() : 0);
+        result = 31 * result + (getIsRegisterEnabled() != null ? getIsRegisterEnabled().hashCode() : 0);
+        result = 31 * result + (getDisabledUsernames() != null ? getDisabledUsernames().hashCode() : 0);
+        result = 31 * result + (getIsCommentEnabled() != null ? getIsCommentEnabled().hashCode() : 0);
+        result = 31 * result + (getIsCommentChecked() != null ? getIsCommentChecked().hashCode() : 0);
+        return result;
+    }
 }

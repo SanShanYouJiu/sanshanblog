@@ -42,21 +42,48 @@ public class VoteConsumer {
 
     protected void voteConsumerProcess() {
         pool.execute(() -> {
-            while (!VoteService.consumerQueue.isEmpty()) {
-                if (log.isDebugEnabled()){
-                    log.debug("从VoteService中的consumer获得数据,即将存入Mysql中");
-                }
-                VoteDTO voteDTO = VoteService.consumerQueue.poll();
-                //将VoteVo拆为IpBlogVote部分存储到Mysql中
-                saveIpBlogVoteDO(voteDTO);
-                if (voteDTO.getVote()){
-                    incrFavour(voteDTO);
-                }
-                else {
-                    incrTreads(voteDTO);
-                }
-            }
+            voteAddConsumerProcess();
+            voteDecrConsumerProcess();
         });
+    }
+
+    /**
+     * 对Vote增加的consumer进行处理
+     */
+    private  void  voteAddConsumerProcess(){
+        while (!VoteService.voteAddConsumerQueue.isEmpty()) {
+            if (log.isDebugEnabled()){
+                log.debug("从VoteService中的voteAddConsumerQueue获得数据,即将存入Mysql中");
+            }
+            VoteDTO voteDTO = VoteService.voteAddConsumerQueue.poll();
+            //将VoteVo拆为IpBlogVote部分存储到Mysql中
+            saveIpBlogVoteDO(voteDTO);
+            if (voteDTO.getVote()){
+                incrFavour(voteDTO);
+            }
+            else {
+                incrTreads(voteDTO);
+            }
+        }
+    }
+
+    /**
+     * 对Vote的减少的Consumer进行处理
+     */
+    private  void  voteDecrConsumerProcess(){
+        while (!VoteService.voteDecrConsumerQueue.isEmpty()) {
+            if (log.isDebugEnabled()){
+                log.debug("从VoteService中的voteDecrConsumerQueue获得数据,即将在Mysql执行");
+            }
+            VoteDTO voteDTO = VoteService.voteDecrConsumerQueue.poll();
+            if (voteDTO.getVote()){
+                blogVoteMapper.decrTreads(voteDTO.getBlogId());
+                ipBlogVoteMapper.deleteVoteTreadByBlogId(voteDTO.getIp(), voteDTO.getBlogId());
+            }else {
+                blogVoteMapper.decrFavours(voteDTO.getBlogId());
+                ipBlogVoteMapper.deleteVoteFavourByBlogId(voteDTO.getIp(), voteDTO.getBlogId());
+            }
+        }
     }
 
     /**
@@ -65,7 +92,7 @@ public class VoteConsumer {
      */
     private  void saveIpBlogVoteDO(VoteDTO voteDTO){
         //将VoteDTO存储到Mysql中
-        IpBlogVoteDO ipBlogVoteDO = new IpBlogVoteDO(new Date(),new Date(),voteDTO.getId(), voteDTO.getBlogId(), voteDTO.getVote());
+        IpBlogVoteDO ipBlogVoteDO = new IpBlogVoteDO(new Date(),new Date(),voteDTO.getIp(), voteDTO.getBlogId(), voteDTO.getVote());
         ipBlogVoteMapper.insert(ipBlogVoteDO);
     }
 
@@ -83,6 +110,7 @@ public class VoteConsumer {
             blogVoteMapper.insert(blogVoteDO);
         }
     }
+
 
     /**
      *

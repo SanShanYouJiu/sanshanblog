@@ -16,7 +16,7 @@
     <!--这里的事务并没有起到什么作用  现在只是预留在这里-->
     <tx:advice id="txAdvice" transaction-manager="txManager">
          <tx:attributes>
-             <tx:method name="query*" isolation="READ_COMMITTED" propagation="SUPPORTS"/>
+             <!--<tx:method name="query*" isolation="READ_COMMITTED" propagation="SUPPORTS"/>-->
              <tx:method name="save*"  isolation="READ_COMMITTED" propagation="REQUIRED"
                         rollback-for="java.lang.RuntimeException"/>
              <tx:method name="update*" isolation="READ_COMMITTED" propagation="REQUIRED"

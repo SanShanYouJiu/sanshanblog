@@ -9,18 +9,20 @@ import java.io.*;
 @Slf4j
 public class SystemUtil {
 
-    /**
-     * 配置缓存名称
-     */
-    private static final String SETTING_NAME = "sanshanblog-setting.json";
+
+    public  final String filename ;
+
+    public SystemUtil(String location) {
+        filename = location;
+    }
 
     /**
      * 得到系统配置
      * @return 结果
      */
-    public static Setting getSetting() {
+    public   Setting getSetting() {
         //从配置文件获取
-        try (InputStream in = SystemUtil.class.getClassLoader().getResourceAsStream(SETTING_NAME))
+        try (InputStream in = new FileInputStream(filename))
         {
             Setting tempSetting = JSON.parseObject(in, null, Setting.class);
             log.info("get setting :{}",JSON.toJSONString(tempSetting));
@@ -36,9 +38,9 @@ public class SystemUtil {
      * 设置或刷新系统配置
      * @param setting 设置
      */
-    public static void setSetting(Setting setting){
+    public  void setSetting(Setting setting){
         try {
-            File file = new File(SystemUtil.class.getClassLoader().getResource("").getPath()+SETTING_NAME);
+            File file = new File(filename);
             OutputStream out = new FileOutputStream(file);
             JSON.writeJSONString(out,setting);
         } catch (IOException e) {

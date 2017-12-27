@@ -1,7 +1,8 @@
 package com.sanshan.service.init.container.check;
 
 import com.sanshan.service.init.container.check.conf.loadcheck.SettingLoadCheck;
-import com.sanshan.service.init.container.check.dataprotetcd.DataBaseRollBack;
+import com.sanshan.service.init.container.check.dataprotetcd.blogmetacache.BlogMetaDataBaseRollBack;
+import com.sanshan.service.init.container.check.dataprotetcd.votecache.VoteDataBaseRollBack;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -13,7 +14,10 @@ import org.springframework.stereotype.Component;
 public class InstantiationTracingBeanPostProcessor implements ApplicationListener<ContextRefreshedEvent> {
 
     @Autowired
-    private DataBaseRollBack dataBaseRollBack;
+    private BlogMetaDataBaseRollBack blogMetaDataBaseRollBack;
+
+    @Autowired
+    private VoteDataBaseRollBack voteDataBaseRollBack;
 
     @Autowired
     private SettingLoadCheck settingLoadCheck;
@@ -22,7 +26,8 @@ public class InstantiationTracingBeanPostProcessor implements ApplicationListene
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if(event.getApplicationContext().getParent() == null) {
-            dataBaseRollBack.inspectDataConsistency();
+            blogMetaDataBaseRollBack.inspectDataConsistency();
+            voteDataBaseRollBack.inspectDataConsistency();
             settingLoadCheck.loadCheck();
         }
     }

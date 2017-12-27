@@ -1,7 +1,5 @@
 package com.sanshan.service.vote;
 
-import com.sanshan.dao.BlogVoteMapper;
-import com.sanshan.dao.IpBlogVoteMapper;
 import com.sanshan.pojo.dto.VoteDTO;
 import com.sanshan.pojo.entity.IpBlogVoteDO;
 import com.sanshan.service.vo.ResponseMsgVO;
@@ -10,9 +8,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -24,7 +19,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author sanshan
  * www.85432173@qq.com
  * 投票的相关变化
- * TODO  缓存必须要保证不需要可用性
  */
 @Service
 @Slf4j
@@ -32,13 +26,6 @@ public class VoteService {
 
     @Autowired
     private RedisTemplate redisTemplate;
-
-
-    @Autowired
-    private IpBlogVoteMapper ipBlogVoteMapper;
-
-    @Autowired
-    private BlogVoteMapper blogVoteMapper;
 
 
     public static final String VOTE_IP_FAVOUR_PREFIX = "ip_vote:favour:";
@@ -89,7 +76,6 @@ public class VoteService {
      * @param vote
      * @param responseMsgVO
      */
-    @Transactional(isolation = Isolation.READ_COMMITTED,propagation = Propagation.REQUIRES_NEW,rollbackFor = RuntimeException.class)
     public synchronized void anonymousVote(String ip, Long blogId, boolean vote, ResponseMsgVO responseMsgVO) {
         //首先检查是否可以投票
         if (inspectVote(ip, blogId, vote, responseMsgVO)) {
@@ -151,9 +137,9 @@ public class VoteService {
      */
     private void setReverseVote(String ip,Long blogId,Boolean vote){
         if (vote) {
-            redisTemplate.opsForHash().put(VOTE_IP_TREAD_PREFIX + ip, blogId, false);
+            redisTemplate.opsForHash().delete(VOTE_IP_TREAD_PREFIX + ip, blogId);
         } else {
-            redisTemplate.opsForHash().put(VOTE_IP_FAVOUR_PREFIX + ip, blogId, false);
+            redisTemplate.opsForHash().delete(VOTE_IP_FAVOUR_PREFIX + ip, blogId);
         }
     }
 
@@ -182,8 +168,6 @@ public class VoteService {
     public void ipVoteInfo(String ip, ResponseMsgVO responseMsgVO) {
         List<IpBlogVoteDO> ipVotes = new LinkedList<>();
 
-        //查数据库
-        IpBlogVoteDO ipBlogVoteDO = ipBlogVoteMapper.queryByIp(ip);
 
     }
 

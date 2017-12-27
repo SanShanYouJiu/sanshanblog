@@ -77,15 +77,16 @@
         <org.quartz-scheduler>2.2.1</org.quartz-scheduler>
         <org.quartz-scheduler-jobs>2.2.1</org.quartz-scheduler-jobs>
 
+        <javax.persistence.api>2.2</javax.persistence.api>
+
         <!--druid-->
         <com.alibaba.druid>1.0.9</com.alibaba.druid>
          <!--validate-->
-        <org.hibernate-validator>5.2.4.Final</org.hibernate-validator>
-
         <!--Ueditor组件部分-->
         <version.commons-codec>1.9</version.commons-codec>
         <version.commons-io>2.4</version.commons-io>
         <version.commons-fileupload>1.3.1</version.commons-fileupload>
+
 
         <!--MQ-->
         <org.springframework.amqp-rabbitmq>1.6.5.RELEASE</org.springframework.amqp-rabbitmq>
@@ -501,17 +502,11 @@
             </dependency>
             <!--阿里druid配置 end-->
 
-            <!--hibervate validate start-->
+            <!--Javax persistence-->
             <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-validator</artifactId>
-                <version>${org.hibernate-validator}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.jboss.logging</groupId>
-                        <artifactId>jboss-logging</artifactId>
-                    </exclusion>
-                </exclusions>
+                <groupId>javax.persistence</groupId>
+                <artifactId>javax.persistence-api</artifactId>
+                <version>${javax.persistence.api}</version>
             </dependency>
 
             <!--Ueditor组件-->

@@ -299,13 +299,6 @@
         </dependency>
 
 
-        <!--hibervate validate start-->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-        </dependency>
-
-
         <!--Ueditor组件-->
         <dependency>
             <groupId>commons-codec</groupId>
@@ -318,6 +311,10 @@
             <artifactId>json</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>javax.persistence</groupId>
+            <artifactId>javax.persistence-api</artifactId>
+        </dependency>
 
     </dependencies>
     <!--<build>-->

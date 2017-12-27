@@ -1,4 +1,4 @@
-package com.sanshan.service.init.container.check.dataprotetcd;
+package com.sanshan.service.init.container.check.dataprotetcd.blogmetacache;
 
 import com.sanshan.dao.MarkDownBlogMapper;
 import com.sanshan.dao.UeditorBlogMapper;
@@ -17,11 +17,11 @@ import java.util.List;
 import java.util.TreeMap;
 
 /**
- *可用性保证
+ *BlogIdGenerate的properties文件的可用性保证
  */
 @Component
 @Slf4j
-public class DataBaseRollBack {
+public class BlogMetaDataBaseRollBack {
 
     @Autowired
     private MarkDownBlogMapper markDownBlogMapper;
@@ -37,14 +37,14 @@ public class DataBaseRollBack {
     public void inspectDataConsistency() {
         //数据库与BlogIdGenerate的事物完整性检查
         Long initTime = System.currentTimeMillis();
-        log.info("进行事物一致性检查");
+        log.info("BlogIdGenerate进行事物一致性检查");
         List<MarkDownBlogDO> markDownBlogDOList = markDownBlogMapper.selectAll();
         List<UeditorBlogDO> uEditorBlogDOS = uEditorBlogMapper.selectAll();
         rollBackData(markDownBlogDOList, uEditorBlogDOS);
-        log.info("从数据库中将恢复properties中的数据完成 耗时:{}ms", System.currentTimeMillis() - initTime);
+        log.info("从数据库中检查properties中的数据一致性完成 耗时:{}ms", System.currentTimeMillis() - initTime);
     }
 
-    //从数据库中将恢复properties中的数据（宕机恢复使用)
+    //从数据库中回滚properties中的数据（宕机恢复使用)
     private void rollBackData(List<MarkDownBlogDO> markDownBlogDOList, List<UeditorBlogDO> uEditorBlogDOS) {
         for (MarkDownBlogDO m : markDownBlogDOList) {
             blogIdGenerate.addIdMap(m.getId(), EditorTypeEnum.MarkDown_EDITOR);

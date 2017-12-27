@@ -6,6 +6,7 @@ import com.sanshan.util.SystemUtil;
 import com.sanshan.util.setting.Setting;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,11 @@ public class SettingLoadCheck {
     @Autowired
     private SettingService settingService;
 
+
+    @Value("${sanshanblog-setting.location}")
+    private String location;
+
+
     @Autowired
     private RedisTemplate redisTemplate;
 
@@ -28,7 +34,8 @@ public class SettingLoadCheck {
      */
     public void loadCheck(){
         String settingCache = (String) redisTemplate.opsForValue().get(settingService.SETTING_CACHE);
-        Setting originalSetting = SystemUtil.getSetting();
+        SystemUtil systemUtil = new SystemUtil(location);
+        Setting originalSetting = systemUtil.getSetting();
         if (Objects.isNull(settingCache)){
             redisTemplate.opsForValue().set(settingService.SETTING_CACHE, JSON.toJSONString(originalSetting));
             settingService.setSetting(originalSetting);
@@ -43,6 +50,5 @@ public class SettingLoadCheck {
         }
         return;
     }
-
 
 }

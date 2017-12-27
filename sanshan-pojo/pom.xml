@@ -32,8 +32,8 @@
         <!--</dependency>-->
         <!--hibervate validate end-->
         <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-entitymanager</artifactId>
+            <groupId>javax.persistence</groupId>
+            <artifactId>javax.persistence-api</artifactId>
         </dependency>
 
         <dependency>

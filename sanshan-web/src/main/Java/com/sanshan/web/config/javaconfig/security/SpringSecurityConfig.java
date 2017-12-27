@@ -69,7 +69,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .authorizeRequests()
                 .antMatchers(
-                        //TODO 魔法值太多
+                        // 魔法值太多
                         "/api/admin/index/**",
                         "/api/user/change-pwd",
                         "/api/user/email-check",

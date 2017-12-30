@@ -35,22 +35,22 @@ public class BlogService {
 
 
     public Long getCurrentId() {
-        Long id = blogIdGenerate.getSize();
-        for (long i = id - 1; i > -1; i--) {
-            EditorTypeEnum type = blogIdGenerate.getType(i);
-            switch (type) {
-                case UEDITOR_EDITOR:
-                    return i;
-                case MarkDown_EDITOR:
-                    return i;
-                case Void_Id:
-                    continue;
-                default:
-                     break;
-            }
-        }
-        log.error("获取当前ID错误:{}", id);
-        throw new NotFoundBlogException("未找到当前博客Id");
+        return blogIdGenerate.getExistMaxId();
+        //for (long i = id - 1; i > -1; i--) {
+        //    EditorTypeEnum type = blogIdGenerate.getType(i);
+        //    switch (type) {
+        //        case UEDITOR_EDITOR:
+        //            return i;
+        //        case MarkDown_EDITOR:
+        //            return i;
+        //        case Void_Id:
+        //            continue;
+        //        default:
+        //             break;
+        //    }
+        //}
+        //log.error("获取当前ID错误:{}", id);
+        //throw new NotFoundBlogException("未找到当前博客Id");
     }
 
     /**
@@ -236,8 +236,8 @@ public class BlogService {
 
     public List<BlogVO> queryAll() {
         List<BlogVO> blogs = new LinkedList<>();
-        Long size = blogIdGenerate.getSize();
-        for (long i = 0; i < size; i++) {
+        Long maxId = blogIdGenerate.getExistMaxId();
+        for (long i = 0; i < maxId; i++) {
             BlogVO blogVO = getBlog(i);
             if (Objects.isNull(blogVO)) {
                 continue;

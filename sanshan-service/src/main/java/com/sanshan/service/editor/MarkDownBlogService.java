@@ -73,7 +73,8 @@ public class MarkDownBlogService {
 
     public Integer saveDO(String content, String title,String tag) {
         MarkDownBlogDO markDownBlog = new MarkDownBlogDO();
-        markDownBlog.setId(blogIdGenerate.getId());
+        Long id = blogIdGenerate.getId(EditorTypeEnum.MarkDown_EDITOR);
+        markDownBlog.setId(id);
         markDownBlog.setContent(content);
         markDownBlog.setTag(tag);
         markDownBlog.setTitle(title);
@@ -98,22 +99,22 @@ public class MarkDownBlogService {
         int result = cacheService.save(markDownBlog);
         //插入失败
         if (result == 0) {
+            blogIdGenerate.removeIdMap(id);
             return 0;
         }
         //更新User对应的blog缓存
         userBlogCacheService.userBlogRefresh(user.getUsername());
         //加入到索引中
         if (tag!=null){
-            blogIdGenerate.putTag(tag,blogIdGenerate.getId());
+            blogIdGenerate.putTag(tag,id);
         }
         if (title!=null){
-            blogIdGenerate.putTitle(title,blogIdGenerate.getId());
+            blogIdGenerate.putTitle(title,id);
         }
-        blogIdGenerate.putDate(date,blogIdGenerate.getId());
+        blogIdGenerate.putDate(date,id);
 
-        //加入IdMap对应
-        blogIdGenerate.addIdMap(blogIdGenerate.getId(), EditorTypeEnum.MarkDown_EDITOR);
-        log.info("用户:{}新增Markdown博客Id为:{}",user.getUsername(),markDownBlog.getId());
+
+        log.info("用户:{} 新增Markdown博客Id为:{}",user.getUsername(),id);
         return result;
     }
 

@@ -2,18 +2,20 @@ package com.sanshan.service;
 
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import com.sanshan.dao.FeedbackMapper;
+import com.sanshan.dao.mongo.FeedBackRepository;
 import com.sanshan.dao.mongo.FileOperation;
 import com.sanshan.pojo.entity.FeedbackDO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
@@ -21,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class FeedBackService {
 
     @Autowired
-    private FeedbackMapper feedbackMapper;
+    private FeedBackRepository feedBackRepository;
 
     @Autowired
     private FileOperation fileOperation;
@@ -44,7 +46,7 @@ public class FeedBackService {
             feedbackDO.setOpinion(opinion);
             feedbackDO.setCreated(new Date());
             feedbackDO.setUpdated(new Date());
-            feedbackMapper.save(feedbackDO);
+            feedBackRepository.save(feedbackDO);
             log.info("存入反馈信息已成功");
         };
         pool.execute(runnable);
@@ -67,9 +69,8 @@ public class FeedBackService {
         pool.execute(runnable);
     }
 
-    @Cacheable(value = {"feedback"}, key = "'feedback'+#a0")
-    public FeedbackDO get(long id) {
-        return feedbackMapper.selectById(id);
+    public FeedbackDO get(String email) {
+        return feedBackRepository.findByEmail(email);
     }
 
 

@@ -1,6 +1,5 @@
 package com.sanshan.web.controller.index;
 
-import com.sanshan.dao.mongo.FileOperation;
 import com.sanshan.service.FeedBackService;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.web.config.javaconfig.auxiliary.MultipartFileBucketValidator;
@@ -19,8 +18,6 @@ public class HomeIndexController {
     @Autowired
     private MultipartFileBucketValidator multipartFileBucketValidator;
 
-    @Autowired
-    private FileOperation fileOperation;
 
     @Autowired
     private FeedBackService feedBackService;
@@ -42,8 +39,16 @@ public class HomeIndexController {
     }
 
 
-    @RequestMapping(value = "/advice/file", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    @ResponseBody
+    /**
+     * 关闭这个方法 因为带宽不够用 不给匿名用户上传文件
+     * @param ip
+     * @param email
+     * @param opinion
+     * @param multipartFile
+     * @return
+     */
+    //@RequestMapping(value = "/advice/file", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE,consumes = {MediaType.IMAGE_PNG_VALUE,MediaType.IMAGE_GIF_VALUE,MediaType.IMAGE_JPEG_VALUE})
+    //@ResponseBody
     public ResponseMsgVO handleFileUpload2(
             @RequestHeader(value = "X-Real-IP") String ip,
             @RequestHeader(value = "email") String email,

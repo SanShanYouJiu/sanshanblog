@@ -4,20 +4,20 @@ package com.sanshan.pojo.entity;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-import javax.persistence.Table;
 import java.io.Serializable;
 
 @Data
 @NoArgsConstructor
 @ToString
-@Table(name = "feedback")
+@Document
 public class FeedbackDO extends BaseDO implements Serializable {
-    private static final long serialVersionUID = -3306932378732722579L;
 
-    @Id
-    private Long id;
+
+    private static final long serialVersionUID = -2512029643744464787L;
+
+    private String _id;
 
     private String email;
 

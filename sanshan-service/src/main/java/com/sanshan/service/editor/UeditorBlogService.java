@@ -32,6 +32,9 @@ public class UeditorBlogService {
 
     @Autowired
     private UserBlogCacheService userBlogCacheService;
+
+    @Autowired
+    private UeditorFileService ueditorFileService;
     /**
      * DTO查询
      *
@@ -75,8 +78,9 @@ public class UeditorBlogService {
 
     public Integer saveDO(String content, String title, String tag) {
         UeditorBlogDO uEditorBlogDO = new UeditorBlogDO();
+        Long id = blogIdGenerate.getId(EditorTypeEnum.UEDITOR_EDITOR);
         //使用IdMap生成的Id
-        uEditorBlogDO.setId(blogIdGenerate.getId());
+        uEditorBlogDO.setId(id);
         uEditorBlogDO.setContent(content);
         uEditorBlogDO.setTag(tag);
         uEditorBlogDO.setTitle(title);
@@ -100,6 +104,7 @@ public class UeditorBlogService {
         int result = cacheService.save(uEditorBlogDO);
         //插入失败
         if (result == 0) {
+            blogIdGenerate.removeIdMap(id);
             return 0;
         }
 
@@ -108,16 +113,17 @@ public class UeditorBlogService {
 
         //加入到索引中
         if (tag!=null){
-            blogIdGenerate.putTag(tag,blogIdGenerate.getId());
+            blogIdGenerate.putTag(tag,id);
         }
         if (title!=null){
-            blogIdGenerate.putTitle(title,blogIdGenerate.getId());
+            blogIdGenerate.putTitle(title,id);
         }
-        blogIdGenerate.putDate(date,blogIdGenerate.getId());
+        blogIdGenerate.putDate(date,id);
 
-        //加入IdMap对应
-        blogIdGenerate.addIdMap(blogIdGenerate.getId(), EditorTypeEnum.UEDITOR_EDITOR);
-        log.info("用户:{}新增Ueditor博客Id为:{}",user.getUsername(),uEditorBlogDO.getId());
+        log.info("用户:{} 新增Ueditor博客Id为:{}",user.getUsername(),id);
+
+        //检测ueditor中上传的文件
+        ueditorFileService.checkUeditorContentFile(id,content);
         return  result;
     }
 
@@ -143,6 +149,14 @@ public class UeditorBlogService {
         return true;
     }
 
+    /**
+     * 在更新时也需要对文件进行引用检查
+     * @param id
+     * @param content
+     * @param title
+     * @param tag
+     * @return
+     */
     public Boolean  updateSelectiveDO(Long id,String content,String title,String tag){
         UeditorBlogDO uEditorBlogDO = new UeditorBlogDO();
         uEditorBlogDO.setId(id);
@@ -175,8 +189,9 @@ public class UeditorBlogService {
         }
         //更新User对应的blog缓存
         userBlogCacheService.userBlogRefresh(user.getUsername());
-        //TODO: 删除Ueditor中博客对应的文件
         blogIdGenerate.remove(id);
+        //审核ueditor博客中对应的文件
+        ueditorFileService.deleteContentContainsFile(id);
         log.info("用户:{}删除了Ueditor博客 Id为{}", user.getUsername(), id);
         return rows;
     }

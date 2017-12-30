@@ -51,10 +51,14 @@ public class VoteService {
         return t;
     });
 
-    //投票增加的处理队列
+    /**
+     投票增加的处理队列
+     */
     public static ConcurrentLinkedQueue<VoteDTO> voteAddConsumerQueue = new ConcurrentLinkedQueue<VoteDTO>();
 
-    //投票减少的处理队列
+    /**
+     投票减少的处理队列
+     */
     public static ConcurrentLinkedQueue<VoteDTO> voteDecrConsumerQueue = new ConcurrentLinkedQueue<VoteDTO>();
 
 
@@ -82,10 +86,10 @@ public class VoteService {
             //进行投票
             if (vote) {
                 redisTemplate.opsForHash().put(VOTE_IP_FAVOUR_PREFIX + ip, blogId,true);
-                redisTemplate.opsForValue().increment(BLOG_VOTE_FAVOURS_PREFIX + blogId, 1);
+                redisTemplate.opsForHash().increment(BLOG_VOTE_FAVOURS_PREFIX , blogId, 1);
             } else {
                 redisTemplate.opsForHash().put(VOTE_IP_TREAD_PREFIX + ip, blogId,true);
-                redisTemplate.opsForValue().increment(BLOG_VOTE_THREADS_PREFIX + blogId, 1);
+                redisTemplate.opsForHash().increment(BLOG_VOTE_THREADS_PREFIX , blogId, 1);
             }
             voteTransactionConsistentCheck(ip,blogId,vote);
             //加入到已投票域中
@@ -151,9 +155,9 @@ public class VoteService {
      */
     public void   decrReverseVotes(String ip,Long blogId,Boolean vote) {
         if (vote) {
-            redisTemplate.opsForValue().increment(BLOG_VOTE_THREADS_PREFIX + blogId, -1);
+            redisTemplate.opsForHash().increment(BLOG_VOTE_THREADS_PREFIX , blogId, -1);
         } else {
-            redisTemplate.opsForValue().increment(BLOG_VOTE_FAVOURS_PREFIX + blogId, -1);
+            redisTemplate.opsForHash().increment(BLOG_VOTE_FAVOURS_PREFIX , blogId, -1);
         }
         VoteDTO voteDTO = new VoteDTO();
         voteDecrConsumerQueue.add(voteDTO.decrVote(ip,blogId,vote));

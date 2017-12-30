@@ -26,6 +26,16 @@
         </property>
     </bean>
 
+    <bean id="jobTask3" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="nightCheckHandler"/>
+        </property>
+        <property name="targetMethod">
+            <value>process</value>
+        </property>
+    </bean>
+
+
     <bean id="cronTrigger1" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="jobTask1"></property>
         <!-- cron表达式 -->
@@ -42,6 +52,15 @@
         </property>
     </bean>
 
+    <bean id="cronTrigger3" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="jobTask3"></property>
+        <!-- cron表达式 -->
+        <property name="cronExpression">
+            <value>${nightCheck.quartz.expression}</value>
+        </property>
+    </bean>
+
+
     <bean id="startQuertz" lazy-init="false" autowire="no"
           class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <property name="triggers">
@@ -49,6 +68,7 @@
                 <!-- 触发器列表    -->
                 <ref bean="cronTrigger1"/>
                 <ref bean="cronTrigger2"/>
+                <ref bean="cronTrigger3"/>
             </list>
         </property>
     </bean>

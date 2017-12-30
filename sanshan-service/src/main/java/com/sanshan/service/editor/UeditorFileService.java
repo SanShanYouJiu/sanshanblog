@@ -1,76 +1,115 @@
 package com.sanshan.service.editor;
 
-import com.mongodb.gridfs.GridFSDBFile;
-import com.sanshan.dao.mongo.FileOperation;
+import com.sanshan.service.upload.QiniuStorageManager;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * TODO 将文件上传到具体的云中
+ *TODO 将这里缓存的数据延迟存入到数据库中
+ * 保持不需要缓存的可用性设计
  */
 @Slf4j
 @Service
 public class UeditorFileService {
 
-    @Autowired
-    FileOperation fileOperation;
 
+    @Autowired
+    private QiniuStorageManager qiniuStorageManager;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
+
+    public static  final String UEDITOR_UPLOAD_TEMP_FILE="ueditor_upload:tmep_file:";
+
+    public static final String UEDITOR_TMEP_FILENAME_SET = "ueditor_upload:temp_file_set:";
+
+    public  static  final  String UEDITOR_UPLOAD_FILE="ueditor_upload:file:";
+
+    public static final String UEDITOR_UPLOAD_ID_FILE_MAP="ueditor_upload:id_file_map:";
+
+    private static final AtomicInteger POOL_NUMBER = new AtomicInteger(1);
+
+    private ExecutorService pool = new ThreadPoolExecutor(0, 4,
+            3, TimeUnit.MINUTES,
+            new SynchronousQueue<Runnable>(),(r)->{
+        Thread t = new Thread(r);
+        t.setName("ueditor-Checkfile-thread:"+POOL_NUMBER.incrementAndGet());
+        return t;
+    });
 
     /**
-     * mongoDB存入图片
+     *  存入图片到七牛云
      * @param content  文件
      * @param filename 文件名
      * @param type 类型
      * @param metedata 元数据 元数据其实就是数据的数据 其他附带的一些信息
      */
     public void saveFile(InputStream content, String filename, String type, Object metedata) {
-        fileOperation.saveFile(content, filename, type, metedata);
+        qiniuStorageManager.ueditorUpload(content, filename,type,metedata);
+        //上传过的暂时文件 12小时候后从这个缓存中消失 代表这个暂存文件只存在12小时
+        redisTemplate.opsForValue().set(UEDITOR_UPLOAD_TEMP_FILE+filename,filename,12, TimeUnit.HOURS);
+        //将暂存文件名存入到一个专门的Set中
+        redisTemplate.opsForSet().add(UEDITOR_TMEP_FILENAME_SET,filename);
+        //上传过文件的列表 一天更新一次 在晚上1点凌晨进行比对
+        // 如果是在UEDITOR_UPLOAD_TEMP_FILE缓存没有 这一个缓存中有的文件就进行审核 值为0的代表0人引用 需要将这条缓存中以及暂存文件名的set中也删除
+        redisTemplate.opsForHash().put(UEDITOR_UPLOAD_FILE, filename, 0);
     }
 
     /**
-     *  获得Ueditor上传的文件
+     * 检测Ueditor内容中的文件 并且提交到缓存中作记录
      *
-     * @param format   上传的具体文件 是file还是image或者video
-     * @param date     时间
-     * @param filename 文件名
-     * @param suffix   具体文件的后缀格式
-     * @param response 当前环境的HttpServletResponse
+     * @param id      Ueditor的博客ID
+     * @param content 文件
      */
-    public void getUEditorFile(String format, String date, String filename, String suffix, HttpServletResponse response){
-        String fileFullName = "/api/ueditor-editor/upload/" + format + "/" + date + "/" + filename + "." + suffix;//这里注意 前缀是写死的
-        response.setContentType(format+"\\"+suffix);
-        List<GridFSDBFile> gridFSDBFiles = fileOperation.getFile(fileFullName);
-        GridFSDBFile gfile = gridFSDBFiles.get(0);
-        try {
-            OutputStream ot = response.getOutputStream();
-            byte[] btImg = readStream(gfile.getInputStream());
-            ot.write(btImg);
-            ot.flush();
-        } catch (IOException e) {
-            log.error(e.getMessage());
-            e.printStackTrace();
-        }
-    }
+    protected void checkUeditorContentFile(Long id, String content) {
+        pool.execute(() -> {
+            Set<String> filenameSet = redisTemplate.opsForSet().members(UEDITOR_TMEP_FILENAME_SET);
+            String[] filenames = filenameSet.toArray(new String[]{});
+            List<String> blogFiles = new LinkedList<>();
+            for (int i = 0; i < filenames.length; i++) {
+                String filename= filenames[i];
+                Boolean contain = StringUtils.contains(content, filename);
+                if (contain) {
+                    //增加一个博客的引用
+                    redisTemplate.opsForHash().increment(UEDITOR_UPLOAD_FILE, filename, 1);
+                    blogFiles.add(filename);
+                }
+            }
+            //在ID与文件对应表中进行关联
+            redisTemplate.opsForHash().put(UEDITOR_UPLOAD_ID_FILE_MAP, id, blogFiles);
 
+        });
+    }
 
     /**
-     *  mongoDB中获得图片
-     * @param filename 文件名
-     * @return 返回图片集合
+     * 删除博客ID对应表 并且减少文件的引用数
+     * @param blogId
      */
-    public List<GridFSDBFile> getFile(String filename) {
-        return fileOperation.getFile(filename);
+    public void deleteContentContainsFile(Long blogId) {
+        pool.execute(()->{
+            List<String> filenames;
+            filenames = (List<String>) redisTemplate.opsForHash().get(UEDITOR_UPLOAD_ID_FILE_MAP, blogId);
+            //删除该博客ID文件对应表
+            redisTemplate.opsForHash().delete(UEDITOR_UPLOAD_ID_FILE_MAP, blogId);
+            for (int i = 0; i <filenames.size() ; i++) {
+                String filename = filenames.get(i);
+                redisTemplate.opsForHash().increment(UEDITOR_UPLOAD_FILE, filename, -1);
+            }
+        });
     }
-
-
 
 
     /**
@@ -78,21 +117,7 @@ public class UeditorFileService {
      * @param filename 文件名
      */
     public void deleteFile(String filename){
-        fileOperation.deleteFile(filename);
-    }
-
-
-    public byte[] readStream(InputStream inStream) {
-        ByteArrayOutputStream bops = new ByteArrayOutputStream();
-        int data = -1;
-        try {
-            while((data = inStream.read()) != -1){
-                bops.write(data);
-            }
-            return bops.toByteArray();
-        }catch(Exception e){
-            return null;
-        }
+        qiniuStorageManager.ueditorDeleteFile(filename);
     }
 
 

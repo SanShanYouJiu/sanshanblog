@@ -66,7 +66,7 @@ public class StorageManager {
 
 
     /**
-     * 个人实现存储到mongoDB中 而不是本地文件系统
+     * 存到七牛云中
      *
      * @param is
      * @param path
@@ -102,11 +102,9 @@ public class StorageManager {
             //原本的方式
 //			state = saveTmpFile(tmpFile, path);
 
-            //存入mongoDB中
             DBObject metedata = new BasicDBObject();
             //对应的博客ID
             //metedata.put("blog_id",)
-            //元数据
             try {
                 staticueditorFileService.saveFile(new FileInputStream(tmpFile), path, suffix, metedata);
             } catch (Exception e) {
@@ -153,7 +151,7 @@ public class StorageManager {
             //原本的代码
             //			state = saveTmpFile(tmpFile, path);
 
-            //存入mongoDB中
+            //存入云中
             DBObject metedata = new BasicDBObject();
             //元数据
             try {

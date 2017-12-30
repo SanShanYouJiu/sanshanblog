@@ -62,15 +62,15 @@ public class UeditorEditorController {
     }
 
 
-    @RequestMapping(value = "/upload/{format}/{date}/{filename}.{suffix}")
-    public void getUeditorFile(@PathVariable("format") String format,
-                               @PathVariable("date") String date,
-                               @PathVariable("filename") String filename,
-                               @PathVariable("suffix") String suffix,
-                               HttpServletResponse response) {
-        fileService.getUEditorFile(format, date, filename, suffix, response);
-
-    }
+    //@RequestMapping(value = "/upload/{format}/{date}/{filename}.{suffix}")
+    //public void getUeditorFile(@PathVariable("format") String format,
+    //                           @PathVariable("date") String date,
+    //                           @PathVariable("filename") String filename,
+    //                           @PathVariable("suffix") String suffix,
+    //                           HttpServletResponse response) {
+    //    fileService.getUEditorFile(format, date, filename, suffix, response);
+    //
+    //}
 
 
     @RequestMapping(value = "query-by-page", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

@@ -50,7 +50,7 @@
         <!--Spring -data -commons-->
         <org.springframework.data-commons>1.11.4.RELEASE</org.springframework.data-commons>
 
-         <!--org.mybatis.-->
+        <!--org.mybatis.-->
         <org.mybatis>3.3.0</org.mybatis>
         <com.github.pagehelper>5.0.0</com.github.pagehelper>
         <tk.mybatis.mapper>3.3.9</tk.mybatis.mapper>
@@ -81,7 +81,7 @@
 
         <!--druid-->
         <com.alibaba.druid>1.0.9</com.alibaba.druid>
-         <!--validate-->
+        <!--validate-->
         <!--Ueditor组件部分-->
         <version.commons-codec>1.9</version.commons-codec>
         <version.commons-io>2.4</version.commons-io>
@@ -90,6 +90,12 @@
 
         <!--MQ-->
         <org.springframework.amqp-rabbitmq>1.6.5.RELEASE</org.springframework.amqp-rabbitmq>
+
+        <!--七牛云相关-->
+        <com.qiniu-java-sdk>7.2.6</com.qiniu-java-sdk>
+        <com.squareup.okhttp3>3.3.1</com.squareup.okhttp3>
+        <com.google.code.gson>2.6.2</com.google.code.gson>
+        <com.qiniu-happy-dns-java>0.1.4</com.qiniu-happy-dns-java>
 
     </properties>
 
@@ -347,18 +353,17 @@
             </dependency>
 
 
-
             <!--&lt;!&ndash;Spring-data通用核心类  mongonDB需要 注意这个会与Spring-data-jpa冲突&ndash;&gt;-->
             <dependency>
                 <groupId>org.springframework.data</groupId>
                 <artifactId>spring-data-commons</artifactId>
                 <version>${org.springframework.data-commons}</version>
-               <exclusions>
-                   <exclusion>
-                       <groupId>org.slf4j</groupId>
-                       <artifactId>jcl-over-slf4j</artifactId>
-                   </exclusion>
-               </exclusions>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.slf4j</groupId>
+                        <artifactId>jcl-over-slf4j</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
 
@@ -530,6 +535,31 @@
                 <groupId>org.json</groupId>
                 <artifactId>json</artifactId>
                 <version>${version.json}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.qiniu</groupId>
+                <artifactId>qiniu-java-sdk</artifactId>
+                <version>${com.qiniu-java-sdk}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.squareup.okhttp3</groupId>
+                <artifactId>okhttp</artifactId>
+                <version>${com.squareup.okhttp3}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.google.code.gson</groupId>
+                <artifactId>gson</artifactId>
+                <version>${com.google.code.gson}</version>
+                <scope>compile</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.qiniu</groupId>
+                <artifactId>happy-dns-java</artifactId>
+                <version>${com.qiniu-happy-dns-java}</version>
+                <scope>compile</scope>
             </dependency>
 
         </dependencies>

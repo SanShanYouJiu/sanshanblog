@@ -1,4 +1,4 @@
-package com.sanshan.service.init.container.check.dataprotetcd.blogmetacache;
+package com.sanshan.service.check.init.container.check.dataprotetcd.blogmetacache;
 
 import com.sanshan.dao.MarkDownBlogMapper;
 import com.sanshan.dao.UeditorBlogMapper;

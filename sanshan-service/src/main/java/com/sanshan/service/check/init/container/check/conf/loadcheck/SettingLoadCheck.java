@@ -1,4 +1,4 @@
-package com.sanshan.service.init.container.check.conf.loadcheck;
+package com.sanshan.service.check.init.container.check.conf.loadcheck;
 
 import com.alibaba.fastjson.JSON;
 import com.sanshan.service.SettingService;

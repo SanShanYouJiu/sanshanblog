@@ -1,4 +1,4 @@
-package com.sanshan.service.init.container.check.dataprotetcd.votecache;
+package com.sanshan.service.check.init.container.check.dataprotetcd.votecache;
 
 import com.sanshan.dao.BlogVoteMapper;
 import com.sanshan.dao.IpBlogVoteMapper;
@@ -52,8 +52,8 @@ public class VoteDataBaseRollBack {
     public void rollbackData(List<BlogVoteDO> blogVoteDOS, List<IpBlogVoteDO> ipBlogVoteDOS) {
 
         blogVoteDOS.stream().forEach(blogVoteDO -> {
-            redisTemplate.opsForValue().set(VoteService.BLOG_VOTE_FAVOURS_PREFIX + blogVoteDO.getBlogId(), blogVoteDO.getFavours());
-            redisTemplate.opsForValue().set(VoteService.BLOG_VOTE_THREADS_PREFIX + blogVoteDO.getBlogId(), blogVoteDO.getTreads());
+            redisTemplate.opsForHash().put(VoteService.BLOG_VOTE_FAVOURS_PREFIX , blogVoteDO.getBlogId(), blogVoteDO.getFavours());
+            redisTemplate.opsForHash().put(VoteService.BLOG_VOTE_THREADS_PREFIX , blogVoteDO.getBlogId(), blogVoteDO.getTreads());
         });
 
         ipBlogVoteDOS.stream().forEach(ipBlogVoteDO -> {

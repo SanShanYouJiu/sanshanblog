@@ -3,8 +3,8 @@
 > 本来想的是作为一个自己的Blog系统使用  
 1. 前端使用[angular4+bootstrap][1] 
 2. 
- - 后端目前采用的图片存储于MongoDB数据库(以及User表)
- - 使用Redis作为缓存 mysql作为Blog数据库 
+ - 后端日志存入MongoDB数据库(以及User，FeedBack信息)
+ - 使用Redis作为缓存 mysql作为Blog以及投票数据库 
  - maven作为项目管理工具
  - 基本架构是SSM 不过因为因为Spring4的注解解决方案很成熟 所以基本除了pom.xml之外的xml基本消失了
  - 日志系统采用的是Log4j+slf4j 存储在mongoDB中
@@ -25,7 +25,7 @@ DO DTO VO 三种实体对象
 实现了一个次关键字的缓存层 获取博客具体内容时才会向Redis请求取数据
 其他时刻通过维持Id唯一的 Date Title Tag 次关键字倒排索引
 从而不使用高昂的数据库/Redis查询
-> 在目前数量较小时是可以到达速度极快的
+> 在目前数量较小时是可以到达速度极快的 暂时试验性的使用 
 
 在内部
 - 分别维护6个Map集合  维持为3个倒排索引
@@ -34,7 +34,8 @@ DO DTO VO 三种实体对象
 
 风格是采用的Restful与传统URL方式混合 
 博客支持俩种风格的Blog 
-> - 一种是Markdown风格的编辑  另外一种是富文本方式(富文本方式用的是百度的UEditor) 
+> - 一种是Markdown风格的编辑 
+另外一种是富文本方式(富文本方式用的是百度的UEditor) 采用七牛云存储相关ueditor上传文件
 
 #### 注意事项
 properties文件默认不是UTF-8编码 需要自己在IDEA中设置为UTF-8 或者自己手动处理

@@ -123,7 +123,7 @@ public class UeditorBlogService {
         log.info("用户:{} 新增Ueditor博客Id为:{}",user.getUsername(),id);
 
         //检测ueditor中上传的文件
-        ueditorFileService.checkUeditorContentFile(id,content);
+        ueditorFileService.checkUeditorContentFile(id,content,user.getUsername());
         return  result;
     }
 

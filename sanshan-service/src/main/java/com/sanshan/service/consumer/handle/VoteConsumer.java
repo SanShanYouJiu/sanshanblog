@@ -15,7 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
@@ -32,8 +32,7 @@ public class VoteConsumer {
     @Autowired
     private BlogVoteMapper blogVoteMapper;
 
-
-    private ExecutorService pool = new ThreadPoolExecutor(0,4,3, TimeUnit.MINUTES,new SynchronousQueue<Runnable>(),(r)->{
+    private ExecutorService pool = new ThreadPoolExecutor(1,1,3, TimeUnit.MINUTES,new LinkedBlockingQueue<Runnable>(),(r)->{
         Thread t = new Thread(r);
         t.setName("vote-consumer-thread");
         return t;
@@ -41,10 +40,12 @@ public class VoteConsumer {
 
 
     protected void voteConsumerProcess() {
-        pool.execute(() -> {
-            voteAddConsumerProcess();
-            voteDecrConsumerProcess();
-        });
+        while (!VoteService.voteAddConsumerQueue.isEmpty() || !VoteService.voteDecrConsumerQueue.isEmpty()) {
+            pool.execute(() -> {
+                voteAddConsumerProcess();
+                voteDecrConsumerProcess();
+            });
+        }
     }
 
     /**

@@ -32,19 +32,24 @@ public class BlogMetaDataBaseRollBack {
     @Autowired
     private BlogIdGenerate blogIdGenerate;
 
-    //检查是否需要从数据库恢复数据
-    @Transactional(isolation = Isolation.READ_COMMITTED,propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
+    /**
+     *
+     从数据库回滚数据
+     */
     public void inspectDataConsistency() {
         //数据库与BlogIdGenerate的事物完整性检查
         Long initTime = System.currentTimeMillis();
-        log.info("BlogIdGenerate进行事物一致性检查");
+        log.info("BlogIdGenerate从数据库中回滚数据");
+        //TODO 需要将缓存中的内容全部删除 然后从数据库恢复
         List<MarkDownBlogDO> markDownBlogDOList = markDownBlogMapper.selectAll();
         List<UeditorBlogDO> uEditorBlogDOS = uEditorBlogMapper.selectAll();
         rollBackData(markDownBlogDOList, uEditorBlogDOS);
-        log.info("从数据库中检查properties中的数据一致性完成 耗时:{}ms", System.currentTimeMillis() - initTime);
+        log.info("从数据库中回滚properties中的数据完成 耗时:{}ms", System.currentTimeMillis() - initTime);
     }
 
-    //从数据库中回滚properties中的数据（宕机恢复使用)
+    /**
+     从数据库中回滚properties中的数据（宕机恢复使用)
+     */
     private void rollBackData(List<MarkDownBlogDO> markDownBlogDOList, List<UeditorBlogDO> uEditorBlogDOS) {
         for (MarkDownBlogDO m : markDownBlogDOList) {
             blogIdGenerate.addIdMap(m.getId(), EditorTypeEnum.MarkDown_EDITOR);

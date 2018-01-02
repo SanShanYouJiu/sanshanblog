@@ -7,13 +7,15 @@ import com.sanshan.pojo.entity.IpBlogVoteDO;
 import com.sanshan.service.vote.VoteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SessionCallback;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Isolation;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 
 /**
  * 投票数据的可用性保证
@@ -33,27 +35,35 @@ public class VoteDataBaseRollBack {
 
 
     /**
-     检查是否需要从数据库恢复数据
+     * 从数据库恢复数据
      */
-    @Transactional(isolation = Isolation.READ_COMMITTED,propagation = Propagation.REQUIRED,rollbackFor = Exception.class)
     public void inspectDataConsistency() {
         Long initTime = System.currentTimeMillis();
         //进行点赞数据的事务完整性检查
-        log.info("投票数据进行事物一致性检查");
+        log.info("投票数据进行数据回滚");
         List<BlogVoteDO> blogVoteDOS = blogVoteMapper.selectAll();
         List<IpBlogVoteDO> ipBlogVoteDOS = ipBlogVoteMapper.selectAll();
-        rollbackData(blogVoteDOS, ipBlogVoteDOS);
-        log.info("从数据库中检查投票数据的一致性完成 耗时:{}ms", System.currentTimeMillis() - initTime);
+        //开启事务
+        SessionCallback sessionCallback = new SessionCallback() {
+            @Override
+            public Object execute(RedisOperations redisOperations) throws DataAccessException {
+                redisOperations.multi();
+                rollbackData(blogVoteDOS, ipBlogVoteDOS);
+                return redisOperations.exec();
+            }
+        };
+        //执行
+        redisTemplate.execute(sessionCallback);
+        log.info("从数据库中回滚投票数据的完成 耗时:{}ms", System.currentTimeMillis() - initTime);
     }
 
     /**
-     数据回滚到缓存
+     * 数据回滚到缓存
      */
-    public void rollbackData(List<BlogVoteDO> blogVoteDOS, List<IpBlogVoteDO> ipBlogVoteDOS) {
-
+    private void rollbackData(List<BlogVoteDO> blogVoteDOS, List<IpBlogVoteDO> ipBlogVoteDOS) {
         blogVoteDOS.stream().forEach(blogVoteDO -> {
-            redisTemplate.opsForHash().put(VoteService.BLOG_VOTE_FAVOURS_PREFIX , blogVoteDO.getBlogId(), blogVoteDO.getFavours());
-            redisTemplate.opsForHash().put(VoteService.BLOG_VOTE_THREADS_PREFIX , blogVoteDO.getBlogId(), blogVoteDO.getTreads());
+            redisTemplate.opsForHash().put(VoteService.BLOG_VOTE_FAVOURS_PREFIX, blogVoteDO.getBlogId(), blogVoteDO.getFavours());
+            redisTemplate.opsForHash().put(VoteService.BLOG_VOTE_THREADS_PREFIX, blogVoteDO.getBlogId(), blogVoteDO.getTreads());
         });
 
         ipBlogVoteDOS.stream().forEach(ipBlogVoteDO -> {
@@ -61,9 +71,9 @@ public class VoteDataBaseRollBack {
             Long blogId = ipBlogVoteDO.getBlogId();
             if (ipBlogVoteDO.getFavour()) {
                 redisTemplate.opsForHash().put(VoteService.IP_VOTE_BLOG_ID_EXIST_PREFIX + ip, blogId, true);
-                redisTemplate.opsForHash().put(VoteService.VOTE_IP_FAVOUR_PREFIX+ip, blogId, true);
-            }else {
-                redisTemplate.opsForHash().put(VoteService.IP_VOTE_BLOG_ID_EXIST_PREFIX+ip,blogId,false);
+                redisTemplate.opsForHash().put(VoteService.VOTE_IP_FAVOUR_PREFIX + ip, blogId, true);
+            } else {
+                redisTemplate.opsForHash().put(VoteService.IP_VOTE_BLOG_ID_EXIST_PREFIX + ip, blogId, false);
                 redisTemplate.opsForHash().put(VoteService.VOTE_IP_TREAD_PREFIX + ip, blogId, true);
             }
         });

@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 
 /**
  * 采用了lombok进行缩减代码
@@ -12,11 +13,13 @@ import javax.persistence.Table;
 @Table(name = "markdown_blog")
 @NoArgsConstructor()
 @Data
-public class MarkDownBlogDO extends BaseEditorDO {
+public class MarkDownBlogDO extends BaseEditorDO  implements Serializable{
 
-    private static final long serialVersionUID = 2532923739523906290L;
 
+    private static final long serialVersionUID = 4504221282215641915L;
     @Id
     private Long id;
+
+    private String extra;
 
 }

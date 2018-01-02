@@ -4,13 +4,15 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.Date;
 
 @Data
 @NoArgsConstructor
 @ToString
-public class UeditorBlogDTO {
+public class UeditorBlogDTO  implements Serializable{
 
+    private static final long serialVersionUID = 4347635814760464628L;
     private  Long id;
 
     private String user;

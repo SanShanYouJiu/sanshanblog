@@ -22,7 +22,7 @@ public class HomeIndexController {
     @Autowired
     private FeedBackService feedBackService;
 
-    //TODO 作校验使用
+    //作校验使用
     @InitBinder("multipartFileBucket")
     protected void initBinderMultipartFileBucket(WebDataBinder binder) {
         binder.setValidator(multipartFileBucketValidator);

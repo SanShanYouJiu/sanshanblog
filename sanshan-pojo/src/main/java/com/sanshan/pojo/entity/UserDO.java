@@ -7,6 +7,7 @@ import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -14,7 +15,7 @@ import java.util.List;
 @Data
 @ToString
 @Document
-public class UserDO extends BaseDO {
+public class UserDO extends BaseDO implements Serializable{
 
     private static final long serialVersionUID = -499938264759024375L;
 

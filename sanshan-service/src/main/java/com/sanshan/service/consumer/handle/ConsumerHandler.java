@@ -15,12 +15,16 @@ public class ConsumerHandler {
     @Autowired
     private VoteConsumer voteConsumer;
 
+    @Autowired
+    private UeditorFileConsumer ueditorFileConsumer;
+
 
     public void process() {
         if (log.isDebugEnabled()) {
             log.debug("处理consumer中的数据");
         }
         voteConsumer.voteConsumerProcess();
+        ueditorFileConsumer.ueditorConsumer();
     }
 
 

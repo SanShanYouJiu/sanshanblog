@@ -20,7 +20,7 @@ public final class BlogIdGenerate {
 
     final AtomicInteger poolNumber = new AtomicInteger(1);
 
-    private ExecutorService pool = new ThreadPoolExecutor(4,9,1,TimeUnit.MINUTES,new LinkedBlockingDeque<Runnable>(),(r)->{
+    private ExecutorService pool = new ThreadPoolExecutor(4,9,3,TimeUnit.MINUTES,new LinkedBlockingDeque<Runnable>(),(r)->{
         Thread t = new Thread(r);
         t.setName("BlogIdGenerate-thread:"+poolNumber.incrementAndGet());
         return t;

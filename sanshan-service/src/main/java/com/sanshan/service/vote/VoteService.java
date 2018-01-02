@@ -19,6 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author sanshan
  * www.85432173@qq.com
  * 投票的相关变化
+ * FIXME 在删除博客时将投票数据也进行删除
  */
 @Service
 @Slf4j
@@ -35,7 +36,7 @@ public class VoteService {
     public static final String IP_VOTE_BLOG_ID_EXIST_PREFIX = "ip_vote:exist:";
 
     private static final AtomicInteger POOL_NUMBER = new AtomicInteger(1);
-    private ExecutorService pool = new ThreadPoolExecutor(0, 4,
+    private ExecutorService pool = new ThreadPoolExecutor(0, 8,
             3, TimeUnit.MINUTES,
             new SynchronousQueue<Runnable>(), (r) -> {
         SecurityManager s = System.getSecurityManager();

@@ -1,5 +1,6 @@
 package com.sanshan.service.check.night;
 
+import com.sanshan.dao.UeditorFileQuoteMapper;
 import com.sanshan.service.editor.UeditorFileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,10 @@ public class UeditorFileUploadCheck {
     @Autowired
     private UeditorFileService ueditorFileService;
 
+    @Autowired
+    private UeditorFileQuoteMapper ueditorFileQuoteMapper;
+
+
     public void check(){
        Map<String,Integer> fileQuoteMap= redisTemplate.opsForHash().entries(UeditorFileService.UEDITOR_UPLOAD_FILE);
        //首先检查引用为0的 然后查看引用0的在UEDITOR_UPLOAD_TEMP_FILE缓存中是否存在
@@ -30,6 +35,7 @@ public class UeditorFileUploadCheck {
                 if (!contain){
                     ueditorFileService.deleteFile(entry.getKey());
                     redisTemplate.opsForHash().delete(UeditorFileService.UEDITOR_UPLOAD_FILE, entry.getKey());
+                    ueditorFileQuoteMapper.deleteByFilename(entry.getKey());
                     redisTemplate.opsForSet().remove(UeditorFileService.UEDITOR_TMEP_FILENAME_SET, entry.getKey());
                 }
             }

@@ -2,6 +2,7 @@ package com.sanshan.service.check.init.container.check;
 
 import com.sanshan.service.check.init.container.check.conf.loadcheck.SettingLoadCheck;
 import com.sanshan.service.check.init.container.check.dataprotetcd.blogmetacache.BlogMetaDataBaseRollBack;
+import com.sanshan.service.check.init.container.check.dataprotetcd.ueditorfile.UeditorFileDataBaseRollBack;
 import com.sanshan.service.check.init.container.check.dataprotetcd.votecache.VoteDataBaseRollBack;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class InstantiationTracingBeanPostProcessor implements ApplicationListene
     private VoteDataBaseRollBack voteDataBaseRollBack;
 
     @Autowired
+    private UeditorFileDataBaseRollBack  ueditorFileDataBaseRollBack;
+
+    @Autowired
     private SettingLoadCheck settingLoadCheck;
 
     //需要执行的逻辑代码，当spring容器初始化完成后就会执行该方法。
@@ -28,6 +32,7 @@ public class InstantiationTracingBeanPostProcessor implements ApplicationListene
         if(event.getApplicationContext().getParent() == null) {
             blogMetaDataBaseRollBack.inspectDataConsistency();
             voteDataBaseRollBack.inspectDataConsistency();
+            ueditorFileDataBaseRollBack.inspectDataConsistency();
             settingLoadCheck.loadCheck();
         }
     }

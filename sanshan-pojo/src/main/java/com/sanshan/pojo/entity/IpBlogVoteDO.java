@@ -7,6 +7,7 @@ import lombok.ToString;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -15,7 +16,10 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 @ToString
-public class IpBlogVoteDO extends BaseDO{
+public class IpBlogVoteDO extends BaseDO implements Serializable{
+
+    private static final long serialVersionUID = -1710798552070664045L;
+
     @Id
     private Long id;
 

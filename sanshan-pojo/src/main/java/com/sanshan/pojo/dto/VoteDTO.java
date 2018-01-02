@@ -1,11 +1,13 @@
 package com.sanshan.pojo.dto;
 
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
 /**
  */
+@NoArgsConstructor
 @Data
 public class VoteDTO implements Serializable {
 
@@ -17,8 +19,6 @@ public class VoteDTO implements Serializable {
 
     private Boolean vote;
 
-    public VoteDTO() {
-    }
 
    public   VoteDTO addVote(String ip, long blogId, boolean vote){
        this.ip = ip;

@@ -1,12 +1,10 @@
 package com.sanshan.pojo.entity;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
 @Data
-@NoArgsConstructor
 public  abstract class BaseEditorDO extends BaseDO {
 
     private String user;

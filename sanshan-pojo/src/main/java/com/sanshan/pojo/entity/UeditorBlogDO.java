@@ -16,4 +16,5 @@ public class UeditorBlogDO extends BaseEditorDO {
     @Id
     private Long id;
 
+    private String extra;
 }

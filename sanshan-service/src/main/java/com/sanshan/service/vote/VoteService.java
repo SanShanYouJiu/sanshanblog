@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -19,7 +20,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author sanshan
  * www.85432173@qq.com
  * 投票的相关变化
- * FIXME 在删除博客时将投票数据也进行删除
  */
 @Service
 @Slf4j
@@ -30,10 +30,14 @@ public class VoteService {
 
 
     public static final String VOTE_IP_FAVOUR_PREFIX = "ip_vote:favour:";
+    public static final String VOTE_IP_FAVOUR_KEYS = "ip_vote:favour~keys";
     public static final String VOTE_IP_TREAD_PREFIX = "ip_vote:tread:";
-    public static final String BLOG_VOTE_FAVOURS_PREFIX = "blog_vote:favours:";
-    public static final String BLOG_VOTE_THREADS_PREFIX = "blog_vote:treads:";
+    public static final String VOTE_IP_TREAD_KEYS = "ip_vote:tread~keys";
     public static final String IP_VOTE_BLOG_ID_EXIST_PREFIX = "ip_vote:exist:";
+    public static final String IP_VOTE_BLOG_ID_EXIST_KEYS = "ip_vote:exist~keys";
+
+    public static final String BLOG_VOTE_FAVOURS = "blog_vote:favours:";
+    public static final String BLOG_VOTE_THREADS = "blog_vote:treads:";
 
     private static final AtomicInteger POOL_NUMBER = new AtomicInteger(1);
     private ExecutorService pool = new ThreadPoolExecutor(0, 8,
@@ -62,6 +66,8 @@ public class VoteService {
      */
     public static ConcurrentLinkedQueue<VoteDTO> voteDecrConsumerQueue = new ConcurrentLinkedQueue<VoteDTO>();
 
+    public static ConcurrentLinkedQueue<VoteDTO> voteDeleteConsumerQueue = new ConcurrentLinkedQueue();
+
 
 
 
@@ -87,14 +93,18 @@ public class VoteService {
             //进行投票
             if (vote) {
                 redisTemplate.opsForHash().put(VOTE_IP_FAVOUR_PREFIX + ip, blogId,true);
-                redisTemplate.opsForHash().increment(BLOG_VOTE_FAVOURS_PREFIX , blogId, 1);
+                redisTemplate.opsForSet().add(VOTE_IP_FAVOUR_KEYS, VOTE_IP_FAVOUR_PREFIX + ip);
+                redisTemplate.opsForHash().increment(BLOG_VOTE_FAVOURS , blogId, 1);
             } else {
                 redisTemplate.opsForHash().put(VOTE_IP_TREAD_PREFIX + ip, blogId,true);
-                redisTemplate.opsForHash().increment(BLOG_VOTE_THREADS_PREFIX , blogId, 1);
+                redisTemplate.opsForSet().add(VOTE_IP_TREAD_KEYS, VOTE_IP_TREAD_PREFIX + ip);
+
+                redisTemplate.opsForHash().increment(BLOG_VOTE_THREADS , blogId, 1);
             }
             voteTransactionConsistentCheck(ip,blogId,vote);
             //加入到已投票域中
             redisTemplate.opsForHash().put(IP_VOTE_BLOG_ID_EXIST_PREFIX + ip, blogId, vote);
+            redisTemplate.opsForSet().add(IP_VOTE_BLOG_ID_EXIST_KEYS, IP_VOTE_BLOG_ID_EXIST_PREFIX + ip);
             saveBlogVoteInfo(ip, blogId, vote);
             responseMsgVO.buildOK();
         }
@@ -156,9 +166,9 @@ public class VoteService {
      */
     public void   decrReverseVotes(String ip,Long blogId,Boolean vote) {
         if (vote) {
-            redisTemplate.opsForHash().increment(BLOG_VOTE_THREADS_PREFIX , blogId, -1);
+            redisTemplate.opsForHash().increment(BLOG_VOTE_THREADS , blogId, -1);
         } else {
-            redisTemplate.opsForHash().increment(BLOG_VOTE_FAVOURS_PREFIX , blogId, -1);
+            redisTemplate.opsForHash().increment(BLOG_VOTE_FAVOURS , blogId, -1);
         }
         VoteDTO voteDTO = new VoteDTO();
         voteDecrConsumerQueue.add(voteDTO.decrVote(ip,blogId,vote));
@@ -192,6 +202,45 @@ public class VoteService {
             voteAddConsumerQueue.add(voteDTO.addVote(ip,blogId,vote));
         });
     }
+
+    /**
+     * 删除博客时将投票数据也进行删除
+     * @param blogId
+     */
+    public void deleteBlogVote(Long blogId) {
+      pool.execute(()->{
+          Set<String> favourSet = redisTemplate.opsForSet().members(VOTE_IP_FAVOUR_KEYS);
+          if (!Objects.isNull(favourSet)) {
+              String[] favours = favourSet.toArray(new String[]{});
+              for (int i = 0; i < favours.length; i++) {
+                  redisTemplate.opsForHash().delete(favours[i], blogId);
+              }
+          }
+
+          Set<String> treadSet = redisTemplate.opsForSet().members(VOTE_IP_TREAD_KEYS);
+          if (!Objects.isNull(treadSet)) {
+              String[] treads = treadSet.toArray(new String[]{});
+              for (int i = 0; i < treads.length; i++) {
+                  redisTemplate.opsForHash().delete(treads[i], blogId);
+              }
+          }
+
+          Set<String> existSet = redisTemplate.opsForSet().members(IP_VOTE_BLOG_ID_EXIST_KEYS);
+          if (!Objects.isNull(existSet)) {
+              String[] exists = existSet.toArray(new String[]{});
+              for (int i = 0; i < exists.length; i++) {
+                  redisTemplate.opsForHash().delete(exists[i],blogId);
+              }
+          }
+
+          redisTemplate.opsForHash().delete(BLOG_VOTE_FAVOURS,blogId);
+          redisTemplate.opsForHash().delete(BLOG_VOTE_THREADS,blogId);
+          VoteDTO voteDTO = new VoteDTO();
+          voteDTO.setBlogId(blogId);
+          voteDeleteConsumerQueue.add(voteDTO);
+      });
+    }
+
 
 
 }

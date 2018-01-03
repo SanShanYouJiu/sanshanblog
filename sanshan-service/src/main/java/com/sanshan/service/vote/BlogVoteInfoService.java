@@ -76,8 +76,8 @@ public class BlogVoteInfoService {
      * @param responseMsgVO
      */
     public void queryBlogInfo(Long blogId, ResponseMsgVO responseMsgVO) {
-        Integer blogFavours = (Integer) redisTemplate.opsForHash().get(VoteService.BLOG_VOTE_FAVOURS_PREFIX ,blogId);
-        Integer blogTreads = (Integer) redisTemplate.opsForHash().get(VoteService.BLOG_VOTE_THREADS_PREFIX ,blogId);
+        Integer blogFavours = (Integer) redisTemplate.opsForHash().get(VoteService.BLOG_VOTE_FAVOURS ,blogId);
+        Integer blogTreads = (Integer) redisTemplate.opsForHash().get(VoteService.BLOG_VOTE_THREADS ,blogId);
         BlogVoteDTO blogVoteDTO = new BlogVoteDTO(blogId, blogFavours, blogTreads);
         //检查是否一致
         InspectState state = inspectDataConsistency(blogVoteDTO);
@@ -92,10 +92,10 @@ public class BlogVoteInfoService {
             }
         }
         if (!Objects.isNull(blogVoteDTO.getFavours())) {
-            redisTemplate.opsForHash().put(VoteService.BLOG_VOTE_FAVOURS_PREFIX , blogId, blogVoteDTO.getFavours());
+            redisTemplate.opsForHash().put(VoteService.BLOG_VOTE_FAVOURS , blogId, blogVoteDTO.getFavours());
         }
         if (!Objects.isNull(blogVoteDTO.getTreads())) {
-            redisTemplate.opsForHash().put(VoteService.BLOG_VOTE_THREADS_PREFIX , blogId, blogVoteDTO.getTreads());
+            redisTemplate.opsForHash().put(VoteService.BLOG_VOTE_THREADS , blogId, blogVoteDTO.getTreads());
         }
 
         responseMsgVO.buildOKWithData(blogVoteDTO);

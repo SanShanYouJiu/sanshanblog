@@ -40,13 +40,16 @@ public class VoteConsumer {
 
 
     protected void voteConsumerProcess() {
-        while (!VoteService.voteAddConsumerQueue.isEmpty() || !VoteService.voteDecrConsumerQueue.isEmpty()) {
+        if (!VoteService.voteAddConsumerQueue.isEmpty() || !VoteService.voteDecrConsumerQueue.isEmpty()||!VoteService.voteDeleteConsumerQueue.isEmpty()) {
             pool.execute(() -> {
                 voteAddConsumerProcess();
                 voteDecrConsumerProcess();
+                voteDleteConsumerProcess();
             });
         }
     }
+
+
 
     /**
      * 对Vote增加的consumer进行处理
@@ -84,6 +87,18 @@ public class VoteConsumer {
                 blogVoteMapper.decrFavours(voteDTO.getBlogId());
                 ipBlogVoteMapper.deleteVoteFavourByBlogId(voteDTO.getIp(), voteDTO.getBlogId());
             }
+        }
+    }
+
+    /**
+     * 删除相关投票数据
+     */
+    private void voteDleteConsumerProcess() {
+        while (!VoteService.voteDeleteConsumerQueue.isEmpty()) {
+            VoteDTO voteDTO = VoteService.voteDeleteConsumerQueue.poll();
+            Long blogId = voteDTO.getBlogId();
+            ipBlogVoteMapper.deleteByBlogId(blogId);
+            blogVoteMapper.deleteByBlogId(blogId);
         }
     }
 

@@ -6,6 +6,7 @@ import com.sanshan.service.editor.MarkDownBlogService;
 import com.sanshan.service.editor.UeditorBlogService;
 import com.sanshan.service.vo.BlogVO;
 import com.sanshan.service.vo.ResponseMsgVO;
+import com.sanshan.service.vote.VoteService;
 import com.sanshan.util.BlogIdGenerate;
 import com.sanshan.util.PageInfo;
 import com.sanshan.util.exception.MapFoundNullException;
@@ -32,6 +33,9 @@ public class BlogService {
 
     @Autowired
     private BlogIdGenerate blogIdGenerate;
+
+    @Autowired
+    private VoteService voteService;
 
 
     public Long getCurrentId() {
@@ -230,6 +234,7 @@ public class BlogService {
              default:
                  break;
         }
+        voteService.deleteBlogVote(id);
         responseMsgVO.buildOK();
     }
 

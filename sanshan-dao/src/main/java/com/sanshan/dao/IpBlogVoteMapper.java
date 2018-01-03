@@ -17,4 +17,7 @@ public interface IpBlogVoteMapper extends Mapper<IpBlogVoteDO> {
 
     @Delete(" Delete FROM ip_blog_vote WHERE  ip=#{ip}&&blog_id=#{blogId}&&favour=1")
     int deleteVoteFavourByBlogId(@Param("ip") String ip, @Param("blogId") Long blogId);
+
+    @Delete("Delete FROM ip_blog_vote WHERE blog_id=#{blog_id}")
+    int deleteByBlogId(@Param("blog_id") Long blogId);
 }

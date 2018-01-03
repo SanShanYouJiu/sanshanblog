@@ -1,6 +1,8 @@
 package com.sanshan.dao;
 
 import com.sanshan.pojo.entity.BlogVoteDO;
+import org.apache.ibatis.annotations.Delete;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import tk.mybatis.mapper.common.Mapper;
@@ -23,4 +25,7 @@ public interface BlogVoteMapper extends Mapper<BlogVoteDO>{
 
     @Select("SELECT favours,treads  FROM blog_vote WHERE  blog_id=#{blogId}")
      BlogVoteDO queryVote(long blogId);
+
+    @Delete("DELETE FROM blog_vote WHERE blog_id=#{blog_id}")
+    int deleteByBlogId(@Param("blog_id") Long blogId);
 }

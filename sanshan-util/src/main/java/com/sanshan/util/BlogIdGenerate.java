@@ -128,7 +128,12 @@ public final class BlogIdGenerate {
      */
     public synchronized  final Long getId(EditorTypeEnum type) {
         //log.debug("获取当前系统新的博客Id,可能是用于新增博客");
-        Long id = ((TreeMap<Long,EditorTypeEnum>) IdMap).firstKey();
+        Long id;
+        try {
+             id = ((TreeMap<Long,EditorTypeEnum>) IdMap).firstKey();
+        }catch (NoSuchElementException e){
+            id=0L;
+        }
         //如果ID被其他博客使用了 那么就会递增到无人使用的id
         while (IdMap.containsKey(id)) {
           id++;

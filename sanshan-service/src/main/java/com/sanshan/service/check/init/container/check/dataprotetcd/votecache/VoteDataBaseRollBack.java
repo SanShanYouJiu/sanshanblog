@@ -11,6 +11,7 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SessionCallback;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -62,8 +63,8 @@ public class VoteDataBaseRollBack {
      */
     private void rollbackData(List<BlogVoteDO> blogVoteDOS, List<IpBlogVoteDO> ipBlogVoteDOS) {
         blogVoteDOS.stream().forEach(blogVoteDO -> {
-            redisTemplate.opsForHash().put(VoteService.BLOG_VOTE_FAVOURS_PREFIX, blogVoteDO.getBlogId(), blogVoteDO.getFavours());
-            redisTemplate.opsForHash().put(VoteService.BLOG_VOTE_THREADS_PREFIX, blogVoteDO.getBlogId(), blogVoteDO.getTreads());
+            redisTemplate.opsForHash().put(VoteService.BLOG_VOTE_FAVOURS, blogVoteDO.getBlogId(), blogVoteDO.getFavours());
+            redisTemplate.opsForHash().put(VoteService.BLOG_VOTE_THREADS, blogVoteDO.getBlogId(), blogVoteDO.getTreads());
         });
 
         ipBlogVoteDOS.stream().forEach(ipBlogVoteDO -> {
@@ -71,10 +72,18 @@ public class VoteDataBaseRollBack {
             Long blogId = ipBlogVoteDO.getBlogId();
             if (ipBlogVoteDO.getFavour()) {
                 redisTemplate.opsForHash().put(VoteService.IP_VOTE_BLOG_ID_EXIST_PREFIX + ip, blogId, true);
+                redisTemplate.opsForSet().add(VoteService.IP_VOTE_BLOG_ID_EXIST_KEYS,VoteService.IP_VOTE_BLOG_ID_EXIST_PREFIX + ip);
+
                 redisTemplate.opsForHash().put(VoteService.VOTE_IP_FAVOUR_PREFIX + ip, blogId, true);
+                redisTemplate.opsForSet().add(VoteService.VOTE_IP_FAVOUR_KEYS,VoteService.VOTE_IP_FAVOUR_PREFIX + ip);
             } else {
+
                 redisTemplate.opsForHash().put(VoteService.IP_VOTE_BLOG_ID_EXIST_PREFIX + ip, blogId, false);
+                redisTemplate.opsForSet().add(VoteService.IP_VOTE_BLOG_ID_EXIST_KEYS, VoteService.IP_VOTE_BLOG_ID_EXIST_PREFIX + ip);
+
                 redisTemplate.opsForHash().put(VoteService.VOTE_IP_TREAD_PREFIX + ip, blogId, true);
+                redisTemplate.opsForSet().add(VoteService.VOTE_IP_TREAD_KEYS, VoteService.VOTE_IP_TREAD_PREFIX + ip);
+
             }
         });
     }

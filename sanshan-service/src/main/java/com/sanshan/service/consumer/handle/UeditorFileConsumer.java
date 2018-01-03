@@ -40,7 +40,7 @@ public class UeditorFileConsumer {
 
 
     protected void ueditorConsumer(){
-        while (!UeditorFileService.ueditorFileAddQueue.isEmpty() || !UeditorFileService.ueditorFileDecrQueue.isEmpty() || !UeditorFileService.ueditorFileUpload.isEmpty()) {
+        if (!UeditorFileService.ueditorFileAddQueue.isEmpty() || !UeditorFileService.ueditorFileDecrQueue.isEmpty() || !UeditorFileService.ueditorFileUpload.isEmpty()) {
             pool.execute(() -> {
                 ueditorBlogFileAdd();
                 ueditorBlogFileDecr();

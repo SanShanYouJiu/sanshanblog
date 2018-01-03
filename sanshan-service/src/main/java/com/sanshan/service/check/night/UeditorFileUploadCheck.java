@@ -33,10 +33,10 @@ public class UeditorFileUploadCheck {
                 Boolean contain = redisTemplate.opsForValue().get(UeditorFileService.UEDITOR_UPLOAD_TEMP_FILE+entry.getKey()) != null ? true : false;
                 //不包含的情况
                 if (!contain){
-                    ueditorFileService.deleteFile(entry.getKey());
                     redisTemplate.opsForHash().delete(UeditorFileService.UEDITOR_UPLOAD_FILE, entry.getKey());
                     ueditorFileQuoteMapper.deleteByFilename(entry.getKey());
                     redisTemplate.opsForSet().remove(UeditorFileService.UEDITOR_TMEP_FILENAME_SET, entry.getKey());
+                    ueditorFileService.deleteFile(entry.getKey());
                 }
             }
         }

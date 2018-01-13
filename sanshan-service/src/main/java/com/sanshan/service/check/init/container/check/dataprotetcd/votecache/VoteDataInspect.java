@@ -11,19 +11,16 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.data.redis.core.RedisOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SessionCallback;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Objects;
-import java.util.Set;
 
 /**
  * 投票数据的可用性保证
  */
 @Component
 @Slf4j
-public class VoteDataBaseRollBack {
+public class VoteDataInspect {
 
     @Autowired
     private BlogVoteMapper blogVoteMapper;

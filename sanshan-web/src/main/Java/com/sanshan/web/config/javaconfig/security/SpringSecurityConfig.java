@@ -6,6 +6,7 @@ import com.sanshan.web.config.javaconfig.auxiliary.jwt.JwtAuthenticationTokenFil
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -73,15 +74,15 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/admin/index/**",
                         "/api/user/change-pwd",
                         "/api/user/email-check",
-                        "/api/auth/refresh",
-                        "/api/register/check/token",
-                        "/api/blog/delete-by-id",
+                        "/api/auth/refresh-token",
+                        "/api/user/register/check/token",
                         "/api/markdown-editor/**",
                         "/api/ueditor-editor/query-by-page",//TODO 将Config与加载图片的代码分离到另外一个Controller中
-                        "/api/ueditor-editor/query-all",
-                        "/api/ueditor-editor/insert-blog",
-                        "/api/ueditor-editor/delete-by-id",
-                        "/api/ueditor-editor/update-by-id")
+                        "/api/file/**",
+                        "/api/ueditor-editor/blog",
+                        "/api/ueditor-editor/blog/**")
+                .hasAnyRole("USER")
+                .antMatchers(HttpMethod.DELETE,"/api/blog/id/**")
                 .hasAnyRole("USER")
                 .antMatchers(
                         "/",
@@ -100,10 +101,8 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/user/email/send",
                         "/api/user/check/token",
                         "/api/user/forget-pwd",
-                        "/api/file/**",
                         "/api/search/**",
-                        "/api/user-info/**",
-                        "/api/blog/vote/**"
+                        "/api/user-info/**"
                 ).permitAll()
                 .anyRequest()
                 .authenticated();

@@ -1,4 +1,4 @@
-package com.sanshan.service.consumer.handle;
+package com.sanshan.service.consumer.accept;
 
 import com.sanshan.dao.UeditorFileQuoteMapper;
 import com.sanshan.dao.UeditorIdFileMapMapper;

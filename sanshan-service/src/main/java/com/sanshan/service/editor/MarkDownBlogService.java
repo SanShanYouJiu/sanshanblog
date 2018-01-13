@@ -73,7 +73,7 @@ public class MarkDownBlogService {
 
     public Integer saveDO(String content, String title,String tag) {
         MarkDownBlogDO markDownBlog = new MarkDownBlogDO();
-        Long id = blogIdGenerate.getId(EditorTypeEnum.MarkDown_EDITOR);
+        Long id = blogIdGenerate.getId(EditorTypeEnum.MARKDOWN_EDITOR);
         markDownBlog.setId(id);
         markDownBlog.setContent(content);
         markDownBlog.setTag(tag);

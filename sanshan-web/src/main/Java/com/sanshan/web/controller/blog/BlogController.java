@@ -8,9 +8,7 @@ import com.sanshan.util.exception.NotFoundBlogException;
 import com.sanshan.util.info.PosCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -29,8 +27,8 @@ public class BlogController {
     private BlogService blogService;
 
 
-    @RequestMapping(value = "query-by-id", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO getBlog(@RequestParam("id") Long id) throws Exception {
+    @GetMapping(value = "id/{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO getBlog(@PathVariable("id") Long id) throws Exception {
         ResponseMsgVO<BlogVO> responseMsgVO = new ResponseMsgVO<>();
         BlogVO blog = blogService.getBlog(id);
         if (Objects.isNull(blog)) {
@@ -40,8 +38,8 @@ public class BlogController {
     }
 
 
-    @RequestMapping(value = "query-by-tag",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO queryByTag(@RequestParam("tag")String tag){
+    @GetMapping(value = "tag/{tag}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO queryByTag(@PathVariable("tag")String tag){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         List<BlogVO> list = blogService.getBlogByTag(tag);
         if (Objects.isNull(list)){
@@ -50,7 +48,7 @@ public class BlogController {
         return responseMsgVO.buildOKWithData(list);
     }
 
-    @RequestMapping(value = "query-tag-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "tag-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO queryTagAll(){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         List list =blogService.queryTagAll();
@@ -60,8 +58,8 @@ public class BlogController {
         return responseMsgVO.buildOKWithData(list);
     }
 
-    @RequestMapping(value = "query-tag-by-page",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO queryTagByPage(@RequestParam(name = "pageRows")long pageRows,@RequestParam(name = "pageNum")long pageNum){
+    @GetMapping(value = "tag-page/pageRows:{pageRows}/pageNum:{pageNum}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO queryTagByPage(@PathVariable(name = "pageRows")long pageRows,@PathVariable(name = "pageNum")long pageNum){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         PageInfo pageInfo =blogService.queryTagByPage(pageRows,pageNum);
         if (Objects.isNull(pageInfo.getCompleteData())){
@@ -70,8 +68,8 @@ public class BlogController {
         return responseMsgVO.buildOKWithData(pageInfo);
     }
 
-    @RequestMapping(value = "query-by-title",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO  queryByTitle(@RequestParam("title")String title){
+    @GetMapping(value = "title/{title}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO  queryByTitle(@PathVariable("title")String title){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         List<BlogVO> list = blogService.getBlogByTitle(title);
         if (Objects.isNull(list)){
@@ -80,7 +78,7 @@ public class BlogController {
         return responseMsgVO.buildOKWithData(list);
     }
 
-    @RequestMapping(value = "query-title-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "title-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO queryTitleAll(){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         List list =blogService.queryTitleAll();
@@ -91,8 +89,8 @@ public class BlogController {
     }
 
 
-    @RequestMapping(value = "query-title-by-page",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO queryTitleByPage(@RequestParam("pageRows")long pageRows,@RequestParam(name = "pageNum")long pageNum){
+    @GetMapping(value = "title-page/pageRows:{pageRows}/pageNum:{pageNum}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO queryTitleByPage(@PathVariable("pageRows")long pageRows,@PathVariable(name = "pageNum")long pageNum){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         PageInfo pageInfo =blogService.queryTitleByPage(pageRows,pageNum);
         if (Objects.isNull(pageInfo.getCompleteData())){
@@ -101,8 +99,8 @@ public class BlogController {
         return responseMsgVO.buildOKWithData(pageInfo);
     }
 
-    @RequestMapping(value = "query-by-date",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO  queryByDate(@RequestParam("date")String dateString) throws ParseException {
+    @GetMapping(value = "date/{date}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO  queryByDate(@PathVariable("date")String dateString) throws ParseException {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date= null;
@@ -114,7 +112,7 @@ public class BlogController {
         return responseMsgVO.buildOKWithData(list);
     }
 
-    @RequestMapping(value = "query-date-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "date-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO queryDateAll(){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         List list =blogService.queryDateAll();
@@ -124,8 +122,8 @@ public class BlogController {
         return  responseMsgVO.buildOKWithData(list);
     }
 
-    @RequestMapping(value = "query-date-by-page", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO queryDateByPage(@RequestParam(name = "pageRows") long pageRows, @RequestParam(name = "pageNum") long pageNum) {
+    @GetMapping(value = "date-page/pageRows:{pageRows}/pageNum:{pageNum}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO queryDateByPage(@PathVariable(name = "pageRows") long pageRows, @PathVariable(name = "pageNum") long pageNum) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         PageInfo pageInfo = blogService.queryDateByPage(pageRows, pageNum);
         if (Objects.isNull(pageInfo.getCompleteData())){
@@ -134,7 +132,7 @@ public class BlogController {
         return responseMsgVO.buildOKWithData(pageInfo);
     }
 
-    @RequestMapping(value = "query-all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO queryAllBlog() {
         ResponseMsgVO<List<BlogVO>> responseMsgVO = new ResponseMsgVO();
         //List<BlogVO> list = blogService.queryAll();
@@ -142,15 +140,15 @@ public class BlogController {
         return responseMsgVO.buildOKWithData(list);
     }
 
-    @RequestMapping(value = "query-by-page",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public  ResponseMsgVO queryByPage(@RequestParam("pageRows")long pageRows,@RequestParam("pageNum")long pageNum){
+    @GetMapping(value = "page/pageRows:{pageRows}/pageNum:{pageNum}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public  ResponseMsgVO queryByPage(@PathVariable("pageRows")long pageRows,@PathVariable("pageNum")long pageNum){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         PageInfo pageInfo= blogService.queryByPage(pageRows, pageNum);
         return responseMsgVO.buildOKWithData(pageInfo);
     }
 
-    @RequestMapping(value = "delete-by-id",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO blogDelete(@RequestParam("id") Long id) {
+    @DeleteMapping(value = "id/{id}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO blogDelete(@PathVariable("id") Long id) {
         //id去除
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         blogService.removeBlog(id,responseMsgVO);
@@ -161,7 +159,7 @@ public class BlogController {
      * 获得目前的最新博客ID
      * @return 最新博客ID
      */
-    @RequestMapping(value = "get-current-id", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "first-id", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO getCurrentId() {
         Long id =  blogService.getCurrentId();
         return new ResponseMsgVO().buildOKWithData(id);

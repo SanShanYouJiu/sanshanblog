@@ -19,10 +19,10 @@
 
     <bean id="jobTask2" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
         <property name="targetObject">
-            <ref bean="consumerHandler"/>
+            <ref bean="consumerAccept"/>
         </property>
         <property name="targetMethod">
-            <value>process</value>
+            <value>accept</value>
         </property>
     </bean>
 
@@ -31,7 +31,7 @@
             <ref bean="nightCheckHandler"/>
         </property>
         <property name="targetMethod">
-            <value>process</value>
+            <value>nightCheck</value>
         </property>
     </bean>
 

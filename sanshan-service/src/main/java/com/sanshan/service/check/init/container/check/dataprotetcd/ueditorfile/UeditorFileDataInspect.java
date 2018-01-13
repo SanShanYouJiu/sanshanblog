@@ -18,7 +18,7 @@ import java.util.List;
  */
 @Component
 @Slf4j
-public class UeditorFileDataBaseRollBack {
+public class UeditorFileDataInspect {
 
 
     @Autowired

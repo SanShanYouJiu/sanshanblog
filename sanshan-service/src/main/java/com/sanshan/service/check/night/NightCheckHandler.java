@@ -15,7 +15,7 @@ public class NightCheckHandler {
     @Autowired
     private UeditorFileUploadCheck ueditorFileUploadCheck;
 
-    public void process() {
+    public void nightCheck() {
         log.info("午夜检测开始");
         ueditorFileUploadCheck.check();
         log.info("核对完毕");

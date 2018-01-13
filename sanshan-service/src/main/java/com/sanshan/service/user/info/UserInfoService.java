@@ -5,6 +5,7 @@ import com.sanshan.pojo.dto.UserDTO;
 import com.sanshan.pojo.entity.UserDO;
 import com.sanshan.service.convent.UserConvert;
 import com.sanshan.service.user.cache.UserBlogCacheService;
+import com.sanshan.service.vo.BlogVO;
 import com.sanshan.service.vo.ResponseMsgVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,7 +29,7 @@ public class UserInfoService {
         responseMsgVO.buildOKWithData(userDTO);
     }
 
-    public List getUserBlogs(String username) {
+    public List<BlogVO> getUserBlogs(String username) {
          return userBlogCacheService.getUserBlogs(username);
     }
 }

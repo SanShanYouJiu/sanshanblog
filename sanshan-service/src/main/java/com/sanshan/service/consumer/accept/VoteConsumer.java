@@ -1,4 +1,4 @@
-package com.sanshan.service.consumer.handle;
+package com.sanshan.service.consumer.accept;
 
 import com.sanshan.dao.BlogVoteMapper;
 import com.sanshan.dao.IpBlogVoteMapper;
@@ -42,9 +42,9 @@ public class VoteConsumer {
     protected void voteConsumerProcess() {
         if (!VoteService.voteAddConsumerQueue.isEmpty() || !VoteService.voteDecrConsumerQueue.isEmpty()||!VoteService.voteDeleteConsumerQueue.isEmpty()) {
             pool.execute(() -> {
-                voteAddConsumerProcess();
-                voteDecrConsumerProcess();
-                voteDleteConsumerProcess();
+                voteAdd();
+                voteDecr();
+                voteDelete();
             });
         }
     }
@@ -54,7 +54,7 @@ public class VoteConsumer {
     /**
      * 对Vote增加的consumer进行处理
      */
-    private  void  voteAddConsumerProcess(){
+    private  void  voteAdd(){
         while (!VoteService.voteAddConsumerQueue.isEmpty()) {
             if (log.isDebugEnabled()){
                 log.debug("从VoteService中的voteAddConsumerQueue获得数据,即将存入Mysql中");
@@ -74,7 +74,7 @@ public class VoteConsumer {
     /**
      * 对Vote的减少的Consumer进行处理
      */
-    private  void  voteDecrConsumerProcess(){
+    private  void  voteDecr(){
         while (!VoteService.voteDecrConsumerQueue.isEmpty()) {
             if (log.isDebugEnabled()){
                 log.debug("从VoteService中的voteDecrConsumerQueue获得数据,即将在Mysql执行");
@@ -93,7 +93,7 @@ public class VoteConsumer {
     /**
      * 删除相关投票数据
      */
-    private void voteDleteConsumerProcess() {
+    private void voteDelete() {
         while (!VoteService.voteDeleteConsumerQueue.isEmpty()) {
             VoteDTO voteDTO = VoteService.voteDeleteConsumerQueue.poll();
             Long blogId = voteDTO.getBlogId();

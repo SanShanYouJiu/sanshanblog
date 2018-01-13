@@ -38,7 +38,6 @@ public class UeditorBlogCacheService extends BaseServiceImpl<UeditorBlogDO> {
     }
 
 
-    @Cacheable({"ueditor-blog"})
     @Override
     public PageInfo<UeditorBlogDO> queryPageListByWhere(UeditorBlogDO example, Integer page, Integer rows) {
         return super.queryPageListByWhere(example, page, rows);

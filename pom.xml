@@ -26,7 +26,7 @@
         <junit>4.10</junit>
         <lombok>1.16.4.0</lombok>
         <modelmapper>0.7.5</modelmapper>
-        <spring.version>4.2.5.RELEASE</spring.version>
+        <spring.version>4.3.5.RELEASE</spring.version>
         <!--validate-->
         <cglib>3.2.2</cglib>
         <!--aspectj-->

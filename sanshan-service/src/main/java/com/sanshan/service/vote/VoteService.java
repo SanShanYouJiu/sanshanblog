@@ -119,8 +119,8 @@ public class VoteService {
      * @return
      */
     private Boolean inspectVote(String ip, Long blogId, Boolean vote, ResponseMsgVO responseMsgVO) {
-        Boolean flag = (Boolean) redisTemplate.opsForHash().get(IP_VOTE_BLOG_ID_EXIST_PREFIX + ip, blogId);
-        if (!Objects.isNull(flag) && flag.equals(vote) ) {
+        Boolean found = (Boolean) redisTemplate.opsForHash().get(IP_VOTE_BLOG_ID_EXIST_PREFIX + ip, blogId);
+        if (!Objects.isNull(found) && found.equals(vote) ) {
             responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.URL_ERROR, "已对Id为:" + blogId + "的博客投票过");
             return false;
         } else {

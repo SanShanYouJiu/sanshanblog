@@ -6,7 +6,7 @@ import com.sanshan.util.AuthCodeUtil;
 import com.sanshan.util.ImageBase64Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.imageio.ImageIO;
@@ -39,7 +39,7 @@ public class CodeController {
      * @param response
      * @throws IOException
      */
-    @RequestMapping("/codeValidate")
+    @GetMapping("/codeValidate")
     public ResponseMsgVO getCode(HttpServletResponse response) throws IOException {
         ResponseMsgVO msgVO = new ResponseMsgVO();
 

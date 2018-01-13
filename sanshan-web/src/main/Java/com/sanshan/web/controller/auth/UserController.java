@@ -7,9 +7,7 @@ import com.sanshan.util.info.PosCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
@@ -28,7 +26,7 @@ public class UserController {
     /**
      *更改密码 在更改密码之前需要发送邮箱验证码
      */
-    @RequestMapping(value = "/change-pwd",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/change-pwd",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO changePassword(@RequestParam(name = "code") String code,
                                         @RequestParam(name = "password") String password){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
@@ -40,7 +38,7 @@ public class UserController {
     /**
      * 检查邮箱是否可以使用
      */
-    @RequestMapping(value = "/email/check", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/email/check", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO checkUsername(@RequestParam(name = "email") String email) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         //查看是否存在邮箱
@@ -59,7 +57,7 @@ public class UserController {
     /**
      * 注册之后的邮箱认证
      */
-    @RequestMapping(value = "/register/check/token",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/register/check/token",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO registerCheckToken(@RequestParam(name = "token") String token
     ) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
@@ -73,7 +71,7 @@ public class UserController {
      *
      * @param type 对应的是CodyTypeEnum类型 1注册 2更改密码
      */
-    @RequestMapping(value = "/email/send", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/email/send", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO sendEmailCode(
             @RequestParam(name = "type") Integer type,
             @RequestParam(name = "email") String email,
@@ -92,7 +90,7 @@ public class UserController {
     /**
      忘记密码
      */
-    @RequestMapping(value = "/forget-pwd", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/forget-pwd", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO<?> findPassword(@RequestParam(name = "email") String email,
                                           @RequestParam(name = "code") String code) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
@@ -107,7 +105,7 @@ public class UserController {
      * 验证邮箱code
      * @param code code
      */
-    @RequestMapping(value = "/check/code", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/check/code", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO checkToken(@RequestParam(name = "code") String code) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO<>();
         userService.checkEmailToken(code,responseMsgVO);

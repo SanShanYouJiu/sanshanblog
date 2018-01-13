@@ -1,4 +1,4 @@
-package com.sanshan.service.consumer.handle;
+package com.sanshan.service.consumer.accept;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 @Slf4j
-public class ConsumerHandler {
+public class ConsumerAccept {
 
     @Autowired
     private VoteConsumer voteConsumer;
@@ -19,7 +19,7 @@ public class ConsumerHandler {
     private UeditorFileConsumer ueditorFileConsumer;
 
 
-    public void process() {
+    public void accept() {
         if (log.isDebugEnabled()) {
             log.debug("处理consumer中的数据");
         }

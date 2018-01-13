@@ -11,10 +11,7 @@ import com.sanshan.util.info.EditorTypeEnum;
 import com.sanshan.util.info.PosCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,20 +32,20 @@ public class MarkDownEditorController {
     /**
      * 分页查询
      *
-     * @param pagenum
-     * @param pagesize
+     * @param pageNum
+     * @param pageRows
      * @return
      */
-    @RequestMapping(value = "query-by-page", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO queryByPage(@RequestParam("pagenum") Integer pagenum
-            , @RequestParam("pagesize") Integer pagesize) {
-        PageInfo<MarkDownBlogDTO> info = markDownBlogService.queryDtoPageListByWhere(null, pagenum, pagesize);
+    @GetMapping(value = "blog/page/pageRows:{pageRows}/pageNum:{pageNum}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO queryByPage(@PathVariable("pageNum") Integer pageNum
+            , @PathVariable("pageRows") Integer pageRows) {
+        PageInfo<MarkDownBlogDTO> info = markDownBlogService.queryDtoPageListByWhere(null, pageRows, pageNum);
         ResponseMsgVO<PageInfo> responseMsgVO = new ResponseMsgVO<PageInfo>();
         return responseMsgVO.buildOKWithData(info);
     }
 
 
-    @RequestMapping(value = "query-all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "blog/all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO queryAll() {
         ResponseMsgVO<List<BlogVO>> responseMsgVO = new ResponseMsgVO<>();
         List<BlogVO> list;
@@ -57,7 +54,7 @@ public class MarkDownEditorController {
     }
 
 
-    @RequestMapping(value = "insert-blog", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "blog", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO insertMarkDownBlog(
             @RequestParam(value = "content", required = false) String content,
             @RequestParam(value = "tag", required = false) String tag,
@@ -72,9 +69,9 @@ public class MarkDownEditorController {
     }
 
 
-    @RequestMapping(value = "delete-by-id", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO deleteMarkDownBlog(@RequestParam("id") Long id) {
-        if (blogIdGenerate.getType(id)==EditorTypeEnum.MarkDown_EDITOR){
+    @DeleteMapping(value = "blog/id:{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO deleteMarkDownBlog(@PathVariable("id") Long id) {
+        if (blogIdGenerate.getType(id)==EditorTypeEnum.MARKDOWN_EDITOR){
             int result = markDownBlogService.deleteDOById(id);
             if (result == 0) {
                 return new ResponseMsgVO().buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR,"未删除成功");
@@ -85,13 +82,13 @@ public class MarkDownEditorController {
     }
 
 
-    @RequestMapping(value = "update-by-id",method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "blog/id:{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO update(
-            @RequestParam(value = "id")Long id,
+            @PathVariable(value = "id")Long id,
             @RequestParam(value = "content", required = false) String content,
             @RequestParam(value = "tag", required = false) String tag,
             @RequestParam(value = "title", required = false) String title) {
-        if(blogIdGenerate.getType(id)!=EditorTypeEnum.MarkDown_EDITOR){
+        if(blogIdGenerate.getType(id)!=EditorTypeEnum.MARKDOWN_EDITOR){
             return  new ResponseMsgVO().buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR,
                     "该ID对应的不是Markdown格式的文件");
         }

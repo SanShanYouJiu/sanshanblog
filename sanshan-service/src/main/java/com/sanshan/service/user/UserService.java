@@ -184,7 +184,7 @@ public class UserService {
             return;
         }
 
-        responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "token无效");
+        responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "验证码错误");
         return;
     }
 

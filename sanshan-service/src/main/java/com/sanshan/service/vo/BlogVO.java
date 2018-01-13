@@ -44,7 +44,7 @@ public class BlogVO  implements Serializable{
     }
 
     public BlogVO(MarkDownBlogDTO markDownBlog) {
-        this.type= EditorTypeEnum.MarkDown_EDITOR.getIndex();
+        this.type= EditorTypeEnum.MARKDOWN_EDITOR.getIndex();
         this.id = markDownBlog.getId();
         this.user  =markDownBlog.getUser();
         this.title = markDownBlog.getTitle();

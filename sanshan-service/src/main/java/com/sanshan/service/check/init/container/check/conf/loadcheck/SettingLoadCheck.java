@@ -30,6 +30,7 @@ public class SettingLoadCheck {
     private RedisTemplate redisTemplate;
 
     /**
+     * TODO 考虑路径不对加载不到的情况
      * 对加载的配置文件进行一致性检查
      */
     public void loadCheck(){

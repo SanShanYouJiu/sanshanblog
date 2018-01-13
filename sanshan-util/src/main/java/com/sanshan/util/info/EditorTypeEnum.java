@@ -6,8 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public enum EditorTypeEnum {
     UEDITOR_EDITOR(0,"UEDITOR_EDITOR"),
-    MarkDown_EDITOR(1,"MarkDown_EDITOR"),
-    Void_Id(404,"Void_Id");
+    MARKDOWN_EDITOR(1,"MARKDOWN_EDITOR"),
+    VOID_ID(404,"VOID_ID");
 
     private String type;
     private int index;
@@ -22,8 +22,8 @@ public enum EditorTypeEnum {
     public static EditorTypeEnum getEditorType(String name) throws EditorTypeConventException {
         switch (name) {
             case "UEDITOR_EDITOR" :return EditorTypeEnum.UEDITOR_EDITOR;
-            case "MarkDown_EDITOR":return  EditorTypeEnum.MarkDown_EDITOR;
-            case "Void_Id":return EditorTypeEnum.Void_Id;
+            case "MARKDOWN_EDITOR":return  EditorTypeEnum.MARKDOWN_EDITOR;
+            case "VOID_ID":return EditorTypeEnum.VOID_ID;
             default:break;
         }
         log.error("转换出错");

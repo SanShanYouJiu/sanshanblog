@@ -1,9 +1,9 @@
 package com.sanshan.service.check.init.container.check;
 
 import com.sanshan.service.check.init.container.check.conf.loadcheck.SettingLoadCheck;
-import com.sanshan.service.check.init.container.check.dataprotetcd.blogmetacache.BlogMetaDataBaseRollBack;
-import com.sanshan.service.check.init.container.check.dataprotetcd.ueditorfile.UeditorFileDataBaseRollBack;
-import com.sanshan.service.check.init.container.check.dataprotetcd.votecache.VoteDataBaseRollBack;
+import com.sanshan.service.check.init.container.check.dataprotetcd.blogmetacache.BlogMetaDataInspect;
+import com.sanshan.service.check.init.container.check.dataprotetcd.ueditorfile.UeditorFileDataInspect;
+import com.sanshan.service.check.init.container.check.dataprotetcd.votecache.VoteDataInspect;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
@@ -15,13 +15,13 @@ import org.springframework.stereotype.Component;
 public class InstantiationTracingBeanPostProcessor implements ApplicationListener<ContextRefreshedEvent> {
 
     @Autowired
-    private BlogMetaDataBaseRollBack blogMetaDataBaseRollBack;
+    private BlogMetaDataInspect blogMetaDataInspect;
 
     @Autowired
-    private VoteDataBaseRollBack voteDataBaseRollBack;
+    private VoteDataInspect voteDataInspect;
 
     @Autowired
-    private UeditorFileDataBaseRollBack  ueditorFileDataBaseRollBack;
+    private UeditorFileDataInspect ueditorFileDataInspect;
 
     @Autowired
     private SettingLoadCheck settingLoadCheck;
@@ -30,9 +30,9 @@ public class InstantiationTracingBeanPostProcessor implements ApplicationListene
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         if(event.getApplicationContext().getParent() == null) {
-            blogMetaDataBaseRollBack.inspectDataConsistency();
-            voteDataBaseRollBack.inspectDataConsistency();
-            ueditorFileDataBaseRollBack.inspectDataConsistency();
+            blogMetaDataInspect.inspectDataConsistency();
+            voteDataInspect.inspectDataConsistency();
+            ueditorFileDataInspect.inspectDataConsistency();
             settingLoadCheck.loadCheck();
         }
     }

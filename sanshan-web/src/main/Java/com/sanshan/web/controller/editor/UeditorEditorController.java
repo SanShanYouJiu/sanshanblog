@@ -43,7 +43,7 @@ public class UeditorEditorController {
     @Autowired
     private BlogService blogService;
 
-    @RequestMapping("/config")
+    @GetMapping("/config")
     public void config(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         // response.setContentType("application/json");
         request.setCharacterEncoding("utf-8");
@@ -73,18 +73,18 @@ public class UeditorEditorController {
     //}
 
 
-    @RequestMapping(value = "query-by-page", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO queryByPage(@RequestParam("pagenum") Integer pagenum
-            , @RequestParam("pagesize") Integer pagesize) {
+    @GetMapping(value = "blog/page/pageRows:{pageRows}/pageNum:{pageNum}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO queryByPage(@PathVariable("pageNum") Integer pageNum
+            , @PathVariable("pageRows") Integer pageRows) {
         ResponseMsgVO<PageInfo<UeditorBlogDTO>> responseMsgVO = new ResponseMsgVO<>();
-        PageHelper.startPage(pagenum, pagesize);
+        PageHelper.startPage(pageNum, pageRows);
         List<UeditorBlogDTO> list = uEditorBlogService.queryDtoAll();
         PageInfo<UeditorBlogDTO> info = new PageInfo(list);
         return responseMsgVO.buildOKWithData(info);
     }
 
 
-    @RequestMapping(value = "query-all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "blog/all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO queryAll() {
         ResponseMsgVO<List<BlogVO>> responseMsgVO = new ResponseMsgVO<>();
         List<BlogVO> list ;
@@ -93,7 +93,7 @@ public class UeditorEditorController {
     }
 
 
-    @RequestMapping(value = "insert-blog", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "blog", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO insertMarkDownBlog(
             @RequestParam(value = "content", required = false) String content,
         @RequestParam(value = "title", required = false) String title,
@@ -108,8 +108,8 @@ public class UeditorEditorController {
     }
 
 
-    @RequestMapping(value = "delete-by-id", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO deleteUeditorBlog(@RequestParam("id") Long id) {
+    @DeleteMapping(value = "blog/id:{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO deleteUeditorBlog(@PathVariable("id") Long id) {
         if (blogIdGenerate.getType(id) == EditorTypeEnum.UEDITOR_EDITOR) {
             int result = uEditorBlogService.deleteDOById(id);
             if (result == 0) {
@@ -121,9 +121,9 @@ public class UeditorEditorController {
     }
 
 
-    @RequestMapping(value = "update-by-id", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "blog/id:{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO update(
-            @RequestParam(value = "id") Long id,
+            @PathVariable(value = "id") Long id,
             @RequestParam(value = "content", required = false) String content,
             @RequestParam(value = "tag", required = false) String tag,
             @RequestParam(value = "title", required = false) String title) {

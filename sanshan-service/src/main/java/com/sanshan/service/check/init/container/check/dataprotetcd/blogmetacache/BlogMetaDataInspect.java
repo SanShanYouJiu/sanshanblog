@@ -21,7 +21,7 @@ import java.util.TreeMap;
  */
 @Component
 @Slf4j
-public class BlogMetaDataBaseRollBack {
+public class BlogMetaDataInspect {
 
     @Autowired
     private MarkDownBlogMapper markDownBlogMapper;
@@ -52,7 +52,7 @@ public class BlogMetaDataBaseRollBack {
      */
     private void rollBackData(List<MarkDownBlogDO> markDownBlogDOList, List<UeditorBlogDO> uEditorBlogDOS) {
         for (MarkDownBlogDO m : markDownBlogDOList) {
-            blogIdGenerate.addIdMap(m.getId(), EditorTypeEnum.MarkDown_EDITOR);
+            blogIdGenerate.addIdMap(m.getId(), EditorTypeEnum.MARKDOWN_EDITOR);
             if (m.getTitle() != null) {
                 blogIdGenerate.putTitle(m.getTitle(), m.getId());
             }
@@ -81,7 +81,7 @@ public class BlogMetaDataBaseRollBack {
         Long id = idMap.firstKey();
         for (long i = 0; i < id; i++) {
             if (!idMap.containsKey(i)) {
-                blogIdGenerate.addIdMap(i, EditorTypeEnum.Void_Id);
+                blogIdGenerate.addIdMap(i, EditorTypeEnum.VOID_ID);
             }
         }
     }

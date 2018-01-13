@@ -44,7 +44,6 @@ public class MarkDownBlogCacheService extends BaseServiceImpl<MarkDownBlogDO> {
 
 
 
-    @Cacheable(value = {"markdown-blog"})
     @Override
     public PageInfo<MarkDownBlogDO> queryPageListByWhere(MarkDownBlogDO example, Integer page, Integer rows) {
         return super.queryPageListByWhere(example, page, rows);

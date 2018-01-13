@@ -7,9 +7,7 @@ import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.info.PosCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +21,7 @@ public class AdminIndexController {
     private AdminIndexService adminIndexService;
 
 
-    @RequestMapping(value = "/blog/query-all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/blog/all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO queryAllBlog() {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         List<BlogVO> list;
@@ -32,7 +30,7 @@ public class AdminIndexController {
     }
 
 
-    @RequestMapping(value = "/blog/query-ueditor-all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/blog/ueditor-all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO queryUEditorAll() {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         List<BlogVO> list;
@@ -41,7 +39,7 @@ public class AdminIndexController {
     }
 
 
-    @RequestMapping(value = "/blog/query-markdown-all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/blog/markdown-all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO queryMarkdownAll() {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         List<BlogVO> list;
@@ -50,7 +48,7 @@ public class AdminIndexController {
     }
 
 
-    @RequestMapping(value = "/get-user-info", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @GetMapping(value = "/user-info", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO currentUserInfo() {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         UserDTO userDTO = adminIndexService.getUserInfo();
@@ -58,7 +56,7 @@ public class AdminIndexController {
     }
 
 
-    @RequestMapping(value = "/blog/update-by-id")
+    @PostMapping(value = "/blog")
     public ResponseMsgVO updateBlog(@RequestParam(name = "id",required = true)Long id,
                                     @RequestParam(name = "title",required = false)String title,
                                     @RequestParam(name = "tag" ,required = false)String tag,
@@ -69,7 +67,7 @@ public class AdminIndexController {
     }
 
 
-    @RequestMapping(value = "/change-user-info", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/user-info", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO changeUserInfo(
             @RequestParam(name = "username", required = true) String username,
             @RequestParam(name = "avatar", required = false) String avatar,

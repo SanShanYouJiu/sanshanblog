@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.io.InputStream;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -117,6 +118,10 @@ public class UeditorFileService {
         pool.execute(()->{
             List<String> filenames;
             filenames = (List<String>) redisTemplate.opsForHash().get(UEDITOR_UPLOAD_ID_FILE_MAP, blogId);
+            //没有文件退出方法
+            if(Objects.isNull(filenames)){
+                return;
+            }
             for (int i = 0; i <filenames.size() ; i++) {
                 String filename = filenames.get(i);
                 redisTemplate.opsForHash().increment(UEDITOR_UPLOAD_FILE, filename, -1);

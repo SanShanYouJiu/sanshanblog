@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -17,7 +18,7 @@ public class FileLoadController {
     @Autowired
     private FileLoadService fileLoadService;
 
-    @RequestMapping(value = "/images/{filename}.{suffix}")
+    @GetMapping(value = "/images/{filename}.{suffix}")
     //用作用户自定义头像加载
     //暂时给任何用户观看
     //注意在使用ResponseEntity时不能加 produces选项 因为ResponseEntity与produces冲突

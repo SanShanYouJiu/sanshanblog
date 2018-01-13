@@ -102,12 +102,12 @@ public class AdminIndexService {
         userDO.setUsername(username);
         String avatar = mapList.get("avatar");
         String blogLink = mapList.get("blogLink");
-        boolean avatarFlag=stringIsNotNull(avatar);
-        boolean blogLinFlag=stringIsNotNull(blogLink);
-           if (avatarFlag){
+        boolean avatarFound=stringIsNotNull(avatar);
+        boolean blogLinkFound=stringIsNotNull(blogLink);
+           if (avatarFound){
                userDO.setAvatar(avatar);
            }
-           if (blogLinFlag){
+           if (blogLinkFound){
                userDO.setBlogLink(blogLink);
            }
        WriteResult result= userRepository.changeUserInfo(userDO);
@@ -122,11 +122,11 @@ public class AdminIndexService {
                ueditorBlogService.updateSelectiveDO(id, content, title, tag);
                 responseMsgVO.buildOK();
                 return;
-            case MarkDown_EDITOR:
+            case MARKDOWN_EDITOR:
                 markDownBlogService.updateSelectiveDO(id, content, title, tag);
                 responseMsgVO.buildOK();
                 return;
-            case Void_Id:
+            case VOID_ID:
                 responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR, "更新错误 更新节点已被删除");
                 throw new NotFoundBlogException("该节点已被删除");
             default:

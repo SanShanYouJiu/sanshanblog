@@ -200,10 +200,10 @@ public class BlogService {
             case UEDITOR_EDITOR:
                 blog = new BlogVO(uEditorBlogService.queryDtoById(id));
                 break;
-            case MarkDown_EDITOR:
+            case MARKDOWN_EDITOR:
                 blog = new BlogVO(markDownBlogService.queryDtoById(id));
                 break;
-            case Void_Id:
+            case VOID_ID:
                 break;
             default:
                  break;
@@ -222,14 +222,14 @@ public class BlogService {
                     return;
                 }
                 break;
-            case MarkDown_EDITOR:
+            case MARKDOWN_EDITOR:
                 int result2 = markDownBlogService.deleteDOById(id);
                 if (result2 == 0) {
                     responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR, "删除对于Id为:" + id + "的博客失败");
                     return;
                 }
                 break;
-            case Void_Id:
+            case VOID_ID:
                 throw new NotFoundBlogException("无法删除 ID已失效");
              default:
                  break;
@@ -283,7 +283,7 @@ public class BlogService {
             throw new MapFoundNullException();
         }
         switch (type) {
-            case MarkDown_EDITOR:
+            case MARKDOWN_EDITOR:
                 MarkDownBlogDTO m = new MarkDownBlogDTO();
                 m.setId(id);
                 m.setTitle(titleMap.get(id));
@@ -295,7 +295,7 @@ public class BlogService {
                 u.setTitle(titleMap.get(id));
                 blogVOS.add(new BlogVO(u));
                 break;
-            case Void_Id:
+            case VOID_ID:
                 break;
              default:
                  break;

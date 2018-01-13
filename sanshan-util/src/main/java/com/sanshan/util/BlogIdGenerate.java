@@ -35,19 +35,19 @@ public final class BlogIdGenerate {
     public final void init() {
         Long initTime = System.currentTimeMillis();
         Future future = pool.submit(() -> {
-            fileToMap(filename + "IdMap.properties", IdMap, 1);
+            fileToMap(filename + "idMap.properties", idMap, 1);
         });
         Future future0 = pool.submit(() -> {
-            fileToMap(filename + "IdExistMap.properties", IdExistMap, 1);
+            fileToMap(filename + "idExistMap.properties", idExistMap, 1);
         });
         Future future1 = pool.submit(() -> {
-            fileToMap(filename + "IdTitleMap.properties", IdTitleMap, 0);
+            fileToMap(filename + "idTitleMap.properties", idTitleMap, 0);
         });
         Future future2 = pool.submit(() -> {
-            fileToMap(filename + "IdTagMap.properties", IdTagMap, 0);
+            fileToMap(filename + "idTagMap.properties", idTagMap, 0);
         });
         Future future3 = pool.submit(() -> {
-            fileToMap(filename + "IdDateMap.properties", IdDateMap, 3);
+            fileToMap(filename + "idDateMap.properties", idDateMap, 3);
         });
         Future future4 = pool.submit(() -> {
             fileToMap(filename + "invertTitleMap.properties", invertTitleMap, 2);
@@ -81,7 +81,7 @@ public final class BlogIdGenerate {
 
     //ID保存 不可轻举妄动
     @SuppressWarnings("Duplicates")
-    private static Map<Long, EditorTypeEnum> IdMap = new TreeMap<>(
+    private static Map<Long, EditorTypeEnum> idMap = new TreeMap<>(
             (o1, o2) -> {
                 if (o1.equals(o2)) {
                     return 0;
@@ -94,7 +94,7 @@ public final class BlogIdGenerate {
     );
 
     @SuppressWarnings("Duplicates")
-    private Map<Long, EditorTypeEnum> IdExistMap = new TreeMap<>(
+    private Map<Long, EditorTypeEnum> idExistMap = new TreeMap<>(
             (o1, o2) -> {
                 if (o1.equals(o2)) {
                     return 0;
@@ -113,9 +113,9 @@ public final class BlogIdGenerate {
      * @param type
      */
     public synchronized final   void addIdMap(final Long id, final EditorTypeEnum type) {
-        IdMap.put(id, type);
-        if (!(type.equals(EditorTypeEnum.Void_Id))){
-            IdExistMap.put(id, type);
+        idMap.put(id, type);
+        if (!(type.equals(EditorTypeEnum.VOID_ID))){
+            idExistMap.put(id, type);
         }
         //log.debug("将Id为{}与对应的类型为{}加入到IdMap集合中", id, type);
     }
@@ -130,17 +130,17 @@ public final class BlogIdGenerate {
         //log.debug("获取当前系统新的博客Id,可能是用于新增博客");
         Long id;
         try {
-             id = ((TreeMap<Long,EditorTypeEnum>) IdMap).firstKey();
+             id = ((TreeMap<Long,EditorTypeEnum>) idMap).firstKey();
         }catch (NoSuchElementException e){
             id=0L;
         }
         //如果ID被其他博客使用了 那么就会递增到无人使用的id
-        while (IdMap.containsKey(id)) {
+        while (idMap.containsKey(id)) {
           id++;
         }
-        IdMap.put(id, type);
-        if (!(type.equals(EditorTypeEnum.Void_Id))) {
-            IdExistMap.put(id, type);
+        idMap.put(id, type);
+        if (!(type.equals(EditorTypeEnum.VOID_ID))) {
+            idExistMap.put(id, type);
         }
         return id;
     }
@@ -151,7 +151,7 @@ public final class BlogIdGenerate {
      * @param id
      */
     public synchronized  final void removeIdMap(Long id){
-         IdMap.remove(id);
+        idMap.remove(id);
     }
 
     /**
@@ -160,7 +160,7 @@ public final class BlogIdGenerate {
      * @return
      */
     public synchronized final   boolean containsId(Long id) {
-        return IdExistMap.containsKey(id);
+        return idExistMap.containsKey(id);
     }
 
     /**
@@ -181,7 +181,7 @@ public final class BlogIdGenerate {
                     }
                 }
         );
-        copyMap.putAll(IdExistMap);
+        copyMap.putAll(idExistMap);
         //log.debug("拷贝发布IdMap集合的内容");
         return copyMap;
     }
@@ -205,36 +205,36 @@ public final class BlogIdGenerate {
         long endRows = preRows + pageRows;
         long count=0;
 
-        for (Map.Entry<Long, EditorTypeEnum> entry : IdExistMap.entrySet()) {
+        for (Map.Entry<Long, EditorTypeEnum> entry : idExistMap.entrySet()) {
             if (count >= preRows && count<endRows) {
                 copyMap.put(entry.getKey(), entry.getValue());
             }
             count++;
             if (count==endRows){
-                pageInfo = new PageInfo(copyMap,pageRows,pageNum,IdExistMap.size());
+                pageInfo = new PageInfo(copyMap,pageRows,pageNum,idExistMap.size());
                  return pageInfo;
             }
         }
-        pageInfo = new PageInfo(copyMap,pageRows,pageNum,IdExistMap.size());
+        pageInfo = new PageInfo(copyMap,pageRows,pageNum,idExistMap.size());
         return pageInfo;
      }
 
 
     public synchronized final long getSize() {
         //log.debug("获取当前IdMap文件长度");
-        return IdMap.size();
+        return idMap.size();
     }
 
     public synchronized final    Long getExistMaxId(){
         //获取存活的最大ID
-        return ((TreeMap<Long, EditorTypeEnum>) IdExistMap).firstKey();
+        return ((TreeMap<Long, EditorTypeEnum>) idExistMap).firstKey();
     }
 
 
     public synchronized final EditorTypeEnum getType(final Long id) {
         //log.debug("获取ID为{}的博客类型", id);
-        if (IdMap.containsKey(id)){
-            return IdMap.get(id);
+        if (idMap.containsKey(id)){
+            return idMap.get(id);
         }else {
             return null;
         }
@@ -244,7 +244,7 @@ public final class BlogIdGenerate {
     /**
      * Id Title索引
      */
-    private Map<String, Set<Long>> IdTitleMap = new HashMap<>(
+    private Map<String, Set<Long>> idTitleMap = new HashMap<>(
     );
 
     /**
@@ -258,7 +258,7 @@ public final class BlogIdGenerate {
     private String preTitle;
 
     public synchronized final   void putTitle(final String title, final Long id) {
-        Set<Long> longs = IdTitleMap.get(title);
+        Set<Long> longs = idTitleMap.get(title);
         if (longs != null && longs.contains(id)) {
             return;
         }
@@ -268,21 +268,21 @@ public final class BlogIdGenerate {
         //查找之前id对应的key
         preTitle = invertTitleMap.get(id);
         if (!Objects.isNull(preTitle) && preTitle != title) {
-            Set<Long> prelongs = IdTitleMap.get(preTitle);
+            Set<Long> prelongs = idTitleMap.get(preTitle);
             prelongs.remove(id);
             if (prelongs.size() == 0) {
-                IdTitleMap.remove(preTitle);
+                idTitleMap.remove(preTitle);
             }
         }
         longs.add(id);
-        IdTitleMap.put(title, longs);
+        idTitleMap.put(title, longs);
         //加入到已经成为该Id对应的Title序列中
         invertTitleMap.put(id, title);
         //log.debug("上传标题为{},id为{}的新IdTitle索引 或许该索引项已存在 则不加", title, id);
     }
 
     public synchronized final  Set<Long> getTitleMap(final String title) {
-        Set<Long> longs = IdTitleMap.get(title);
+        Set<Long> longs = idTitleMap.get(title);
         //log.debug("查找title为{}的Id集合", title);
         return longs;
     }
@@ -294,7 +294,7 @@ public final class BlogIdGenerate {
      */
     public synchronized final Map<String, Set<Long>> getIdTitleCopy() {
         HashMap<String, Set<Long>> copyMap = new HashMap<>();
-        copyMap.putAll(IdTitleMap);
+        copyMap.putAll(idTitleMap);
         //log.debug("拷贝发布IdTitleMap集合的内容");
         return copyMap;
     }
@@ -317,24 +317,24 @@ public final class BlogIdGenerate {
         long preRows = pageRows * (pageNum - 1);
         long endRows = preRows + pageRows;
         long count=0;
-        for (Map.Entry<String, Set<Long>> entry : IdTitleMap.entrySet()) {
+        for (Map.Entry<String, Set<Long>> entry : idTitleMap.entrySet()) {
             if (count >= preRows && count<endRows) {
                 copyMap.put(entry.getKey(), entry.getValue());
             }
             count++;
             if (count==endRows){
-                pageInfo = new PageInfo(copyMap,pageRows,pageNum,IdTitleMap.size());
+                pageInfo = new PageInfo(copyMap,pageRows,pageNum,idTitleMap.size());
                 return pageInfo;
             }
         }
-        pageInfo = new PageInfo(copyMap,pageRows,pageNum,IdTitleMap.size());
+        pageInfo = new PageInfo(copyMap,pageRows,pageNum,idTitleMap.size());
         return pageInfo;
     }
 
     /**
      * Id tag索引
      */
-    private   Map<String, Set<Long>> IdTagMap = new HashMap<>(
+    private   Map<String, Set<Long>> idTagMap = new HashMap<>(
     );
     /**
      * 已经存在的Id Tag索引
@@ -347,7 +347,7 @@ public final class BlogIdGenerate {
     private String preTag;
 
     public synchronized final  void putTag(final String tag, final Long id) {
-        Set<Long> longs = IdTagMap.get(tag);
+        Set<Long> longs = idTagMap.get(tag);
         if (longs != null && longs.contains(id)) {
             return;
         }
@@ -357,21 +357,21 @@ public final class BlogIdGenerate {
         //查找之前id对应的key
         preTag = invertTagMap.get(id);
         if (!Objects.isNull(preTag) && preTag != tag) {
-            Set<Long> prelongs = IdTagMap.get(preTag);
+            Set<Long> prelongs = idTagMap.get(preTag);
             prelongs.remove(id);
             if (prelongs.size() == 0) {
-                IdTagMap.remove(preTag);
+                idTagMap.remove(preTag);
             }
         }
         longs.add(id);
-        IdTagMap.put(tag, longs);
+        idTagMap.put(tag, longs);
         //加入到已经成为该Id对应的tag序列中
         invertTagMap.put(id, tag);
         //log.debug("上传标签为{},id为{}的新IdTag索引 或许该索引项已存在 则不加", tag, id);
     }
 
     public synchronized final Set<Long> getTagMap(final String tag) {
-        Set<Long> longs = IdTagMap.get(tag);
+        Set<Long> longs = idTagMap.get(tag);
         //log.debug("查找tag为{}的Id集合", tag);
         return longs;
     }
@@ -383,7 +383,7 @@ public final class BlogIdGenerate {
      */
     public  synchronized final Map<String, Set<Long>> getIdTagCopy() {
         HashMap<String, Set<Long>> idTagMapCopy = new HashMap<>();
-        idTagMapCopy.putAll(IdTagMap);
+        idTagMapCopy.putAll(idTagMap);
         //log.debug("拷贝发布IdTagMap集合的内容");
         return idTagMapCopy;
     }
@@ -394,17 +394,17 @@ public final class BlogIdGenerate {
         long preRows = pageRows * (pageNum - 1);
         long endRows = preRows + pageRows;
         long count=0;
-        for (Map.Entry<String, Set<Long>> entry : IdTagMap.entrySet()) {
+        for (Map.Entry<String, Set<Long>> entry : idTagMap.entrySet()) {
             if (count >= preRows && count<endRows) {
                 copyMap.put(entry.getKey(), entry.getValue());
             }
             count++;
             if (count==endRows){
-                pageInfo = new PageInfo(copyMap, pageRows, pageNum, IdTagMap.size());
+                pageInfo = new PageInfo(copyMap, pageRows, pageNum, idTagMap.size());
                 return pageInfo;
             }
         }
-        pageInfo = new PageInfo(copyMap, pageRows, pageNum, IdTagMap.size());
+        pageInfo = new PageInfo(copyMap, pageRows, pageNum, idTagMap.size());
         return pageInfo;
     }
     /**
@@ -422,7 +422,7 @@ public final class BlogIdGenerate {
      * Id Date索引
      */
     @SuppressWarnings("Duplicates")
-    private Map<Date, Set<Long>> IdDateMap = new TreeMap<>(
+    private Map<Date, Set<Long>> idDateMap = new TreeMap<>(
             (o1,o2)->{
                     if (o1.equals(o2)) {
                         return 0;
@@ -440,7 +440,7 @@ public final class BlogIdGenerate {
 
 
     public synchronized final  void putDate(final Date date, final Long id) {
-        Set<Long> longs = IdDateMap.get(date);
+        Set<Long> longs = idDateMap.get(date);
         if (longs != null && longs.contains(id)) {
             return;
         }
@@ -448,13 +448,13 @@ public final class BlogIdGenerate {
             longs = new HashSet<>();
         }
         longs.add(id);
-        IdDateMap.put(date, longs);
+        idDateMap.put(date, longs);
         invertDateMap.put(id, date);
         //log.debug("上传日期为{},id为{}的新IdDate索引 或许该索引项已存在 则不加", date, id);
     }
 
     public synchronized final Set<Long> getDateMap(final Date date) {
-        Set<Long> longs = IdDateMap.get(date);
+        Set<Long> longs = idDateMap.get(date);
         //log.debug("查找日期为{}的博客", date);
         return longs;
     }
@@ -479,7 +479,7 @@ public final class BlogIdGenerate {
                     }
                 }
         );
-        copyMap.putAll(IdDateMap);
+        copyMap.putAll(idDateMap);
         //log.debug("拷贝发布IdDateMap集合的内容");
         return copyMap;
     }
@@ -503,17 +503,17 @@ public final class BlogIdGenerate {
         long preRows = pageRows * (pageNum - 1);
         long endRows = preRows + pageRows;
         long count=0;
-        for (Map.Entry<Date, Set<Long>> entry : IdDateMap.entrySet()) {
+        for (Map.Entry<Date, Set<Long>> entry : idDateMap.entrySet()) {
             if (count >= preRows && count<endRows) {
                 copyMap.put(entry.getKey(), entry.getValue());
             }
             count++;
             if (count==endRows){
-                pageInfo =new PageInfo(copyMap,pageRows,pageNum,IdDateMap.size());
+                pageInfo =new PageInfo(copyMap,pageRows,pageNum,idDateMap.size());
                 return pageInfo;
             }
         }
-        pageInfo =new PageInfo(copyMap,pageRows,pageNum,IdDateMap.size());
+        pageInfo =new PageInfo(copyMap,pageRows,pageNum,idDateMap.size());
         return pageInfo;
     }
 
@@ -537,31 +537,31 @@ public final class BlogIdGenerate {
      */
     public  synchronized final void remove(final Long id) {
         String title = invertTitleMap.get(id);
-        Set<Long> titlelongs = IdTitleMap.get(title);
+        Set<Long> titlelongs = idTitleMap.get(title);
         titlelongs.remove(id);
         if (titlelongs.size() == 0){
-            IdTitleMap.remove(title);
+            idTitleMap.remove(title);
         }
         invertTitleMap.remove(id);
 
         String tag = invertTagMap.get(id);
-        Set<Long> taglongs = IdTagMap.get(tag);
+        Set<Long> taglongs = idTagMap.get(tag);
         taglongs.remove(id);
         if (taglongs.size() == 0){
-            IdTagMap.remove(tag);
+            idTagMap.remove(tag);
         }
         invertTagMap.remove(id);
 
         Date date = invertDateMap.get(id);
-        Set<Long> datelongs = IdDateMap.get(date);
+        Set<Long> datelongs = idDateMap.get(date);
         datelongs.remove(id);
         if (datelongs.size() == 0){
-            IdDateMap.remove(date);
+            idDateMap.remove(date);
         }
         invertDateMap.remove(id);
 
-        IdMap.put(id, EditorTypeEnum.Void_Id);
-        IdExistMap.remove(id);
+        idMap.put(id, EditorTypeEnum.VOID_ID);
+        idExistMap.remove(id);
         //log.debug("删除该Id对应的倒排索引对应项");
     }
 
@@ -569,11 +569,11 @@ public final class BlogIdGenerate {
     //定时生成IdMap文件保存到磁盘上
     private final void saveMap() {
         Long initTime = System.currentTimeMillis();
-        Future future = saveMapByName("IdMap.properties", "其他properties的依赖文件 根据Id来判断是否查找哪种类型");
-        Future future0 = saveMapByName("IdExistMap.properties", "真实存在的博客");
-        Future future1 = saveMapByName("IdDateMap.properties", "Id Date索引");
-        Future future2 = saveMapByName("IdTagMap.properties", "Id Tag索引");
-        Future future3 = saveMapByName("IdTitleMap.properties", "Id Title索引");
+        Future future = saveMapByName("idMap.properties", "其他properties的依赖文件 根据Id来判断是否查找哪种类型");
+        Future future0 = saveMapByName("idExistMap.properties", "真实存在的博客");
+        Future future1 = saveMapByName("idDateMap.properties", "Id Date索引");
+        Future future2 = saveMapByName("idTagMap.properties", "Id Tag索引");
+        Future future3 = saveMapByName("idTitleMap.properties", "Id Title索引");
         Future future4 = saveMapByName("invertTitleMap.properties", "已存在的Id的title索引2");
         Future future5 = saveMapByName("invertTagMap.properties", "已存在的Id的tag索引");
         Future future6 = saveMapByName("invertDateMap.properties", "已存在的Id的Date索引");
@@ -604,20 +604,20 @@ public final class BlogIdGenerate {
 
     private void switchTypePropertiesToFile(final String mapName, final String description) throws IOException {
         switch (mapName) {
-            case "IdMap.properties":
-                PropertiesConvenUtil.idMapToFile(filename + mapName, IdMap, description);
+            case "idMap.properties":
+                PropertiesConvenUtil.idMapToFile(filename + mapName, idMap, description);
                 break;
-            case "IdExistMap.properties":
-            PropertiesConvenUtil.idMapToFile(filename + mapName, IdExistMap, description);
+            case "idExistMap.properties":
+            PropertiesConvenUtil.idMapToFile(filename + mapName, idExistMap, description);
                 break;
-            case "IdDateMap.properties":
-                PropertiesConvenUtil.setLongDateMapToFile(filename + mapName, IdDateMap, description);
+            case "idDateMap.properties":
+                PropertiesConvenUtil.setLongDateMapToFile(filename + mapName, idDateMap, description);
                 break;
-            case "IdTagMap.properties":
-                PropertiesConvenUtil.setLongStringToFile(filename + mapName, IdTagMap, description);
+            case "idTagMap.properties":
+                PropertiesConvenUtil.setLongStringToFile(filename + mapName, idTagMap, description);
                 break;
-            case "IdTitleMap.properties":
-                PropertiesConvenUtil.setLongStringToFile(filename + mapName, IdTitleMap, description);
+            case "idTitleMap.properties":
+                PropertiesConvenUtil.setLongStringToFile(filename + mapName, idTitleMap, description);
                 break;
             case "invertTitleMap.properties":
                 PropertiesConvenUtil.longStringMapToFile(filename + mapName, invertTitleMap, description);

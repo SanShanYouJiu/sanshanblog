@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
@@ -36,7 +33,7 @@ public class AuthController {
     @Autowired
     private RedisTemplate<String,String> redisTemplate;
 
-    @RequestMapping(value = "/login", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO createAuthenticationToken(
             JwtAuthenticationRequest authenticationRequest, @RequestParam(name = "codeid") String codeid) throws AuthenticationException {
         ResponseMsgVO msgVO = new ResponseMsgVO();
@@ -56,7 +53,7 @@ public class AuthController {
     }
 
 
-    @RequestMapping(value = "/register", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO register(UserDO addedUser,
                                   @RequestParam(name = "codeid") String codeid,
                                   @RequestParam(name = "code") String code
@@ -92,7 +89,7 @@ public class AuthController {
      * @return
      * @throws AuthenticationException
      */
-    @RequestMapping(value = "/refresh", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/refresh-token", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO refreshAndGetAuthenticationToken(
             HttpServletRequest request) throws AuthenticationException {
         ResponseMsgVO<JwtAuthenticationResponse> msgVO = new ResponseMsgVO<>();

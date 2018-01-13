@@ -2,6 +2,8 @@ package com.sanshan.web.config.webaseconfig;
 
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
+import com.google.code.kaptcha.impl.DefaultKaptcha;
+import com.google.code.kaptcha.util.Config;
 import com.sanshan.web.config.javaconfig.auxiliary.ControllerAop;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.*;
@@ -22,6 +24,7 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
 
 import java.util.List;
+import java.util.Properties;
 
 @Configuration
 @EnableWebMvc
@@ -82,10 +85,21 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return multipartResolver;
     }
 
-//    @Bean
-//    public MultipartResolver multipartResolver() {
-//        return new StandardServletMultipartResolver();
-//    }
+
+
+     @Bean
+     public DefaultKaptcha captchaProducer(){
+         DefaultKaptcha kaptcha = new DefaultKaptcha();
+         Properties p = new Properties();
+         p.setProperty("kaptcha.image.width", "100");
+         p.setProperty("kaptcha.image.height", "50");
+         p.setProperty("kaptcha.noise.impl", "com.google.code.kaptcha.impl.NoNoise");
+         p.setProperty("kaptcha.textproducer.char.string", "0123456789abcdefghijklmnopqrstuvwxyzyo");
+         p.setProperty("kaptcha.textproducer.char.length", "4");
+         Config config = new Config(p);
+         kaptcha.setConfig(config);
+         return kaptcha;
+     }
 
 
     @Autowired

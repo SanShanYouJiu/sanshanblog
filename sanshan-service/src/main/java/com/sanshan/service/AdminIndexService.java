@@ -45,8 +45,6 @@ public class AdminIndexService {
     @Autowired
     private MarkDownBlogService markDownBlogService;
 
-    private ThreadLocal<List> cacheList = new ThreadLocal<>();
-
     public List<BlogVO> queryAllBlog() {
         JwtUser jwtUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         List<BlogVO> list = userInfoService.getUserBlogs(jwtUser.getUsername());
@@ -61,32 +59,23 @@ public class AdminIndexService {
                 return 1;
             }
         });
-        cacheList.set(list);
         return list;
     }
 
 
     public List<BlogVO> queryMarkdownBlogAll() {
         List<BlogVO> list;
-       if ((list=cacheList.get())!=null){
-            return list.stream().filter((blogVO) -> blogVO.getType() == 1).collect(Collectors.toList());
-        } else {
             JwtUser jwtUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             list = userInfoService.getUserBlogs(jwtUser.getUsername());
            return list.stream().filter((blogVO) -> blogVO.getType() == 1).collect(Collectors.toList());
-        }
     }
 
 
     public List<BlogVO> queryUEditorBlogAll() {
         List<BlogVO> list;
-        if ((list=cacheList.get())!=null){
-            return list.stream().filter((blogVO) -> blogVO.getType() == 0).collect(Collectors.toList());
-        } else {
             JwtUser jwtUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
             list = userInfoService.getUserBlogs(jwtUser.getUsername());
             return list.stream().filter((blogVO) -> blogVO.getType() == 0).collect(Collectors.toList());
-        }
     }
 
 

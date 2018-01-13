@@ -97,6 +97,9 @@
         <com.google.code.gson>2.6.2</com.google.code.gson>
         <com.qiniu-happy-dns-java>0.1.4</com.qiniu-happy-dns-java>
 
+        <!--验证码-->
+        <com.github.penggle.kaptcha>2.3.2</com.github.penggle.kaptcha>
+
     </properties>
 
     <modules>
@@ -560,6 +563,13 @@
                 <artifactId>happy-dns-java</artifactId>
                 <version>${com.qiniu-happy-dns-java}</version>
                 <scope>compile</scope>
+            </dependency>
+
+            <!--验证码-->
+            <dependency>
+                <groupId>com.github.penggle</groupId>
+                <artifactId>kaptcha</artifactId>
+                <version>${com.github.penggle.kaptcha}</version>
             </dependency>
 
         </dependencies>

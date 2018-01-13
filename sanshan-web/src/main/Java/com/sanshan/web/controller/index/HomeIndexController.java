@@ -29,7 +29,7 @@ public class HomeIndexController {
     }
 
 
-    @RequestMapping(value = "/advice", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/advice", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public ResponseMsgVO handleAdvice(@RequestParam(value = "email") String email, @RequestParam(value = "opinion", required = false) String opinion, @RequestHeader(value = "X-Real-IP") String ip) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();

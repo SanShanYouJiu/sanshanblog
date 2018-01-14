@@ -255,19 +255,19 @@ public final class BlogIdGenerate {
     /**
      * 上传Title索引 以及删除之前的Title索引
      */
-    private String preTitle;
 
     public synchronized final   void putTitle(final String title, final Long id) {
+        String preTitle;
         Set<Long> longs = idTitleMap.get(title);
-        if (longs != null && longs.contains(id)) {
+        if (!Objects.isNull(longs) && longs.contains(id)) {
             return;
         }
-        if (longs == null){
+        if (Objects.isNull(longs)){
             longs = new HashSet<>();
         }
         //查找之前id对应的key
         preTitle = invertTitleMap.get(id);
-        if (!Objects.isNull(preTitle) && preTitle != title) {
+        if (!Objects.isNull(preTitle) && !preTitle.equals(title)) {
             Set<Long> prelongs = idTitleMap.get(preTitle);
             prelongs.remove(id);
             if (prelongs.size() == 0) {
@@ -344,19 +344,19 @@ public final class BlogIdGenerate {
     /**
      * 上传Tag索引以及删除之前的索引地址
      */
-    private String preTag;
 
     public synchronized final  void putTag(final String tag, final Long id) {
+        String preTag;
         Set<Long> longs = idTagMap.get(tag);
-        if (longs != null && longs.contains(id)) {
+        if (!Objects.isNull(longs) && longs.contains(id)) {
             return;
         }
-        if (longs == null){
+        if (Objects.isNull(longs)){
             longs = new HashSet<>();
         }
         //查找之前id对应的key
         preTag = invertTagMap.get(id);
-        if (!Objects.isNull(preTag) && preTag != tag) {
+        if (!Objects.isNull(preTag) && !preTag.equals(tag)) {
             Set<Long> prelongs = idTagMap.get(preTag);
             prelongs.remove(id);
             if (prelongs.size() == 0) {
@@ -441,10 +441,10 @@ public final class BlogIdGenerate {
 
     public synchronized final  void putDate(final Date date, final Long id) {
         Set<Long> longs = idDateMap.get(date);
-        if (longs != null && longs.contains(id)) {
+        if (!Objects.isNull(longs) && longs.contains(id)) {
             return;
         }
-        if (longs == null){
+        if (Objects.isNull(longs)){
             longs = new HashSet<>();
         }
         longs.add(id);

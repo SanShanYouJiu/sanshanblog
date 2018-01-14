@@ -20,7 +20,7 @@ public class SystemUtil {
      * 得到系统配置
      * @return 结果
      */
-    public   Setting getSetting() {
+    public   Setting getSetting()  {
         //从配置文件获取
         try (InputStream in = new FileInputStream(filename))
         {
@@ -29,22 +29,23 @@ public class SystemUtil {
             return tempSetting;
         } catch (IOException e) {
             log.error("read setting error", e);
+            e.printStackTrace();
         }
-        //最后返回默认配置
-        return new Setting();
+        return null;
     }
 
     /**
      * 设置或刷新系统配置
      * @param setting 设置
      */
-    public  void setSetting(Setting setting){
+    public  void setSetting(Setting setting)  {
         try {
             File file = new File(filename);
             OutputStream out = new FileOutputStream(file);
             JSON.writeJSONString(out,setting);
         } catch (IOException e) {
             log.error("read setting error",e);
+            e.printStackTrace();
         }
     }
 }

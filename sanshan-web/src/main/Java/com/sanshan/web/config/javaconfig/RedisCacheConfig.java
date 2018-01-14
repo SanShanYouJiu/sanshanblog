@@ -29,7 +29,6 @@ import java.util.List;
 @Slf4j
 @Configuration
 @EnableCaching(proxyTargetClass = true)
-@PropertySource("file:D:/SanShanBlog.properties")
 public class RedisCacheConfig  implements CachingConfigurer  {
 
     @Value("${redis.maxActive}")

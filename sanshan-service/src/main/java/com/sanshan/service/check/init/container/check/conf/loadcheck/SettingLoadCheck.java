@@ -30,11 +30,10 @@ public class SettingLoadCheck {
     private RedisTemplate redisTemplate;
 
     /**
-     * TODO 加强路径不对加载不到的反馈
      * 对加载的配置文件进行一致性检查
      */
     public void loadCheck(){
-        String settingCache = (String) redisTemplate.opsForValue().get(settingService.SETTING_CACHE);
+        String settingCache = (String) redisTemplate.opsForValue().get(SettingService.SETTING_CACHE);
         SystemUtil systemUtil = new SystemUtil(location);
         Setting originalSetting = systemUtil.getSetting();
         if (Objects.isNull(settingCache)){

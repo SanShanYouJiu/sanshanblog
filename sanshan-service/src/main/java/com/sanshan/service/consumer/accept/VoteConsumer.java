@@ -41,6 +41,9 @@ public class VoteConsumer {
 
     protected void voteConsumerProcess() {
         if (!VoteService.voteAddConsumerQueue.isEmpty() || !VoteService.voteDecrConsumerQueue.isEmpty()||!VoteService.voteDeleteConsumerQueue.isEmpty()) {
+            if (log.isDebugEnabled()){
+                log.debug("lazy投票数据到数据库中");
+            }
             pool.execute(() -> {
                 voteAdd();
                 voteDecr();
@@ -97,6 +100,9 @@ public class VoteConsumer {
         while (!VoteService.voteDeleteConsumerQueue.isEmpty()) {
             VoteDTO voteDTO = VoteService.voteDeleteConsumerQueue.poll();
             Long blogId = voteDTO.getBlogId();
+            if (log.isDebugEnabled()){
+                log.debug("删除id为{}的投票数据",blogId);
+            }
             ipBlogVoteMapper.deleteByBlogId(blogId);
             blogVoteMapper.deleteByBlogId(blogId);
         }
@@ -109,6 +115,9 @@ public class VoteConsumer {
     private  void saveIpBlogVoteDO(VoteDTO voteDTO){
         //将VoteDTO存储到Mysql中
         IpBlogVoteDO ipBlogVoteDO = new IpBlogVoteDO(new Date(),new Date(),voteDTO.getIp(), voteDTO.getBlogId(), voteDTO.getVote());
+        if (log.isDebugEnabled()){
+            log.debug("增加id为{}的投票数据",voteDTO.getBlogId());
+        }
         ipBlogVoteMapper.insert(ipBlogVoteDO);
     }
 
@@ -117,6 +126,9 @@ public class VoteConsumer {
      * @param voteDTO
      */
     private void incrFavour(VoteDTO voteDTO){
+        if (log.isDebugEnabled()){
+            log.debug("在blogVote表中对id为{}的行增加赞数",voteDTO.getBlogId());
+        }
         int rows = blogVoteMapper.incrFavours(voteDTO.getBlogId());
         if (rows == 0) {
             if (log.isDebugEnabled()){
@@ -133,6 +145,9 @@ public class VoteConsumer {
      * @param voteDTO
      */
     private void  incrTreads(VoteDTO voteDTO){
+        if (log.isDebugEnabled()){
+            log.debug("在blogVote表中对id为{}的行增加踩数",voteDTO.getBlogId());
+        }
         int rows = blogVoteMapper.incrTreads(voteDTO.getBlogId());
         if (rows == 0) {
             if (log.isDebugEnabled()){

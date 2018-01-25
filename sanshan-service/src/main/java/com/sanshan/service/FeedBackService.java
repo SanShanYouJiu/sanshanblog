@@ -47,7 +47,7 @@ public class FeedBackService {
             feedbackDO.setCreated(new Date());
             feedbackDO.setUpdated(new Date());
             feedBackRepository.save(feedbackDO);
-            log.info("存入反馈信息已成功");
+            log.info("存入反馈信息已成功 email为:{}",email);
         };
         pool.execute(runnable);
     }

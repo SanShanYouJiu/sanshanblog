@@ -69,6 +69,7 @@ public class UserService {
         JwtUser jwtUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         UserDO userDO = userRepository.findByUsername(jwtUser.getUsername());
+        log.info("用户:{}更改密码",userDO.getUsername());
         String key = CODE_PREFIX + CodeTypeEnum.CHANGE_PWD.getValue() + userDO.getEmail();
         String value = redisTemplate.opsForValue().get(key);
         if (!StringUtils.equals(code, value)) {
@@ -169,6 +170,7 @@ public class UserService {
     public void forgetPassword(String email, String token, ResponseMsgVO responseMsgVO) {
         //获得具体的user对象
         UserDO userDO = userRepository.findByEmail(email);
+        log.info("用户:{}忘记密码",userDO.getUsername());
         String key = CODE_PREFIX + CodeTypeEnum.CHANGE_PWD.getValue() + userDO.getEmail();
         String value = redisTemplate.opsForValue().get(key);
         if (!Objects.isNull(value) && value.equals(token)) {

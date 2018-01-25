@@ -7,24 +7,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.CachingConfigurer;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.ehcache.EhCacheCacheManager;
 import org.springframework.cache.interceptor.CacheErrorHandler;
 import org.springframework.cache.interceptor.CacheResolver;
 import org.springframework.cache.interceptor.KeyGenerator;
-import org.springframework.cache.jcache.JCacheCacheManager;
-import org.springframework.cache.support.CompositeCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import redis.clients.jedis.JedisPoolConfig;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Slf4j
 @Configuration
@@ -83,19 +76,6 @@ public class RedisCacheConfig  implements CachingConfigurer  {
     }
 
 
-    @Bean
-    public CacheManager cacheManager(net.sf.ehcache.CacheManager cm, javax.cache.CacheManager jcm,JedisConnectionFactory jedisConnectionFactory) {
-        CompositeCacheManager compositeCacheManager = new CompositeCacheManager();
-        List<CacheManager> managers = new ArrayList<CacheManager>();
-        managers.add(new JCacheCacheManager(jcm));
-        managers.add(new EhCacheCacheManager(cm));
-        managers.add(new RedisCacheManager(redisTemplate(jedisConnectionFactory)));
-        compositeCacheManager.setCacheManagers(managers);
-        //在找不到 accountCache，且没有将 fallbackToNoOpCache 设置为 true 的情况下，系统会抛出异常
-        compositeCacheManager.setFallbackToNoOpCache(true);
-        return compositeCacheManager;
-    }
-
     /**
      * @return 自定义策略生成的key
      * @description 自定义的缓存key的生成策略
@@ -109,8 +89,8 @@ public class RedisCacheConfig  implements CachingConfigurer  {
 
 
     /*只是为了设置keyGenerator而实现该接口
-    * 下列方法可以不实现 (在不加@Bean的注解的情况下)
-    * */
+     * 下列方法可以不实现 (在不加@Bean的注解的情况下)
+     * */
     @Override
     public CacheManager cacheManager() {
         return null;

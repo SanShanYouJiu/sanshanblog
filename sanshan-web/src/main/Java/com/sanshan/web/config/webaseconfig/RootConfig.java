@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
                 type= FilterType.ANNOTATION,
                 value = {Controller.class})})
 @PropertySource("file:D:/SanShanBlog.properties")
+//TODO 换成Spring Boot
 public class RootConfig {
 
 

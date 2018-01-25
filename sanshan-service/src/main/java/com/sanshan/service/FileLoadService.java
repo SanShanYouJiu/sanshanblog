@@ -33,6 +33,7 @@ public class FileLoadService {
         Resource body;
         GridFSDBFile gridFSDBFile = fileOperation.getFile(filename).get(0);
         try {
+            //FIXME 这里的值会随着不同的系统而改变
             file = new File("F://Temp//imageFile.jpg");
             gridFSDBFile.writeTo(file);
             body = new FileSystemResource(file);

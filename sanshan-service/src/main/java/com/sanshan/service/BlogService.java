@@ -214,6 +214,7 @@ public class BlogService {
 
     public void removeBlog(Long id,ResponseMsgVO responseMsgVO) {
         EditorTypeEnum type = blogIdGenerate.getType(id);
+        log.info("正在删除id为{}的博客",id);
         switch (type) {
             case UEDITOR_EDITOR:
                 int result = uEditorBlogService.deleteDOById(id);
@@ -235,6 +236,7 @@ public class BlogService {
                  break;
         }
         voteService.deleteBlogVote(id);
+        log.info("删除id为{}的博客成功",id);
         responseMsgVO.buildOK();
     }
 

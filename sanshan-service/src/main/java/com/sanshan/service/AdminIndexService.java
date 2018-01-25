@@ -95,9 +95,11 @@ public class AdminIndexService {
         boolean blogLinkFound=stringIsNotNull(blogLink);
            if (avatarFound){
                userDO.setAvatar(avatar);
+               log.info("用户{}更改自己的头像为{}",username,avatar);
            }
            if (blogLinkFound){
                userDO.setBlogLink(blogLink);
+               log.info("用户{}更改自己的博客链接为{}",username,blogLink);
            }
        WriteResult result= userRepository.changeUserInfo(userDO);
         //这里暂时将修改为0的作为更新失败

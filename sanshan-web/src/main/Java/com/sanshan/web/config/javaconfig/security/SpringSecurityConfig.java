@@ -94,7 +94,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/druid/**",
                         "/api/codeValidate",
                         "/api/index/**",
-                        //不知道如何在前端的Ueditor端加入Authorization属性
+                        //TODO 在前端的Ueditor端加入Authorization属性
                         "/api/ueditor-editor/config",
                         "/api/auth/login",
                         "/api/auth/register",

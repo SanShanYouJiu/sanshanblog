@@ -41,6 +41,9 @@ public class UeditorFileConsumer {
 
     protected void ueditorConsumer(){
         if (!UeditorFileService.ueditorFileAddQueue.isEmpty() || !UeditorFileService.ueditorFileDecrQueue.isEmpty() || !UeditorFileService.ueditorFileUpload.isEmpty()) {
+            if (log.isDebugEnabled()){
+                log.debug("对ueditor中博客文件数据以及相关元数据的改变存入到数据库中");
+            }
             pool.execute(() -> {
                 ueditorBlogFileAdd();
                 ueditorBlogFileDecr();

@@ -95,11 +95,13 @@ public class VoteService {
                 redisTemplate.opsForHash().put(VOTE_IP_FAVOUR_PREFIX + ip, blogId,true);
                 redisTemplate.opsForSet().add(VOTE_IP_FAVOUR_KEYS, VOTE_IP_FAVOUR_PREFIX + ip);
                 redisTemplate.opsForHash().increment(BLOG_VOTE_FAVOURS , blogId, 1);
+                log.info("{}对id为{}的博客-赞",ip,blogId);
             } else {
                 redisTemplate.opsForHash().put(VOTE_IP_TREAD_PREFIX + ip, blogId,true);
                 redisTemplate.opsForSet().add(VOTE_IP_TREAD_KEYS, VOTE_IP_TREAD_PREFIX + ip);
 
                 redisTemplate.opsForHash().increment(BLOG_VOTE_THREADS , blogId, 1);
+                log.info("{}对id为{}的博客-踩",ip,blogId);
             }
             voteTransactionConsistentCheck(ip,blogId,vote);
             //加入到已投票域中
@@ -237,6 +239,7 @@ public class VoteService {
           redisTemplate.opsForHash().delete(BLOG_VOTE_THREADS,blogId);
           VoteDTO voteDTO = new VoteDTO();
           voteDTO.setBlogId(blogId);
+          log.info("在缓存中删除id为{}的博客投票数据完成,放到队列中到数据库中进行删除",blogId);
           voteDeleteConsumerQueue.add(voteDTO);
       });
     }

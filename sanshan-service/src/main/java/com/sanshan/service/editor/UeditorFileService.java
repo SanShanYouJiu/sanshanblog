@@ -87,7 +87,8 @@ public class UeditorFileService {
      * @param id      Ueditor的博客ID
      * @param content 文件
      */
-    protected void checkUeditorContentFile(Long id, String content,String author) {
+    protected void checkUeditorContentFile(Long id, String content) {
+        log.info("检查id为{}的ueditor博客含有的文件内容",id);
         pool.execute(() -> {
             Set<String> filenameSet = redisTemplate.opsForSet().members(UEDITOR_TMEP_FILENAME_SET);
             String[] filenames = filenameSet.toArray(new String[]{});
@@ -115,6 +116,7 @@ public class UeditorFileService {
      * @param blogId
      */
     public void deleteContentContainsFile(Long blogId) {
+        log.info("删除id为{}的ueditor博客中在本站含有的文件",blogId);
         pool.execute(()->{
             List<String> filenames;
             filenames = (List<String>) redisTemplate.opsForHash().get(UEDITOR_UPLOAD_ID_FILE_MAP, blogId);

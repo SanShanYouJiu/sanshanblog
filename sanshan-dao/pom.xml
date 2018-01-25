@@ -3,33 +3,37 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>com.sanshan</groupId>
         <artifactId>sanshanblog</artifactId>
-        <version>1.0</version>
+        <groupId>com.sanshan</groupId>
+        <version>1.0-SNAPSHOT</version>
     </parent>
-
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>sanshan-dao</artifactId>
-    <version>1.0</version>
-    <packaging>jar</packaging>
 
-    <!--<properties>-->
-        <!--<org.mybatis>3.3.0</org.mybatis>-->
-        <!--<tk.mybatis.mapper>3.3.9</tk.mybatis.mapper>-->
-        <!--<org.spring.jpa.mongodb>1.8.4.RELEASE</org.spring.jpa.mongodb>-->
-        <!--<org.mongo-java-driver>3.2.2</org.mongo-java-driver>-->
-        <!--<org.springframework.data-commons>1.11.4.RELEASE</org.springframework.data-commons>-->
-    <!--</properties>-->
+    <groupId>com.sanshan</groupId>
+    <artifactId>sanshan-dao</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
     <dependencies>
 
         <dependency>
             <groupId>com.sanshan</groupId>
             <artifactId>sanshan-pojo</artifactId>
         </dependency>
-        <!--mybatis-->
+
         <dependency>
-            <groupId>org.mybatis</groupId>
-            <artifactId>mybatis</artifactId>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
         </dependency>
 
         <!--通用mapper-->
@@ -39,15 +43,38 @@
         </dependency>
 
         <dependency>
-            <groupId>org.springframework.data</groupId>
-            <artifactId>spring-data-mongodb</artifactId>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-redis</artifactId>
         </dependency>
 
-        <!--&lt;!&ndash;Spring-data通用核心类  mongonDB需要 注意这个会与Spring-data-jpa冲突&ndash;&gt;-->
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-jdbc</artifactId>
+        </dependency>
+
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-commons</artifactId>
         </dependency>
+
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
+
+        <!--阿里druid配置 start-->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+        </dependency>
+        <!--阿里druid配置 end-->
 
     </dependencies>
 

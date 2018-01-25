@@ -43,7 +43,7 @@ public class UeditorEditorController {
     @Autowired
     private BlogService blogService;
 
-    @GetMapping("/config")
+    @RequestMapping("/config")
     public void config(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
         // response.setContentType("application/json");
         request.setCharacterEncoding("utf-8");

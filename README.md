@@ -6,7 +6,7 @@
  - 后端日志存入MongoDB数据库(以及User，FeedBack信息)
  - 使用Redis作为缓存 mysql作为Blog以及投票数据库 
  - maven作为项目管理工具
- - 基本架构是SSM 不过因为因为Spring4的注解解决方案很成熟 所以基本除了pom.xml之外的xml基本消失了
+ - 基本架构是SSM 不过因为因为Spring4的注解解决方案很成熟 所以基本除了pom.xml之外的xml基本消失了(已经改为Spring Boot)
  - 日志系统采用的是Log4j+slf4j 存储在mongoDB中
 
 3. 目前使用的是JWT+Spring security进行单点登录的安全解决方案

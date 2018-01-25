@@ -3,75 +3,47 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <!--<parent>-->
-    <!--<artifactId>com.sanshan.parent</artifactId>-->
-    <!--<groupId>com.sanshan</groupId>-->
-    <!--<version>1.0-SNAPSHOT</version>-->
-    <!--</parent>-->
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.sanshan</groupId>
     <artifactId>sanshanblog</artifactId>
     <packaging>pom</packaging>
-    <version>1.0</version>
+    <version>1.0-SNAPSHOT</version>
 
     <!--集中管理项目依赖-->
     <properties>
-        <com.sanshan.service>1.0</com.sanshan.service>
-        <com.sanshan.util>1.0</com.sanshan.util>
-        <com.sanshan.dao>1.0</com.sanshan.dao>
-        <com.sanshan.pojo>1.0</com.sanshan.pojo>
+        <com.sanshan.service>1.0-SNAPSHOT</com.sanshan.service>
+        <com.sanshan.util>1.0-SNAPSHOT</com.sanshan.util>
+        <com.sanshan.dao>1.0-SNAPSHOT</com.sanshan.dao>
+        <com.sanshan.pojo>1.0-SNAPSHOT</com.sanshan.pojo>
+
+        <spring.boot.version>1.5.2.RELEASE</spring.boot.version>
+        <spring.boot.mongo.version>1.3.2.RELEASE</spring.boot.mongo.version>
+        <!--Spring -data -commons-->
+        <org.springframework.data-commons>1.11.4.RELEASE</org.springframework.data-commons>
+        <spring.boot.redis.version>1.3.5.RELEASE</spring.boot.redis.version>
 
 
-        <javax.servlet-api>3.1.0</javax.servlet-api>
         <junit>4.10</junit>
         <lombok>1.16.4.0</lombok>
         <modelmapper>0.7.5</modelmapper>
-        <spring.version>4.3.5.RELEASE</spring.version>
+
         <!--validate-->
         <cglib>3.2.2</cglib>
-        <!--aspectj-->
-        <org.aspectj-aspectjweaver>1.8.2</org.aspectj-aspectjweaver>
-        <aspectj-aspectjrt>1.5.2a</aspectj-aspectjrt>
+
         <!--log-->
+        <spring.boot.log4j.version>1.3.2.RELEASE</spring.boot.log4j.version>
         <slf4j.version>1.7.7</slf4j.version>
-        <log4j.version>1.2.17</log4j.version>
         <slf4j-log4j12>1.7.21</slf4j-log4j12>
         <log4-mongo-java>0.7.4</log4-mongo-java>
         <!--JSON-->
         <com.alibaba-fastjson>1.2.38</com.alibaba-fastjson>
         <version.json>20160212</version.json>
-        <!--Spring Security-->
-        <org.springframework.security.version>3.2.3.RELEASE</org.springframework.security.version>
-        <!--Redis配置-->
-        <jedis>2.6.2</jedis>
-        <org.springframeword.data-redis>1.7.2.RELEASE</org.springframeword.data-redis>
-        <com.fasterxml.jackson.core>2.6.5</com.fasterxml.jackson.core>
-        <com.fasterxml.jackson.core-jackson-databind>2.6.3</com.fasterxml.jackson.core-jackson-databind>
-        <!--Spring -data -commons-->
-        <org.springframework.data-commons>1.11.4.RELEASE</org.springframework.data-commons>
 
-        <!--org.mybatis.-->
-        <org.mybatis>3.3.0</org.mybatis>
         <com.github.pagehelper>5.0.0</com.github.pagehelper>
+
         <tk.mybatis.mapper>3.3.9</tk.mybatis.mapper>
-        <org.mybatis-ehcache>1.0.0</org.mybatis-ehcache>
-        <org.mybatis-spring>1.2.2</org.mybatis-spring>
-        <javax.cache-api>1.0.0</javax.cache-api>
+        <mybatis.spring.boot.version>1.3.0</mybatis.spring.boot.version>
         <mysql-connector-java>5.1.6</mysql-connector-java>
-        <!--mongo-->
-        <org.spring.data.mongodb>1.8.4.RELEASE</org.spring.data.mongodb>
-        <!--entity Manager-->
-        <org.hibernate-entitymanager>4.1.1.Final</org.hibernate-entitymanager>
-
-        <!--thymeleaf-->
-        <org.thymeleaf>2.1.4.RELEASE</org.thymeleaf>
-        <org.thymeleaf-extras-springsecurity3>2.1.1.RELEASE</org.thymeleaf-extras-springsecurity3>
-        <org.thymeleaf-spring4>2.1.4.RELEASE</org.thymeleaf-spring4>
-
-        <jstl>1.2</jstl>
-        <javax.el-api>2.2.4</javax.el-api>
-        <org.glassfish.web-javax.el>2.2.4</org.glassfish.web-javax.el>
-        <net.sf.ehcache-web>2.0.4</net.sf.ehcache-web>
 
         <!--Quartz-->
         <org.quartz-scheduler>2.2.1</org.quartz-scheduler>
@@ -80,16 +52,11 @@
         <javax.persistence.api>2.2</javax.persistence.api>
 
         <!--druid-->
-        <com.alibaba.druid>1.0.9</com.alibaba.druid>
-        <!--validate-->
+        <spring-boot-druid-starter>1.1.6</spring-boot-druid-starter>
         <!--Ueditor组件部分-->
         <version.commons-codec>1.9</version.commons-codec>
         <version.commons-io>2.4</version.commons-io>
         <version.commons-fileupload>1.3.1</version.commons-fileupload>
-
-
-        <!--MQ-->
-        <org.springframework.amqp-rabbitmq>1.6.5.RELEASE</org.springframework.amqp-rabbitmq>
 
         <!--七牛云相关-->
         <com.qiniu-java-sdk>7.2.6</com.qiniu-java-sdk>
@@ -134,98 +101,72 @@
                 <version>${com.sanshan.dao}</version>
             </dependency>
 
-            <dependency>
-                <groupId>net.spy</groupId>
-                <artifactId>spymemcached</artifactId>
-                <version>2.11.4</version>
-            </dependency>
 
             <dependency>
-                <groupId>org.springframework.amqp</groupId>
-                <artifactId>spring-rabbit</artifactId>
-                <version>${org.springframework.amqp-rabbitmq}</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter</artifactId>
+                <version>${spring.boot.version}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-logging</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
+
             <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>${junit}</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-test</artifactId>
                 <scope>test</scope>
+                <version>${spring.boot.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-web</artifactId>
+                <version>${spring.boot.version}</version>
+                <exclusions>
+                    <exclusion><!--将springboot自带的tomcat排除-->
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-starter-tomcat</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
 
             <dependency>
-                <groupId>javax.servlet</groupId>
-                <artifactId>javax.servlet-api</artifactId>
-                <version>${javax.servlet-api}</version>
-            </dependency>
-
-            <!-- springframe start -->
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-core</artifactId>
-                <version>${spring.version}</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-security</artifactId>
+                <version>${spring.boot.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-web</artifactId>
-                <version>${spring.version}</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-jdbc</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-aop</artifactId>
+                <version>${spring.boot.version}</version>
+            </dependency>
+
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-redis</artifactId>
+                <version>${spring.boot.redis.version}</version>
             </dependency>
 
             <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-orm</artifactId>
-                <version>${spring.version}</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-log4j</artifactId>
+                <version>${spring.boot.log4j.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-oxm</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-tx</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-jdbc</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-webmvc</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-aop</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-context-support</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-test</artifactId>
-                <version>${spring.version}</version>
-            </dependency>
-            <!-- springframe end -->
-
-            <dependency>
-                <groupId>org.springframework.data</groupId>
-                <artifactId>spring-data-redis</artifactId>
-                <version>${org.springframeword.data-redis}</version>
-            </dependency>
 
             <!--cglib动态代理-->
             <dependency>
@@ -235,34 +176,11 @@
             </dependency>
             <!--cglib动态代理 end-->
 
-            <!--aspectj start-->
-            <dependency>
-                <groupId>org.aspectj</groupId>
-                <artifactId>aspectjweaver</artifactId>
-                <version>${org.aspectj-aspectjweaver}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>aspectj</groupId>
-                <artifactId>aspectjrt</artifactId>
-                <version>${aspectj-aspectjrt}</version>
-            </dependency>
-
-            <!--aspectj end-->
-
-
-            <!-- log start -->
-            <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>${log4j.version}</version>
-            </dependency>
             <!-- log4j -mongo -->
             <dependency>
                 <groupId>org.log4mongo</groupId>
                 <artifactId>log4mongo-java</artifactId>
                 <version>${log4-mongo-java}</version>
-                <!--依赖重复 在Spring-data-mongodb中有mongo-java-driver2.13的依赖了-->
                 <exclusions>
                     <exclusion>
                         <groupId>org.mongodb</groupId>
@@ -270,52 +188,31 @@
                     </exclusion>
                 </exclusions>
             </dependency>
+
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-api</artifactId>
                 <version>${slf4j.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-log4j12</artifactId>
                 <version>${slf4j.version}</version>
             </dependency>
+
             <dependency>
                 <groupId>org.slf4j</groupId>
                 <artifactId>slf4j-log4j12</artifactId>
                 <version>${slf4j-log4j12}</version>
             </dependency>
+
             <!-- json解析工具 -->
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
                 <version>${com.alibaba-fastjson}</version>
             </dependency>
-
-            <!--Spring security-->
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-core</artifactId>
-                <version>${org.springframework.security.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-web</artifactId>
-                <version>${org.springframework.security.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-config</artifactId>
-                <version>${org.springframework.security.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.security</groupId>
-                <artifactId>spring-security-taglibs</artifactId>
-                <version>${org.springframework.security.version}</version>
-            </dependency>
-
 
             <dependency>
                 <groupId>org.projectlombok</groupId>
@@ -329,11 +226,10 @@
                 <version>${modelmapper}</version>
             </dependency>
 
-            <!--mybatis-->
             <dependency>
-                <groupId>org.mybatis</groupId>
-                <artifactId>mybatis</artifactId>
-                <version>${org.mybatis}</version>
+                <groupId>org.mybatis.spring.boot</groupId>
+                <artifactId>mybatis-spring-boot-starter</artifactId>
+                <version>${mybatis.spring.boot.version}</version>
             </dependency>
 
             <!--通用mapper-->
@@ -343,20 +239,13 @@
                 <version>${tk.mybatis.mapper}</version>
             </dependency>
 
+
             <dependency>
-                <groupId>org.springframework.data</groupId>
-                <artifactId>spring-data-mongodb</artifactId>
-                <version>${org.spring.data.mongodb}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>jcl-over-slf4j</artifactId>
-                    </exclusion>
-                </exclusions>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-mongodb</artifactId>
+                <version>${spring.boot.mongo.version}</version>
             </dependency>
 
-
-            <!--&lt;!&ndash;Spring-data通用核心类  mongonDB需要 注意这个会与Spring-data-jpa冲突&ndash;&gt;-->
             <dependency>
                 <groupId>org.springframework.data</groupId>
                 <artifactId>spring-data-commons</artifactId>
@@ -370,17 +259,6 @@
             </dependency>
 
 
-            <dependency>
-                <groupId>org.hibernate</groupId>
-                <artifactId>hibernate-entitymanager</artifactId>
-                <version>${org.hibernate-entitymanager}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.javassist</groupId>
-                        <artifactId>javassist</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
 
             <dependency>
                 <groupId>com.github.pagehelper</groupId>
@@ -388,54 +266,11 @@
                 <version>${com.github.pagehelper}</version>
             </dependency>
 
-            <!-- Thymeleaf-->
+            <!--Thymeleaf-->
             <dependency>
-                <groupId>org.thymeleaf</groupId>
-                <artifactId>thymeleaf</artifactId>
-                <version>${org.thymeleaf}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.thymeleaf.extras</groupId>
-                <artifactId>thymeleaf-extras-springsecurity3</artifactId>
-                <version>${org.thymeleaf-extras-springsecurity3}</version>
-            </dependency>
-
-
-            <!--thymeleaf-spring4 -->
-            <dependency>
-                <groupId>org.thymeleaf</groupId>
-                <artifactId>thymeleaf-spring4</artifactId>
-                <version>${org.thymeleaf-spring4}</version>
-            </dependency>
-
-            <!--jstl start-->
-            <dependency>
-                <groupId>jstl</groupId>
-                <artifactId>jstl</artifactId>
-                <version>${jstl}</version>
-            </dependency>
-            <!--jstl end-->
-
-
-            <dependency>
-                <groupId>javax.el</groupId>
-                <artifactId>javax.el-api</artifactId>
-                <version>${javax.el-api}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.glassfish.web</groupId>
-                <artifactId>javax.el</artifactId>
-                <version>${org.glassfish.web-javax.el}</version>
-            </dependency>
-
-
-            <!--web页面缓存-->
-            <dependency>
-                <groupId>net.sf.ehcache</groupId>
-                <artifactId>ehcache-web</artifactId>
-                <version>${net.sf.ehcache-web}</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-thymeleaf</artifactId>
+                <version>${spring.boot.version}</version>
             </dependency>
 
             <dependency>
@@ -449,53 +284,6 @@
                 <version>${org.quartz-scheduler-jobs}</version>
             </dependency>
 
-            <!--Redis配置-->
-            <dependency>
-                <groupId>redis.clients</groupId>
-                <artifactId>jedis</artifactId>
-                <version>${jedis}</version>
-            </dependency>
-
-            <!--Redis Jackson配置-->
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-core</artifactId>
-                <version>${com.fasterxml.jackson.core}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${com.fasterxml.jackson.core-jackson-databind}</version>
-            </dependency>
-
-            <!--Mybatis Spring支持-->
-            <dependency>
-                <groupId>org.mybatis</groupId>
-                <artifactId>mybatis-spring</artifactId>
-                <version>${org.mybatis-spring}</version>
-            </dependency>
-
-
-            <!--mybatis 二级缓存-->
-            <dependency>
-                <groupId>org.mybatis</groupId>
-                <artifactId>mybatis-ehcache</artifactId>
-                <version>${org.mybatis-ehcache}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>net.sf.ehcache</groupId>
-                        <artifactId>ehcache-core</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>javax.cache</groupId>
-                <artifactId>cache-api</artifactId>
-                <version>${javax.cache-api}</version>
-            </dependency>
-
             <dependency>
                 <groupId>mysql</groupId>
                 <artifactId>mysql-connector-java</artifactId>
@@ -505,10 +293,11 @@
             <!--阿里druid配置 start-->
             <dependency>
                 <groupId>com.alibaba</groupId>
-                <artifactId>druid</artifactId>
-                <version>${com.alibaba.druid}</version>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${spring-boot-druid-starter}</version>
             </dependency>
             <!--阿里druid配置 end-->
+
 
             <!--Javax persistence-->
             <dependency>
@@ -523,16 +312,13 @@
                 <artifactId>commons-codec</artifactId>
                 <version>${version.commons-codec}</version>
             </dependency>
+
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
                 <version>${version.commons-io}</version>
             </dependency>
-            <dependency>
-                <groupId>commons-fileupload</groupId>
-                <artifactId>commons-fileupload</artifactId>
-                <version>${version.commons-fileupload}</version>
-            </dependency>
+
 
             <dependency>
                 <groupId>org.json</groupId>
@@ -570,6 +356,12 @@
                 <groupId>com.github.penggle</groupId>
                 <artifactId>kaptcha</artifactId>
                 <version>${com.github.penggle.kaptcha}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
+                <version>${spring.boot.version}</version>
             </dependency>
 
         </dependencies>

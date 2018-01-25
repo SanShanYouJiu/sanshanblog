@@ -149,7 +149,6 @@ public class BlogController {
 
     @DeleteMapping(value = "id/{id}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO blogDelete(@PathVariable("id") Long id) {
-        //id去除
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         blogService.removeBlog(id,responseMsgVO);
         return responseMsgVO;

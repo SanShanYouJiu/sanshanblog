@@ -34,7 +34,7 @@
         <cglib>3.2.2</cglib>
 
         <!--log-->
-        <spring.boot.log4j.version>1.3.2.RELEASE</spring.boot.log4j.version>
+        <log4j.version>1.2.17</log4j.version>
         <slf4j.version>1.7.7</slf4j.version>
         <slf4j-log4j12>1.7.21</slf4j-log4j12>
         <log4-mongo-java>0.7.4</log4-mongo-java>
@@ -66,10 +66,6 @@
 
         <!--druid-->
         <spring-boot-druid-starter>1.1.6</spring-boot-druid-starter>
-        <!--Ueditor组件部分-->
-        <version.commons-codec>1.9</version.commons-codec>
-        <version.commons-io>2.4</version.commons-io>
-        <version.commons-fileupload>1.3.1</version.commons-fileupload>
 
         <!--七牛云相关-->
         <com.qiniu-java-sdk>7.2.6</com.qiniu-java-sdk>
@@ -80,6 +76,16 @@
         <!--验证码-->
         <com.github.penggle.kaptcha>2.3.2</com.github.penggle.kaptcha>
         <net.java.dev.jna>4.1.0</net.java.dev.jna>
+
+        <!--util-->
+        <commonlang.version>3.5</commonlang.version>
+        <commoncodec.version>1.10</commoncodec.version>
+        <httpclient.version>4.5.2</httpclient.version>
+        <commonfile.version>1.3.2</commonfile.version>
+        <commonio.version>2.5</commonio.version>
+        <javax.mail>1.4.7</javax.mail>
+        <io.jsonwebtoken-jjwt>0.7.0</io.jsonwebtoken-jjwt>
+        <com.google.guava>18.0</com.google.guava>
 
     </properties>
 
@@ -127,7 +133,7 @@
                     </exclusion>
                     <exclusion>
                         <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-starter-tomcat</artifactId>
+                        <artifactId>spring-boot-starter-web</artifactId>
                     </exclusion>
                 </exclusions>
             </dependency>
@@ -190,11 +196,7 @@
                 <version>${org.springframeword.data-redis}</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-log4j</artifactId>
-                <version>${spring.boot.log4j.version}</version>
-            </dependency>
+
 
 
             <dependency>
@@ -236,6 +238,13 @@
             <!--cglib动态代理 end-->
 
             <!-- log4j begin -->
+
+            <dependency>
+                <groupId>log4j</groupId>
+                <artifactId>log4j</artifactId>
+                <version>${log4j.version}</version>
+            </dependency>
+
             <dependency>
                 <groupId>org.log4mongo</groupId>
                 <artifactId>log4mongo-java</artifactId>
@@ -260,11 +269,6 @@
                 <version>${slf4j.version}</version>
             </dependency>
 
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
-                <version>${slf4j-log4j12}</version>
-            </dependency>
             <!--log4j end-->
 
             <!-- json解析工具 -->
@@ -380,18 +384,59 @@
                 <version>${javax.persistence.api}</version>
             </dependency>
 
-            <!--Ueditor组件-->
+            <!--util 工具包-->
+
             <dependency>
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
-                <version>${version.commons-codec}</version>
+                <version>${commoncodec.version}</version>
             </dependency>
 
             <dependency>
                 <groupId>commons-io</groupId>
                 <artifactId>commons-io</artifactId>
-                <version>${version.commons-io}</version>
+                <version>${commonio.version}</version>
             </dependency>
+
+            <dependency>
+                <groupId>org.apache.commons</groupId>
+                <artifactId>commons-lang3</artifactId>
+                <version>${commonlang.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>commons-fileupload</groupId>
+                <artifactId>commons-fileupload</artifactId>
+                <version>${commonfile.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>org.apache.httpcomponents</groupId>
+                <artifactId>httpclient</artifactId>
+                <version>${httpclient.version}</version>
+            </dependency>
+
+
+            <!-- mail支持 -->
+            <dependency>
+                <groupId>javax.mail</groupId>
+                <artifactId>mail</artifactId>
+                <version>${javax.mail}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt</artifactId>
+                <version>${io.jsonwebtoken-jjwt}</version>
+            </dependency>
+
+            <!--guava-->
+            <dependency>
+                <groupId>com.google.guava</groupId>
+                <artifactId>guava</artifactId>
+                <version>${com.google.guava}</version>
+            </dependency>
+
 
             <dependency>
                 <groupId>org.json</groupId>

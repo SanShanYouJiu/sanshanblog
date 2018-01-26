@@ -1,7 +1,7 @@
 package com.sanshan.web.config.javaconfig;
 
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
-import com.sanshan.util.CacheKeyGenerator;
+import com.sanshan.web.config.javaconfig.auxiliary.CacheKeyGenerator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.CacheManager;

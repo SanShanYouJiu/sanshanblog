@@ -1,4 +1,4 @@
-package com.sanshan.util;
+package com.sanshan.web.config.javaconfig.auxiliary;
 
 import com.google.common.hash.Hashing;
 import lombok.extern.slf4j.Slf4j;

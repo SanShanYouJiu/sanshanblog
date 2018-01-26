@@ -14,6 +14,7 @@ import com.sanshan.util.info.EditorTypeEnum;
 import com.sanshan.util.info.PosCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,15 +44,19 @@ public class UeditorEditorController {
     @Autowired
     private BlogService blogService;
 
+    @Value("${ueditor-config.location}")
+    private String ueditorConfigLocation;
+
     @RequestMapping("/config")
     public void config(HttpServletRequest request, HttpServletResponse response) throws UnsupportedEncodingException {
+
         // response.setContentType("application/json");
         request.setCharacterEncoding("utf-8");
         String rootPath = request.getSession().getServletContext().getRealPath("/");
         response.setHeader("Content-Type", "text/html");
         try {
             String a = request.getRequestURI();
-            String exec = new ActionEnter(request, rootPath).exec();
+            String exec = new ActionEnter(request, rootPath, ueditorConfigLocation).exec();
             PrintWriter writer = response.getWriter();
             writer.write(exec);
             writer.flush();

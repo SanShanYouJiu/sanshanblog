@@ -18,7 +18,7 @@
         <jedis.version>2.9.0</jedis.version>
         <javax.mail>1.4.7</javax.mail>
         <io.jsonwebtoken-jjwt>0.7.0</io.jsonwebtoken-jjwt>
-        <com.google.guava>11.0</com.google.guava>
+        <com.google.guava>18.0</com.google.guava>
     </properties>
 
     <modelVersion>4.0.0</modelVersion>
@@ -100,7 +100,10 @@
             <version>${commonio.version}</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>net.java.dev.jna</groupId>
+            <artifactId>jna</artifactId>
+        </dependency>
 
         <!-- mail支持 -->
         <dependency>
@@ -123,5 +126,19 @@
         </dependency>
 
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>UTF-8</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

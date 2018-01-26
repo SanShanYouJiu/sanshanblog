@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * 配置管理器
@@ -19,6 +20,7 @@ public final class ConfigManager {
 	private final String originalPath;
 	private final String contextPath;
 	private static final String configFileName = "config.json";
+	private final String ueditorConfigLocation;
 	private String parentPath = null;
 	private JSONObject jsonConfig = null;
 	// 涂鸦上传filename定义
@@ -29,13 +31,14 @@ public final class ConfigManager {
 	/*
 	 * 通过一个给定的路径构建一个配置管理器， 该管理器要求地址路径所在目录下必须存在config.properties文件
 	 */
-	private ConfigManager ( String rootPath, String contextPath, String uri ) throws FileNotFoundException, IOException {
+	private ConfigManager ( String rootPath, String contextPath, String uri ,String ueditorConfigLocation) throws FileNotFoundException, IOException {
 		
 		rootPath = rootPath.replace( "\\", "/" );
 		
 		this.rootPath = rootPath;
 		this.contextPath = contextPath;
-		
+		this.ueditorConfigLocation = ueditorConfigLocation;
+
 		if ( contextPath.length() > 0 ) {
 			this.originalPath = this.rootPath + uri.substring( contextPath.length() );
 		} else {
@@ -51,12 +54,13 @@ public final class ConfigManager {
 	 * @param rootPath 服务器根路径
 	 * @param contextPath 服务器所在项目路径
 	 * @param uri 当前访问的uri
+	 * @param ueditorConfigLocation config的自定义路径
 	 * @return 配置管理器实例或者null
 	 */
-	public static ConfigManager getInstance ( String rootPath, String contextPath, String uri ) {
+	public static ConfigManager getInstance ( String rootPath, String contextPath, String uri,String ueditorConfigLocation ) {
 		
 		try {
-			return new ConfigManager(rootPath, contextPath, uri);
+			return new ConfigManager(rootPath, contextPath, uri,ueditorConfigLocation);
 		} catch ( Exception e ) {
 			return null;
 		}
@@ -168,9 +172,12 @@ public final class ConfigManager {
 	 * @return
 	 */
 	private String getConfigPath () {
-
-		String classpath = this.getClass().getClassLoader().getResource(configFileName).getPath();
-		return classpath;
+		if (!Objects.isNull(ueditorConfigLocation)&&!ueditorConfigLocation.equals("")){
+			return ueditorConfigLocation;
+		}else {
+			String classpath = this.getClass().getClassLoader().getResource(configFileName).getPath();
+			return classpath;
+		}
 //		return this.parentPath + File.separator + ConfigManager.configFileName;
 	}
 

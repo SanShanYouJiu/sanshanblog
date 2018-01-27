@@ -1,6 +1,6 @@
+#  TODO 对Actuator进行端口保护
 management:
   security:
-#   TODO \u9700\u8981\u505A\u6743\u9650\u63A7\u5236
     enabled: false
   port: 8090
 
@@ -8,6 +8,10 @@ info:
   contact:
     email: sanshanyoujiu@gmail.com
     github: https://github.com/SanShanYouJiu
+
 server:
-  context-path: /api
+  servlet-path: /api
+
+
+
 

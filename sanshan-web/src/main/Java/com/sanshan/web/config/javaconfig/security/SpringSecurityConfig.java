@@ -82,28 +82,16 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         //TODO 将Config与加载图片的代码分离到另外一个Controller中
                         "/api/ueditor-editor/blog/**")
                 .hasAnyRole("USER")
+                //Spring Boot Actuator 监控
+                .antMatchers("/actuator/info",
+                        "/actuator/health")
+                .permitAll()
+                .antMatchers("/actuator/**")
+                .hasAnyRole("ADMIN")
                 .antMatchers(HttpMethod.DELETE,"/api/blog/id/**")
                 .hasAnyRole("USER")
                 .antMatchers(
                         "/",
-                        "/**",
-                        //搜索引擎
-                        //"/solr/**",
-                        //"/api/",
-                        //"/favicon.ico",
-                        //"/api/blog/**",
-                        //"/druid/**",
-                        //"/api/codeValidate",
-                        //"/api/index/**",
-                        ////TODO 在前端的Ueditor端加入Authorization属性
-                        //"/api/ueditor-editor/config",
-                        //"/api/auth/login",
-                        //"/api/auth/register",
-                        //"/api/user/email/send",
-                        //"/api/user/check/token",
-                        //"/api/user/forget-pwd",
-                        //"/api/search/**",
-                        //"/api/user-info/**"
                         "/**"
                 ).permitAll()
                 .anyRequest()

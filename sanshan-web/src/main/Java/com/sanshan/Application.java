@@ -12,7 +12,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 /**
  * 在主程序直接运行需要Tomcat依赖
  */
-@SpringBootApplication(exclude = {RedisAutoConfiguration.class, MongoAutoConfiguration.class, ThymeleafAutoConfiguration.class, WebMvcAutoConfiguration.class})
+@SpringBootApplication(exclude = {RedisAutoConfiguration.class, MongoAutoConfiguration.class,ThymeleafAutoConfiguration.class, WebMvcAutoConfiguration.class})
 public class Application  extends SpringBootServletInitializer {
 
     @Override

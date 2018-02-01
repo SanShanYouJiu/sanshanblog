@@ -20,7 +20,9 @@ import java.io.IOException;
 @RestController
 public class GlobalException {
 
+    public static final String ERROR_MSG = "errorMessage";
 
+    public static final  String ERROR_URL="/error";
 
     @ExceptionHandler(IdMapWriteException.class)
     @ResponseStatus(HttpStatus.OK)
@@ -30,7 +32,7 @@ public class GlobalException {
     }
 
 
-    //拦住exception不是一个好选择
+    //TODO 拦住exception不是一个好选择
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.OK)
     public Object exceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception ex) throws ServletException, IOException {
@@ -43,7 +45,7 @@ public class GlobalException {
         }
 
         //转发到错误页面
-        request.setAttribute("errorMessage",ex.getMessage());
+        request.setAttribute(ERROR_MSG,ex.getMessage());
         redirect("/api/error",HttpStatus.NOT_FOUND,request,response);
         return null;
     }

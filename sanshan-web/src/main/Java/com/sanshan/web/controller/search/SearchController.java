@@ -1,5 +1,7 @@
 package com.sanshan.web.controller.search;
 
+import com.sanshan.service.search.ElasticSearchService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,6 +13,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("search")
 public class SearchController {
 
+    @Autowired
+    private ElasticSearchService elasticSearchService;
 
 
 }

@@ -19,6 +19,11 @@
         <spring.boot.version>1.5.2.RELEASE</spring.boot.version>
         <!--spring-data-mongo-->
         <org.spring.data.mongodb>1.8.4.RELEASE</org.spring.data.mongodb>
+        <!--spring-date-elasticsearch-->
+        <org.spring.data.elasticsearch>2.0.2.RELEASE</org.spring.data.elasticsearch>
+        <fasterxml.jackson.version>2.6.6</fasterxml.jackson.version>
+        <joda-time>2.9.4</joda-time>
+
         <!--Spring -data -commons-->
         <org.springframework.data-commons>1.11.4.RELEASE</org.springframework.data-commons>
         <!--redis-->
@@ -198,7 +203,6 @@
 
 
 
-
             <dependency>
                 <groupId>org.springframework.data</groupId>
                 <artifactId>spring-data-mongodb</artifactId>
@@ -223,11 +227,39 @@
                 </exclusions>
             </dependency>
 
+
+            <!--elastic-->
             <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-data-elasticsearch</artifactId>
-                <version>${spring.boot.version}</version>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-elasticsearch</artifactId>
+                <version>${org.spring.data.elasticsearch}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework.data</groupId>
+                        <artifactId>spring-data-commons</artifactId>
+                    </exclusion>
+                </exclusions>
             </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-core</artifactId>
+                <version>${fasterxml.jackson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>com.fasterxml.jackson.core</groupId>
+                <artifactId>jackson-databind</artifactId>
+                <version>${fasterxml.jackson.version}</version>
+            </dependency>
+
+            <dependency>
+                <groupId>joda-time</groupId>
+                <artifactId>joda-time</artifactId>
+                <version>${joda-time}</version>
+            </dependency>
+
+
 
             <!--cglib动态代理-->
             <dependency>

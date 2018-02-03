@@ -10,6 +10,7 @@ import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.ResourceHttpMessageConverter;
+import org.springframework.stereotype.Repository;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -22,6 +23,7 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Properties;
@@ -31,7 +33,7 @@ import java.util.Properties;
 @ComponentScan(value = "com.sanshan.web.controller",excludeFilters = {
         @ComponentScan.Filter(
                 type= FilterType.ANNOTATION,
-                value = {Configuration.class})
+                value = {Configuration.class,Service.class, Repository.class})
 })
 @PropertySource("file:D:/SanShanBlog.properties")
 @EnableAspectJAutoProxy(proxyTargetClass = true)//开启切面

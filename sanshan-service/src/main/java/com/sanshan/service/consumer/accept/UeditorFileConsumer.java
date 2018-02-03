@@ -23,7 +23,6 @@ import java.util.concurrent.*;
  */
 @Service
 @Slf4j
-@Transactional(isolation = Isolation.READ_COMMITTED,propagation = Propagation.REQUIRES_NEW,rollbackFor = Exception.class)
 public class UeditorFileConsumer {
 
     @Autowired
@@ -32,24 +31,22 @@ public class UeditorFileConsumer {
     @Autowired
     private UeditorFileQuoteMapper ueditorFileQuoteMapper;
 
-    private ExecutorService pool = new ThreadPoolExecutor(1,1,10, TimeUnit.MINUTES,new LinkedBlockingDeque<>(),(r)->{
-        Thread t = new Thread(r);
-        t.setName("ueditor-consumer-thread");
-        return t;
-    });
 
-
-    protected void ueditorConsumer(){
+    @Transactional(isolation = Isolation.READ_COMMITTED,propagation = Propagation.REQUIRES_NEW,rollbackFor = Exception.class)
+    public void ueditorConsumer(){
         if (!UeditorFileService.ueditorFileAddQueue.isEmpty() || !UeditorFileService.ueditorFileDecrQueue.isEmpty() || !UeditorFileService.ueditorFileUpload.isEmpty()) {
             if (log.isDebugEnabled()){
                 log.debug("对ueditor中博客文件数据以及相关元数据的改变存入到数据库中");
             }
-            pool.execute(() -> {
-                ueditorBlogFileAdd();
-                ueditorBlogFileDecr();
-                ueditorFileUpload();
-            });
+                ueditorFileExecute();
         }
+    }
+
+
+    private void ueditorFileExecute(){
+        ueditorBlogFileAdd();
+        ueditorBlogFileDecr();
+        ueditorFileUpload();
     }
 
     /**

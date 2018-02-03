@@ -9,9 +9,11 @@ import com.sanshan.service.vote.VoteService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
@@ -23,7 +25,6 @@ import java.util.concurrent.TimeUnit;
  */
 @Service
 @Slf4j
-@Transactional(isolation = Isolation.READ_COMMITTED,propagation = Propagation.REQUIRES_NEW,rollbackFor = Exception.class)
 public class VoteConsumer {
 
     @Autowired
@@ -32,27 +33,22 @@ public class VoteConsumer {
     @Autowired
     private BlogVoteMapper blogVoteMapper;
 
-    private ExecutorService pool = new ThreadPoolExecutor(1,1,3, TimeUnit.MINUTES,new LinkedBlockingQueue<Runnable>(),(r)->{
-        Thread t = new Thread(r);
-        t.setName("vote-consumer-thread");
-        return t;
-    });
 
-
-    protected void voteConsumerProcess() {
+    @Transactional(isolation = Isolation.READ_COMMITTED,propagation = Propagation.REQUIRES_NEW,rollbackFor = Exception.class)
+    public void voteConsumerProcess() {
         if (!VoteService.voteAddConsumerQueue.isEmpty() || !VoteService.voteDecrConsumerQueue.isEmpty()||!VoteService.voteDeleteConsumerQueue.isEmpty()) {
             if (log.isDebugEnabled()){
                 log.debug("lazy投票数据到数据库中");
             }
-            pool.execute(() -> {
-                voteAdd();
-                voteDecr();
-                voteDelete();
-            });
+              voteExecute();
         }
     }
 
-
+    private void voteExecute(){
+        voteAdd();
+        voteDecr();
+        voteDelete();
+    }
 
     /**
      * 对Vote增加的consumer进行处理

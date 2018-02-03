@@ -1,6 +1,6 @@
 package com.sanshan.web.config.webaseconfig;
 
-import com.sanshan.Application;
+import com.sanshan.web.Application;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.security.web.context.AbstractSecurityWebApplicationInitializer;
 

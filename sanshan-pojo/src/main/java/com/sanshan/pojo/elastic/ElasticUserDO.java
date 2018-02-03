@@ -5,12 +5,15 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
+import org.springframework.data.elasticsearch.annotations.Field;
+import org.springframework.data.elasticsearch.annotations.FieldIndex;
+import org.springframework.data.elasticsearch.annotations.FieldType;
 
 
 @NoArgsConstructor
 @Data
 @ToString
-@Document(indexName = "user-info",type = "user")
+@Document(indexName = "user-info", type = "user")
 public class ElasticUserDO {
 
     @Id
@@ -19,6 +22,7 @@ public class ElasticUserDO {
     /**
      *头像
      */
+    @Field(type = FieldType.String,index = FieldIndex.not_analyzed)
     private String avatar;
 
     /**
@@ -28,7 +32,8 @@ public class ElasticUserDO {
 
     /**
      * 电子邮箱
-     */
+      */
+    @Field(type = FieldType.String,index = FieldIndex.not_analyzed)
     private String email;
 
 

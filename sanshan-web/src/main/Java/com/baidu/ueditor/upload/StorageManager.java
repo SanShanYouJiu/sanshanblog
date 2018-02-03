@@ -6,16 +6,16 @@ import com.baidu.ueditor.define.State;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import com.sanshan.service.editor.UeditorFileService;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.FileUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
 
-@Slf4j
 public class StorageManager {
-
+    private static final Logger log = LoggerFactory.getLogger(StorageManager.class);
 
     public static final int BUFFER_SIZE = 8192;
 //    private static Mongo mongo = new Mongo("localhost", 27017);

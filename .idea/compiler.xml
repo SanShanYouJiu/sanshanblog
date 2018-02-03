@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="AjcSettings">
+    <option name="ajcPath" value="$MAVEN_REPOSITORY$/org/aspectj/aspectjtools/1.8.9/aspectjtools-1.8.9.jar" />
+    <option name="cmdLineParams" value="-showWeaveInfo" />
+    <option name="delegateToJavac" value="true" />
+  </component>
   <component name="CompilerConfiguration">
+    <option name="DEFAULT_COMPILER" value="ajc" />
     <option name="BUILD_PROCESS_HEAP_SIZE" value="1000" />
     <annotationProcessing>
       <profile name="Maven default annotation processors profile" enabled="true">

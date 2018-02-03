@@ -4,20 +4,21 @@ import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.exception.CheckException;
 import com.sanshan.util.exception.FileLoadException;
 import com.sanshan.util.info.PosCodeEnum;
-import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 
 /**
  * 处理和包装异常
  */
-@Slf4j
 @Aspect
 public class ControllerAop {
 
+    private static final Logger log = LoggerFactory.getLogger(ControllerAop.class);
 
     @Pointcut("execution(public com.sanshan.service.vo.ResponseMsgVO *(..))")
     public void responseMsgVoPointcut() {

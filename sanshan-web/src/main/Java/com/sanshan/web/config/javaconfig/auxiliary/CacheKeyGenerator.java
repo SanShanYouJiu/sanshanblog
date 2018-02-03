@@ -1,7 +1,8 @@
 package com.sanshan.web.config.javaconfig.auxiliary;
 
 import com.google.common.hash.Hashing;
-import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.util.ClassUtils;
 
@@ -12,8 +13,9 @@ import java.nio.charset.Charset;
 /**
  * 自定义CacheKey的生成策略
  */
-@Slf4j
 public  class CacheKeyGenerator implements KeyGenerator {
+
+    private static final Logger log = LoggerFactory.getLogger(CacheKeyGenerator.class);
 
     // custom cache key
     public static final int NO_PARAM_KEY = 0;

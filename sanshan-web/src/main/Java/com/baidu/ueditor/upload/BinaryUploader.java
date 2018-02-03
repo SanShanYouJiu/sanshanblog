@@ -5,9 +5,10 @@ import com.baidu.ueditor.define.AppInfo;
 import com.baidu.ueditor.define.BaseState;
 import com.baidu.ueditor.define.FileType;
 import com.baidu.ueditor.define.State;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.fileupload.FileItemStream;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.support.DefaultMultipartHttpServletRequest;
 
@@ -23,9 +24,8 @@ import java.util.Map;
  *
  * 被Spring MVC包装过的Request 自定义实现
  */
-@Slf4j
 public class BinaryUploader {
-
+	private static final Logger log = LoggerFactory.getLogger(BinaryUploader.class);
 	public static final State save(HttpServletRequest request,
 								   Map<String, Object> conf) {
 		FileItemStream fileStream = null;

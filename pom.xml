@@ -70,7 +70,7 @@
         <javax.persistence.api>2.2</javax.persistence.api>
 
         <!--druid-->
-        <com.alibaba.druid>1.0.9</com.alibaba.druid>
+        <spring-boot-druid-starter>1.1.6</spring-boot-druid-starter>
 
         <!--七牛云相关-->
         <com.qiniu-java-sdk>7.2.6</com.qiniu-java-sdk>
@@ -222,6 +222,10 @@
                         <groupId>org.springframework</groupId>
                         <artifactId>spring-tx</artifactId>
                     </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-context</artifactId>
+                    </exclusion>
                 </exclusions>
             </dependency>
 
@@ -273,9 +277,7 @@
                 <version>${joda-time}</version>
             </dependency>
 
-
-
-            <!--cglib动态代理-->
+            <!--cglib动态代理 begin-->
             <dependency>
                 <groupId>cglib</groupId>
                 <artifactId>cglib</artifactId>
@@ -417,8 +419,8 @@
             <!--阿里druid配置 start-->
             <dependency>
                 <groupId>com.alibaba</groupId>
-                <artifactId>druid</artifactId>
-                <version>${com.alibaba.druid}</version>
+                <artifactId>druid-spring-boot-starter</artifactId>
+                <version>${spring-boot-druid-starter}</version>
             </dependency>
             <!--阿里druid配置 end-->
 

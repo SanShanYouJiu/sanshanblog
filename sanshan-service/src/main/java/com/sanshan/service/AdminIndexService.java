@@ -1,8 +1,10 @@
 package com.sanshan.service;
 
 import com.mongodb.WriteResult;
+import com.sanshan.dao.elastic.UserInfoRepository;
 import com.sanshan.dao.mongo.UserRepository;
 import com.sanshan.pojo.dto.UserDTO;
+import com.sanshan.pojo.elastic.ElasticUserDO;
 import com.sanshan.pojo.entity.UserDO;
 import com.sanshan.service.convent.UserConvert;
 import com.sanshan.service.editor.MarkDownBlogService;
@@ -23,6 +25,7 @@ import org.springframework.stereotype.Service;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -44,6 +47,9 @@ public class AdminIndexService {
 
     @Autowired
     private MarkDownBlogService markDownBlogService;
+
+    @Autowired
+    private UserInfoRepository userInfoRepository;
 
     public List<BlogVO> queryAllBlog() {
         JwtUser jwtUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -87,8 +93,8 @@ public class AdminIndexService {
     }
 
     public Boolean changeUserInfo(String username,Map<String,String> mapList ){
-        UserDO userDO = new UserDO();
-        userDO.setUsername(username);
+        UserDO userDO ;
+        userDO = userRepository.findByUsername(username);
         String avatar = mapList.get("avatar");
         String blogLink = mapList.get("blogLink");
         boolean avatarFound=stringIsNotNull(avatar);
@@ -101,9 +107,20 @@ public class AdminIndexService {
                userDO.setBlogLink(blogLink);
                log.info("用户{}更改自己的博客链接为{}",username,blogLink);
            }
-       WriteResult result= userRepository.changeUserInfo(userDO);
-        //这里暂时将修改为0的作为更新失败
-        return  result.getN()!=0;
+       return changeUserInfo(userDO);
+    }
+
+    private Boolean changeUserInfo(UserDO userDO){
+        WriteResult result= userRepository.changeUserInfo(userDO);
+        //转换DTO对象
+        UserDTO userDTO = UserConvert.doToDto(userDO);
+        ElasticUserDO elasticUserDO = UserConvert.dtoToElasticDO(userDTO);
+        ElasticUserDO esResult = userInfoRepository.save(elasticUserDO);
+        if (!Objects.isNull(esResult)&&result.getN()!=0){
+             return true;
+         }else {
+             return false;
+         }
     }
 
     public void updateBlogById(Long id,String title, String tag, String content, ResponseMsgVO responseMsgVO) {

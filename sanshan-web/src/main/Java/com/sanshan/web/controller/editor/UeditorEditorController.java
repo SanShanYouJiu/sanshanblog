@@ -129,9 +129,9 @@ public class UeditorEditorController {
     @PostMapping(value = "blog/id:{id}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO update(
             @PathVariable(value = "id") Long id,
-            @RequestParam(value = "content", required = false) String content,
+            @RequestParam(value = "content") String content,
             @RequestParam(value = "tag", required = false) String tag,
-            @RequestParam(value = "title", required = false) String title) {
+            @RequestParam(value = "title") String title) {
         if (blogIdGenerate.getType(id) != EditorTypeEnum.UEDITOR_EDITOR) {
             return new ResponseMsgVO().buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR,
                     "该ID对应的不是富文本格式的文件");

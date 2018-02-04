@@ -2,7 +2,6 @@ package com.sanshan.service;
 
 import com.mongodb.gridfs.GridFSDBFile;
 import com.sanshan.dao.mongo.FileOperation;
-import com.sanshan.dao.mongo.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
@@ -20,8 +19,6 @@ import java.io.IOException;
 @Slf4j
 public class FileLoadService {
 
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private FileOperation fileOperation;

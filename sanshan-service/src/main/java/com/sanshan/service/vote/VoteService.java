@@ -210,7 +210,6 @@ public class VoteService {
      * @param blogId
      */
     public void deleteBlogVote(Long blogId) {
-      pool.execute(()->{
           Set<String> favourSet = redisTemplate.opsForSet().members(VOTE_IP_FAVOUR_KEYS);
           if (!Objects.isNull(favourSet)) {
               String[] favours = favourSet.toArray(new String[]{});
@@ -239,9 +238,8 @@ public class VoteService {
           redisTemplate.opsForHash().delete(BLOG_VOTE_THREADS,blogId);
           VoteDTO voteDTO = new VoteDTO();
           voteDTO.setBlogId(blogId);
-          log.info("在缓存中删除id为{}的博客投票数据完成,放到队列中到数据库中进行删除",blogId);
+          log.debug("在缓存中删除id为{}的博客投票数据完成,删除请求进入到阻塞队列中 在一定时间内在数据库中进行删除",blogId);
           voteDeleteConsumerQueue.add(voteDTO);
-      });
     }
 
 

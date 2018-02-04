@@ -56,9 +56,9 @@ public class MarkDownEditorController {
 
     @PostMapping(value = "blog", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO insertMarkDownBlog(
-            @RequestParam(value = "content", required = false) String content,
-            @RequestParam(value = "tag", required = false) String tag,
-            @RequestParam(value = "title", required = false) String title) {
+            @RequestParam(value = "content") String content,
+            @RequestParam(value = "tag",required = false) String tag,
+            @RequestParam(value = "title") String title) {
 
         int result = markDownBlogService.saveDO(content, title, tag);
         if (result ==0){

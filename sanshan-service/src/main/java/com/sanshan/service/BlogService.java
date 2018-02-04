@@ -6,7 +6,6 @@ import com.sanshan.service.editor.MarkDownBlogService;
 import com.sanshan.service.editor.UeditorBlogService;
 import com.sanshan.service.vo.BlogVO;
 import com.sanshan.service.vo.ResponseMsgVO;
-import com.sanshan.service.vote.VoteService;
 import com.sanshan.util.BlogIdGenerate;
 import com.sanshan.util.PageInfo;
 import com.sanshan.util.exception.MapFoundNullException;
@@ -25,6 +24,7 @@ import java.util.*;
 @Service
 @Slf4j
 public class BlogService {
+
     @Autowired
     private MarkDownBlogService markDownBlogService;
 
@@ -34,27 +34,9 @@ public class BlogService {
     @Autowired
     private BlogIdGenerate blogIdGenerate;
 
-    @Autowired
-    private VoteService voteService;
-
 
     public Long getCurrentId() {
         return blogIdGenerate.getExistMaxId();
-        //for (long i = id - 1; i > -1; i--) {
-        //    EditorTypeEnum type = blogIdGenerate.getType(i);
-        //    switch (type) {
-        //        case UEDITOR_EDITOR:
-        //            return i;
-        //        case MarkDown_EDITOR:
-        //            return i;
-        //        case Void_Id:
-        //            continue;
-        //        default:
-        //             break;
-        //    }
-        //}
-        //log.error("获取当前ID错误:{}", id);
-        //throw new NotFoundBlogException("未找到当前博客Id");
     }
 
     /**
@@ -235,7 +217,6 @@ public class BlogService {
              default:
                  break;
         }
-        voteService.deleteBlogVote(id);
         log.info("删除id为{}的博客成功",id);
         responseMsgVO.buildOK();
     }

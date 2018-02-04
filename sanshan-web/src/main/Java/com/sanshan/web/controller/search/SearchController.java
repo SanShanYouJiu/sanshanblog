@@ -1,7 +1,11 @@
 package com.sanshan.web.controller.search;
 
 import com.sanshan.service.search.ElasticSearchService;
+import com.sanshan.service.vo.ResponseMsgVO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -16,5 +20,11 @@ public class SearchController {
     @Autowired
     private ElasticSearchService elasticSearchService;
 
+    @GetMapping(value = "/all/{key}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO searchAll(@PathVariable(name = "key") String  key){
+        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
+        elasticSearchService.queryAll(key,responseMsgVO);
+        return responseMsgVO;
+    }
 
 }

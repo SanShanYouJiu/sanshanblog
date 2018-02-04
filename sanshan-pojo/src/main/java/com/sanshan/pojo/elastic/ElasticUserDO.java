@@ -9,12 +9,16 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldIndex;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 
+import java.io.Serializable;
+
 
 @NoArgsConstructor
 @Data
 @ToString
 @Document(indexName = "user-info", type = "user")
-public class ElasticUserDO {
+public class ElasticUserDO implements Serializable {
+
+    private static final long serialVersionUID = 693337155482970397L;
 
     @Id
     private String id;

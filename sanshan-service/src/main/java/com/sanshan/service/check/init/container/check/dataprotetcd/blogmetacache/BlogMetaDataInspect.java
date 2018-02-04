@@ -53,10 +53,10 @@ public class BlogMetaDataInspect {
     private void rollBackData(List<MarkDownBlogDO> markDownBlogDOList, List<UeditorBlogDO> uEditorBlogDOS) {
         for (MarkDownBlogDO m : markDownBlogDOList) {
             blogIdGenerate.addIdMap(m.getId(), EditorTypeEnum.MARKDOWN_EDITOR);
-            if (m.getTitle() != null) {
+            if (m.getTitle() != null && !m.getTitle().equals("")) {
                 blogIdGenerate.putTitle(m.getTitle(), m.getId());
             }
-            if (m.getTag() != null) {
+            if (m.getTag() != null && !m.getTag().equals("")) {
                 blogIdGenerate.putTag(m.getTag(), m.getId());
             }
             blogIdGenerate.putDate(m.getTime(), m.getId());
@@ -64,10 +64,10 @@ public class BlogMetaDataInspect {
 
         for (UeditorBlogDO u : uEditorBlogDOS) {
             blogIdGenerate.addIdMap(u.getId(), EditorTypeEnum.UEDITOR_EDITOR);
-            if (u.getTitle() != null) {
+            if (u.getTitle() != null && !u.getTitle().equals("")) {
                 blogIdGenerate.putTitle(u.getTitle(), u.getId());
             }
-            if (u.getTag() != null) {
+            if (u.getTag() != null && ! u.getTag().equals("")) {
                 blogIdGenerate.putTag(u.getTag(), u.getId());
             }
             blogIdGenerate.putDate(u.getTime(), u.getId());

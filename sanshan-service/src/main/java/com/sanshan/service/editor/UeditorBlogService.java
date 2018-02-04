@@ -5,7 +5,6 @@ import com.sanshan.pojo.dto.UeditorBlogDTO;
 import com.sanshan.pojo.entity.UeditorBlogDO;
 import com.sanshan.service.convent.UeditorEditorConvert;
 import com.sanshan.service.editor.cacheservice.UeditorBlogCacheService;
-import com.sanshan.service.user.cache.UserBlogCacheService;
 import com.sanshan.service.vo.JwtUser;
 import com.sanshan.util.BlogIdGenerate;
 import com.sanshan.util.info.EditorTypeEnum;
@@ -31,10 +30,8 @@ public class UeditorBlogService {
     private   BlogIdGenerate blogIdGenerate;
 
     @Autowired
-    private UserBlogCacheService userBlogCacheService;
+    private BlogOperation blogOperation;
 
-    @Autowired
-    private UeditorFileService ueditorFileService;
     /**
      * DTO查询
      *
@@ -75,11 +72,17 @@ public class UeditorBlogService {
         return UeditorEditorConvert.doToDto(cacheService.queryById(id));
     }
 
-
+    /**
+     * 存入ueditor博客
+     * @param content
+     * @param title
+     * @param tag
+     * @return
+     */
     public Integer saveDO(String content, String title, String tag) {
         UeditorBlogDO uEditorBlogDO = new UeditorBlogDO();
-        Long id = blogIdGenerate.getId(EditorTypeEnum.UEDITOR_EDITOR);
         //使用IdMap生成的Id
+        Long id = blogIdGenerate.getId(EditorTypeEnum.UEDITOR_EDITOR);
         uEditorBlogDO.setId(id);
         uEditorBlogDO.setContent(content);
         uEditorBlogDO.setTag(tag);
@@ -101,56 +104,25 @@ public class UeditorBlogService {
         JwtUser user = (JwtUser) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
           uEditorBlogDO.setUser(user.getUsername());
-        int result = cacheService.save(uEditorBlogDO);
+
+          //检查
+        UeditorBlogDO checkResult = blogOperation.ueditorBlogCheck(uEditorBlogDO);
+
+        int result = cacheService.save(checkResult);
         //插入失败
         if (result == 0) {
             blogIdGenerate.removeIdMap(id);
             return 0;
         }
 
-        //更新User对应的blog缓存
-        userBlogCacheService.userBlogRefresh(user.getUsername());
-
-        //加入到索引中
-        if (tag!=null){
-            blogIdGenerate.putTag(tag,id);
-        }
-        if (title!=null){
-            blogIdGenerate.putTitle(title,id);
-        }
-        blogIdGenerate.putDate(date,id);
+        blogOperation.ueditorBlogAdd(checkResult, user.getUsername());
 
         log.info("用户:{} 新增Ueditor博客Id为:{}",user.getUsername(),id);
-
-        //检测ueditor中上传的文件
-        ueditorFileService.checkUeditorContentFile(id,content);
         return  result;
     }
 
-    @Deprecated
-    public Boolean updateDO(UeditorBlogDO uEditorBlogDO){
-        long id=uEditorBlogDO.getId();
-        String tag = uEditorBlogDO.getTag();
-        Date date=uEditorBlogDO.getTime();
-        String title = uEditorBlogDO.getTitle();
-
-        UeditorEditorConvert.doToDto(cacheService.update(uEditorBlogDO));
-
-        //更新User对应的blog缓存
-        userBlogCacheService.userBlogRefresh(uEditorBlogDO.getUser());
-        //加入到索引中
-        if (tag!=null){
-            blogIdGenerate.putTag(tag,id);
-        }
-        if (title!=null){
-            blogIdGenerate.putTitle(title,id);
-        }
-        blogIdGenerate.putDate(date,id);
-        return true;
-    }
-
     /**
-     * 在更新时也需要对文件进行引用检查
+     * 参数不为空的进行更新操作
      * @param id
      * @param content
      * @param title
@@ -166,15 +138,7 @@ public class UeditorBlogService {
         uEditorBlogDO.setTitle(title);
 
        UeditorBlogDTO uEditorBlogDTO= UeditorEditorConvert.doToDto(cacheService.updateSelective(uEditorBlogDO));
-        //更新User对应的blog缓存
-        userBlogCacheService.userBlogRefresh(uEditorBlogDTO.getUser());
-        //加入到索引中
-        if (tag!=null){
-            blogIdGenerate.putTag(tag,id);
-        }
-        if (title!=null){
-            blogIdGenerate.putTitle(title,id);
-        }
+        blogOperation.ueditorUpdate(uEditorBlogDTO);
         return true;
     }
 
@@ -188,10 +152,7 @@ public class UeditorBlogService {
             return 0;
         }
         //更新User对应的blog缓存
-        userBlogCacheService.userBlogRefresh(user.getUsername());
-        blogIdGenerate.remove(id);
-        //审核ueditor博客中对应的文件
-        ueditorFileService.deleteContentContainsFile(id);
+        blogOperation.ueditorDelete(id,user.getUsername());
         log.info("用户:{}删除了Ueditor博客 Id为{}", user.getUsername(), id);
         return rows;
     }

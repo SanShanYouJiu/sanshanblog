@@ -3,6 +3,7 @@ package com.sanshan.service.convent;
 
 import com.github.pagehelper.PageInfo;
 import com.sanshan.pojo.dto.MarkDownBlogDTO;
+import com.sanshan.pojo.elastic.ElasticMarkDownBlogDO;
 import com.sanshan.pojo.entity.MarkDownBlogDO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -26,6 +27,9 @@ public class MarkDownEditorConvert {
         return MODEL_MAPPER.map(markDownBlogDOS,new TypeToken<List<MarkDownBlogDTO>>(){}.getType());
     }
 
+    public static ElasticMarkDownBlogDO dtoToElastic(MarkDownBlogDTO markDownBlogDTO) {
+        return  MODEL_MAPPER.map(markDownBlogDTO,ElasticMarkDownBlogDO.class);
+    }
 
     public static PageInfo<MarkDownBlogDTO> doToDtoPage(PageInfo<MarkDownBlogDO> markDownBlogDOPageInfo) {
         List<MarkDownBlogDO> list = markDownBlogDOPageInfo.getList();

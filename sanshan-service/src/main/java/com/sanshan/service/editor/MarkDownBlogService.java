@@ -5,7 +5,6 @@ import com.sanshan.pojo.dto.MarkDownBlogDTO;
 import com.sanshan.pojo.entity.MarkDownBlogDO;
 import com.sanshan.service.convent.MarkDownEditorConvert;
 import com.sanshan.service.editor.cacheservice.MarkDownBlogCacheService;
-import com.sanshan.service.user.cache.UserBlogCacheService;
 import com.sanshan.service.vo.JwtUser;
 import com.sanshan.util.BlogIdGenerate;
 import com.sanshan.util.info.EditorTypeEnum;
@@ -30,7 +29,8 @@ public class MarkDownBlogService {
     private  BlogIdGenerate blogIdGenerate;
 
     @Autowired
-    private UserBlogCacheService userBlogCacheService;
+    private BlogOperation blogOperation;
+
     /**
      * DTO查询
      *
@@ -71,6 +71,13 @@ public class MarkDownBlogService {
         return MarkDownEditorConvert.doToDtoPage(markDownBlogDOPageInfo);
     }
 
+    /**
+     *存入markdown博客
+     * @param content
+     * @param title
+     * @param tag
+     * @return
+     */
     public Integer saveDO(String content, String title,String tag) {
         MarkDownBlogDO markDownBlog = new MarkDownBlogDO();
         Long id = blogIdGenerate.getId(EditorTypeEnum.MARKDOWN_EDITOR);
@@ -96,49 +103,21 @@ public class MarkDownBlogService {
                 .getPrincipal();
         markDownBlog.setUser(user.getUsername());
 
-        int result = cacheService.save(markDownBlog);
+        //检查
+        MarkDownBlogDO checkResult = blogOperation.markdownBlogCheck(markDownBlog);
+
+        int result = cacheService.save(checkResult);
         //插入失败
         if (result == 0) {
             blogIdGenerate.removeIdMap(id);
             return 0;
         }
-        //更新User对应的blog缓存
-        userBlogCacheService.userBlogRefresh(user.getUsername());
-        //加入到索引中
-        if (tag!=null){
-            blogIdGenerate.putTag(tag,id);
-        }
-        if (title!=null){
-            blogIdGenerate.putTitle(title,id);
-        }
-        blogIdGenerate.putDate(date,id);
-
+        blogOperation.markdownBlogAdd(checkResult,user.getUsername());
 
         log.info("用户:{} 新增Markdown博客Id为:{}",user.getUsername(),id);
         return result;
     }
 
-    @Deprecated
-    public MarkDownBlogDTO updateDO(MarkDownBlogDO markDownBlogDO){
-        long id=markDownBlogDO.getId();
-        String tag = markDownBlogDO.getTag();
-        Date date=markDownBlogDO.getTime();
-        String title = markDownBlogDO.getTitle();
-
-       MarkDownBlogDTO markDownBlogDTO= MarkDownEditorConvert.doToDto(cacheService.update(markDownBlogDO));
-
-        //更新User对应的blog缓存
-        userBlogCacheService.userBlogRefresh(markDownBlogDTO.getUser());
-        //加入到索引中
-        if (tag!=null){
-            blogIdGenerate.putTag(tag,id);
-        }
-        if (title!=null){
-            blogIdGenerate.putTitle(title,id);
-        }
-        blogIdGenerate.putDate(date,id);
-        return markDownBlogDTO;
-    }
 
 
     public Boolean  updateSelectiveDO(Long id,String content,String title,String tag){
@@ -150,18 +129,9 @@ public class MarkDownBlogService {
         markDownBlogDO.setTitle(title);
 
         MarkDownBlogDTO markDownBlogDTO= MarkDownEditorConvert.doToDto(cacheService.updateSelective(markDownBlogDO));
-        //更新User对应的blog缓存
-        userBlogCacheService.userBlogRefresh(markDownBlogDTO.getUser());
-        //加入到索引中
-        if (tag!=null){
-            blogIdGenerate.putTag(tag,id);
-        }
-        if (title!=null){
-            blogIdGenerate.putTitle(title,id);
-        }
+        blogOperation.markdownUpdate(markDownBlogDTO);
         return true;
     }
-
 
     public Integer deleteDOById(Long id) {
         //获得当前用户
@@ -172,8 +142,7 @@ public class MarkDownBlogService {
         if (rows==0){
             return 0;
         }
-        userBlogCacheService.userBlogRefresh(user.getUsername());
-        blogIdGenerate.remove(id);
+        blogOperation.markdownDelete(id, user.getUsername());
         log.info("用户:{}删除了Markdown博客 Id为{}", user.getUsername(), id);
         return rows;
     }

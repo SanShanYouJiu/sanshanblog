@@ -1,12 +1,16 @@
 package com.sanshan.service.auth;
 
+import com.sanshan.dao.elastic.UserInfoRepository;
 import com.sanshan.dao.mongo.UserRepository;
+import com.sanshan.pojo.dto.UserDTO;
+import com.sanshan.pojo.elastic.ElasticUserDO;
 import com.sanshan.pojo.entity.UserDO;
 import com.sanshan.service.SettingService;
+import com.sanshan.service.convent.UserConvert;
 import com.sanshan.service.vo.JwtUser;
 import com.sanshan.service.vo.ResponseMsgVO;
-import com.sanshan.util.setting.Setting;
 import com.sanshan.util.info.PosCodeEnum;
+import com.sanshan.util.setting.Setting;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +40,9 @@ public class AuthServiceImpl implements AuthService {
 
     @Value("${jwt.tokenHead}")
     private String tokenHead;
+
+    @Autowired
+    private UserInfoRepository userInfoRepository;
 
      @Autowired
      private SettingService settingService;
@@ -72,10 +79,23 @@ public class AuthServiceImpl implements AuthService {
         userToAdd.setPassword(encoder.encode(rawPassword));
         userToAdd.setLastPasswordResetDate(new Date());
         userToAdd.setRoles(asList("ROLE_USER"));
-        userRepository.insert(userToAdd);
+        userAdd(userToAdd);
         log.info("{}:注册成功",username);
         responseMsgVO.buildOK();
         return true;
+    }
+
+    /**
+     * 用户增加
+     * 将用户信息分发到各个模块上
+     * @param userToAdd
+     */
+    private void  userAdd(UserDO userToAdd){
+        UserDO userDO = userRepository.insert(userToAdd);
+        //转换为DTO对象 加入到ElasticSearch中
+        UserDTO userDTO = UserConvert.doToDto(userDO);
+        ElasticUserDO elasticUserDO = UserConvert.dtoToElasticDO(userDTO);
+        userInfoRepository.save(elasticUserDO);
     }
 
     /**

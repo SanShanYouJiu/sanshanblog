@@ -538,27 +538,34 @@ public final class BlogIdGenerate {
     public  synchronized final void remove(final Long id) {
         String title = invertTitleMap.get(id);
         Set<Long> titlelongs = idTitleMap.get(title);
-        titlelongs.remove(id);
-        if (titlelongs.size() == 0){
-            idTitleMap.remove(title);
+        //防止null异常
+        if (!Objects.isNull(titlelongs)){
+            titlelongs.remove(id);
+            if (titlelongs.size() == 0){
+                idTitleMap.remove(title);
+            }
+            invertTitleMap.remove(id);
         }
-        invertTitleMap.remove(id);
 
         String tag = invertTagMap.get(id);
         Set<Long> taglongs = idTagMap.get(tag);
-        taglongs.remove(id);
-        if (taglongs.size() == 0){
-            idTagMap.remove(tag);
+        if (!Objects.isNull(taglongs)) {
+            taglongs.remove(id);
+            if (taglongs.size() == 0) {
+                idTagMap.remove(tag);
+            }
+            invertTagMap.remove(id);
         }
-        invertTagMap.remove(id);
 
         Date date = invertDateMap.get(id);
+        if (!Objects.isNull(date)) {
         Set<Long> datelongs = idDateMap.get(date);
-        datelongs.remove(id);
-        if (datelongs.size() == 0){
-            idDateMap.remove(date);
+            datelongs.remove(id);
+            if (datelongs.size() == 0) {
+                idDateMap.remove(date);
+            }
+            invertDateMap.remove(id);
         }
-        invertDateMap.remove(id);
 
         idMap.put(id, EditorTypeEnum.VOID_ID);
         idExistMap.remove(id);

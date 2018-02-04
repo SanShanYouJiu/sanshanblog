@@ -2,8 +2,10 @@ package com.sanshan.service.convent;
 
 import com.github.pagehelper.PageInfo;
 import com.sanshan.pojo.dto.UserDTO;
+import com.sanshan.pojo.elastic.ElasticUserDO;
 import com.sanshan.pojo.entity.UserDO;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.modelmapper.TypeToken;
 
 import java.util.List;
@@ -11,7 +13,17 @@ import java.util.Objects;
 
 public class UserConvert {
 
-    private static final ModelMapper MODEL_MAPPER = new ModelMapper();
+    private static final ModelMapper MODEL_MAPPER =new ModelMapper();
+
+    static {
+        PropertyMap<UserDO, ElasticUserDO> typeMap =  new PropertyMap<UserDO, ElasticUserDO>() {
+            @Override
+            protected void configure() {
+            map().setId(source.get_id());
+            }
+        } ;
+        MODEL_MAPPER.addMappings(typeMap);
+    }
 
     public static UserDTO doToDto(UserDO userDO) {
         if (Objects.isNull(userDO)){
@@ -22,6 +34,13 @@ public class UserConvert {
 
     public static List<UserDTO> doToDtoList(List<UserDO> userDOS) {
         return MODEL_MAPPER.map(userDOS,new TypeToken<List<UserDTO>>(){}.getType());
+    }
+
+    public static ElasticUserDO dtoToElasticDO(UserDTO userDTO) {
+        if (Objects.isNull(userDTO)) {
+            return null;
+        }
+        return MODEL_MAPPER.map(userDTO,ElasticUserDO.class);
     }
 
 

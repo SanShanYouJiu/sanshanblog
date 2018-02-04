@@ -2,6 +2,7 @@ package com.sanshan.service.convent;
 
 import com.github.pagehelper.PageInfo;
 import com.sanshan.pojo.dto.UeditorBlogDTO;
+import com.sanshan.pojo.elastic.ElasticUeditorBlogDO;
 import com.sanshan.pojo.entity.UeditorBlogDO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -22,6 +23,10 @@ public class UeditorEditorConvert {
 
     public static List<UeditorBlogDTO> doToDtoList(List<UeditorBlogDO> uEditorBlogDOS) {
         return MODEL_MAPPER.map(uEditorBlogDOS,new TypeToken<List<UeditorBlogDTO>>(){}.getType());
+    }
+
+    public static ElasticUeditorBlogDO dtoToElastic(UeditorBlogDTO ueditorBlogDTO) {
+        return  MODEL_MAPPER.map(ueditorBlogDTO,ElasticUeditorBlogDO.class);
     }
 
 

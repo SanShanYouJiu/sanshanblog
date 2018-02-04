@@ -13,6 +13,9 @@
     <name>Web Maven Webapp</name>
     <url>http://maven.apache.org</url>
 
+    <properties>
+        <main-class>com.sanshan.web.Application</main-class>
+    </properties>
 
     <dependencies>
 
@@ -86,16 +89,23 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                    <encoding>UTF-8</encoding>
-                </configuration>
             </plugin>
-            <plugin>
+            <!--由于使用外部Tomcat进行部署 将下面功能取消  如果需要Spring Boot jar方式的部署 打开下面功能 以及关闭上面的   <packaging>war</packaging>  即可 -->
+        <!--    <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
+                <configuration>
+                <mainClass>${main-class}</mainClass>
+                  <layout>ZIP</layout>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>-->
         </plugins>
     </build>
 </project>

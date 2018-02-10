@@ -3,11 +3,9 @@ package com.sanshan.service.editor.cacheservice;
 import com.github.pagehelper.PageInfo;
 import com.sanshan.pojo.entity.MarkDownBlogDO;
 import com.sanshan.service.BaseServiceImpl;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,9 +15,6 @@ import java.util.List;
  */
 @Service
 public class MarkDownBlogCacheService extends BaseServiceImpl<MarkDownBlogDO> {
-    @Autowired
-    private RedisTemplate<String, String> redisTemplate;
-
 
     @Override
     public List<MarkDownBlogDO> queryAll() {

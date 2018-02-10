@@ -75,6 +75,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/api/user/change-pwd",
                         "/api/user/email-check",
                         "/api/auth/refresh-token",
+                        "/api/auth/login-status",
                         "/api/user/register/check/token",
                         "/api/markdown-editor/**",
                         "/api/file/**",
@@ -88,7 +89,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/actuator/**")
                 .hasAnyRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE,"/api/blog/id/**")
+                .antMatchers(HttpMethod.DELETE, "/api/blog/id/**")
                 .hasAnyRole("USER")
                 .antMatchers(
                         "/",

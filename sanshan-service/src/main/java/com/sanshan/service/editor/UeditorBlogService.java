@@ -106,7 +106,7 @@ public class UeditorBlogService {
           uEditorBlogDO.setUser(user.getUsername());
 
           //检查
-        UeditorBlogDO checkResult = blogOperation.ueditorBlogCheck(uEditorBlogDO);
+        UeditorBlogDO checkResult = blogOperation.ueditorBlogAddCheck(uEditorBlogDO);
 
         int result = cacheService.save(checkResult);
         //插入失败
@@ -136,9 +136,12 @@ public class UeditorBlogService {
         uEditorBlogDO.setUpdated(new Date());
         uEditorBlogDO.setTag(tag);
         uEditorBlogDO.setTitle(title);
+        //检查
+        UeditorBlogDO checkResult= blogOperation.ueditorBlogUpdateCheck(uEditorBlogDO);
 
-       UeditorBlogDTO uEditorBlogDTO= UeditorEditorConvert.doToDto(cacheService.updateSelective(uEditorBlogDO));
-        blogOperation.ueditorUpdate(uEditorBlogDTO);
+        UeditorBlogDTO uEditorBlogDTO = UeditorEditorConvert.doToDto(checkResult);
+        cacheService.updateSelective(checkResult);
+        blogOperation.ueditorOtherUpdate(uEditorBlogDTO);
         return true;
     }
 

@@ -30,6 +30,9 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+/**
+ * TODO 做拆分
+ */
 public class AdminIndexService {
 
 
@@ -104,6 +107,13 @@ public class AdminIndexService {
                log.info("用户{}更改自己的头像为{}",username,avatar);
            }
            if (blogLinkFound){
+                String httpPrefix="http://";
+                String httpsPrefix="https://";
+                if (blogLink.contains(httpPrefix)||blogLink.contains(httpsPrefix)){
+                } else {
+                    //猜测是http开头
+                    blogLink = httpPrefix + blogLink;
+                }
                userDO.setBlogLink(blogLink);
                log.info("用户{}更改自己的博客链接为{}",username,blogLink);
            }

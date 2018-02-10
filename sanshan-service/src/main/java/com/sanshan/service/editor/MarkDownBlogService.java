@@ -104,7 +104,7 @@ public class MarkDownBlogService {
         markDownBlog.setUser(user.getUsername());
 
         //检查
-        MarkDownBlogDO checkResult = blogOperation.markdownBlogCheck(markDownBlog);
+        MarkDownBlogDO checkResult = blogOperation.markdownBlogAddCheck(markDownBlog);
 
         int result = cacheService.save(checkResult);
         //插入失败
@@ -127,9 +127,13 @@ public class MarkDownBlogService {
         markDownBlogDO.setUpdated(new Date());
         markDownBlogDO.setTag(tag);
         markDownBlogDO.setTitle(title);
+        //检查
+        MarkDownBlogDO checkResult = blogOperation.markDownBlogUpdateCheck(markDownBlogDO);
 
-        MarkDownBlogDTO markDownBlogDTO= MarkDownEditorConvert.doToDto(cacheService.updateSelective(markDownBlogDO));
-        blogOperation.markdownUpdate(markDownBlogDTO);
+        cacheService.updateSelective(checkResult);
+        MarkDownBlogDTO markDownBlogDTO= MarkDownEditorConvert.doToDto(checkResult);
+
+        blogOperation.markdownOtherUpdate(markDownBlogDTO);
         return true;
     }
 

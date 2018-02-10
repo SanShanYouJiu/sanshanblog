@@ -102,5 +102,16 @@ public class AuthController {
         }
     }
 
+    /**
+     * 查看是否拥有登录权限
+     * @return
+     */
+    @GetMapping(value = "/login-status",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public  ResponseMsgVO loginStatus(){
+        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
+        responseMsgVO.buildOKWithData("login is ok");
+        return responseMsgVO;
+    }
+
 
 }

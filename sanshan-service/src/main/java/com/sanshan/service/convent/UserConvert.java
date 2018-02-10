@@ -22,7 +22,14 @@ public class UserConvert {
             map().setId(source.get_id());
             }
         } ;
+        PropertyMap<UserDO,UserDTO> typeMap2 = new PropertyMap<UserDO, UserDTO>() {
+            @Override
+            protected void configure() {
+                map().setId(source.get_id());
+            }
+        };
         MODEL_MAPPER.addMappings(typeMap);
+        MODEL_MAPPER.addMappings(typeMap2);
     }
 
     public static UserDTO doToDto(UserDO userDO) {

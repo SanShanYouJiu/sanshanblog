@@ -9,6 +9,7 @@ import com.sanshan.service.convent.MarkDownEditorConvert;
 import com.sanshan.service.convent.UeditorEditorConvert;
 import com.sanshan.service.search.ElasticSearchService;
 import com.sanshan.service.user.cache.UserBlogCacheService;
+import com.sanshan.pojo.dto.BaseEditorDTO;
 import com.sanshan.service.vote.VoteService;
 import com.sanshan.util.BlogIdGenerate;
 import com.sanshan.util.exception.PropertyAccessException;
@@ -56,10 +57,20 @@ public class BlogOperation {
      *
      * @param markDownBlogDO
      */
-    public MarkDownBlogDO markdownBlogCheck(MarkDownBlogDO markDownBlogDO) {
+    public MarkDownBlogDO markdownBlogAddCheck(MarkDownBlogDO markDownBlogDO) {
         baseCheck(markDownBlogDO, markDownBlogDO.getId());
         return markDownBlogDO;
     }
+
+    /**
+     * markdown类型博客更新检测
+     * @param markDownBlogDO
+     * @return
+     */
+     public  MarkDownBlogDO markDownBlogUpdateCheck(MarkDownBlogDO markDownBlogDO){
+         baseUpdateCheck(markDownBlogDO);
+         return  markDownBlogDO;
+     }
 
     /**
      * ueditor类型博客插入检查
@@ -67,11 +78,18 @@ public class BlogOperation {
      * @param ueditorBlogDO
      * @return
      */
-    public UeditorBlogDO ueditorBlogCheck(UeditorBlogDO ueditorBlogDO) {
+    public UeditorBlogDO ueditorBlogAddCheck(UeditorBlogDO ueditorBlogDO) {
         baseCheck(ueditorBlogDO, ueditorBlogDO.getId());
         return ueditorBlogDO;
     }
 
+    /*
+    ueditor 类型博客更新检测
+     */
+    public UeditorBlogDO ueditorBlogUpdateCheck(UeditorBlogDO ueditorBlogDO) {
+        baseUpdateCheck(ueditorBlogDO);
+        return ueditorBlogDO;
+    }
 
     /**
      * Ueditor博客存入以及相关操作
@@ -136,13 +154,10 @@ public class BlogOperation {
     /**
      * @param markDownBlogDTO
      */
-    public void markdownUpdate(MarkDownBlogDTO markDownBlogDTO) {
+    public void markdownOtherUpdate(MarkDownBlogDTO markDownBlogDTO) {
         pool.execute(() -> {
             Long id = markDownBlogDTO.getId();
-            String tag = markDownBlogDTO.getTag();
-            String title = markDownBlogDTO.getTitle();
-            String username = markDownBlogDTO.getUser();
-            baseUpdateCache(id, username, title, tag);
+            baseOtherUpdateCache(markDownBlogDTO,id);
             elasticSearchService.markdownBlogAdd(markDownBlogDTO);
         });
     }
@@ -152,13 +167,10 @@ public class BlogOperation {
      *
      * @param ueditorBlogDTO
      */
-    public void ueditorUpdate(UeditorBlogDTO ueditorBlogDTO) {
+    public void ueditorOtherUpdate(UeditorBlogDTO ueditorBlogDTO) {
         pool.execute(() -> {
             Long id = ueditorBlogDTO.getId();
-            String tag = ueditorBlogDTO.getTag();
-            String title = ueditorBlogDTO.getTitle();
-            String username = ueditorBlogDTO.getUser();
-            baseUpdateCache(id, username, title, tag);
+            baseOtherUpdateCache(ueditorBlogDTO,id);
             elasticSearchService.ueditorBlogAdd(ueditorBlogDTO);
         });
     }
@@ -208,8 +220,10 @@ public class BlogOperation {
      * @param editorDO
      */
     private void baseCheck(BaseEditorDO editorDO, Long id) {
-        String title = editorDO.getTitle();
-        String tag = editorDO.getTag();
+        String title = editorDO.getTitle().trim();
+        editorDO.setTitle(title);
+        String tag = editorDO.getTag().trim();
+        editorDO.setTag(tag);
         if (tag.equals("")) {
             editorDO.setTag(null);
         }
@@ -219,22 +233,54 @@ public class BlogOperation {
         }
     }
 
+    /**
+     *默认所有更新的选项不能为空或者纯空格
+     * @param editorDO
+     */
+    private  void baseUpdateCheck(BaseEditorDO editorDO){
+        String title = null;
+        String tag = null;
+        String content = null;
+        //消除空格
+        if (editorDO.getTitle()!=null) {
+            title = editorDO.getTitle().trim();
+            editorDO.setTitle(title);
+        }
+        if (editorDO.getTag()!=null) {
+            tag = editorDO.getTag().trim();
+            editorDO.setTag(tag);
+        }
+        if (editorDO.getContent()!=null) {
+            content = editorDO.getContent().trim();
+            editorDO.setContent(content);
+        }
+
+        //进行检查
+        if (tag==null||tag.equals("")) {
+            editorDO.setTag(null);
+        }
+        if (title==null||title.equals("")) {
+            editorDO.setTitle(null);
+        }
+       if (content==null||content.equals("")){
+           editorDO.setContent(null);
+       }
+    }
+
 
     /**
+     * @param editorDTO
      * @param id
-     * @param username
-     * @param title
-     * @param tag
      */
-    private void baseUpdateCache(Long id, String username, String title, String tag) {
+    private void baseOtherUpdateCache(BaseEditorDTO editorDTO, Long id) {
         //更新User对应的blog缓存
-        userBlogCacheService.userBlogRefresh(username);
+        userBlogCacheService.userBlogRefresh(editorDTO.getUser());
         //加入到索引中
-        if (tag != null) {
-            blogIdGenerate.putTag(tag, id);
+        if (editorDTO.getTag() != null) {
+            blogIdGenerate.putTag(editorDTO.getTag(), id);
         }
-        if (title != null) {
-            blogIdGenerate.putTitle(title, id);
+        if (editorDTO.getTitle() != null) {
+            blogIdGenerate.putTitle(editorDTO.getTitle(), id);
         }
 
     }

@@ -5,7 +5,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @author sanshan
@@ -13,19 +12,10 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @ToString
-public class MarkDownBlogDTO implements Serializable{
+public class MarkDownBlogDTO extends BaseEditorDTO implements Serializable{
 
-    private static final long serialVersionUID = -9201214690365180565L;
+    private static final long serialVersionUID = 5661725470938567952L;
     private  Long id;
 
-    private String user;
-
-    private String title;
-
-    private String content;
-
-    private Date time;
-
-    private String tag;
 
 }

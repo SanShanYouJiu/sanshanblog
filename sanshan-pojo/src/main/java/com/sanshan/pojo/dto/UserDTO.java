@@ -13,7 +13,7 @@ public class UserDTO  implements Serializable{
 
     private static final long serialVersionUID = 5162067894810129753L;
 
-    private Long id;
+    private String id;
 
     private String avatar;
 

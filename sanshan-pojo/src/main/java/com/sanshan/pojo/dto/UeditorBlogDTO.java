@@ -5,23 +5,13 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.Date;
 
 @Data
 @NoArgsConstructor
 @ToString
-public class UeditorBlogDTO  implements Serializable{
+public class UeditorBlogDTO  extends BaseEditorDTO implements Serializable{
 
-    private static final long serialVersionUID = 4347635814760464628L;
+    private static final long serialVersionUID = 1604587939100832871L;
     private  Long id;
 
-    private String user;
-
-    private String title;
-
-    private String content;
-
-    private Date time;
-
-    private String tag;
 }

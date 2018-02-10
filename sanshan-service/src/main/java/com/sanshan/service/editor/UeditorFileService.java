@@ -69,7 +69,7 @@ public class UeditorFileService {
     public void saveFile(InputStream content, String filename, String type, Object metedata) {
         qiniuStorageManager.ueditorUpload(content, filename,type,metedata);
         //上传过的暂时文件 12小时候后从这个缓存中消失 代表这个暂存文件只存在12小时
-        //实际上 如果客户运气足够好的话 这个图片可以存在24小时 因为一天更新比对一次
+        //实际上 如果客户运气足够好的话 这个图片可以存在36小时 因为一天更新比对一次
         redisTemplate.opsForValue().set(UEDITOR_UPLOAD_TEMP_FILE+filename,filename,12, TimeUnit.HOURS);
         //将暂存文件名存入到一个专门的Set中
         redisTemplate.opsForSet().add(UEDITOR_TMEP_FILENAME_SET,filename);

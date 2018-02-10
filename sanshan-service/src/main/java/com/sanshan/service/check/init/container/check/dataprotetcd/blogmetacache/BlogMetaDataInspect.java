@@ -40,7 +40,8 @@ public class BlogMetaDataInspect {
         //数据库与BlogIdGenerate的事物完整性检查
         Long initTime = System.currentTimeMillis();
         log.info("BlogIdGenerate从数据库中回滚数据");
-        //TODO 需要将缓存中的内容全部删除 然后从数据库恢复
+        //初始化数据
+        blogIdGenerate.initData();
         List<MarkDownBlogDO> markDownBlogDOList = markDownBlogMapper.selectAll();
         List<UeditorBlogDO> uEditorBlogDOS = uEditorBlogMapper.selectAll();
         rollBackData(markDownBlogDOList, uEditorBlogDOS);

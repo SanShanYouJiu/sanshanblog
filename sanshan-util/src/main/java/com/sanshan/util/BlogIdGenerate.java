@@ -69,6 +69,26 @@ public final class BlogIdGenerate {
         log.info("已加载完文件系统中的properties文件 该文件是倒排索引关键文件 耗时:{}ms", System.currentTimeMillis() - initTime);
     }
 
+    /**
+     * 删除内部维护所有数据--初始化
+     * 目的是在系统重新初始化时进行使用
+     * importance!!
+     * danger !!
+     */
+    public  void initData(){
+        this.invertDateMap.clear();
+        this.idDateMap.clear();
+
+        this.invertTagMap.clear();
+        this.idTagMap.clear();
+
+        this.invertTitleMap.clear();
+        this.idTitleMap.clear();
+
+        this.idExistMap.clear();
+        this.idMap.clear();
+    }
+
     private void fileToMap(String filename, Map map, int type) {
         try {
             PropertiesConvenUtil.fileToMap(filename, map, type);

@@ -10,4 +10,5 @@ public interface UserInfoRepository extends ElasticsearchRepository<ElasticUserD
 
       List<ElasticUserDO> findByUsername(String username);
 
+
 }

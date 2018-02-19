@@ -10,14 +10,21 @@ import com.sanshan.pojo.elastic.ElasticMarkDownBlogDO;
 import com.sanshan.pojo.elastic.ElasticUeditorBlogDO;
 import com.sanshan.service.convent.MarkDownEditorConvert;
 import com.sanshan.service.convent.UeditorEditorConvert;
+import com.sanshan.service.vo.ElasticResponseVO;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.exception.NotFoundBlogException;
 import com.sanshan.util.info.EditorTypeEnum;
 import lombok.extern.slf4j.Slf4j;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.search.SearchHit;
+import org.elasticsearch.search.SearchHits;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
+import org.springframework.data.elasticsearch.core.query.FetchSourceFilter;
 import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.elasticsearch.core.query.SearchQuery;
+import org.springframework.data.elasticsearch.core.query.SourceFilter;
 import org.springframework.stereotype.Service;
 
 import java.util.LinkedList;
@@ -60,13 +67,16 @@ public class ElasticSearchService {
     /**
      * 全部查询
      * 前期使用  应该尽量使用按类型搜索
+     * 做返回字段判 不将content这种数据量大的进行返回到response中
      * @param key
      * @param responseMsgVO
      */
-    public void queryAll(String key, ResponseMsgVO responseMsgVO){
-         SearchQuery query = new NativeSearchQueryBuilder().withQuery(matchQuery("_all", key)).build();
+    public void queryAll(String key,Integer pageRows,Integer pageNum, ResponseMsgVO responseMsgVO){
+        SourceFilter sourceFilter =new FetchSourceFilter(new String[]{},new String[]{"content"});
+         SearchQuery query = new NativeSearchQueryBuilder().withQuery(matchQuery("_all", key)).withIndices("_all").withPageable(new PageRequest(pageNum,pageRows)).withSourceFilter(sourceFilter).build();
          template.query(query,(searchResponse)->{
-           return responseMsgVO.buildOKWithData(searchResponse.getHits());
+           List<ElasticResponseVO> sources = assembleElasticReuturnSourceResponse(searchResponse);
+           return responseMsgVO.buildOKWithData(sources);
          });
      }
 
@@ -75,7 +85,12 @@ public class ElasticSearchService {
      * @param key
      * @param responseMsgVO
      */
-     public void userInfoSearch(String key,ResponseMsgVO responseMsgVO){
+     public void userInfoSearch(String key,int pageRows,int pageNum,ResponseMsgVO responseMsgVO){
+         SearchQuery query = new NativeSearchQueryBuilder().withQuery(matchQuery("_all",key)).withIndices("user-info").withTypes("user").withPageable(new PageRequest(pageNum,pageRows)).withFields().build();
+         template.query(query, (searchResponse) -> {
+             List<ElasticResponseVO>  responseVOS= assembleElasticReuturnSourceResponse(searchResponse);
+             return responseMsgVO.buildOKWithData(responseVOS);
+         });
      }
 
     /**
@@ -93,8 +108,13 @@ public class ElasticSearchService {
      * @param key
      * @param responseMsgVO
      */
-    public void blogInfoSearch(String key,ResponseMsgVO responseMsgVO){
-
+    public void blogInfoSearch(String key,Integer pageRows,Integer pageNum,ResponseMsgVO responseMsgVO){
+        SourceFilter sourceFilter =new FetchSourceFilter(new String[]{},new String[]{"content"});
+        SearchQuery query = new NativeSearchQueryBuilder().withQuery(matchQuery("_all",key)).withIndices("blogs").withPageable(new PageRequest(pageNum,pageRows)).withSourceFilter(sourceFilter).build();
+        template.query(query, (searchResponse) -> {
+            List<ElasticResponseVO> response = assembleElasticReuturnSourceResponse(searchResponse);
+            return responseMsgVO.buildOKWithData(response);
+        });
     }
 
     /**
@@ -150,6 +170,46 @@ public class ElasticSearchService {
             default:break;
         }
         log.debug("删除博客id为:{} 在Es中搜索数据完成",id);
+    }
+
+    /**
+     * 组装返回Source结果
+     * @param searchResponse
+     * @return
+     */
+    private List<ElasticResponseVO> assembleElasticReuturnSourceResponse(SearchResponse searchResponse){
+        List<ElasticResponseVO> sources = new LinkedList<>();
+        SearchHits hits = searchResponse.getHits();
+        SearchHit[] searchHits = hits.hits();
+        for (int i = 0; i < searchHits.length; i++) {
+            ElasticResponseVO responseVO = new ElasticResponseVO();
+            responseVO.setSource(searchHits[i].getSource());
+            responseVO.setId(searchHits[i].getId());
+            responseVO.setType(searchHits[i].getType());
+            responseVO.setScore(searchHits[i].getScore());
+            sources.add(responseVO);
+        }
+        return  sources;
+    }
+
+    /**
+     * 组装自定义filed结果
+     * @param searchResponse
+     * @return
+     */
+    private List<ElasticResponseVO> assembleElasticReuturnFiledsResponse(SearchResponse searchResponse){
+        List<ElasticResponseVO> fileds = new LinkedList<>();
+        SearchHits hits = searchResponse.getHits();
+        SearchHit[] searchHits = hits.hits();
+        for (int i = 0; i < searchHits.length; i++) {
+            ElasticResponseVO responseVO = new ElasticResponseVO();
+            responseVO.setFields(searchHits[i].getFields());
+            responseVO.setId(searchHits[i].getId());
+            responseVO.setType(searchHits[i].getType());
+            responseVO.setScore(searchHits[i].getScore());
+            fileds.add(responseVO);
+        }
+        return  fileds;
     }
 
 }

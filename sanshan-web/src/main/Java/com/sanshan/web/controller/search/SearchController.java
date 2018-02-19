@@ -24,10 +24,10 @@ public class SearchController {
      * @param key
      * @return
      */
-    @GetMapping(value = "/all/{key}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO searchAll(@PathVariable(name = "key") String  key){
+    @GetMapping(value = "/all/{key}/pageRows:{pageRows}/pageNum:{pageNum}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO searchAll(@PathVariable(name = "key") String  key,@PathVariable(name = "pageRows")Integer pageRows,@PathVariable("pageNum")Integer pageNum){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
-        elasticSearchService.queryAll(key,responseMsgVO);
+        elasticSearchService.queryAll(key,pageRows,pageNum,responseMsgVO);
         return responseMsgVO;
     }
 
@@ -36,10 +36,10 @@ public class SearchController {
      * @param key
      * @return
      */
-    @GetMapping(value = "/user-info/{key}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO userInfoSearch(@PathVariable(name = "key")String key){
+    @GetMapping(value = "/user-info/{key}/pageRows:{pageRows}/pageNum:{pageNum}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO userInfoSearch(@PathVariable(name = "key")String key,@PathVariable(name = "pageRows")Integer pageRows,@PathVariable("pageNum")Integer pageNum){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
-        elasticSearchService.userInfoSearch(key,responseMsgVO);
+        elasticSearchService.userInfoSearch(key,pageRows,pageNum,responseMsgVO);
         return responseMsgVO;
     }
 
@@ -60,10 +60,10 @@ public class SearchController {
      * @param key
      * @return
      */
-    @GetMapping(value = "/blog-info/{key}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public  ResponseMsgVO blogInfoSearch(@PathVariable(name = "key")String key){
+    @GetMapping(value = "/blog-info/{key}/pageRows:{pageRows}/pageNum:{pageNum}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public  ResponseMsgVO blogInfoSearch(@PathVariable(name = "key")String key,@PathVariable(name = "pageRows") Integer pageRows,@PathVariable(name = "pageNum") Integer pageNum){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
-        elasticSearchService.blogInfoSearch(key,responseMsgVO);
+        elasticSearchService.blogInfoSearch(key,pageRows,pageNum,responseMsgVO);
         return responseMsgVO;
     }
 

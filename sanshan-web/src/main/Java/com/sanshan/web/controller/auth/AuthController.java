@@ -52,7 +52,6 @@ public class AuthController {
         return msgVO.buildOKWithData(new JwtAuthenticationResponse(token));
     }
 
-
     @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO register(UserDO addedUser,
                                   @RequestParam(name = "codeid") String codeid,
@@ -65,6 +64,31 @@ public class AuthController {
         if (!code.equalsIgnoreCase(codeValue)) {
             return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "验证码错误");
         }
+
+        //合法性检查
+        if (!userService.checkPassWordLegal(addedUser.getPassword(), responseMsgVO)){
+            return responseMsgVO;
+        }
+        // 是否含有违规字段
+        if (authService.usernameIsDisabled(addedUser.getUsername())){
+            return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.USERNAME_NOALLOW, "用户名含有违规字段");
+        }
+        //注册
+        if (!authService.register(addedUser, responseMsgVO)){
+            return responseMsgVO;
+        }
+        return responseMsgVO;
+    }
+
+
+    @PostMapping(value = "/register-novalidate", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    /**
+     * 不需要图片验证码 但是需要对防刷进行控制
+     */
+    public ResponseMsgVO register(UserDO addedUser
+    ) {
+
+        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
 
         //合法性检查
         if (!userService.checkPassWordLegal(addedUser.getPassword(), responseMsgVO)){

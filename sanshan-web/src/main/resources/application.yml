@@ -1,4 +1,5 @@
 #  TODO 对Actuator进行定制端口保护 并且在Spring Security中进行映射保护
+# TODO 添加测试模块
 management:
     enabled: true
     shell:

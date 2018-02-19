@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
         excludeFilters = {@ComponentScan.Filter(
                 type= FilterType.ANNOTATION,
                 value = {Controller.class})})
+//@PropertySource("file:/etc/sanshanblog/SanShanBlog.properties")
 @PropertySource("file:D:/SanShanBlog.properties")
 public class RootConfig {
 

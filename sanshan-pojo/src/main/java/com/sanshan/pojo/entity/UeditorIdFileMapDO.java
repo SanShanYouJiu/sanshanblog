@@ -1,5 +1,6 @@
 package com.sanshan.pojo.entity;
 
+import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.io.Serializable;
@@ -7,26 +8,27 @@ import java.util.Date;
 
 /**
  */
-@Table(name = "ueditor_file_quote")
-public class UeditorFileQuoteDO extends BaseDO implements Serializable{
+@Table(name = "ueditor_id_file_map")
+public class UeditorIdFileMapDO extends BaseDO implements Serializable{
 
 
-    private static final long serialVersionUID = 8290646201408849806L;
+    private static final long serialVersionUID = -2310558671488507061L;
     @Id
     private Long id;
 
-    private String filename;
+    @Column(name = "blog_id")
+    private Long blod_id;
 
-    private Integer quote;
+    private String filename;
 
     private String extra;
 
-    public UeditorFileQuoteDO() {
+    public UeditorIdFileMapDO() {
     }
 
-    public UeditorFileQuoteDO(String filename, Integer quote, Date created, Date updated){
-        this.filename=filename;
-        this.quote=quote;
+    public UeditorIdFileMapDO(Long blod_id, String filename, Date created, Date updated) {
+        this.blod_id = blod_id;
+        this.filename = filename;
         this.setCreated(created);
         this.setUpdated(updated);
     }
@@ -39,20 +41,20 @@ public class UeditorFileQuoteDO extends BaseDO implements Serializable{
         this.id = id;
     }
 
+    public Long getBlod_id() {
+        return blod_id;
+    }
+
+    public void setBlod_id(Long blod_id) {
+        this.blod_id = blod_id;
+    }
+
     public String getFilename() {
         return filename;
     }
 
     public void setFilename(String filename) {
         this.filename = filename;
-    }
-
-    public Integer getQuote() {
-        return quote;
-    }
-
-    public void setQuote(Integer quote) {
-        this.quote = quote;
     }
 
     public String getExtra() {
@@ -66,15 +68,15 @@ public class UeditorFileQuoteDO extends BaseDO implements Serializable{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof UeditorFileQuoteDO)) return false;
+        if (!(o instanceof UeditorIdFileMapDO)) return false;
         if (!super.equals(o)) return false;
 
-        UeditorFileQuoteDO that = (UeditorFileQuoteDO) o;
+        UeditorIdFileMapDO that = (UeditorIdFileMapDO) o;
 
         if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
+        if (getBlod_id() != null ? !getBlod_id().equals(that.getBlod_id()) : that.getBlod_id() != null) return false;
         if (getFilename() != null ? !getFilename().equals(that.getFilename()) : that.getFilename() != null)
             return false;
-        if (getQuote() != null ? !getQuote().equals(that.getQuote()) : that.getQuote() != null) return false;
         return getExtra() != null ? getExtra().equals(that.getExtra()) : that.getExtra() == null;
     }
 
@@ -82,18 +84,18 @@ public class UeditorFileQuoteDO extends BaseDO implements Serializable{
     public int hashCode() {
         int result = super.hashCode();
         result = 31 * result + (getId() != null ? getId().hashCode() : 0);
+        result = 31 * result + (getBlod_id() != null ? getBlod_id().hashCode() : 0);
         result = 31 * result + (getFilename() != null ? getFilename().hashCode() : 0);
-        result = 31 * result + (getQuote() != null ? getQuote().hashCode() : 0);
         result = 31 * result + (getExtra() != null ? getExtra().hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
-        return "UeditorFileQuoteDO{" +
+        return "UeditorIdFileMapDO{" +
                 "id=" + id +
+                ", blod_id=" + blod_id +
                 ", filename='" + filename + '\'' +
-                ", quote=" + quote +
                 ", extra='" + extra + '\'' +
                 '}';
     }

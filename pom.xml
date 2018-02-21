@@ -42,7 +42,7 @@
 
 
         <junit>4.10</junit>
-        <lombok>1.16.4.0</lombok>
+        <lombok>1.16.4</lombok>
         <modelmapper>0.7.5</modelmapper>
 
         <!--validate-->
@@ -336,9 +336,15 @@
                 <version>${com.alibaba-fastjson}</version>
             </dependency>
 
+            <!--<dependency>-->
+                <!--<groupId>org.projectlombok</groupId>-->
+                <!--<artifactId>lombok-maven</artifactId>-->
+                <!--<version>${lombok}</version>-->
+            <!--</dependency>-->
+
             <dependency>
                 <groupId>org.projectlombok</groupId>
-                <artifactId>lombok-maven</artifactId>
+                <artifactId>lombok</artifactId>
                 <version>${lombok}</version>
             </dependency>
 

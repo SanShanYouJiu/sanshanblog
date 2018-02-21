@@ -1,0 +1,15 @@
+*.class
+# idea config file
+.idea/
+*.iml
+
+sanshan-util/src/main/resources/
+
+*.log
+
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar

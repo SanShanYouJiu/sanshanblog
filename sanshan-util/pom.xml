@@ -34,7 +34,7 @@
 
         <dependency>
             <groupId>org.projectlombok</groupId>
-            <artifactId>lombok-maven</artifactId>
+            <artifactId>lombok</artifactId>
         </dependency>
 
         <dependency>

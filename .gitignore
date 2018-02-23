@@ -4,6 +4,11 @@
 *.iml
 
 sanshan-util/src/main/resources/
+sanshan-util/target/
+sanshan-web/target/
+sanshan-pojo/target/
+sanshan-dao/target/
+sanshan-service/target/
 
 *.log
 

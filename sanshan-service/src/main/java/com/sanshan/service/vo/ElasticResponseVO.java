@@ -1,17 +1,14 @@
 package com.sanshan.service.vo;
 
 import lombok.Data;
-import org.elasticsearch.search.SearchHitField;
 
-import java.util.Map;
+import java.util.List;
 
 @Data
 public class ElasticResponseVO {
 
-    private String id ;
-    private Map<String,Object>  source ;
-    private Map<String, SearchHitField> fields ;
-    private Float score;
-    private String type;
+    private List<ElasticSearchResultDTO> result;
+
+    private  Long total;
 
 }

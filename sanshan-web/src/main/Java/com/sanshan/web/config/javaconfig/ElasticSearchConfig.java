@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.data.elasticsearch.core.ElasticsearchTemplate;
 import org.springframework.data.elasticsearch.repository.config.EnableElasticsearchRepositories;
@@ -19,7 +20,7 @@ import java.net.InetAddress;
  */
 @Configuration
 @EnableElasticsearchRepositories(basePackages = "com.sanshan.dao.elastic")
-//@PropertySource("file:D:/SanShanBlog.properties")
+@PropertySource("file:D:/SanShanBlog.properties")
 public class ElasticSearchConfig {
 
     @Value("${elasticsearch.host}")

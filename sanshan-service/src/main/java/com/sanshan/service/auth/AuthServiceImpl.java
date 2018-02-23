@@ -1,12 +1,11 @@
 package com.sanshan.service.auth;
 
-import com.sanshan.dao.elastic.UserInfoRepository;
 import com.sanshan.dao.mongo.UserRepository;
 import com.sanshan.pojo.dto.UserDTO;
-import com.sanshan.pojo.elastic.ElasticUserDO;
 import com.sanshan.pojo.entity.UserDO;
 import com.sanshan.service.SettingService;
 import com.sanshan.service.convent.UserConvert;
+import com.sanshan.service.search.ElasticSearchService;
 import com.sanshan.service.vo.JwtUser;
 import com.sanshan.service.vo.ResponseMsgVO;
 import com.sanshan.util.info.PosCodeEnum;
@@ -42,7 +41,7 @@ public class AuthServiceImpl implements AuthService {
     private String tokenHead;
 
     @Autowired
-    private UserInfoRepository userInfoRepository;
+    private ElasticSearchService elasticSearchService;
 
      @Autowired
      private SettingService settingService;
@@ -94,8 +93,7 @@ public class AuthServiceImpl implements AuthService {
         UserDO userDO = userRepository.insert(userToAdd);
         //转换为DTO对象 加入到ElasticSearch中
         UserDTO userDTO = UserConvert.doToDto(userDO);
-        ElasticUserDO elasticUserDO = UserConvert.dtoToElasticDO(userDTO);
-        userInfoRepository.save(elasticUserDO);
+        elasticSearchService.userAdd(userDTO);
     }
 
     /**

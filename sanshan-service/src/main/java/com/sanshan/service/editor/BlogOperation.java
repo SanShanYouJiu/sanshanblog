@@ -2,14 +2,14 @@ package com.sanshan.service.editor;
 
 import com.sanshan.pojo.dto.MarkDownBlogDTO;
 import com.sanshan.pojo.dto.UeditorBlogDTO;
-import com.sanshan.pojo.entity.BaseEditorDO;
+import com.sanshan.pojo.entity.BaseBlogEditorDO;
 import com.sanshan.pojo.entity.MarkDownBlogDO;
 import com.sanshan.pojo.entity.UeditorBlogDO;
 import com.sanshan.service.convent.MarkDownEditorConvert;
 import com.sanshan.service.convent.UeditorEditorConvert;
 import com.sanshan.service.search.ElasticSearchService;
 import com.sanshan.service.user.cache.UserBlogCacheService;
-import com.sanshan.pojo.dto.BaseEditorDTO;
+import com.sanshan.pojo.dto.BaseBlogEditorDTO;
 import com.sanshan.service.vote.VoteService;
 import com.sanshan.util.BlogIdGenerate;
 import com.sanshan.util.exception.PropertyAccessException;
@@ -219,7 +219,7 @@ public class BlogOperation {
      *
      * @param editorDO
      */
-    private void baseCheck(BaseEditorDO editorDO, Long id) {
+    private void baseCheck(BaseBlogEditorDO editorDO, Long id) {
         String title = editorDO.getTitle().trim();
         editorDO.setTitle(title);
         String tag = editorDO.getTag().trim();
@@ -237,7 +237,7 @@ public class BlogOperation {
      *默认所有更新的选项不能为空或者纯空格
      * @param editorDO
      */
-    private  void baseUpdateCheck(BaseEditorDO editorDO){
+    private  void baseUpdateCheck(BaseBlogEditorDO editorDO){
         String title = null;
         String tag = null;
         String content = null;
@@ -272,7 +272,7 @@ public class BlogOperation {
      * @param editorDTO
      * @param id
      */
-    private void baseOtherUpdateCache(BaseEditorDTO editorDTO, Long id) {
+    private void baseOtherUpdateCache(BaseBlogEditorDTO editorDTO, Long id) {
         //更新User对应的blog缓存
         userBlogCacheService.userBlogRefresh(editorDTO.getUser());
         //加入到索引中

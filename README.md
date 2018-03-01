@@ -84,4 +84,4 @@
 在代码中采用lombok进行缩写代码
 
 [1]: https://github.com/SanShanYouJiu/SanShanBlog-Web
-[2]: http://116.207.129.136/
+[2]: https://sanshan.xyz/

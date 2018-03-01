@@ -35,6 +35,16 @@
         </property>
     </bean>
 
+    <bean id="jobTask4" class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <property name="targetObject">
+            <ref bean="recommendService"/>
+        </property>
+        <property name="targetMethod">
+            <value>generateRecommedn</value>
+        </property>
+    </bean>
+
+
 
     <bean id="cronTrigger1" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
         <property name="jobDetail" ref="jobTask1"></property>
@@ -60,6 +70,15 @@
         </property>
     </bean>
 
+    <bean id="cronTrigger4" class="org.springframework.scheduling.quartz.CronTriggerFactoryBean">
+        <property name="jobDetail" ref="jobTask4"></property>
+        <!-- cron表达式 -->
+        <property name="cronExpression">
+            <value>${recommend.quartz.expression}</value>
+        </property>
+    </bean>
+
+
 
     <bean id="startQuertz" lazy-init="false" autowire="no"
           class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
@@ -69,6 +88,7 @@
                 <ref bean="cronTrigger1"/>
                 <ref bean="cronTrigger2"/>
                 <ref bean="cronTrigger3"/>
+                <ref bean="cronTrigger4"/>
             </list>
         </property>
     </bean>

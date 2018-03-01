@@ -13,7 +13,7 @@ import java.io.Serializable;
 @Table(name = "markdown_blog")
 @NoArgsConstructor()
 @Data
-public class MarkDownBlogDO extends BaseEditorDO  implements Serializable{
+public class MarkDownBlogDO extends BaseBlogEditorDO implements Serializable{
 
 
     private static final long serialVersionUID = 4504221282215641915L;

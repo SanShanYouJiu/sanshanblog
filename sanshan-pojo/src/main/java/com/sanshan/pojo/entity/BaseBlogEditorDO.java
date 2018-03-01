@@ -1,11 +1,11 @@
-package com.sanshan.pojo.dto;
+package com.sanshan.pojo.entity;
 
 import lombok.Data;
 
 import java.util.Date;
 
 @Data
-public  abstract class BaseEditorDTO {
+public  abstract class BaseBlogEditorDO extends BaseDO {
 
     private String user;
 
@@ -16,4 +16,5 @@ public  abstract class BaseEditorDTO {
     private Date time;
 
     private String tag;
+
 }

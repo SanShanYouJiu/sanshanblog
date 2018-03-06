@@ -47,6 +47,11 @@
             <artifactId>fastjson</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.github.scribejava</groupId>
+            <artifactId>scribejava-apis</artifactId>
+        </dependency>
+
         <!--common start-->
         <dependency>
             <groupId>org.apache.commons</groupId>

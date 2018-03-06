@@ -6,11 +6,16 @@ import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
 import com.sanshan.web.config.javaconfig.auxiliary.ControllerAop;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.stereotype.Repository;
+import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextListener;
+import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -18,14 +23,17 @@ import org.springframework.web.servlet.config.annotation.DefaultServletHandlerCo
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
+import org.springframework.web.util.IntrospectorCleanupListener;
+import org.springframework.web.util.Log4jConfigListener;
 import org.thymeleaf.extras.springsecurity3.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
-import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 
 @Configuration
@@ -35,8 +43,8 @@ import java.util.Properties;
                 type= FilterType.ANNOTATION,
                 value = {Configuration.class,Service.class, Repository.class})
 })
-//@PropertySource("file:/etc/sanshanblog/SanShanBlog.properties")
-@PropertySource("file:D:/SanShanBlog.properties")
+@PropertySource("file:/etc/sanshanblog/SanShanBlog.properties")
+//@PropertySource("file:D:/SanShanBlog.properties")
 @EnableAspectJAutoProxy(proxyTargetClass = true)//开启切面
 public class WebConfig extends WebMvcConfigurerAdapter {
 
@@ -103,7 +111,48 @@ public class WebConfig extends WebMvcConfigurerAdapter {
          kaptcha.setConfig(config);
          return kaptcha;
      }
+    @Bean
+    public ControllerAop controllerAop(){
+        return new ControllerAop();
+    }
 
+    /**
+     * 允许请求到外部的Listener
+     * @return
+     */
+   @Bean
+   public ServletListenerRegistrationBean<RequestContextListener> requestContextListener(){
+       return new ServletListenerRegistrationBean<RequestContextListener>(new RequestContextListener());
+   }
+
+    /**
+     * 主要负责处理由　JavaBeans Introspector的使用而引起的缓冲泄露
+     * @return
+     */
+   @Bean
+   public ServletListenerRegistrationBean<IntrospectorCleanupListener> introspectorCleanupListener() {
+        return  new ServletListenerRegistrationBean<>(new IntrospectorCleanupListener());
+   }
+
+    /**
+     log4j监听器
+     * @return
+     */
+   @Bean
+   public ServletListenerRegistrationBean<Log4jConfigListener> log4jConfigListener(){
+       return  new ServletListenerRegistrationBean<>(new Log4jConfigListener());
+   }
+
+   @Bean
+   public FilterRegistrationBean  filterRegistrationBean(){
+       FilterRegistrationBean charactEncodingFilter = new FilterRegistrationBean();
+       charactEncodingFilter.addUrlPatterns("/api/**");
+       charactEncodingFilter.setFilter(new CharacterEncodingFilter());
+       Map<String, String> initMap = new HashMap<>(10);
+       initMap.put("encoding", "utf-8");
+       charactEncodingFilter.setInitParameters(initMap);
+       return  charactEncodingFilter;
+   }
 
     @Autowired
     private ResourceHttpMessageConverter resourceHttpMessageConverter;
@@ -124,9 +173,5 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return new PropertySourcesPlaceholderConfigurer();
     }
 
-    @Bean
-    public ControllerAop controllerAop(){
-        return new ControllerAop();
-    }
 }
 

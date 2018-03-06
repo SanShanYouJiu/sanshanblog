@@ -28,6 +28,10 @@ public class BlogRecommendService {
     private  final Integer generateBlogs = 5;
 
 
+    /**
+     * TODO 完成博客推荐
+     * @return
+     */
     public List<BaseBlogEditorDTO> generateBlogs(){
         List<BaseBlogEditorDTO> recommendBlogs = new LinkedList<>();
         log.info("生成一次 博客推荐数据");

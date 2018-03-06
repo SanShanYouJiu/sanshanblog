@@ -1,5 +1,7 @@
 package com.sanshan.web;
 
+import io.prometheus.client.spring.boot.EnablePrometheusEndpoint;
+import io.prometheus.client.spring.boot.EnableSpringBootMetricsCollector;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchAutoConfiguration;
@@ -7,7 +9,6 @@ import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration;
 import org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration;
-import org.springframework.boot.autoconfigure.web.WebMvcAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 
@@ -19,7 +20,9 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
  * 需要注意的是属于Spring-Boot-Actuator的监控功能 没有在传统Spring FrameWork中配置
  *
  */
-@SpringBootApplication(exclude = {RedisAutoConfiguration.class, MongoAutoConfiguration.class,ThymeleafAutoConfiguration.class, ElasticsearchAutoConfiguration.class, TransactionAutoConfiguration.class,WebMvcAutoConfiguration.class})
+@SpringBootApplication(exclude = {RedisAutoConfiguration.class, MongoAutoConfiguration.class,ThymeleafAutoConfiguration.class, ElasticsearchAutoConfiguration.class, TransactionAutoConfiguration.class})
+@EnablePrometheusEndpoint
+@EnableSpringBootMetricsCollector
 public class Application  extends SpringBootServletInitializer {
 
     @Override

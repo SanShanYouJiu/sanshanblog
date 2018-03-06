@@ -40,6 +40,10 @@
         <jedis>2.9.0</jedis>
         <org.springframeword.data-redis>1.8.1.RELEASE</org.springframeword.data-redis>
 
+        <spring-security-oauth2>2.0.13.RELEASE</spring-security-oauth2>
+        <com.github.scribejava>4.2.0</com.github.scribejava>
+
+        <io.prometheus>0.0.21</io.prometheus>
 
         <junit>4.10</junit>
         <lombok>1.16.4</lombok>
@@ -270,6 +274,30 @@
             </dependency>
 
             <dependency>
+                <groupId>org.springframework.security.oauth</groupId>
+                <artifactId>spring-security-oauth2</artifactId>
+                <version>${spring-security-oauth2}</version>
+                <exclusions>
+                    <exclusion>
+                        <groupId>org.springframework.data</groupId>
+                        <artifactId>spring-data-redis</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework.security</groupId>
+                        <artifactId>spring-security-core</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework.security</groupId>
+                        <artifactId>spring-security-config</artifactId>
+                    </exclusion>
+                    <exclusion>
+                        <groupId>org.springframework.security</groupId>
+                        <artifactId>spring-security-web</artifactId>
+                    </exclusion>
+                </exclusions>
+            </dependency>
+
+            <dependency>
                 <groupId>com.fasterxml.jackson.core</groupId>
                 <artifactId>jackson-core</artifactId>
                 <version>${fasterxml.jackson.version}</version>
@@ -328,6 +356,13 @@
             </dependency>
 
             <!--log4j end-->
+
+            <!--oauth2-->
+            <dependency>
+                <groupId>com.github.scribejava</groupId>
+                <artifactId>scribejava-apis</artifactId>
+                <version>${com.github.scribejava}</version>
+            </dependency>
 
             <!-- json解析工具 -->
             <dependency>
@@ -412,6 +447,13 @@
                 <version>${org.thymeleaf-spring4}</version>
             </dependency>
             <!--thymeleaf-end -->
+
+            <!--prometheus-->
+            <dependency>
+                <groupId>io.prometheus</groupId>
+                <artifactId>simpleclient_spring_boot</artifactId>
+                <version>${io.prometheus}</version>
+            </dependency>
 
             <!--quartz being-->
             <dependency>

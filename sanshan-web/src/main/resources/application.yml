@@ -1,22 +1,13 @@
-#  TODO 对Actuator进行定制端口保护 并且在Spring Security中进行映射保护
+#  TODO 对Actuator进行定制保护 并且在Spring Security中进行映射保护
 # TODO 添加测试模块
 management:
-    enabled: true
-    shell:
-      auth:
-        simple:
-          user:
-            name: admin
-            password: 1234567q
-    security:
-      roles: ADMIN
     context-path: /actuator
-    port: 8119
-
+    security:
+      enabled: false
 
 info:
   contact:
-    email: sanshanyoujiu@gmail.com
+    email: www.85432173@qq.com
     github: https://github.com/SanShanYouJiu
 
 server:

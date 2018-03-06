@@ -22,6 +22,10 @@ public class UserRecommendService {
     private final Integer generateUsers = 3;
 
 
+    /**
+     * TODO 完成用户推荐
+     * @return
+     */
     public List<UserDTO>  generateUsers(){
         List<UserDTO> recommendUsers = new LinkedList<>();
         log.info("生成一次 用户推荐数据");

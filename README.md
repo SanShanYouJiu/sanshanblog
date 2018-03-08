@@ -6,6 +6,8 @@
 > 演示 [地址][2]
 
 > 这是后台代码 在下文中有技术选型的说明 前端代码在这里 [地址][1]
+>
+> docker编排文件 [地址][3]
 
 #### 查询
 
@@ -68,7 +70,7 @@
 4. 对Tomcat进行了GC参数调整 目前参数为下：
 > JAVA_OPTS="-server -Xms700m -Xmx700m -XX:PermSize=64M  -XX:NewRatio=4 -XX:MaxPermSize=128m -Djava.awt.headless=true "
 
-5. 整体项目使用Docker部署
+5. 整体项目使用[Docker][3]部署
 
 ##  领域模型设计 
 主要为 DO DTO VO 三种实体对象
@@ -85,3 +87,4 @@
 
 [1]: https://github.com/SanShanYouJiu/SanShanBlog-Web
 [2]: https://sanshan.xyz/
+[3]: https://github.com/SanShanYouJiu/sanshanblog-docker-file

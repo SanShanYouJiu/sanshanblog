@@ -1,7 +1,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
-        <groupId>com.sanshan</groupId>
+        <groupId>xyz.sanshan</groupId>
         <artifactId>sanshanblog</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
@@ -14,7 +14,13 @@
     <url>http://maven.apache.org</url>
 
     <properties>
-        <main-class>com.sanshan.web.Application</main-class>
+        <main-class>xyz.sanshan.web.Application</main-class>
+        <!--validate-->
+        <cglib>3.2.2</cglib>
+        <io.prometheus>0.0.21</io.prometheus>
+        <!--Quartz-->
+        <org.quartz-scheduler>2.2.1</org.quartz-scheduler>
+        <org.quartz-scheduler-jobs>2.2.1</org.quartz-scheduler-jobs>
     </properties>
 
     <dependencies>
@@ -25,10 +31,19 @@
             <scope>test</scope>
         </dependency>
 
-
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>logback-classic</artifactId>
+                    <groupId>ch.qos.logback</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>log4j-over-slf4j</artifactId>
+                    <groupId>org.slf4j</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!--Thymeleaf-->
@@ -39,7 +54,7 @@
 
         <dependency>
             <groupId>org.thymeleaf.extras</groupId>
-            <artifactId>thymeleaf-extras-springsecurity3</artifactId>
+            <artifactId>thymeleaf-extras-springsecurity4</artifactId>
         </dependency>
 
         <dependency>
@@ -60,33 +75,34 @@
         <dependency>
             <groupId>io.prometheus</groupId>
             <artifactId>simpleclient_spring_boot</artifactId>
+            <version>${io.prometheus}</version>
         </dependency>
 
         <dependency>
             <groupId>cglib</groupId>
             <artifactId>cglib</artifactId>
+            <version>${cglib}</version>
         </dependency>
 
 
         <dependency>
-            <groupId>com.sanshan</groupId>
+            <groupId>xyz.sanshan</groupId>
             <artifactId>sanshan-service</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
 
-        <!--quartz begin-->
+        <!--quartz being-->
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz</artifactId>
+            <version>${org.quartz-scheduler}</version>
         </dependency>
-
         <dependency>
             <groupId>org.quartz-scheduler</groupId>
             <artifactId>quartz-jobs</artifactId>
+            <version>${org.quartz-scheduler-jobs}</version>
         </dependency>
         <!--quartz end-->
-
-
-
 
     </dependencies>
 

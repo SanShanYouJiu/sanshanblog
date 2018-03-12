@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>com.sanshan</groupId>
+    <groupId>xyz.sanshan</groupId>
     <artifactId>sanshanblog</artifactId>
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
@@ -17,95 +17,15 @@
         </repository>
     </repositories>
 
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.2.RELEASE</version>
+    </parent>
+
     <!--集中管理项目依赖-->
     <properties>
-        <com.sanshan.service>1.0-SNAPSHOT</com.sanshan.service>
-        <com.sanshan.util>1.0-SNAPSHOT</com.sanshan.util>
-        <com.sanshan.dao>1.0-SNAPSHOT</com.sanshan.dao>
-        <com.sanshan.pojo>1.0-SNAPSHOT</com.sanshan.pojo>
-
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-
-        <spring.boot.version>1.5.2.RELEASE</spring.boot.version>
-        <!--spring-data-mongo-->
-        <org.spring.data.mongodb>1.10.1.RELEASE</org.spring.data.mongodb>
-        <!--spring-date-elasticsearch-->
-        <org.spring.data.elasticsearch>2.1.1.RELEASE</org.spring.data.elasticsearch>
-        <fasterxml.jackson.version>2.8.7</fasterxml.jackson.version>
-        <joda-time>2.9.7</joda-time>
-
-        <!--Spring -data -commons-->
-        <org.springframework.data-commons>1.13.1.RELEASE</org.springframework.data-commons>
-        <!--redis-->
-        <jedis>2.9.0</jedis>
-        <org.springframeword.data-redis>1.8.1.RELEASE</org.springframeword.data-redis>
-
-        <spring-security-oauth2>2.0.13.RELEASE</spring-security-oauth2>
-        <com.github.scribejava>4.2.0</com.github.scribejava>
-
-        <io.prometheus>0.0.21</io.prometheus>
-
-        <junit>4.10</junit>
-        <lombok>1.16.4</lombok>
-        <modelmapper>0.7.5</modelmapper>
-
-        <!--validate-->
-        <cglib>3.2.2</cglib>
-
-        <!--log-->
-        <log4j.version>1.2.17</log4j.version>
-        <slf4j.version>1.7.7</slf4j.version>
-        <slf4j-log4j12>1.7.21</slf4j-log4j12>
-        <log4-mongo-java>0.7.4</log4-mongo-java>
-        <!--JSON-->
-        <com.alibaba-fastjson>1.2.38</com.alibaba-fastjson>
-        <version.json>20160212</version.json>
-
-        <com.github.pagehelper>5.0.0</com.github.pagehelper>
-
-        <tk.mybatis.mapper>3.3.9</tk.mybatis.mapper>
-        <mysql-connector-java>5.1.6</mysql-connector-java>
-
-        <!--mybatis-->
-        <org.mybatis>3.3.0</org.mybatis>
-        <org.mybatis-ehcache>1.0.0</org.mybatis-ehcache>
-        <org.mybatis-spring>1.2.2</org.mybatis-spring>
-
-        <!--thymeleaf-->
-        <org.thymeleaf>2.1.4.RELEASE</org.thymeleaf>
-        <org.thymeleaf-extras-springsecurity3>2.1.1.RELEASE</org.thymeleaf-extras-springsecurity3>
-        <org.thymeleaf-spring4>2.1.4.RELEASE</org.thymeleaf-spring4>
-
-
-        <!--Quartz-->
-        <org.quartz-scheduler>2.2.1</org.quartz-scheduler>
-        <org.quartz-scheduler-jobs>2.2.1</org.quartz-scheduler-jobs>
-
-        <javax.persistence.api>2.2</javax.persistence.api>
-
-        <!--druid-->
-        <spring-boot-druid-starter>1.1.6</spring-boot-druid-starter>
-
-        <!--七牛云相关-->
-        <com.qiniu-java-sdk>7.2.6</com.qiniu-java-sdk>
-        <com.squareup.okhttp3>3.3.1</com.squareup.okhttp3>
-        <com.google.code.gson>2.6.2</com.google.code.gson>
-        <com.qiniu-happy-dns-java>0.1.4</com.qiniu-happy-dns-java>
-
-        <!--验证码-->
-        <com.github.penggle.kaptcha>2.3.2</com.github.penggle.kaptcha>
-        <net.java.dev.jna>4.1.0</net.java.dev.jna>
-
-        <!--util-->
-        <commonlang.version>3.5</commonlang.version>
-        <commoncodec.version>1.10</commoncodec.version>
-        <httpclient.version>4.5.2</httpclient.version>
-        <commonfile.version>1.3.2</commonfile.version>
-        <commonio.version>2.5</commonio.version>
-        <javax.mail>1.4.7</javax.mail>
-        <io.jsonwebtoken-jjwt>0.7.0</io.jsonwebtoken-jjwt>
-        <com.google.guava>18.0</com.google.guava>
-
     </properties>
 
     <modules>
@@ -113,491 +33,49 @@
         <module>sanshan-service</module>
         <module>sanshan-web</module>
         <module>sanshan-pojo</module>
-        <module>sanshan-util</module>
+        <module>sanshan-common</module>
+        <module>sanshan-center</module>
     </modules>
+
+    <developers>
+        <developer>
+            <name>sanshan</name>
+            <email>85432173@qq.com</email>
+        </developer>
+    </developers>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <scope>provided</scope>
+            <version>1.16.4</version>
+        </dependency>
+    </dependencies>
 
     <dependencyManagement>
         <dependencies>
-
             <dependency>
-                <groupId>com.sanshan</groupId>
-                <artifactId>sanshan-service</artifactId>
-                <version>${com.sanshan.service}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.sanshan</groupId>
-                <artifactId>sanshan-util</artifactId>
-                <version>${com.sanshan.util}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.sanshan</groupId>
-                <artifactId>sanshan-pojo</artifactId>
-                <version>${com.sanshan.pojo}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.sanshan</groupId>
-                <artifactId>sanshan-dao</artifactId>
-                <version>${com.sanshan.dao}</version>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>Dalston.SR1</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
 
-
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter</artifactId>
-                <version>${spring.boot.version}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-starter-logging</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.springframework.boot</groupId>
-                        <artifactId>spring-boot-starter-web</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-test</artifactId>
-                <scope>test</scope>
-                <version>${spring.boot.version}</version>
-            </dependency>
-
-
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-web</artifactId>
-                <version>${spring.boot.version}</version>
-                <!--<exclusions>-->
-                    <!--<exclusion>&lt;!&ndash;将springboot自带的tomcat排除&ndash;&gt;-->
-                        <!--<groupId>org.springframework.boot</groupId>-->
-                        <!--<artifactId>spring-boot-starter-tomcat</artifactId>-->
-                    <!--</exclusion>-->
-                <!--</exclusions>-->
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-actuator</artifactId>
-                <version>${spring.boot.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-security</artifactId>
-                <version>${spring.boot.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-jdbc</artifactId>
-                <version>${spring.boot.version}</version>
-            </dependency>
-
-
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-aop</artifactId>
-                <version>${spring.boot.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>redis.clients</groupId>
-                <artifactId>jedis</artifactId>
-                <version>${jedis}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.data</groupId>
-                <artifactId>spring-data-redis</artifactId>
-                <version>${org.springframeword.data-redis}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-tx</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-
-
-            <dependency>
-                <groupId>org.springframework.data</groupId>
-                <artifactId>spring-data-mongodb</artifactId>
-                <version>${org.spring.data.mongodb}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>jcl-over-slf4j</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-tx</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-context</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.data</groupId>
-                <artifactId>spring-data-commons</artifactId>
-                <version>${org.springframework.data-commons}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.slf4j</groupId>
-                        <artifactId>jcl-over-slf4j</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-
-            <!--elastic-->
-            <dependency>
-                <groupId>org.springframework.data</groupId>
-                <artifactId>spring-data-elasticsearch</artifactId>
-                <version>${org.spring.data.elasticsearch}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.springframework.data</groupId>
-                        <artifactId>spring-data-commons</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-tx</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>org.springframework.security.oauth</groupId>
-                <artifactId>spring-security-oauth2</artifactId>
-                <version>${spring-security-oauth2}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.springframework.data</groupId>
-                        <artifactId>spring-data-redis</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.springframework.security</groupId>
-                        <artifactId>spring-security-core</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.springframework.security</groupId>
-                        <artifactId>spring-security-config</artifactId>
-                    </exclusion>
-                    <exclusion>
-                        <groupId>org.springframework.security</groupId>
-                        <artifactId>spring-security-web</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-core</artifactId>
-                <version>${fasterxml.jackson.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${fasterxml.jackson.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>joda-time</groupId>
-                <artifactId>joda-time</artifactId>
-                <version>${joda-time}</version>
-            </dependency>
-
-            <!--cglib动态代理 begin-->
-            <dependency>
-                <groupId>cglib</groupId>
-                <artifactId>cglib</artifactId>
-                <version>${cglib}</version>
-            </dependency>
-            <!--cglib动态代理 end-->
-
-            <!-- log4j begin -->
-
-            <dependency>
-                <groupId>log4j</groupId>
-                <artifactId>log4j</artifactId>
-                <version>${log4j.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.log4mongo</groupId>
-                <artifactId>log4mongo-java</artifactId>
-                <version>${log4-mongo-java}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>org.mongodb</groupId>
-                        <artifactId>mongo-java-driver</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-api</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-log4j12</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
-
-            <!--log4j end-->
-
-            <!--oauth2-->
-            <dependency>
-                <groupId>com.github.scribejava</groupId>
-                <artifactId>scribejava-apis</artifactId>
-                <version>${com.github.scribejava}</version>
-            </dependency>
-
-            <!-- json解析工具 -->
             <dependency>
                 <groupId>com.alibaba</groupId>
                 <artifactId>fastjson</artifactId>
-                <version>${com.alibaba-fastjson}</version>
-            </dependency>
-
-            <!--<dependency>-->
-                <!--<groupId>org.projectlombok</groupId>-->
-                <!--<artifactId>lombok-maven</artifactId>-->
-                <!--<version>${lombok}</version>-->
-            <!--</dependency>-->
-
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok}</version>
+                <version>1.2.38</version>
             </dependency>
 
             <dependency>
-                <groupId>org.modelmapper</groupId>
-                <artifactId>modelmapper</artifactId>
-                <version>${modelmapper}</version>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>1.5.2.RELEASE</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
-
-
-            <!--mybatis begin-->
-            <dependency>
-                <groupId>org.mybatis</groupId>
-                <artifactId>mybatis</artifactId>
-                <version>${org.mybatis}</version>
-            </dependency>
-
-            <!--Mybatis Spring支持-->
-            <dependency>
-                <groupId>org.mybatis</groupId>
-                <artifactId>mybatis-spring</artifactId>
-                <version>${org.mybatis-spring}</version>
-            </dependency>
-
-
-            <!--mybatis 二级缓存-->
-            <dependency>
-                <groupId>org.mybatis</groupId>
-                <artifactId>mybatis-ehcache</artifactId>
-                <version>${org.mybatis-ehcache}</version>
-                <exclusions>
-                    <exclusion>
-                        <groupId>net.sf.ehcache</groupId>
-                        <artifactId>ehcache-core</artifactId>
-                    </exclusion>
-                </exclusions>
-            </dependency>
-
-
-            <!--通用mapper-->
-            <dependency>
-                <groupId>tk.mybatis</groupId>
-                <artifactId>mapper</artifactId>
-                <version>${tk.mybatis.mapper}</version>
-            </dependency>
-
-            <!--mybatis end-->
-
-            <!--Thymeleaf-->
-            <dependency>
-                <groupId>org.thymeleaf</groupId>
-                <artifactId>thymeleaf</artifactId>
-                <version>${org.thymeleaf}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.thymeleaf.extras</groupId>
-                <artifactId>thymeleaf-extras-springsecurity3</artifactId>
-                <version>${org.thymeleaf-extras-springsecurity3}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.thymeleaf</groupId>
-                <artifactId>thymeleaf-spring4</artifactId>
-                <version>${org.thymeleaf-spring4}</version>
-            </dependency>
-            <!--thymeleaf-end -->
-
-            <!--prometheus-->
-            <dependency>
-                <groupId>io.prometheus</groupId>
-                <artifactId>simpleclient_spring_boot</artifactId>
-                <version>${io.prometheus}</version>
-            </dependency>
-
-            <!--quartz being-->
-            <dependency>
-                <groupId>org.quartz-scheduler</groupId>
-                <artifactId>quartz</artifactId>
-                <version>${org.quartz-scheduler}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.quartz-scheduler</groupId>
-                <artifactId>quartz-jobs</artifactId>
-                <version>${org.quartz-scheduler-jobs}</version>
-            </dependency>
-            <!--quartz end-->
-
-            <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
-                <version>${mysql-connector-java}</version>
-            </dependency>
-
-            <!--阿里druid配置 start-->
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>druid-spring-boot-starter</artifactId>
-                <version>${spring-boot-druid-starter}</version>
-            </dependency>
-            <!--阿里druid配置 end-->
-
-
-            <!--Javax persistence-->
-            <dependency>
-                <groupId>javax.persistence</groupId>
-                <artifactId>javax.persistence-api</artifactId>
-                <version>${javax.persistence.api}</version>
-            </dependency>
-
-            <!--util 工具包-->
-
-            <dependency>
-                <groupId>commons-codec</groupId>
-                <artifactId>commons-codec</artifactId>
-                <version>${commoncodec.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>commons-io</groupId>
-                <artifactId>commons-io</artifactId>
-                <version>${commonio.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.commons</groupId>
-                <artifactId>commons-lang3</artifactId>
-                <version>${commonlang.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>commons-fileupload</groupId>
-                <artifactId>commons-fileupload</artifactId>
-                <version>${commonfile.version}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>org.apache.httpcomponents</groupId>
-                <artifactId>httpclient</artifactId>
-                <version>${httpclient.version}</version>
-            </dependency>
-
-
-            <!-- mail支持 -->
-            <dependency>
-                <groupId>javax.mail</groupId>
-                <artifactId>mail</artifactId>
-                <version>${javax.mail}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>io.jsonwebtoken</groupId>
-                <artifactId>jjwt</artifactId>
-                <version>${io.jsonwebtoken-jjwt}</version>
-            </dependency>
-
-            <!--guava-->
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>${com.google.guava}</version>
-            </dependency>
-
-
-            <dependency>
-                <groupId>org.json</groupId>
-                <artifactId>json</artifactId>
-                <version>${version.json}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>com.qiniu</groupId>
-                <artifactId>qiniu-java-sdk</artifactId>
-                <version>${com.qiniu-java-sdk}</version>
-                <scope>compile</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>com.squareup.okhttp3</groupId>
-                <artifactId>okhttp</artifactId>
-                <version>${com.squareup.okhttp3}</version>
-                <scope>compile</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>com.google.code.gson</groupId>
-                <artifactId>gson</artifactId>
-                <version>${com.google.code.gson}</version>
-                <scope>compile</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>com.qiniu</groupId>
-                <artifactId>happy-dns-java</artifactId>
-                <version>${com.qiniu-happy-dns-java}</version>
-                <scope>compile</scope>
-            </dependency>
-
-
-            <dependency>
-                <groupId>com.github.pagehelper</groupId>
-                <artifactId>pagehelper</artifactId>
-                <version>${com.github.pagehelper}</version>
-            </dependency>
-
-            <!--验证码-->
-            <dependency>
-                <groupId>com.github.penggle</groupId>
-                <artifactId>kaptcha</artifactId>
-                <version>${com.github.penggle.kaptcha}</version>
-            </dependency>
-
-            <dependency>
-                <groupId>net.java.dev.jna</groupId>
-                <artifactId>jna</artifactId>
-                <version>${net.java.dev.jna}</version>
-            </dependency>
-
 
         </dependencies>
     </dependencyManagement>

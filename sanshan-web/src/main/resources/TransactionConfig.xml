@@ -29,7 +29,7 @@
 
 
     <aop:config>
-        <aop:pointcut id="ponintcut" expression="execution(* com.sanshan.service.*.*(..))"/>
+        <aop:pointcut id="ponintcut" expression="execution(* xyz.sanshan.service.*.*(..))"/>
         <aop:advisor advice-ref="txAdvice"
         pointcut-ref="ponintcut"
         ></aop:advisor>

@@ -59,7 +59,7 @@
  - 基本架构是SSM 不过因为因为Spring4的注解解决方案很成熟 所以基本除了maven的pom.xml之外的xml基本消失了
  > (已经改为Spring Boot) 但是传统的Spring FrameWork方式同样支持 只需调整servlet入口类即可 在Application.java中有说明
  - 采用ElasticSearch 作为搜索支持
- - 日志系统采用的是Log4j+slf4j 存储在mongoDB中
+ - 日志系统采用的是Log4j2+slf4j 存储在mongoDB中
  - REST API 风格的URL 以及事务的完整支持
  - 对实时性不高的任务进行定时处理-目前采用阻塞队列进行添加 
  > 如果后期部署在多台机器上 将会换成MQ或者kafka这种中间件做通信

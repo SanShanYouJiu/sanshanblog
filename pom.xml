@@ -24,12 +24,11 @@
     </properties>
 
     <modules>
-        <module>sanshan-dao</module>
-        <module>sanshan-service</module>
-        <module>sanshan-web</module>
-        <module>sanshan-pojo</module>
-        <module>sanshan-common</module>
         <module>sanshan-center</module>
+        <module>sanshan-main</module>
+        <module>sanshan-gate</module>
+        <module>sanshan-search</module>
+        <module>sanshan-common</module>
     </modules>
 
     <developers>

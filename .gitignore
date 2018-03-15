@@ -1,15 +1,13 @@
 *.class
-# idea config file
+# IDE config file
 .idea/
 *.iml
+.project
+.settings/
+.classpath
 
-sanshan-common/src/main/resources/
-sanshan-common/target/
-sanshan-web/target/
-sanshan-pojo/target/
-sanshan-dao/target/
-sanshan-service/target/
-sanshan-center/target/
+sanshan-common/src/main/resources/data/
+*/target
 
 *.log
 

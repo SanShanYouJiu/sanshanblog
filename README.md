@@ -1,8 +1,9 @@
 # SanShanBlog
 
-开始时一个博客系统，后来随着点赞功能 搜索 讨论模块的增加 并且提供相对完整的用户支持
+ 一个完善的博客社区
 
-所以目标是作一个类似于以博客为导向的社区 
+分布式支持，微服务架构，docker容器化
+
 > 演示 [地址][2]
 
 > 这是后台代码 在下文中有技术选型的说明 前端代码在这里 [地址][1]
@@ -66,19 +67,17 @@
 
 
 3. 目前使用的是JWT+Spring security的安全方案
-
-4. 对Tomcat进行了GC参数调整 目前参数为下：
+4. 使用Spring Cloud 微服务框架支持
+5. 对Tomcat进行了GC参数调整 目前参数为下：
 > JAVA_OPTS="-server -Xms700m -Xmx700m -XX:PermSize=64M  -XX:NewRatio=4 -XX:MaxPermSize=128m -Djava.awt.headless=true "
 
-5. 整体项目使用[Docker][3]部署
+6. 整体项目使用[Docker][3]部署
 
 ##  领域模型设计 
 主要为 DO DTO VO 三种实体对象
 1. DO:数据库表模型,一张表对应一个DO
 2. DTO:数据传输载体
 3. VO 对应接口返回数据包装.简单情况下DTO可以直接作为VO使用
-
-以及单独为Elastic设计的DO对象
 
 
 

@@ -1,0 +1,24 @@
+spring:
+    application:
+        name: sanshan-gate
+server:
+    port: 8080 #启动端口
+#
+zuul:
+  sensitive-headers:
+  prefix: /api #为zuul设置一个公共的前缀
+  routes:
+    main:
+      path: /main/**
+      serviceId: sanshan-main
+
+    search:
+      path: /search/**
+      serviceId: sanshan-search
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+

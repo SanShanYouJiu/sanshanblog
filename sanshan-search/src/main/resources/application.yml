@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: sanshan-search
+
+management:
+    context-path: /actuator
+    security:
+      enabled: true
+
+server:
+  port: 8070
+
+eureka:
+  instance:
+    statusPageUrlPath: /search/actuator/info
+    healthCheckUrlPath: /search/actuator/health
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/

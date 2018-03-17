@@ -2,20 +2,30 @@ spring:
   application:
     name: sanshan-main
 
-#  TODO 对Actuator进行定制保护 并且在Spring Security中进行映射保护
-# TODO 添加测试模块
+#  TODO 对Actuator进行定制保护 并且在Spring Security中进行映射保护 并且需要对druid的访问进行控制
+
 management:
     context-path: /actuator
     security:
-      enabled: false
-
-info:
-  contact:
-    email: www.85432173@qq.com
-    github: https://github.com/SanShanYouJiu
+      enabled: true
 
 server:
-  servlet-path: /api
+  port: 8060
+
+feign:
+   hystrix:
+      enable: true
+
+
+eureka:
+  instance:
+    statusPageUrlPath: /actuator/info
+    healthCheckUrlPath: /actuator/health
+  client:
+    service-url:
+      defaultZone: http://localhost:8761/eureka/
+
+
 
 
 

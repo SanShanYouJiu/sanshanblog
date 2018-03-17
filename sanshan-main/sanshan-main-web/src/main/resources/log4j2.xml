@@ -17,8 +17,6 @@
             <appender-ref ref="mongoAppender"/>
             <appender-ref ref="STDOUT" />
         </Logger>
-        <Root level="info">
-            <appender-ref ref="STDOUT" />
-        </Root>
+
     </Loggers>
 </Configuration>

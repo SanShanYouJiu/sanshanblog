@@ -46,7 +46,7 @@ public class GlobalException {
 
         //转发到错误页面
         request.setAttribute(ERROR_MSG,ex.getMessage());
-        redirect("/api/error",HttpStatus.NOT_FOUND,request,response);
+        redirect("/error",HttpStatus.NOT_FOUND,request,response);
         return null;
     }
 

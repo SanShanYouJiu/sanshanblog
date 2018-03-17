@@ -25,11 +25,10 @@ public class InstantiationTracingBeanPostProcessor implements ApplicationListene
     //需要执行的逻辑代码，当spring容器初始化完成后就会执行该方法。
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
-        if(event.getApplicationContext().getParent() == null) {
+        //FIXME Spring容器有两个 会初始化两次
             blogMetaDataInspect.inspectDataConsistency();
             voteDataInspect.inspectDataConsistency();
             ueditorFileDataInspect.inspectDataConsistency();
-        }
     }
 
 }

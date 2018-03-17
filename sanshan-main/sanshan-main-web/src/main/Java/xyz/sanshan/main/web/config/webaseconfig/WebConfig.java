@@ -5,7 +5,6 @@ import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletListenerRegistrationBean;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
@@ -14,7 +13,6 @@ import org.springframework.http.converter.ResourceHttpMessageConverter;
 import org.springframework.stereotype.Repository;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextListener;
-import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.ViewResolver;
@@ -23,7 +21,6 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 import org.springframework.web.util.IntrospectorCleanupListener;
-import org.springframework.web.util.Log4jConfigListener;
 import org.thymeleaf.extras.springsecurity4.dialect.SpringSecurityDialect;
 import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
@@ -31,9 +28,7 @@ import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
 import xyz.sanshan.main.web.config.javaconfig.auxiliary.ControllerAop;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 
 @Configuration
@@ -134,25 +129,17 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return  new ServletListenerRegistrationBean<>(new IntrospectorCleanupListener());
    }
 
-    /**
-     log4j监听器
-     * @return
-     */
-   @Bean
-   public ServletListenerRegistrationBean<Log4jConfigListener> log4jConfigListener(){
-       return  new ServletListenerRegistrationBean<>(new Log4jConfigListener());
-   }
 
-   @Bean
-   public FilterRegistrationBean  filterRegistrationBean(){
-       FilterRegistrationBean charactEncodingFilter = new FilterRegistrationBean();
-       charactEncodingFilter.addUrlPatterns("/api/**");
-       charactEncodingFilter.setFilter(new CharacterEncodingFilter());
-       Map<String, String> initMap = new HashMap<>(10);
-       initMap.put("encoding", "utf-8");
-       charactEncodingFilter.setInitParameters(initMap);
-       return  charactEncodingFilter;
-   }
+   //@Bean
+   //public FilterRegistrationBean  filterRegistrationBean(){
+   //    FilterRegistrationBean charactEncodingFilter = new FilterRegistrationBean();
+   //    charactEncodingFilter.addUrlPatterns("/main/**");
+   //    charactEncodingFilter.setFilter(new CharacterEncodingFilter());
+   //    Map<String, String> initMap = new HashMap<>(10);
+   //    initMap.put("encoding", "utf-8");
+   //    charactEncodingFilter.setInitParameters(initMap);
+   //    return  charactEncodingFilter;
+   //}
 
     @Autowired
     private ResourceHttpMessageConverter resourceHttpMessageConverter;

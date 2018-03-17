@@ -3,7 +3,7 @@ spring:
         name: sanshan-center
 
 server:
-    port: 9200 #启动端口
+    port: 8761 #启动端口
 
 eureka:
     client:

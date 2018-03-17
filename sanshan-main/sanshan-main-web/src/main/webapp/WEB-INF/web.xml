@@ -5,7 +5,7 @@
 
     <context-param>
         <param-name>webAppRootKey</param-name>
-        <param-value>webapp.sanshanblog</param-value>
+        <param-value>webapp.sanshanblog-main</param-value>
     </context-param>
 
 </web-app>

@@ -23,7 +23,7 @@ public class WebAppInitializer /* extends AbstractAnnotationConfigDispatcherServ
 //
 //    @Override
 //    protected String[] getServletMappings() {
-//        return new String[]{"/api/*"};
+//        return new String[]{"/main/*"};
 //    }
 //
 //
@@ -39,7 +39,7 @@ public class WebAppInitializer /* extends AbstractAnnotationConfigDispatcherServ
 //        //FilterRegistration.Dynamic filter = servletContext.addFilter("CharacterEncodingFilter",
 //        //        CharacterEncodingFilter.class);
 //        //filter.setInitParameter("encoding", "utf-8");
-//        //filter.addMappingForUrlPatterns(null, false, "/api/*");
+//        //filter.addMappingForUrlPatterns(null, false, "/main/*");
 //
 ////        主要负责处理由　JavaBeans Introspector的使用而引起的缓冲泄露
 ////        servletContext.addListener(org.springframework.web.util.IntrospectorCleanupListener.class);

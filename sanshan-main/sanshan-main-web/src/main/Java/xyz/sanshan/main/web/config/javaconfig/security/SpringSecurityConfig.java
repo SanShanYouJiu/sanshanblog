@@ -57,9 +57,9 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         return new JwtAuthenticationTokenFilter();
     }
 
-
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
+        String urlPrefix = "/main/";
         // 由于使用的是JWT，我们这里不需要csrf
         httpSecurity.
                 csrf().
@@ -71,17 +71,17 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers(
                         // 魔法值太多
-                        "/api/admin/index/**",
-                        "/api/user/change-pwd",
-                        "/api/user/email-check",
-                        "/api/auth/refresh-token",
-                        "/api/auth/login-status",
-                        "/api/user/register/check/token",
-                        "/api/markdown-editor/**",
-                        "/api/file/**",
-                        "/api/ueditor-editor/blog",
+                        "admin/index/**",
+                        "user/change-pwd",
+                        "user/email-check",
+                        "auth/refresh-token",
+                        "auth/login-status",
+                        "user/register/check/token",
+                        "markdown-editor/**",
+                        "file/**",
+                        "ueditor-editor/blog",
                         //TODO 将Config与加载图片的代码分离到另外一个Controller中
-                        "/api/ueditor-editor/blog/**")
+                        "ueditor-editor/blog/**")
                 .hasAnyRole("USER")
                 //Spring Boot Actuator 监控
                 .antMatchers("/actuator/info",
@@ -89,7 +89,7 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/actuator/**")
                 .hasAnyRole("ADMIN")
-                .antMatchers(HttpMethod.DELETE, "/api/blog/id/**")
+                .antMatchers(HttpMethod.DELETE, "log/id/**")
                 .hasAnyRole("USER")
                 .antMatchers(
                         "/",

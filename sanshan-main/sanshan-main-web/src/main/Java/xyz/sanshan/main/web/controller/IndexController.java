@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import xyz.sanshan.common.info.PosCodeEnum;
-import xyz.sanshan.main.service.vo.ResponseMsgVO;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.main.web.controller.globalexception.GlobalException;
 
 import javax.servlet.http.HttpServletRequest;

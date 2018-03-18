@@ -1,7 +1,7 @@
 package xyz.sanshan.main.web.controller.auth.oauth2;
 
 import xyz.sanshan.main.service.auth.oauth2.GithubOAuth2Service;
-import xyz.sanshan.main.service.vo.ResponseMsgVO;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

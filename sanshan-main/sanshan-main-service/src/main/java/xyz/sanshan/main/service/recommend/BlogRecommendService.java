@@ -2,7 +2,7 @@ package xyz.sanshan.main.service.recommend;
 
 import xyz.sanshan.main.pojo.dto.BaseBlogEditorDTO;
 import xyz.sanshan.main.pojo.dto.BlogVoteDTO;
-import xyz.sanshan.main.service.vo.ResponseMsgVO;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.main.service.vote.BlogVoteInfoService;
 import xyz.sanshan.common.BlogIdGenerate;
 import xyz.sanshan.common.info.EditorTypeEnum;

@@ -1,7 +1,7 @@
 package xyz.sanshan.main.web.controller.recommend;
 
 import xyz.sanshan.main.service.recommend.RecommendService;
-import xyz.sanshan.main.service.vo.ResponseMsgVO;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

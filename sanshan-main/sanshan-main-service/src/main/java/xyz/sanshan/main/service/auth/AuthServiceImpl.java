@@ -7,7 +7,7 @@ import xyz.sanshan.main.service.vo.JwtUser;
 import xyz.sanshan.main.service.SettingService;
 import xyz.sanshan.main.service.convent.UserConvert;
 import xyz.sanshan.main.service.search.ElasticSearchService;
-import xyz.sanshan.main.service.vo.ResponseMsgVO;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.common.info.PosCodeEnum;
 import xyz.sanshan.common.setting.Setting;
 import lombok.extern.slf4j.Slf4j;

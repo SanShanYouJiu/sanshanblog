@@ -1,26 +1,25 @@
 package xyz.sanshan.main.web.config.javaconfig.auxiliary;
 
+import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
 import xyz.sanshan.common.exception.CheckException;
 import xyz.sanshan.common.exception.FileLoadException;
 import xyz.sanshan.common.info.PosCodeEnum;
-import xyz.sanshan.main.service.vo.ResponseMsgVO;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 
 /**
  * 处理和包装异常
  */
 @Aspect
+@Slf4j
 public class ControllerAop {
 
-    private static final Logger log = LoggerFactory.getLogger(ControllerAop.class);
 
-    @Pointcut("execution(public xyz.sanshan.main.service.vo.ResponseMsgVO *(..))")
+    @Pointcut("execution(public xyz.sanshan.common.vo.ResponseMsgVO *(..))")
     public void responseMsgVoPointcut() {
     }
 

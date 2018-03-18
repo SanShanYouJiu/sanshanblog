@@ -2,7 +2,7 @@ package xyz.sanshan.main.service.vote;
 
 import xyz.sanshan.main.pojo.dto.VoteDTO;
 import xyz.sanshan.main.pojo.entity.IpBlogVoteDO;
-import xyz.sanshan.main.service.vo.ResponseMsgVO;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.common.info.PosCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

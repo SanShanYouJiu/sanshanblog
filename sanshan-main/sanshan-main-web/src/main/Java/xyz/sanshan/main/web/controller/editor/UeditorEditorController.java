@@ -8,7 +8,7 @@ import xyz.sanshan.main.service.BlogService;
 import xyz.sanshan.main.service.editor.UeditorFileService;
 import xyz.sanshan.main.service.editor.UeditorBlogService;
 import xyz.sanshan.main.service.vo.BlogVO;
-import xyz.sanshan.main.service.vo.ResponseMsgVO;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.common.BlogIdGenerate;
 import xyz.sanshan.common.info.EditorTypeEnum;
 import xyz.sanshan.common.info.PosCodeEnum;

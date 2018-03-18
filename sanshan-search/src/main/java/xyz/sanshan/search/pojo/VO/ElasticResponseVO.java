@@ -1,4 +1,4 @@
-package xyz.sanshan.main.service.vo;
+package xyz.sanshan.search.pojo.VO;
 
 import lombok.Data;
 

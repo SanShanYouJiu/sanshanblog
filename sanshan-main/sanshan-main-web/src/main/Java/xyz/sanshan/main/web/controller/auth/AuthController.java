@@ -3,7 +3,7 @@ package xyz.sanshan.main.web.controller.auth;
 import xyz.sanshan.main.pojo.entity.UserDO;
 import xyz.sanshan.main.service.user.UserService;
 import xyz.sanshan.main.service.auth.AuthService;
-import xyz.sanshan.main.service.vo.ResponseMsgVO;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.common.JwtAuthenticationRequest;
 import xyz.sanshan.common.JwtAuthenticationResponse;
 import xyz.sanshan.common.info.PosCodeEnum;

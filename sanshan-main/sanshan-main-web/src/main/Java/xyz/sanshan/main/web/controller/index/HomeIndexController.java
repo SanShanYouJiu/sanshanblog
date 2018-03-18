@@ -1,7 +1,7 @@
 package xyz.sanshan.main.web.controller.index;
 
 import xyz.sanshan.main.service.FeedBackService;
-import xyz.sanshan.main.service.vo.ResponseMsgVO;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.main.web.config.javaconfig.auxiliary.MultipartFileBucketValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

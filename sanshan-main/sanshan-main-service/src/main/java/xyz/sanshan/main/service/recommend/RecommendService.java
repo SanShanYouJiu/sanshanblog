@@ -8,7 +8,7 @@ import xyz.sanshan.main.pojo.dto.BaseBlogEditorDTO;
 import xyz.sanshan.main.pojo.dto.RecommendDTO;
 import xyz.sanshan.main.pojo.dto.UserDTO;
 import xyz.sanshan.main.pojo.entity.RecommendDO;
-import xyz.sanshan.main.service.vo.ResponseMsgVO;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.main.service.convent.RecommendConvert;
 
 import javax.annotation.PostConstruct;

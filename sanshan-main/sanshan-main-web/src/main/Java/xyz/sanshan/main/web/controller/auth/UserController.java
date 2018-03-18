@@ -2,7 +2,7 @@ package xyz.sanshan.main.web.controller.auth;
 
 import xyz.sanshan.main.dao.mongo.UserRepository;
 import xyz.sanshan.main.service.user.UserService;
-import xyz.sanshan.main.service.vo.ResponseMsgVO;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.common.info.PosCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

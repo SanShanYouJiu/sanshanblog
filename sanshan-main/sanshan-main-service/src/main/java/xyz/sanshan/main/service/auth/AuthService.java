@@ -1,7 +1,7 @@
 package xyz.sanshan.main.service.auth;
 
 import xyz.sanshan.main.pojo.entity.UserDO;
-import xyz.sanshan.main.service.vo.ResponseMsgVO;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 
 public interface AuthService {
     boolean register(UserDO userToAdd, ResponseMsgVO responseMsgVO);

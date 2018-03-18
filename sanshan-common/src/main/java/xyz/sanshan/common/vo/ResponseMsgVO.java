@@ -1,4 +1,4 @@
-package xyz.sanshan.main.service.vo;
+package xyz.sanshan.common.vo;
 
 import xyz.sanshan.common.info.PosCodeEnum;
 import lombok.Data;

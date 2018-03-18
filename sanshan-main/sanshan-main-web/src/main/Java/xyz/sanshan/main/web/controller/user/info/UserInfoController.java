@@ -1,7 +1,7 @@
 package xyz.sanshan.main.web.controller.user.info;
 
 import xyz.sanshan.main.service.user.info.UserInfoService;
-import xyz.sanshan.main.service.vo.ResponseMsgVO;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.common.info.PosCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;

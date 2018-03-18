@@ -2,7 +2,7 @@ package xyz.sanshan.main.web.controller.blog;
 
 import xyz.sanshan.main.service.BlogService;
 import xyz.sanshan.main.service.vo.BlogVO;
-import xyz.sanshan.main.service.vo.ResponseMsgVO;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.common.PageInfo;
 import xyz.sanshan.common.exception.NotFoundBlogException;
 import xyz.sanshan.common.info.PosCodeEnum;

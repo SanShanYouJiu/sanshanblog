@@ -8,7 +8,7 @@ import xyz.sanshan.main.pojo.entity.UserDO;
 import xyz.sanshan.main.service.convent.UserConvert;
 import xyz.sanshan.main.service.user.cache.UserBlogCacheService;
 import xyz.sanshan.main.service.vo.BlogVO;
-import xyz.sanshan.main.service.vo.ResponseMsgVO;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 
 import java.util.List;
 

@@ -2,7 +2,7 @@ package xyz.sanshan.main.web.controller.auth;
 
 import com.google.code.kaptcha.Producer;
 import xyz.sanshan.main.service.vo.CodeValidateVO;
-import xyz.sanshan.main.service.vo.ResponseMsgVO;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;

@@ -5,7 +5,7 @@ import xyz.sanshan.main.pojo.dto.BlogVoteDTO;
 import xyz.sanshan.main.pojo.entity.UserDO;
 import xyz.sanshan.main.service.user.info.UserInfoService;
 import xyz.sanshan.main.service.vo.BlogVO;
-import xyz.sanshan.main.service.vo.ResponseMsgVO;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.main.service.vo.UserVoteInfoVO;
 import xyz.sanshan.common.info.PosCodeEnum;
 import lombok.extern.slf4j.Slf4j;

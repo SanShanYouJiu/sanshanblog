@@ -17,7 +17,7 @@ import xyz.sanshan.main.service.editor.UeditorBlogService;
 import xyz.sanshan.main.service.user.info.UserInfoService;
 import xyz.sanshan.main.service.vo.BlogVO;
 import xyz.sanshan.main.service.vo.JwtUser;
-import xyz.sanshan.main.service.vo.ResponseMsgVO;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.main.service.convent.UserConvert;
 import xyz.sanshan.main.service.search.ElasticSearchService;
 

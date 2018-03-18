@@ -9,7 +9,6 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import java.sql.SQLException;
 
 @Configuration
-//@PropertySource("file:D:/SanShanBlog.properties")
 public class DbConfig {
 
     @Value("${druid.driver}")

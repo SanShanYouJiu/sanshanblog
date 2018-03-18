@@ -2,7 +2,6 @@ package xyz.sanshan.main.web;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.data.elasticsearch.ElasticsearchAutoConfiguration;
 import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration;
@@ -22,9 +21,9 @@ import xyz.sanshan.main.web.config.webaseconfig.WebAppInitializer;
  *
  *
  */
-@SpringBootApplication(exclude = {RedisAutoConfiguration.class, MongoAutoConfiguration.class,ThymeleafAutoConfiguration.class, ElasticsearchAutoConfiguration.class, TransactionAutoConfiguration.class})
+@SpringBootApplication(exclude = {RedisAutoConfiguration.class, MongoAutoConfiguration.class,ThymeleafAutoConfiguration.class, TransactionAutoConfiguration.class})
 @EnableDiscoveryClient
-@EnableFeignClients
+@EnableFeignClients({"xyz.sanshan.main.service.feign"})
 @EnableHystrix
 public class MainBootstrap extends SpringBootServletInitializer {
 

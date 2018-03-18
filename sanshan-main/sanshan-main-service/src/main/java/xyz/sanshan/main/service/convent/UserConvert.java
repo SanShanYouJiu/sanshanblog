@@ -1,12 +1,11 @@
 package xyz.sanshan.main.service.convent;
 
 import com.github.pagehelper.PageInfo;
-import xyz.sanshan.main.pojo.dto.UserDTO;
-import xyz.sanshan.main.pojo.elastic.ElasticUserDO;
-import xyz.sanshan.main.pojo.entity.UserDO;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
 import org.modelmapper.TypeToken;
+import xyz.sanshan.main.pojo.dto.UserDTO;
+import xyz.sanshan.main.pojo.entity.UserDO;
 
 import java.util.List;
 import java.util.Objects;
@@ -16,20 +15,13 @@ public class UserConvert {
     private static final ModelMapper MODEL_MAPPER =new ModelMapper();
 
     static {
-        PropertyMap<UserDO, ElasticUserDO> typeMap =  new PropertyMap<UserDO, ElasticUserDO>() {
-            @Override
-            protected void configure() {
-            map().setId(source.get_id());
-            }
-        } ;
-        PropertyMap<UserDO,UserDTO> typeMap2 = new PropertyMap<UserDO, UserDTO>() {
+        PropertyMap<UserDO,UserDTO> typeMap = new PropertyMap<UserDO, UserDTO>() {
             @Override
             protected void configure() {
                 map().setId(source.get_id());
             }
         };
         MODEL_MAPPER.addMappings(typeMap);
-        MODEL_MAPPER.addMappings(typeMap2);
     }
 
     public static UserDTO doToDto(UserDO userDO) {
@@ -43,12 +35,6 @@ public class UserConvert {
         return MODEL_MAPPER.map(userDOS,new TypeToken<List<UserDTO>>(){}.getType());
     }
 
-    public static ElasticUserDO dtoToElasticDO(UserDTO userDTO) {
-        if (Objects.isNull(userDTO)) {
-            return null;
-        }
-        return MODEL_MAPPER.map(userDTO,ElasticUserDO.class);
-    }
 
 
     public static PageInfo<UserDTO> doToDtoPage(PageInfo<UserDO> userDOPageInfo) {

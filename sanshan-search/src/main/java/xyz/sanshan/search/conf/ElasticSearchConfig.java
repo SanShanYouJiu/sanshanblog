@@ -1,4 +1,4 @@
-package xyz.sanshan.main.web.config.javaconfig;
+package xyz.sanshan.search.conf;
 
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;
@@ -18,8 +18,7 @@ import java.net.InetAddress;
  *
  */
 @Configuration
-@EnableElasticsearchRepositories(basePackages = "xyz.sanshan.main.dao.elastic")
-//@PropertySource("file:D:/SanShanBlog.properties")
+@EnableElasticsearchRepositories(basePackages = "xyz.sanshan.search.dao")
 public class ElasticSearchConfig {
 
     @Value("${elasticsearch.host}")

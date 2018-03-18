@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="off" monitorInterval="30">
     <Appenders>
-        <NoSql name="mongoAppender" bufferSize="10"> <!--建议bufferSize配置,减少频繁写操作。 -->
+        <NoSql name="mongoAppender" > <!--建议bufferSize配置,减少频繁写操作。 -->
             <MongoDb databaseName="logs" collectionName="sanshan-main-logs" server="localhost" port="27017"/>
         </NoSql>
         <Console name="STDOUT" target="SYSTEM_OUT">
@@ -9,14 +9,20 @@
         </Console>
     </Appenders>
     <Loggers>
-        <Logger name="mongologger" level="info">
-            <appender-ref ref="mongoAppender"/>
-        </Logger>
 
-        <Logger name="org" level="info">
+        <!--<Logger name="org" level="info">-->
+            <!--<appender-ref ref="mongoAppender"/>-->
+            <!--<appender-ref ref="STDOUT" />-->
+        <!--</Logger>-->
+
+        <!--<Logger name="xyz.sanshan.main" level="info">-->
+            <!--<appender-ref ref="mongoAppender"/>-->
+            <!--<appender-ref ref="STDOUT" />-->
+        <!--</Logger>-->
+
+        <root level="info">
             <appender-ref ref="mongoAppender"/>
             <appender-ref ref="STDOUT" />
-        </Logger>
-
+        </root>
     </Loggers>
 </Configuration>

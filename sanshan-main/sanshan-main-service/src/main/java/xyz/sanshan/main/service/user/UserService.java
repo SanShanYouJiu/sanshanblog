@@ -6,7 +6,7 @@ import xyz.sanshan.main.pojo.entity.UserDO;
 import xyz.sanshan.main.service.MailService;
 import xyz.sanshan.main.service.auth.JwtTokenUtil;
 import xyz.sanshan.main.service.vo.JwtUser;
-import xyz.sanshan.main.service.vo.ResponseMsgVO;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.common.JwtAuthenticationResponse;
 import xyz.sanshan.common.info.CodeTypeEnum;
 import xyz.sanshan.common.info.PosCodeEnum;

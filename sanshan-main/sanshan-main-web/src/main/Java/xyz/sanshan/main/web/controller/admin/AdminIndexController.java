@@ -7,7 +7,7 @@ import xyz.sanshan.common.info.PosCodeEnum;
 import xyz.sanshan.main.pojo.dto.UserDTO;
 import xyz.sanshan.main.service.AdminIndexService;
 import xyz.sanshan.main.service.vo.BlogVO;
-import xyz.sanshan.main.service.vo.ResponseMsgVO;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 
 import java.util.HashMap;
 import java.util.List;

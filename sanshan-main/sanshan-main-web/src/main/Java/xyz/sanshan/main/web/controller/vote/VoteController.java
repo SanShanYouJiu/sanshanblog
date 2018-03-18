@@ -3,7 +3,7 @@ package xyz.sanshan.main.web.controller.vote;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-import xyz.sanshan.main.service.vo.ResponseMsgVO;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.main.service.vote.BlogVoteInfoService;
 import xyz.sanshan.main.service.vote.UserVoteInfoService;
 import xyz.sanshan.main.service.vote.VoteService;

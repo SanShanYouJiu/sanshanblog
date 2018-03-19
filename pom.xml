@@ -34,6 +34,7 @@
         <module>sanshan-gate</module>
         <module>sanshan-search</module>
         <module>sanshan-common</module>
+        <module>sanshan-config</module>
     </modules>
 
     <developers>

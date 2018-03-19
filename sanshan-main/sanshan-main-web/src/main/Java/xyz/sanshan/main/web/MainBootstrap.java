@@ -8,9 +8,9 @@ import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfigurati
 import org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
+import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
-import org.springframework.cloud.netflix.hystrix.EnableHystrix;
 import xyz.sanshan.main.web.config.webaseconfig.SpringSecuityFilter;
 import xyz.sanshan.main.web.config.webaseconfig.WebAppInitializer;
 
@@ -24,7 +24,7 @@ import xyz.sanshan.main.web.config.webaseconfig.WebAppInitializer;
 @SpringBootApplication(exclude = {RedisAutoConfiguration.class, MongoAutoConfiguration.class,ThymeleafAutoConfiguration.class, TransactionAutoConfiguration.class})
 @EnableDiscoveryClient
 @EnableFeignClients({"xyz.sanshan.main.service.feign"})
-@EnableHystrix
+@EnableCircuitBreaker
 public class MainBootstrap extends SpringBootServletInitializer {
 
     @Override

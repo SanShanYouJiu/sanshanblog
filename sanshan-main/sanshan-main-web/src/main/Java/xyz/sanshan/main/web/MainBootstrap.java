@@ -18,6 +18,7 @@ import xyz.sanshan.main.web.config.webaseconfig.WebAppInitializer;
  * 在主程序直接运行需要Servlet容器依赖
  *
  * 如果需要调整为传统Spring FrameWork方式工作 只需要将这里的继承类{@link SpringBootServletInitializer}  注释 将在{@link SpringSecuityFilter}与{@link WebAppInitializer}中的注释打开即可
+ * 注意：改为微服务之后  使用原始方式会丧失掉微服务附加的功能 比如actuator的监控
  *
  *
  */

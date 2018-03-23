@@ -6,12 +6,12 @@ import lombok.ToString;
 
 import java.io.Serializable;
 
+/**
+ */
 @Data
 @NoArgsConstructor
 @ToString
-public class UeditorBlogDTO  extends BaseBlogEditorDTO implements Serializable{
+public class UeditorBlogDTO  extends BaseBlogDTO implements Serializable {
 
-    private static final long serialVersionUID = 1604587939100832871L;
-    private  Long id;
-
+    private static final long serialVersionUID = 1196602137665546684L;
 }

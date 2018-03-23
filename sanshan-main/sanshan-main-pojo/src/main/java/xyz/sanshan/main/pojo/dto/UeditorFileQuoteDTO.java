@@ -14,6 +14,8 @@ import java.io.Serializable;
 @ToString
 public class UeditorFileQuoteDTO implements Serializable{
 
+    private static final long serialVersionUID = 121650339542497886L;
+
     private String filename;
 
     private Integer quote;

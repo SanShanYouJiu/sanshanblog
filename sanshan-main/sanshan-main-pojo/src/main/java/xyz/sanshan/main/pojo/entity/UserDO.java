@@ -91,4 +91,9 @@ public class UserDO extends BaseDO implements Serializable{
      * 最后修改密码的时间
      */
     private Date lastPasswordResetDate;
+
+    /**
+     *
+     */
+    private String description;
 }

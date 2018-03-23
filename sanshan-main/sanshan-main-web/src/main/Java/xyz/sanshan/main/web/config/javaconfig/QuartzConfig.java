@@ -1,6 +1,6 @@
 package xyz.sanshan.main.web.config.javaconfig;
 
-import xyz.sanshan.common.BlogIdGenerate;
+import xyz.sanshan.main.service.editor.BlogIdGenerate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

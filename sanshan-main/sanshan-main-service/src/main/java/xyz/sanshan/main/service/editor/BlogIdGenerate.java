@@ -1,5 +1,7 @@
-package xyz.sanshan.common;
+package xyz.sanshan.main.service.editor;
 
+import xyz.sanshan.common.PageInfo;
+import xyz.sanshan.common.PropertiesConvenUtil;
 import xyz.sanshan.common.info.EditorTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 
@@ -208,7 +210,7 @@ public final class BlogIdGenerate {
 
     //根据分页查询
     @SuppressWarnings("Duplicates")
-    public  synchronized final  PageInfo getIdCopyByPage(long  pageRows,long pageNum){
+    public  synchronized final PageInfo getIdCopyByPage(long  pageRows, long pageNum){
         PageInfo pageInfo;
         TreeMap<Long, EditorTypeEnum> copyMap = new TreeMap<>(
                  (o1, o2) -> {

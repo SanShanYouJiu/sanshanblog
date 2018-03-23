@@ -59,7 +59,6 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity httpSecurity) throws Exception {
-        String urlPrefix = "/main/";
         // 由于使用的是JWT，我们这里不需要csrf
         httpSecurity.
                 csrf().

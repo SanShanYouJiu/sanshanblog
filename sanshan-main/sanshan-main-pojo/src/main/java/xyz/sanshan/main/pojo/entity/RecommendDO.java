@@ -1,7 +1,7 @@
 package xyz.sanshan.main.pojo.entity;
 
 
-import xyz.sanshan.main.pojo.dto.BaseBlogEditorDTO;
+import xyz.sanshan.main.pojo.dto.BaseBlogDTO;
 import xyz.sanshan.main.pojo.dto.UserDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,7 +21,7 @@ public class RecommendDO  implements Serializable {
 
     private String _id;
 
-    private List<BaseBlogEditorDTO> recommendBlogs;
+    private List<BaseBlogDTO> recommendBlogs;
 
     private List<UserDTO> recommendUsers;
 

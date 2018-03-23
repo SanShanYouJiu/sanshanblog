@@ -1,24 +1,24 @@
 package xyz.sanshan.main.dao.mongo;
 
-import xyz.sanshan.main.pojo.entity.RecommendDO;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
+import xyz.sanshan.main.pojo.entity.RecommendDO;
 
 public class RecommendRepositoryImpl  implements CustomRecommendRepository{
     @Autowired
     private MongoTemplate mongoTemplate;
 
     /**
-     * TODO 完成获得最新推荐数据
      * @return
      */
     @Override
     public RecommendDO findByNewestCreate() {
         Query query = new Query();
-        //query.addCriteria(new Criteria("created").maxDistance())
-        //mongoTemplate.findOne()
-        return null;
+        query.with(new Sort(Sort.Direction.DESC,"created")).limit(1);
+        RecommendDO recommendDO = mongoTemplate.findOne(query, RecommendDO.class);
+        return recommendDO;
     }
 
 }

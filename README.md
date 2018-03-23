@@ -66,7 +66,7 @@
 
 3. 目前使用的是JWT+Spring security的安全方案
 4. 使用Spring Cloud 微服务框架支持
- - ZUUI 网关 
+ - Zuul 网关 
  - eureka 服务注册 
  - hystrix 服务保护 
  - feign 服务消费

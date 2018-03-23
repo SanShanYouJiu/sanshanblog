@@ -1,8 +1,16 @@
 spring:
   application:
     name: sanshan-main
-
-#  TODO 对Actuator进行定制保护 并且在Spring Security中进行映射保护 并且需要对druid的访问进行控制
+  rabbitmq:
+    host: ${RABBIT_MQ_HOST:localhost}
+    port:  ${RABBIT_MQ_PORT:5672}
+    username: guest
+    password: guest
+  zipkin:
+    enabled: true
+  sleuth:
+    sampler:
+      percentage: 1
 
 management:
     context-path: /actuator
@@ -21,15 +29,15 @@ feign:
     enabled: true
 
 
-
 eureka:
   instance:
     statusPageUrlPath: /actuator/info
     healthCheckUrlPath: /actuator/health
+    prefer-ip-address: true
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
-#      defaultZone: http://${EUREKA_HOST:localhost}:${EUREKA_PORT:8761}/eureka/
+#      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://${EUREKA_HOST:localhost}:${EUREKA_PORT:8761}/eureka/
 
 
 

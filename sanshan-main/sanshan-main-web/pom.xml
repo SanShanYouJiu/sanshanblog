@@ -54,11 +54,6 @@
             <artifactId>spring-boot-starter-undertow</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-stream-binder-rabbit</artifactId>
-        </dependency>
-
         <!--Thymeleaf-->
         <dependency>
             <groupId>org.thymeleaf</groupId>
@@ -111,6 +106,17 @@
             <version>${org.quartz-scheduler-jobs}</version>
         </dependency>
         <!--quartz end-->
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-zipkin</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-stream-binder-rabbit</artifactId>
+        </dependency>
+
 
     </dependencies>
 

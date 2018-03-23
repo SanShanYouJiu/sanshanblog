@@ -3,7 +3,7 @@ package xyz.sanshan.main.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import xyz.sanshan.common.BlogIdGenerate;
+import xyz.sanshan.main.service.editor.BlogIdGenerate;
 import xyz.sanshan.common.PageInfo;
 import xyz.sanshan.common.exception.MapFoundNullException;
 import xyz.sanshan.common.exception.NotFoundBlogException;

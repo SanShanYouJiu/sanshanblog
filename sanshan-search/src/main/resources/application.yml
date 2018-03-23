@@ -1,6 +1,16 @@
 spring:
-  application:
-    name: sanshan-search
+    application:
+      name: sanshan-search
+    rabbitmq:
+      host: ${RABBIT_MQ_HOST:localhost}
+      port: ${RABBIT_MQ_PORT:5672}
+      username: guest
+      password: guest
+    zipkin:
+      enabled: true
+    sleuth:
+      sampler:
+        percentage: 1
 
 management:
     context-path: /actuator
@@ -16,5 +26,5 @@ eureka:
     healthCheckUrlPath: /actuator/health
   client:
     service-url:
-      defaultZone: http://localhost:8761/eureka/
-#      defaultZone: http://${EUREKA_HOST:localhost}:${EUREKA_PORT:8761}/eureka/
+#      defaultZone: http://localhost:8761/eureka/
+      defaultZone: http://${EUREKA_HOST:localhost}:${EUREKA_PORT:8761}/eureka/

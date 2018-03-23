@@ -3,10 +3,9 @@ package xyz.sanshan.main.service.editor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import xyz.sanshan.common.BlogIdGenerate;
 import xyz.sanshan.common.exception.PropertyAccessException;
 import xyz.sanshan.common.info.EditorTypeEnum;
-import xyz.sanshan.main.pojo.dto.BaseBlogEditorDTO;
+import xyz.sanshan.main.pojo.dto.BaseBlogDTO;
 import xyz.sanshan.main.pojo.dto.MarkDownBlogDTO;
 import xyz.sanshan.main.pojo.dto.UeditorBlogDTO;
 import xyz.sanshan.main.pojo.entity.BaseBlogEditorDO;
@@ -272,7 +271,7 @@ public class BlogOperation {
      * @param editorDTO
      * @param id
      */
-    private void baseOtherUpdateCache(BaseBlogEditorDTO editorDTO, Long id) {
+    private void baseOtherUpdateCache(BaseBlogDTO editorDTO, Long id) {
         //更新User对应的blog缓存
         userBlogCacheService.userBlogRefresh(editorDTO.getUser());
         //加入到索引中

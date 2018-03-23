@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import xyz.sanshan.common.BlogIdGenerate;
+import xyz.sanshan.main.service.editor.BlogIdGenerate;
 import xyz.sanshan.common.exception.NotFoundBlogException;
 import xyz.sanshan.common.info.EditorTypeEnum;
 import xyz.sanshan.common.info.PosCodeEnum;

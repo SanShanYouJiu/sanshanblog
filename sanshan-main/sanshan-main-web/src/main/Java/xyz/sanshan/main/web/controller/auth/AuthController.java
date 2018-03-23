@@ -1,5 +1,6 @@
 package xyz.sanshan.main.web.controller.auth;
 
+import xyz.sanshan.main.api.vo.user.UserInfo;
 import xyz.sanshan.main.pojo.entity.UserDO;
 import xyz.sanshan.main.service.user.UserService;
 import xyz.sanshan.main.service.auth.AuthService;
@@ -127,6 +128,18 @@ public class AuthController {
         } else {
             return msgVO.buildOKWithData(new JwtAuthenticationResponse(refreshedToken));
         }
+    }
+
+    @PostMapping(value = "/user/validate",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public  ResponseMsgVO userValidate(@RequestParam(name = "username")String username,@RequestParam("password")String password){
+        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
+        UserInfo userInfo = authService.validate(username, password);
+          if (userInfo!=null){
+              responseMsgVO.buildOKWithData(userInfo);
+          }else {
+              responseMsgVO.buildWithPosCode(PosCodeEnum.PARAM_ERROR);
+          }
+          return responseMsgVO;
     }
 
     /**

@@ -9,7 +9,7 @@ import xyz.sanshan.main.service.editor.UeditorFileService;
 import xyz.sanshan.main.service.editor.UeditorBlogService;
 import xyz.sanshan.main.service.vo.BlogVO;
 import xyz.sanshan.common.vo.ResponseMsgVO;
-import xyz.sanshan.common.BlogIdGenerate;
+import xyz.sanshan.main.service.editor.BlogIdGenerate;
 import xyz.sanshan.common.info.EditorTypeEnum;
 import xyz.sanshan.common.info.PosCodeEnum;
 import lombok.extern.slf4j.Slf4j;

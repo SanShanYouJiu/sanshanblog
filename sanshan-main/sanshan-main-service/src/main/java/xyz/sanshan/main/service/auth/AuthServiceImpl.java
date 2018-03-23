@@ -1,5 +1,7 @@
 package xyz.sanshan.main.service.auth;
 
+import org.springframework.beans.BeanUtils;
+import xyz.sanshan.main.api.vo.user.UserInfo;
 import xyz.sanshan.main.dao.mongo.UserRepository;
 import xyz.sanshan.main.pojo.dto.UserDTO;
 import xyz.sanshan.main.pojo.entity.UserDO;
@@ -151,4 +153,19 @@ public class AuthServiceImpl implements AuthService {
         }
         return null;
     }
+
+    public UserInfo validate(String username,String password){
+        UserInfo info =null;
+        UserDO userDO = userRepository.findByUsername(username);
+        BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+        Boolean validate = encoder.matches(password, userDO.getPassword());
+        if (validate){
+            info = new UserInfo();
+            BeanUtils.copyProperties(userDO, info);
+            return info;
+        }else {
+            return info;
+        }
+    }
+
 }

@@ -35,6 +35,8 @@
         <module>sanshan-search</module>
         <module>sanshan-common</module>
         <module>sanshan-config</module>
+        <module>sanshan-control</module>
+        <module>sanshan-main-interface</module>
     </modules>
 
     <developers>

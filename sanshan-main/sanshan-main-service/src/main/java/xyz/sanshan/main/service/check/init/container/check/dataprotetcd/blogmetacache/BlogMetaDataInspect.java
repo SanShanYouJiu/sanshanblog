@@ -4,7 +4,7 @@ import xyz.sanshan.main.dao.mybatis.MarkDownBlogMapper;
 import xyz.sanshan.main.dao.mybatis.UeditorBlogMapper;
 import xyz.sanshan.main.pojo.entity.MarkDownBlogDO;
 import xyz.sanshan.main.pojo.entity.UeditorBlogDO;
-import xyz.sanshan.common.BlogIdGenerate;
+import xyz.sanshan.main.service.editor.BlogIdGenerate;
 import xyz.sanshan.common.info.EditorTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

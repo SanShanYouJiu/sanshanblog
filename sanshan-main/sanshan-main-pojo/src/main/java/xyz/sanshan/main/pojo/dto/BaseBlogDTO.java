@@ -5,7 +5,9 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public  abstract class BaseBlogEditorDTO {
+public  abstract class BaseBlogDTO {
+
+    private Long id;
 
     private String user;
 

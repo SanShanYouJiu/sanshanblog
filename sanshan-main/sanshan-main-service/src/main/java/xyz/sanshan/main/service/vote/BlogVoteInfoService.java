@@ -4,7 +4,7 @@ import xyz.sanshan.main.dao.mybatis.BlogVoteMapper;
 import xyz.sanshan.main.pojo.dto.BlogVoteDTO;
 import xyz.sanshan.main.pojo.entity.BlogVoteDO;
 import xyz.sanshan.common.vo.ResponseMsgVO;
-import xyz.sanshan.common.BlogIdGenerate;
+import xyz.sanshan.main.service.editor.BlogIdGenerate;
 import xyz.sanshan.common.info.PosCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

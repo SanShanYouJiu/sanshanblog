@@ -1,4 +1,4 @@
-package xyz.sanshan.search.conf;
+package xyz.sanshan.search.config;
 
 import org.elasticsearch.client.Client;
 import org.elasticsearch.client.transport.TransportClient;

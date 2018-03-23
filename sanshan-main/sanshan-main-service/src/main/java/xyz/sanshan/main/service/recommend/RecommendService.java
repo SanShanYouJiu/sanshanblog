@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xyz.sanshan.main.dao.mongo.RecommendRepository;
-import xyz.sanshan.main.pojo.dto.BaseBlogEditorDTO;
+import xyz.sanshan.main.pojo.dto.BaseBlogDTO;
 import xyz.sanshan.main.pojo.dto.RecommendDTO;
 import xyz.sanshan.main.pojo.dto.UserDTO;
 import xyz.sanshan.main.pojo.entity.RecommendDO;
@@ -77,7 +77,7 @@ public class RecommendService {
     public void generateRecommedn() {
         RecommendDO recommendDO = new RecommendDO();
         List<UserDTO> recommnedUsers= userRecommendService.generateUsers();
-        List<BaseBlogEditorDTO> recommnedBlogs= blogRecommendService.generateBlogs();
+        List<BaseBlogDTO> recommnedBlogs= blogRecommendService.generateBlogs();
         recommendDO.setRecommendUsers(recommnedUsers);
         recommendDO.setRecommendBlogs(recommnedBlogs);
         recommendDO.setCreated(new Date());

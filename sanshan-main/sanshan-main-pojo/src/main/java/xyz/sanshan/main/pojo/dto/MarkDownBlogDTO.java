@@ -12,10 +12,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @ToString
-public class MarkDownBlogDTO extends BaseBlogEditorDTO implements Serializable{
+public class MarkDownBlogDTO extends BaseBlogDTO implements Serializable {
 
-    private static final long serialVersionUID = 5661725470938567952L;
-    private  Long id;
-
-
+    private static final long serialVersionUID = -1499743079035930506L;
 }

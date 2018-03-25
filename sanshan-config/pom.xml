@@ -28,7 +28,6 @@
     </dependencies>
 
     <build>
-        <finalName>ace-config</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>

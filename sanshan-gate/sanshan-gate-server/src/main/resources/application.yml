@@ -27,6 +27,15 @@ zuul:
       path: /search/**
       serviceId: sanshan-search
 
+    auth:
+      path: /auth/**
+      serviceId: sanshan-auth
+
+gate:
+  ignore:
+    startWith: /auth/jwt
+
+
 eureka:
   client:
     service-url:

@@ -1,6 +1,7 @@
 package xyz.sanshan.main.web.controller.auth;
 
 import com.google.code.kaptcha.Producer;
+import xyz.sanshan.common.info.ConstanceCacheKey;
 import xyz.sanshan.main.service.vo.CodeValidateVO;
 import xyz.sanshan.common.vo.ResponseMsgVO;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
@@ -26,7 +27,6 @@ public class CodeController {
 
      private AtomicLong atomicLong = new AtomicLong(0);
 
-    public static final String CODE_ID_PREFIX = "codeValidate:";
 
     private Producer captchaProducer = null;
 
@@ -54,7 +54,7 @@ public class CodeController {
 
         //生成一个codeID对应 在三分钟内有效
         Long codeId=atomicLong.incrementAndGet();
-        redisTemplate.opsForValue().set(CODE_ID_PREFIX+String.valueOf(codeId), capText,3, TimeUnit.MINUTES);
+        redisTemplate.opsForValue().set(ConstanceCacheKey.CODE_ID_PREFIX+String.valueOf(codeId), capText,3, TimeUnit.MINUTES);
 
         //将图片转换为BASE64编码
         ByteArrayOutputStream os = new ByteArrayOutputStream();

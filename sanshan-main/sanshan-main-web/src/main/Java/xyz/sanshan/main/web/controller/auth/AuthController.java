@@ -1,5 +1,6 @@
 package xyz.sanshan.main.web.controller.auth;
 
+import xyz.sanshan.common.info.ConstanceCacheKey;
 import xyz.sanshan.main.api.vo.user.UserInfo;
 import xyz.sanshan.main.pojo.entity.UserDO;
 import xyz.sanshan.main.service.user.UserService;
@@ -21,9 +22,6 @@ import java.util.Objects;
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
-    public static void main(String[] args) {
-
-    }
 
     @Value("${jwt.header}")
     private String tokenHeader;
@@ -42,7 +40,7 @@ public class AuthController {
             JwtAuthenticationRequest authenticationRequest, @RequestParam(name = "codeid") String codeid) throws AuthenticationException {
         ResponseMsgVO msgVO = new ResponseMsgVO();
         //验证码检测
-        String codeValue = redisTemplate.opsForValue().get(CodeController.CODE_ID_PREFIX + codeid);
+        String codeValue = redisTemplate.opsForValue().get(ConstanceCacheKey.CODE_ID_PREFIX + codeid);
         if (!authenticationRequest.getCode().equalsIgnoreCase(codeValue)) {
             return msgVO.buildWithMsgAndStatus(
                             PosCodeEnum.PARAM_ERROR, "验证码错误");
@@ -64,7 +62,7 @@ public class AuthController {
 
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         //验证码检查
-        String codeValue = redisTemplate.opsForValue().get(CodeController.CODE_ID_PREFIX + codeid);
+        String codeValue = redisTemplate.opsForValue().get(ConstanceCacheKey.CODE_ID_PREFIX + codeid);
         if (!code.equalsIgnoreCase(codeValue)) {
             return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "验证码错误");
         }
@@ -131,7 +129,7 @@ public class AuthController {
     }
 
     @PostMapping(value = "/user/validate",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public  ResponseMsgVO userValidate(@RequestParam(name = "username")String username,@RequestParam("password")String password){
+    public  ResponseMsgVO<UserInfo> userValidate(@RequestParam(name = "username")String username,@RequestParam("password")String password){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         UserInfo userInfo = authService.validate(username, password);
           if (userInfo!=null){

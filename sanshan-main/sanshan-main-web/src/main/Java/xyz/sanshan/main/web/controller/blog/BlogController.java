@@ -78,7 +78,7 @@ public class BlogController {
         return responseMsgVO.buildOKWithData(list);
     }
 
-    @GetMapping(value = "title-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    //@GetMapping(value = "title-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO queryTitleAll(){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         List list =blogService.queryTitleAll();
@@ -112,7 +112,7 @@ public class BlogController {
         return responseMsgVO.buildOKWithData(list);
     }
 
-    @GetMapping(value = "date-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    //@GetMapping(value = "date-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO queryDateAll(){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         List list =blogService.queryDateAll();
@@ -132,7 +132,7 @@ public class BlogController {
         return responseMsgVO.buildOKWithData(pageInfo);
     }
 
-    @GetMapping(value = "all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    //@GetMapping(value = "all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO queryAllBlog() {
         ResponseMsgVO<List<BlogVO>> responseMsgVO = new ResponseMsgVO();
         //List<BlogVO> list = blogService.queryAll();

@@ -1,5 +1,6 @@
 package xyz.sanshan.main.web.controller.auth;
 
+import xyz.sanshan.common.info.ConstanceCacheKey;
 import xyz.sanshan.main.dao.mongo.UserRepository;
 import xyz.sanshan.main.service.user.UserService;
 import xyz.sanshan.common.vo.ResponseMsgVO;
@@ -79,7 +80,7 @@ public class UserController {
             @RequestParam(name = "code") String code) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
           //验证码
-        String codeValidate = redisTemplate.opsForValue().get(CodeController.CODE_ID_PREFIX + codeid);
+        String codeValidate = redisTemplate.opsForValue().get(ConstanceCacheKey.CODE_ID_PREFIX + codeid);
         if (!code.equalsIgnoreCase(codeValidate)) {
             return new ResponseMsgVO().buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "验证码错误");
         }

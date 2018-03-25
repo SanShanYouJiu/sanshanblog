@@ -14,7 +14,6 @@
     <url>http://maven.apache.org</url>
 
     <properties>
-        <main-class>xyz.sanshan.main.web.MainBootstrap</main-class>
         <!--validate-->
         <cglib>3.2.2</cglib>
         <!--Quartz-->
@@ -131,7 +130,6 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                <mainClass>${main-class}</mainClass>
                   <layout>ZIP</layout>
                 </configuration>
                 <executions>

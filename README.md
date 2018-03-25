@@ -10,45 +10,13 @@
 >
 > docker编排文件 [地址][3]
 
-#### 查询
+![sanshanblog-1](https://github.com/SanShanYouJiu/ImageRepository/blob/master/SanShaBlog/sanshanblog-1.jpg?raw=true)
 
-> 您在查询归档 分类 标签 关键字时会响应很快 如果您采用es查询 速度会相对慢一点 但是由于ES的完整支持 您可以搜索到更多的信息
+![sanshanblog-2.jpg](https://github.com/SanShanYouJiu/ImageRepository/blob/master/SanShaBlog/sanshanblog-2.jpg?raw=true)
 
-实现了一个次关键字的缓存层 获取博客具体内容时才会向Redis请求取数据
-其他时刻通过维持Id唯一的 Date Title Tag 次关键字倒排索引
-从而不使用高昂的数据库/Redis查询
+![sanshanblog-3](https://github.com/SanShanYouJiu/ImageRepository/blob/master/SanShaBlog/sanshanblog-3.jpg?raw=true)
 
-> 在目前数量较小时是可以到达速度极快的 暂时试验性的使用 
 
-在内部
-
-- 分别维护6个Map集合  维持为3个倒排索引
-- 定时刷新到磁盘上 启动时自动创建并且重新初始化相关数据 建议不要要求可用性 
-
-#### 博客编辑支持俩种风格
-
-> - 一种是Markdown风格的编辑 
-> - 另外一种是富文本方式(富文本方式用的是百度的UEditor) 采用七牛云存储相关ueditor上传文件 对文件进行了时间校验以及引用表的维护 如果在12小时-36小时之间未上传引用文件的博客 将会在七牛云中删除
-
-#### 点赞与踩
-
-已对点赞功能进行完整的并发支持 并且在获取点赞相关信息时会进行请求校验  大部分情况下都将在缓存获取 从而避免数据库连接池过多导致崩溃的情况
-
-#### 完整的用户支持
-
-您可以在后台页面看到这些内容 
-包括博客的修改删除以及不同编辑器类型的博客的汇总
-
-您可以修改您的个人资料 目前包括 -头像-博客链接
-
-修改之后将会在您的博客个人资料中显示 将会被其他人查看到 也可以被搜索到
-
-您可以在忘记密码时通过注册邮箱进行重置
-
-#### 其他功能
-
-博客的选择更新-可以选择更新标题-标签-内容
-还有一些常规功能包括 博客添加与删除  注册 登录 反馈 等
 
 ## 技术选型
 
@@ -58,7 +26,7 @@
  - 使用Redis作为缓存 mysql作为通用数据库
  - maven作为项目管理工具
  - 基本架构是SSM 不过因为因为Spring4的注解解决方案很成熟 所以基本除了maven的pom.xml之外的xml基本消失了
- 
+
  - 采用ElasticSearch 作为搜索支持
  - 日志系统采用的是Log4j2+slf4j 存储在mongoDB中
  - REST API 风格的URL 以及事务的完整支持

@@ -1,0 +1,15 @@
+spring:
+    application:
+        name: sanshan-auth
+
+server:
+    port: 8081 #启动端口
+
+eureka:
+    instance:
+        statusPageUrlPath: /info
+        healthCheckUrlPath: /health
+    client:
+       service-url:
+#            defaultZone: http://localhost:8761/eureka/
+                defaultZone: http://${EUREKA_HOST:localhost}:${EUREKA_PORT:8761}/eureka/

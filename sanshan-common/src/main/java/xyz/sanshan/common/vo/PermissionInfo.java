@@ -17,6 +17,9 @@ public class PermissionInfo implements Serializable{
         this.name = name;
     }
 
+    public PermissionInfo() {
+    }
+
     public HttpMethodEnum getMethod() {
         return method;
     }

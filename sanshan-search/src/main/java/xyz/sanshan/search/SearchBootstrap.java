@@ -5,11 +5,9 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.cloud.client.SpringCloudApplication;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
-import org.springframework.context.annotation.PropertySource;
 
 @SpringCloudApplication
 @EnableFeignClients
-@PropertySource("file:D:/SanShan-search.properties")
 public class SearchBootstrap extends SpringBootServletInitializer {
 
     @Override

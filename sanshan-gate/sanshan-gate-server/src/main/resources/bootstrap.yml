@@ -4,6 +4,15 @@ info:
     github: https://github.com/SanShanYouJiu
   build:
      description: sanshan-gate application
+spring:
+  cloud:
+    config:
+        discovery:
+           service-id: sanshan-config
+           enabled: true
+        label: master  # git 分支
+        name: gate
+        profile: dev
 
 #请求和响应GZIP压缩支持
 feign:

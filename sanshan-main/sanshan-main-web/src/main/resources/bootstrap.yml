@@ -4,3 +4,13 @@ info:
     github: https://github.com/SanShanYouJiu
   build:
      description: sanshan-main application
+
+spring:
+  cloud:
+    config:
+        discovery:
+           service-id: sanshan-config
+           enabled: true
+        label: master  # git 分支
+        name: sanshan-main
+        profile: dev

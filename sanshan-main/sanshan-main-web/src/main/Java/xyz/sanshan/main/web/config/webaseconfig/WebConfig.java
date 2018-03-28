@@ -39,7 +39,7 @@ import java.util.Properties;
                 value = {Configuration.class,Service.class, Repository.class})
 })
 //@PropertySource("file:/etc/sanshanblog/SanShan-main.properties")
-@PropertySource("file:D:/SanShan-main.properties")
+//@PropertySource("file:D:/SanShan-main.properties")
 @EnableAspectJAutoProxy(proxyTargetClass = true)//开启切面
 public class WebConfig extends WebMvcConfigurerAdapter {
 

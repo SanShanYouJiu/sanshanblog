@@ -1,20 +1,19 @@
 package xyz.sanshan.main.web.controller.auth;
 
-import xyz.sanshan.common.info.ConstanceCacheKey;
-import xyz.sanshan.main.api.vo.user.UserInfo;
-import xyz.sanshan.main.pojo.entity.UserDO;
-import xyz.sanshan.main.service.user.UserService;
-import xyz.sanshan.main.service.auth.AuthService;
-import xyz.sanshan.common.vo.ResponseMsgVO;
-import xyz.sanshan.common.JwtAuthenticationRequest;
-import xyz.sanshan.common.JwtAuthenticationResponse;
-import xyz.sanshan.common.info.PosCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.*;
+import xyz.sanshan.common.JwtAuthenticationRequest;
+import xyz.sanshan.common.JwtAuthenticationResponse;
+import xyz.sanshan.common.info.ConstanceCacheKey;
+import xyz.sanshan.common.info.PosCodeEnum;
+import xyz.sanshan.common.vo.ResponseMsgVO;
+import xyz.sanshan.main.pojo.entity.UserDO;
+import xyz.sanshan.main.service.auth.AuthService;
+import xyz.sanshan.main.service.user.UserService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Objects;
@@ -128,17 +127,6 @@ public class AuthController {
         }
     }
 
-    @PostMapping(value = "/user/validate",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public  ResponseMsgVO<UserInfo> userValidate(@RequestParam(name = "username")String username,@RequestParam("password")String password){
-        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
-        UserInfo userInfo = authService.validate(username, password);
-          if (userInfo!=null){
-              responseMsgVO.buildOKWithData(userInfo);
-          }else {
-              responseMsgVO.buildWithPosCode(PosCodeEnum.PARAM_ERROR);
-          }
-          return responseMsgVO;
-    }
 
     /**
      * 查看是否拥有登录权限

@@ -16,6 +16,7 @@ server:
   port: 8080 #启动端口
 #
 zuul:
+  ignored-services: "*"
   sensitive-headers:
   prefix: /api #为zuul设置一个公共的前缀
   routes:

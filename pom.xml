@@ -25,6 +25,8 @@
 
     <!--集中管理项目依赖-->
     <properties>
+        <docker.image.prefix>sanshanyoujiu</docker.image.prefix>
+        <docker.plugin.version>0.4.13</docker.plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -36,6 +38,7 @@
         <module>sanshan-common</module>
         <module>sanshan-config</module>
         <module>sanshan-control</module>
+        <module>sanshan-auth</module>
         <module>sanshan-main-interface</module>
     </modules>
 

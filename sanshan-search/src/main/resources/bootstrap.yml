@@ -1,0 +1,9 @@
+spring:
+  cloud:
+    config:
+        discovery:
+           service-id: sanshan-config
+           enabled: true
+        label: master  # git 分支
+        name: SanShan-search
+        profile: dev

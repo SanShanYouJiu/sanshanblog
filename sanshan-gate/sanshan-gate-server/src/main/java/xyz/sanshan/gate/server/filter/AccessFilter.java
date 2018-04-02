@@ -1,27 +1,49 @@
 package xyz.sanshan.gate.server.filter;
 
+import com.alibaba.fastjson.JSON;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import xyz.sanshan.auth.common.util.jwt.IJWTInfo;
+import org.springframework.stereotype.Component;
+import org.springframework.util.AntPathMatcher;
+import xyz.sanshan.auth.security.client.config.ServiceAuthConfig;
 import xyz.sanshan.auth.security.client.config.UserAuthConfig;
+import xyz.sanshan.auth.security.client.jwt.UserAuthUtil;
+import xyz.sanshan.auth.security.common.util.jwt.IJWTInfo;
+import xyz.sanshan.common.info.HttpMethodEnum;
+import xyz.sanshan.common.vo.PermissionInfo;
+import xyz.sanshan.gate.server.auth.AuthPermissionUrlUtil;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Set;
 
 @Slf4j
+@Component
 public class AccessFilter extends ZuulFilter {
 
-    @Value("${gate.ignore.startWith}")
-    private String startWith;
+    private AntPathMatcher matcher = new AntPathMatcher();
 
     @Value("${zuul.prefix}")
     private String zuulPrefix;
 
     @Autowired
+    private AuthPermissionUrlUtil authPermissionUrlUtil;
+
+    @Autowired
+    private UserAuthUtil userAuthUtil;
+    @Autowired
     private UserAuthConfig userAuthConfig;
+
+    @Autowired
+    private ServiceAuthConfig serviceAuthConfig;
+
+    //@Autowired
+    //private ServiceAuthUtil serviceAuthUtil;
 
     @Override
     public String filterType() {
@@ -44,16 +66,31 @@ public class AccessFilter extends ZuulFilter {
         HttpServletRequest request = ctx.getRequest();
         final String requestUri = request.getRequestURI().substring(zuulPrefix.length());
         final String method = request.getMethod();
-        // 不进行拦截的地址
-        if (isStartWith(requestUri)) {
+        boolean userAuthDetection = userAuthDetection(requestUri, method);
+        if (userAuthDetection) {
+            //需要用户权限
+            IJWTInfo user = null;
+            try {
+                user = getJWTUser(request, ctx);
+            } catch (Exception e) {
+                setFailedRequest(JSON.toJSONString(e.getMessage()), 200);
+                return null;
+            }
+        }
+        boolean adminAuthDetection = adminAuthDetection(requestUri, method);
+        if (adminAuthDetection) {
+            //管理权限暂不开放
+            setFailedRequest(JSON.toJSONString("Wrong URL to access"), 200);
             return null;
         }
 
-        return  null;
+        // 申请客户端密钥头
+        //ctx.addZuulRequestHeader(serviceAuthConfig.getTokenHeader(), serviceAuthUtil.getClientToken());
+        return null;
     }
 
     /**
-     * 返回session中的用户信息
+     * 返回token中的用户信息
      *
      * @param request
      * @param ctx
@@ -62,29 +99,83 @@ public class AccessFilter extends ZuulFilter {
     private IJWTInfo getJWTUser(HttpServletRequest request, RequestContext ctx) throws Exception {
         String authToken = request.getHeader(userAuthConfig.getTokenHeader());
         if (StringUtils.isBlank(authToken)) {
-            return null;
+            authToken = request.getParameter("token");
         }
         ctx.addZuulRequestHeader(userAuthConfig.getTokenHeader(), authToken);
-        //return userAuthUtil.getInfoFromToken(authToken);
-        return null;
+        return userAuthUtil.getInfoFromToken(authToken);
     }
 
-
     /**
-     * URI是否以什么打头
+     * 是否需要用户权限才能访问
      *
-     * @param requestUri
+     * @param requestUrl
+     * @param method
      * @return
      */
-    private boolean isStartWith(String requestUri) {
+    private boolean userAuthDetection(String requestUrl, String method) {
         boolean flag = false;
-        for (String s : startWith.split(",")) {
-            if (requestUri.startsWith(s)) {
+        Map<String, PermissionInfo> userAllowUrl = authPermissionUrlUtil.getUserAllowUrl();
+        Set<PermissionInfo> userAntPatternAllowUrl = authPermissionUrlUtil.getUserAntPatternAllowUrl();
+        PermissionInfo userPermission = urlMatch(userAllowUrl, userAntPatternAllowUrl, requestUrl);
+        //进行用户权限检查
+        if (userPermission != null) {
+            HttpMethodEnum httpMethodEnum = userPermission.getMethod();
+            if (httpMethodEnum.matches(method)) {
+                //需要
                 return true;
             }
         }
         return flag;
     }
+
+    /**
+     * 是否需要管理权限才能访问
+     *
+     * @param requestUrl
+     * @param method
+     * @return
+     */
+    private boolean adminAuthDetection(String requestUrl, String method) {
+        boolean flag = false;
+        Map<String, PermissionInfo> adminAllowUrl = authPermissionUrlUtil.getAdminAllowUrl();
+        Set<PermissionInfo> antPatternAllowUrl = authPermissionUrlUtil.getAdminAntPatternAllowUrl();
+        //URL 匹配
+        PermissionInfo adminPermission = urlMatch(adminAllowUrl, antPatternAllowUrl, requestUrl);
+        //进行用户权限检查
+        if (adminPermission != null) {
+            HttpMethodEnum httpMethodEnum = adminPermission.getMethod();
+            if (httpMethodEnum.matches(method)) {
+                //需要
+                return true;
+            }
+        }
+        return flag;
+    }
+
+    /**
+     * 进行URL匹配
+     * @param allowUrls
+     * @param antUrls
+     * @param requestUrl
+     * @return
+     */
+    private PermissionInfo urlMatch(Map<String, PermissionInfo> allowUrls, Set<PermissionInfo> antUrls, String requestUrl) {
+        PermissionInfo permissionInfo = allowUrls.get(requestUrl);
+        if (permissionInfo != null) {
+            return permissionInfo;
+        } else {
+            //ant 匹配
+            Iterator<PermissionInfo> iterator= antUrls.iterator();
+            while (iterator.hasNext()) {
+               PermissionInfo info= iterator.next();
+                if (matcher.match(info.getUri(), requestUrl)) {
+                    return info;
+                }
+            }
+        }
+        return null;
+    }
+
 
     /**
      * 网关抛异常

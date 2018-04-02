@@ -1,4 +1,4 @@
-package xyz.sanshan.auth.common.util.jwt;
+package xyz.sanshan.auth.security.common.util.jwt;
 
 import java.io.Serializable;
 

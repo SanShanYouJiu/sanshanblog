@@ -14,7 +14,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api")
-public class PermissonRpcController {
+public class ApiRpcController {
 
   @Autowired
   private PermissionService permissionService;

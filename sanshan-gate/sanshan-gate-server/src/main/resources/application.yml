@@ -21,20 +21,19 @@ zuul:
   prefix: /api #为zuul设置一个公共的前缀
   routes:
     main:
+      prefix: /main
       path: /main/**
       serviceId: sanshan-main
 
     search:
+      prefix: /search
       path: /search/**
       serviceId: sanshan-search
 
     auth:
+      prefix: /auth
       path: /auth/**
       serviceId: sanshan-auth
-
-gate:
-  ignore:
-    startWith: /auth/jwt
 
 
 eureka:
@@ -44,3 +43,11 @@ eureka:
       defaultZone: http://${EUREKA_HOST:localhost}:${EUREKA_PORT:8761}/eureka/
 
 
+auth:
+  serviceId: sanshan-auth
+  user:
+    token-header: Authorization
+  client:
+    token-header: client-token
+    id: sanshan-gate  #不填则默认读取spring.application.name
+    secret: 123456

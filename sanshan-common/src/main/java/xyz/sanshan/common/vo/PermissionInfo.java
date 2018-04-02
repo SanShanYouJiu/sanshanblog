@@ -44,4 +44,24 @@ public class PermissionInfo implements Serializable{
     public void setUri(String uri) {
         this.uri = uri;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof PermissionInfo)) return false;
+
+        PermissionInfo that = (PermissionInfo) o;
+
+        if (getUri() != null ? !getUri().equals(that.getUri()) : that.getUri() != null) return false;
+        if (getMethod() != that.getMethod()) return false;
+        return getName() != null ? getName().equals(that.getName()) : that.getName() == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = getUri() != null ? getUri().hashCode() : 0;
+        result = 31 * result + (getMethod() != null ? getMethod().hashCode() : 0);
+        result = 31 * result + (getName() != null ? getName().hashCode() : 0);
+        return result;
+    }
 }

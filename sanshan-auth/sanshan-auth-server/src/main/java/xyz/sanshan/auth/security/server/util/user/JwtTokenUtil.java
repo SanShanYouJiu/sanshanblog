@@ -5,7 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-import xyz.sanshan.auth.common.util.jwt.IJWTInfo;
+import xyz.sanshan.auth.security.common.util.jwt.IJWTInfo;
 import xyz.sanshan.main.api.vo.user.UserInfo;
 
 import java.io.Serializable;

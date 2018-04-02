@@ -3,7 +3,7 @@ package xyz.sanshan.auth.security.server.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import xyz.sanshan.auth.common.util.jwt.JWTInfo;
+import xyz.sanshan.auth.security.common.util.jwt.JWTInfo;
 import xyz.sanshan.auth.security.server.feign.IUserService;
 import xyz.sanshan.auth.security.server.util.user.JwtTokenUtil;
 import xyz.sanshan.common.vo.ResponseMsgVO;

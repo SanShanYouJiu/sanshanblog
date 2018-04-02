@@ -28,6 +28,7 @@ public class PermissionService {
         result.add(new PermissionInfo("/ueditor-editor/blog",HttpMethodEnum.ALL,""));
         result.add(new PermissionInfo("/ueditor-editor/blog/**",HttpMethodEnum.ALL,""));
         result.add(new PermissionInfo("/blog/id/**", HttpMethodEnum.DELETE, ""));
+        result.add(new PermissionInfo("/api/user-permissions", HttpMethodEnum.ALL, ""));
         return result;
     }
 }

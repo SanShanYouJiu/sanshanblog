@@ -24,6 +24,7 @@ public class PermissionService {
         result.add(new PermissionInfo("/user-info/**", HttpMethodEnum.DELETE,""));
         result.add(new PermissionInfo("/ueditor-info/**", HttpMethodEnum.DELETE,""));
         result.add(new PermissionInfo("/markdown-info/**", HttpMethodEnum.DELETE,""));
+        result.add(new PermissionInfo("/api/admin-permissions", HttpMethodEnum.ALL,""));
         return result;
     }
 }

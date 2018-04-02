@@ -29,6 +29,9 @@ public enum HttpMethodEnum {
 
 
 	public boolean matches(String method) {
+		if (this==HttpMethodEnum.ALL){
+			return true;
+		}
 		return (this == resolve(method));
 	}
 

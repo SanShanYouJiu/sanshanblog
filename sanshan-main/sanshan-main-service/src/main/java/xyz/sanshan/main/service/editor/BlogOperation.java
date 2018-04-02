@@ -61,6 +61,12 @@ public class BlogOperation {
         return markDownBlogDO;
     }
 
+    //FIXME: 用户资源检测
+    public boolean userResourceAuthDetection(long id,String username){
+        return false;
+    }
+
+
     /**
      * markdown类型博客更新检测
      * @param markDownBlogDO

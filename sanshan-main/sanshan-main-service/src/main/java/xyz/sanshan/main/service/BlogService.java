@@ -195,6 +195,7 @@ public class BlogService {
 
 
     public void removeBlog(Long id,ResponseMsgVO responseMsgVO) {
+        //FIXME 删除检查 是不是该用户的博客
         EditorTypeEnum type = blogIdGenerate.getType(id);
         log.info("正在删除id为{}的博客",id);
         switch (type) {

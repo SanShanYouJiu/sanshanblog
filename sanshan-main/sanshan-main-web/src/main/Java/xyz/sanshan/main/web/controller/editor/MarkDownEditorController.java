@@ -1,20 +1,13 @@
 package xyz.sanshan.main.web.controller.editor;
 
-import com.github.pagehelper.PageInfo;
-import xyz.sanshan.main.pojo.dto.MarkDownBlogDTO;
-import xyz.sanshan.main.service.BlogService;
-import xyz.sanshan.main.service.editor.MarkDownBlogService;
-import xyz.sanshan.main.service.vo.BlogVO;
-import xyz.sanshan.common.vo.ResponseMsgVO;
-import xyz.sanshan.main.service.editor.BlogIdGenerate;
-import xyz.sanshan.common.info.EditorTypeEnum;
-import xyz.sanshan.common.info.PosCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import xyz.sanshan.common.info.EditorTypeEnum;
+import xyz.sanshan.common.info.PosCodeEnum;
+import xyz.sanshan.common.vo.ResponseMsgVO;
+import xyz.sanshan.main.service.editor.BlogIdGenerate;
+import xyz.sanshan.main.service.editor.MarkDownBlogService;
 
 @RequestMapping("markdown-editor")
 @RestController
@@ -25,33 +18,6 @@ public class MarkDownEditorController {
 
     @Autowired
     private BlogIdGenerate blogIdGenerate;
-
-    @Autowired
-    private BlogService blogService;
-
-    /**
-     * 分页查询
-     *
-     * @param pageNum
-     * @param pageRows
-     * @return
-     */
-    @GetMapping(value = "blog/page/pageRows:{pageRows}/pageNum:{pageNum}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO queryByPage(@PathVariable("pageNum") Integer pageNum
-            , @PathVariable("pageRows") Integer pageRows) {
-        PageInfo<MarkDownBlogDTO> info = markDownBlogService.queryDtoPageListByWhere(null, pageRows, pageNum);
-        ResponseMsgVO<PageInfo> responseMsgVO = new ResponseMsgVO<PageInfo>();
-        return responseMsgVO.buildOKWithData(info);
-    }
-
-
-    @GetMapping(value = "blog/all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO queryAll() {
-        ResponseMsgVO<List<BlogVO>> responseMsgVO = new ResponseMsgVO<>();
-        List<BlogVO> list;
-        list=blogService.queryAll().stream().filter(blogVO -> blogVO.getType()==1).collect(Collectors.toList());
-        return responseMsgVO.buildOKWithData(list);
-    }
 
 
     @PostMapping(value = "blog", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

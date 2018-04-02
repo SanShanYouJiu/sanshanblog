@@ -1,6 +1,5 @@
 package xyz.sanshan.main.service.editor;
 
-import com.github.pagehelper.PageInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,7 +15,6 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 @Service
 @Slf4j
@@ -30,36 +28,6 @@ public class UeditorBlogService {
 
     @Autowired
     private BlogOperation blogOperation;
-
-    /**
-     * DTO查询
-     *
-     * @return
-     */
-    public List<UeditorBlogDTO> queryDtoAll() {
-        return UeditorEditorConvert.doToDtoList(cacheService.queryAll());
-    }
-
-    /**
-     * DTO查询
-     * @param example 条件
-     * @return
-     */
-    public List<UeditorBlogDTO> queryDtoListByWhere(UeditorBlogDO example) {
-        return UeditorEditorConvert.doToDtoList(cacheService.queryListByWhere(example));
-    }
-
-    /**
-     * DTO查询
-     * @param example 条件
-     * @param page   页数
-     * @param rows    行数
-     * @return
-     */
-    public PageInfo<UeditorBlogDTO> queryDtoPageListByWhere(UeditorBlogDO example, Integer page, Integer rows){
-        PageInfo<UeditorBlogDO>  uEditorBlogDOPageInfo=cacheService.queryPageListByWhere(example, page, rows);
-        return UeditorEditorConvert.doToDtoPage(uEditorBlogDOPageInfo);
-    }
 
 
     /**
@@ -148,6 +116,8 @@ public class UeditorBlogService {
         //获得当前用户
         JwtUser user = (JwtUser) SecurityContextHolder.getContext().getAuthentication()
                 .getPrincipal();
+        //检查
+        blogOperation.baseDeleteCheck(id, user.getUsername());
         //id去除匹配
         Integer rows = cacheService.deleteById(id);
         if (rows==0){

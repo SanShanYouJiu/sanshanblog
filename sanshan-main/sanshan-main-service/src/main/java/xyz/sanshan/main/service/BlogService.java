@@ -2,6 +2,7 @@ package xyz.sanshan.main.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import xyz.sanshan.main.service.editor.BlogIdGenerate;
 import xyz.sanshan.common.PageInfo;
@@ -11,10 +12,12 @@ import xyz.sanshan.common.info.EditorTypeEnum;
 import xyz.sanshan.common.info.PosCodeEnum;
 import xyz.sanshan.main.pojo.dto.MarkDownBlogDTO;
 import xyz.sanshan.main.pojo.dto.UeditorBlogDTO;
+import xyz.sanshan.main.service.editor.BlogOperation;
 import xyz.sanshan.main.service.editor.MarkDownBlogService;
 import xyz.sanshan.main.service.editor.UeditorBlogService;
 import xyz.sanshan.main.service.vo.BlogVO;
 import xyz.sanshan.common.vo.ResponseMsgVO;
+import xyz.sanshan.main.service.vo.JwtUser;
 
 import java.util.*;
 
@@ -33,6 +36,9 @@ public class BlogService {
 
     @Autowired
     private BlogIdGenerate blogIdGenerate;
+
+    @Autowired
+    private BlogOperation blogOperation;
 
 
     public Long getCurrentId() {
@@ -195,7 +201,12 @@ public class BlogService {
 
 
     public void removeBlog(Long id,ResponseMsgVO responseMsgVO) {
-        //FIXME 删除检查 是不是该用户的博客
+        //获得当前用户
+        JwtUser user = (JwtUser) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        //权限检查
+        blogOperation.baseDeleteCheck(id, user.getUsername());
+
         EditorTypeEnum type = blogIdGenerate.getType(id);
         log.info("正在删除id为{}的博客",id);
         switch (type) {
@@ -222,20 +233,6 @@ public class BlogService {
         responseMsgVO.buildOK();
     }
 
-
-    public List<BlogVO> queryAll() {
-        List<BlogVO> blogs = new LinkedList<>();
-        Long maxId = blogIdGenerate.getExistMaxId();
-        for (long i = 0; i < maxId; i++) {
-            BlogVO blogVO = getBlog(i);
-            if (Objects.isNull(blogVO)) {
-                continue;
-            } else {
-                blogs.add(blogVO);
-            }
-        }
-        return blogs;
-    }
 
     public List<BlogVO> queryAllOfIdMap() {
         List<BlogVO> blogVOS = new LinkedList<>();

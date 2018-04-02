@@ -1,30 +1,23 @@
 package xyz.sanshan.main.web.controller.editor;
 
-import xyz.baidu.ueditor.ActionEnter;
-import com.github.pagehelper.PageHelper;
-import com.github.pagehelper.PageInfo;
-import xyz.sanshan.main.pojo.dto.UeditorBlogDTO;
-import xyz.sanshan.main.service.BlogService;
-import xyz.sanshan.main.service.editor.UeditorFileService;
-import xyz.sanshan.main.service.editor.UeditorBlogService;
-import xyz.sanshan.main.service.vo.BlogVO;
-import xyz.sanshan.common.vo.ResponseMsgVO;
-import xyz.sanshan.main.service.editor.BlogIdGenerate;
-import xyz.sanshan.common.info.EditorTypeEnum;
-import xyz.sanshan.common.info.PosCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import xyz.baidu.ueditor.ActionEnter;
+import xyz.sanshan.common.info.EditorTypeEnum;
+import xyz.sanshan.common.info.PosCodeEnum;
+import xyz.sanshan.common.vo.ResponseMsgVO;
+import xyz.sanshan.main.service.editor.BlogIdGenerate;
+import xyz.sanshan.main.service.editor.UeditorBlogService;
+import xyz.sanshan.main.service.editor.UeditorFileService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Slf4j
 @RestController
@@ -41,8 +34,6 @@ public class UeditorEditorController {
     @Autowired
     private BlogIdGenerate blogIdGenerate;
 
-    @Autowired
-    private BlogService blogService;
 
     @Value("${ueditor-config.location}")
     private String ueditorConfigLocation;
@@ -77,25 +68,6 @@ public class UeditorEditorController {
     //
     //}
 
-
-    @GetMapping(value = "blog/page/pageRows:{pageRows}/pageNum:{pageNum}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO queryByPage(@PathVariable("pageNum") Integer pageNum
-            , @PathVariable("pageRows") Integer pageRows) {
-        ResponseMsgVO<PageInfo<UeditorBlogDTO>> responseMsgVO = new ResponseMsgVO<>();
-        PageHelper.startPage(pageNum, pageRows);
-        List<UeditorBlogDTO> list = uEditorBlogService.queryDtoAll();
-        PageInfo<UeditorBlogDTO> info = new PageInfo(list);
-        return responseMsgVO.buildOKWithData(info);
-    }
-
-
-    @GetMapping(value = "blog/all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO queryAll() {
-        ResponseMsgVO<List<BlogVO>> responseMsgVO = new ResponseMsgVO<>();
-        List<BlogVO> list ;
-        list=blogService.queryAll().stream().filter(blogVO -> blogVO.getType()==0).collect(Collectors.toList());
-        return responseMsgVO.buildOKWithData(list);
-    }
 
 
     @PostMapping(value = "blog", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)

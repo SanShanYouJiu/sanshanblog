@@ -2,7 +2,9 @@ package xyz.sanshan.main.service.editor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import xyz.sanshan.common.exception.NotFoundPermissionException;
 import xyz.sanshan.common.exception.PropertyAccessException;
 import xyz.sanshan.common.info.EditorTypeEnum;
 import xyz.sanshan.main.pojo.dto.BaseBlogDTO;
@@ -11,10 +13,13 @@ import xyz.sanshan.main.pojo.dto.UeditorBlogDTO;
 import xyz.sanshan.main.pojo.entity.BaseBlogEditorDO;
 import xyz.sanshan.main.pojo.entity.MarkDownBlogDO;
 import xyz.sanshan.main.pojo.entity.UeditorBlogDO;
+import xyz.sanshan.main.service.BlogService;
 import xyz.sanshan.main.service.convent.MarkDownEditorConvert;
 import xyz.sanshan.main.service.convent.UeditorEditorConvert;
 import xyz.sanshan.main.service.search.ElasticSearchService;
 import xyz.sanshan.main.service.user.cache.UserBlogCacheService;
+import xyz.sanshan.main.service.vo.BlogVO;
+import xyz.sanshan.main.service.vo.JwtUser;
 import xyz.sanshan.main.service.vote.VoteService;
 
 import java.util.Date;
@@ -48,6 +53,9 @@ public class BlogOperation {
     private BlogIdGenerate blogIdGenerate;
 
     @Autowired
+    private BlogService blogService;
+
+    @Autowired
     private VoteService voteService;
 
 
@@ -57,13 +65,26 @@ public class BlogOperation {
      * @param markDownBlogDO
      */
     public MarkDownBlogDO markdownBlogAddCheck(MarkDownBlogDO markDownBlogDO) {
-        baseCheck(markDownBlogDO, markDownBlogDO.getId());
-        return markDownBlogDO;
+      if (baseCheck(markDownBlogDO, markDownBlogDO.getId())){
+          return markDownBlogDO;
+      }else {
+          return null;
+      }
     }
 
-    //FIXME: 用户资源检测
+    /**
+     * 用户资源检测
+     * @param id
+     * @param username
+     * @return
+     */
     public boolean userResourceAuthDetection(long id,String username){
-        return false;
+        BlogVO blogVO = blogService.getBlog(id);
+        if (username.equals(blogVO.getUser())){
+            return true;
+        }else {
+            return false;
+        }
     }
 
 
@@ -73,8 +94,11 @@ public class BlogOperation {
      * @return
      */
      public  MarkDownBlogDO markDownBlogUpdateCheck(MarkDownBlogDO markDownBlogDO){
-         baseUpdateCheck(markDownBlogDO);
-         return  markDownBlogDO;
+        if (baseUpdateCheck(markDownBlogDO,markDownBlogDO.getId())){
+            return  markDownBlogDO;
+        }else {
+            return null;
+        }
      }
 
     /**
@@ -84,16 +108,22 @@ public class BlogOperation {
      * @return
      */
     public UeditorBlogDO ueditorBlogAddCheck(UeditorBlogDO ueditorBlogDO) {
-        baseCheck(ueditorBlogDO, ueditorBlogDO.getId());
-        return ueditorBlogDO;
+        if (baseCheck(ueditorBlogDO, ueditorBlogDO.getId())){
+            return ueditorBlogDO;
+        }else {
+            return null;
+        }
     }
 
     /*
     ueditor 类型博客更新检测
      */
     public UeditorBlogDO ueditorBlogUpdateCheck(UeditorBlogDO ueditorBlogDO) {
-        baseUpdateCheck(ueditorBlogDO);
-        return ueditorBlogDO;
+        if (baseUpdateCheck(ueditorBlogDO,ueditorBlogDO.getId())){
+            return  ueditorBlogDO;
+        }else {
+            return null;
+        }
     }
 
     /**
@@ -224,7 +254,7 @@ public class BlogOperation {
      *
      * @param editorDO
      */
-    private void baseCheck(BaseBlogEditorDO editorDO, Long id) {
+    private boolean baseCheck(BaseBlogEditorDO editorDO, Long id) {
         String title = editorDO.getTitle().trim();
         editorDO.setTitle(title);
         String tag = editorDO.getTag().trim();
@@ -236,13 +266,23 @@ public class BlogOperation {
             blogIdGenerate.remove(id);
             throw new PropertyAccessException("在提交的博客中找不到title类型 博客id为:" + id);
         }
+        return true;
     }
 
     /**
      *默认所有更新的选项不能为空或者纯空格
      * @param editorDO
      */
-    private  void baseUpdateCheck(BaseBlogEditorDO editorDO){
+    private  boolean baseUpdateCheck(BaseBlogEditorDO editorDO,long id){
+        //获得当前用户
+        JwtUser user = (JwtUser) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        //用户资源检查
+        if (!userResourceAuthDetection(id,user.getUsername())){
+            log.warn("权限检查失败,id:{},username:{}",id,editorDO.getUser());
+            throw  new NotFoundPermissionException("权限检查失败,请查看你提供的资源参数是否正确");
+        }
+        editorDO.setUser(user.getUsername());
         String title = null;
         String tag = null;
         String content = null;
@@ -270,6 +310,16 @@ public class BlogOperation {
        if (content==null||content.equals("")){
            editorDO.setContent(null);
        }
+       return true;
+    }
+
+    public boolean baseDeleteCheck(long id,String username){
+        //用户资源检查
+        if (!userResourceAuthDetection(id,username)){
+            log.warn("权限检查失败,id:{},username:{}",id,username);
+            throw  new NotFoundPermissionException("权限检查失败,请查看你提供的资源参数是否正确");
+        }
+        return true;
     }
 
 

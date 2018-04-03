@@ -92,8 +92,11 @@ public class AdminIndexService {
         return userDTO;
     }
 
-    public Boolean changeUserInfo(String username,Map<String,String> mapList ){
+    public Boolean changeUserInfo(Map<String,String> mapList ){
         UserDO userDO ;
+        JwtUser user = (JwtUser) SecurityContextHolder.getContext().getAuthentication()
+                .getPrincipal();
+        String username =user.getUsername();
         userDO = userRepository.findByUsername(username);
         String avatar = mapList.get("avatar");
         String blogLink = mapList.get("blogLink");

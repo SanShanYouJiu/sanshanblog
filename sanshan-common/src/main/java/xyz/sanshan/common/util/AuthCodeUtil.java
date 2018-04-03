@@ -1,4 +1,4 @@
-package xyz.sanshan.common;
+package xyz.sanshan.common.util;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;

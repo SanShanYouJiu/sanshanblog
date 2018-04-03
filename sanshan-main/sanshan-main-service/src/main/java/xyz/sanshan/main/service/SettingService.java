@@ -1,6 +1,6 @@
 package xyz.sanshan.main.service;
 
-import xyz.sanshan.common.SystemUtil;
+import xyz.sanshan.common.util.SystemUtil;
 import xyz.sanshan.common.setting.Setting;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

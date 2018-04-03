@@ -11,6 +11,7 @@ import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
+import xyz.sanshan.auth.security.client.EnableSanShanAuthClient;
 import xyz.sanshan.main.web.config.webaseconfig.SpringSecuityFilter;
 import xyz.sanshan.main.web.config.webaseconfig.WebAppInitializer;
 
@@ -26,6 +27,7 @@ import xyz.sanshan.main.web.config.webaseconfig.WebAppInitializer;
 @EnableDiscoveryClient
 @EnableFeignClients({"xyz.sanshan.main.service.feign"})
 @EnableCircuitBreaker
+@EnableSanShanAuthClient
 public class MainBootstrap extends SpringBootServletInitializer {
 
     @Override

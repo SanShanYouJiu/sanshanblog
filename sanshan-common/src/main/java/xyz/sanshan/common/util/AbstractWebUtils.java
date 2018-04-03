@@ -1,4 +1,4 @@
-package xyz.sanshan.common;
+package xyz.sanshan.common.util;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;

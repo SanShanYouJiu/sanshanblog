@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("jwt")
 public class AuthController {
 
-    @Value("${jwt.tokenHead}")
+    @Value("${jwt.token-header}")
     private String tokenHeader;
 
     @Autowired

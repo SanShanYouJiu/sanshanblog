@@ -16,4 +16,10 @@ public interface IJWTInfo {
      */
     String getId();
 
+    /**
+     * 获取名称
+     * @return
+     */
+    String getName();
+
 }

@@ -15,7 +15,7 @@ public class AuthServiceImpl  implements AuthService{
     private JwtTokenUtil jwtTokenUtil;
     private IUserService userService;
 
-    @Value("${jwt.tokenHead}")
+    @Value("${jwt.token-header}")
     private String tokenHead;
 
     @Autowired
@@ -35,7 +35,7 @@ public class AuthServiceImpl  implements AuthService{
             return null;
         }
         String token = "";
-        token = jwtTokenUtil.generateToken(new JWTInfo(info.get_id(),info.getUsername()));
+        token = jwtTokenUtil.generateToken(new JWTInfo(info.getUsername(),info.get_id()));
         return token;
     }
 

@@ -69,7 +69,6 @@ public class AdminIndexController {
 
     @PostMapping(value = "/user-info", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO changeUserInfo(
-            @RequestParam(name = "username", required = true) String username,
             @RequestParam(name = "avatar", required = false) String avatar,
             @RequestParam(name = "blogLink", required = false) String blogLink
              ) {
@@ -79,7 +78,7 @@ public class AdminIndexController {
                 Map<String, String> mapList = new HashMap<>(5);
                 mapList.put("avatar", avatar);
                 mapList.put("blogLink", blogLink);
-                if (adminIndexService.changeUserInfo(username, mapList)){
+                if (adminIndexService.changeUserInfo(mapList)){
                     return   responseMsgVO.buildOK();
                 }
             }

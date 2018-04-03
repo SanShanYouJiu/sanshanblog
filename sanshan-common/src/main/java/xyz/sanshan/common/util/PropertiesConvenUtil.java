@@ -1,4 +1,4 @@
-package xyz.sanshan.common;
+package xyz.sanshan.common.util;
 
 import xyz.sanshan.common.exception.PropertiesConventException;
 import xyz.sanshan.common.info.EditorTypeEnum;

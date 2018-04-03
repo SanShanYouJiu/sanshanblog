@@ -39,7 +39,14 @@ eureka:
 #      defaultZone: http://localhost:8761/eureka/
       defaultZone: http://${EUREKA_HOST:localhost}:${EUREKA_PORT:8761}/eureka/
 
-
+auth:
+  serviceId: sanshan-auth
+  user:
+    token-header: Authorization
+  client:
+    token-header: client-token
+    id: sanshan-main  #不填则默认读取spring.application.name
+    secret: 123456
 
 
 

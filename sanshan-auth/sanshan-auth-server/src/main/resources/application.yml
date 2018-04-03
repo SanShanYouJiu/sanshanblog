@@ -1,9 +1,26 @@
 spring:
     application:
-        name: sanshan-auth
+      name: sanshan-auth
+    rabbitmq:
+      host: ${RABBIT_MQ_HOST:localhost}
+      port: ${RABBIT_MQ_PORT:5672}
+      username: guest
+      password: guest
+    zipkin:
+      enabled: true
+    sleuth:
+      sampler:
+        percentage: 1
 
 server:
     port: 8081 #启动端口
+
+feign:
+  httpclient:
+    enabled: false
+  okhttp:
+    enabled: true
+
 
 eureka:
     instance:
@@ -13,3 +30,8 @@ eureka:
        service-url:
 #            defaultZone: http://localhost:8761/eureka/
                 defaultZone: http://${EUREKA_HOST:localhost}:${EUREKA_PORT:8761}/eureka/
+
+jwt:
+  token-header: Authorization
+  secret: mysecret
+  expiration: 7200

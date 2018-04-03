@@ -32,7 +32,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 @Service
 @Slf4j
-public class BlogOperation {
+public class BlogResourcesOperation {
 
     private static final AtomicInteger POOL_NUMBER = new AtomicInteger(1);
     private ExecutorService pool = new ThreadPoolExecutor(1, 10, 3, TimeUnit.MINUTES, new SynchronousQueue<>(), (r) -> {

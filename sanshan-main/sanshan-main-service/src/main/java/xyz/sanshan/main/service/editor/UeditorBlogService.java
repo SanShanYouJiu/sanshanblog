@@ -27,7 +27,7 @@ public class UeditorBlogService {
     private   BlogIdGenerate blogIdGenerate;
 
     @Autowired
-    private BlogOperation blogOperation;
+    private BlogResourcesOperation blogOperation;
 
 
     /**

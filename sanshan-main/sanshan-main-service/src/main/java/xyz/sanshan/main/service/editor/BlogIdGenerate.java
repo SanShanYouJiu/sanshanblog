@@ -1,7 +1,7 @@
 package xyz.sanshan.main.service.editor;
 
 import xyz.sanshan.common.PageInfo;
-import xyz.sanshan.common.PropertiesConvenUtil;
+import xyz.sanshan.common.util.PropertiesConvenUtil;
 import xyz.sanshan.common.info.EditorTypeEnum;
 import lombok.extern.slf4j.Slf4j;
 

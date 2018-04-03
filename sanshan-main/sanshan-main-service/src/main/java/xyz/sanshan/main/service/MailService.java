@@ -1,6 +1,6 @@
 package xyz.sanshan.main.service;
 
-import xyz.sanshan.common.AuthCodeUtil;
+import xyz.sanshan.common.util.AuthCodeUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package xyz.sanshan.common;
+package xyz.sanshan.common.util;
 
 import com.alibaba.fastjson.JSON;
 import xyz.sanshan.common.setting.Setting;

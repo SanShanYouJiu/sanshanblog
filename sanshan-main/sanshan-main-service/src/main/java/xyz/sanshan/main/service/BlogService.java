@@ -12,7 +12,7 @@ import xyz.sanshan.common.info.EditorTypeEnum;
 import xyz.sanshan.common.info.PosCodeEnum;
 import xyz.sanshan.main.pojo.dto.MarkDownBlogDTO;
 import xyz.sanshan.main.pojo.dto.UeditorBlogDTO;
-import xyz.sanshan.main.service.editor.BlogOperation;
+import xyz.sanshan.main.service.editor.BlogResourcesOperation;
 import xyz.sanshan.main.service.editor.MarkDownBlogService;
 import xyz.sanshan.main.service.editor.UeditorBlogService;
 import xyz.sanshan.main.service.vo.BlogVO;
@@ -38,7 +38,7 @@ public class BlogService {
     private BlogIdGenerate blogIdGenerate;
 
     @Autowired
-    private BlogOperation blogOperation;
+    private BlogResourcesOperation blogOperation;
 
 
     public Long getCurrentId() {

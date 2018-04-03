@@ -21,6 +21,11 @@ public class JWTInfo implements Serializable,IJWTInfo {
 
     @Override
     public String getId() {
+        return userId;
+    }
+
+    @Override
+    public String getName() {
         return null;
     }
 

@@ -26,7 +26,7 @@ public class MarkDownBlogService {
     private  BlogIdGenerate blogIdGenerate;
 
     @Autowired
-    private BlogOperation blogOperation;
+    private BlogResourcesOperation blogOperation;
 
 
 

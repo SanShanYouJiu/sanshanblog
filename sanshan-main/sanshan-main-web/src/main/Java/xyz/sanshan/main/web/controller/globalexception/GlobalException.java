@@ -1,7 +1,7 @@
 package xyz.sanshan.main.web.controller.globalexception;
 
 import xyz.sanshan.common.vo.ResponseMsgVO;
-import xyz.sanshan.common.AbstractWebUtils;
+import xyz.sanshan.common.util.AbstractWebUtils;
 import xyz.sanshan.common.exception.IdMapWriteException;
 import xyz.sanshan.common.info.PosCodeEnum;
 import org.apache.commons.lang3.StringUtils;

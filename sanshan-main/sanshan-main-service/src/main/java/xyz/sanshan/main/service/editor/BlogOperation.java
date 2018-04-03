@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import xyz.sanshan.common.exception.NotFoundPermissionException;
 import xyz.sanshan.common.exception.PropertyAccessException;
 import xyz.sanshan.common.info.EditorTypeEnum;
+import xyz.sanshan.common.info.PosCodeEnum;
 import xyz.sanshan.main.pojo.dto.BaseBlogDTO;
 import xyz.sanshan.main.pojo.dto.MarkDownBlogDTO;
 import xyz.sanshan.main.pojo.dto.UeditorBlogDTO;
@@ -280,7 +281,7 @@ public class BlogOperation {
         //用户资源检查
         if (!userResourceAuthDetection(id,user.getUsername())){
             log.warn("权限检查失败,id:{},username:{}",id,editorDO.getUser());
-            throw  new NotFoundPermissionException("权限检查失败,请查看你提供的资源参数是否正确");
+            throw  new NotFoundPermissionException("权限检查失败,请查看你提供的资源参数是否正确", PosCodeEnum.PARAM_ERROR.getStatus());
         }
         editorDO.setUser(user.getUsername());
         String title = null;
@@ -317,7 +318,7 @@ public class BlogOperation {
         //用户资源检查
         if (!userResourceAuthDetection(id,username)){
             log.warn("权限检查失败,id:{},username:{}",id,username);
-            throw  new NotFoundPermissionException("权限检查失败,请查看你提供的资源参数是否正确");
+            throw  new NotFoundPermissionException("权限检查失败,请查看你提供的资源参数是否正确",PosCodeEnum.PARAM_ERROR.getStatus());
         }
         return true;
     }

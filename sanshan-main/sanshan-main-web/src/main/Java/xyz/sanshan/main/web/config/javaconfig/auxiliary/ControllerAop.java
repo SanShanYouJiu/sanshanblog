@@ -71,10 +71,7 @@ public class ControllerAop {
         // 已知异常
         if (e instanceof CheckException) {
             result.setMsg(e.getLocalizedMessage());
-            result.setStatus(PosCodeEnum.INTER_ERROR.getStatus());
-        //} else if (e instanceof UnloginException) {
-            //result.setMsg("Unlogin");
-            //result.setCode(ResultBean.NO_LOGIN);
+            result.setStatus(((CheckException) e).getStatus());
         } else {
             log.error(pjp.getSignature() + " error ", e);
             //TODO 未知的异常，应该格外注意，可以发送邮件通知等 生产环境关闭

@@ -2,22 +2,21 @@ package xyz.sanshan.main.service;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import xyz.sanshan.main.service.editor.BlogIdGenerate;
 import xyz.sanshan.common.PageInfo;
+import xyz.sanshan.common.UserContextHandler;
 import xyz.sanshan.common.exception.MapFoundNullException;
 import xyz.sanshan.common.exception.NotFoundBlogException;
 import xyz.sanshan.common.info.EditorTypeEnum;
 import xyz.sanshan.common.info.PosCodeEnum;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.main.pojo.dto.MarkDownBlogDTO;
 import xyz.sanshan.main.pojo.dto.UeditorBlogDTO;
+import xyz.sanshan.main.service.editor.BlogIdGenerate;
 import xyz.sanshan.main.service.editor.BlogResourcesOperation;
 import xyz.sanshan.main.service.editor.MarkDownBlogService;
 import xyz.sanshan.main.service.editor.UeditorBlogService;
 import xyz.sanshan.main.service.vo.BlogVO;
-import xyz.sanshan.common.vo.ResponseMsgVO;
-import xyz.sanshan.main.service.vo.JwtUser;
 
 import java.util.*;
 
@@ -202,10 +201,9 @@ public class BlogService {
 
     public void removeBlog(Long id,ResponseMsgVO responseMsgVO) {
         //获得当前用户
-        JwtUser user = (JwtUser) SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal();
+        String username= UserContextHandler.getUsername();
         //权限检查
-        blogOperation.baseDeleteCheck(id, user.getUsername());
+        blogOperation.baseDeleteCheck(id, username);
 
         EditorTypeEnum type = blogIdGenerate.getType(id);
         log.info("正在删除id为{}的博客",id);

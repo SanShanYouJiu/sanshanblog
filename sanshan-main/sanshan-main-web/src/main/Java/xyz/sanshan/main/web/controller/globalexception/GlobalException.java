@@ -32,7 +32,6 @@ public class GlobalException {
     }
 
 
-    //TODO 拦住exception不是一个好选择
     @ExceptionHandler(Exception.class)
     @ResponseStatus(HttpStatus.OK)
     public Object exceptionHandler(HttpServletRequest request, HttpServletResponse response, Exception ex) throws ServletException, IOException {

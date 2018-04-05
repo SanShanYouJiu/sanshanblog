@@ -3,10 +3,8 @@ package xyz.sanshan.auth.security.server.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.*;
 import xyz.sanshan.auth.security.server.service.AuthService;
 import xyz.sanshan.auth.security.server.util.user.JwtAuthenticationRequest;
 import xyz.sanshan.auth.security.server.util.user.JwtAuthenticationResponse;
@@ -27,13 +25,13 @@ public class AuthController {
     private AuthService authService;
 
     @Autowired
-    private RedisTemplate redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
 
-    @RequestMapping(value = "token", method = RequestMethod.POST)
-    public ResponseMsgVO createAuthenticationToken(
-            @RequestBody JwtAuthenticationRequest authenticationRequest) throws Exception {
+    @PostMapping(value = "token",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO createAuthenticationToken( JwtAuthenticationRequest authenticationRequest) throws Exception {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
-        String codeValue = (String) redisTemplate.opsForValue().get(ConstanceCacheKey.CODE_ID_PREFIX + authenticationRequest.getCodeid());
+        String codeKey =ConstanceCacheKey.CODE_ID_PREFIX+authenticationRequest.getCodeid();
+        String codeValue = (String) redisTemplate.opsForValue().get(codeKey);
         if (!authenticationRequest.getCode().equalsIgnoreCase(codeValue)) {
            //验证码错误
             return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "验证码错误");
@@ -46,16 +44,16 @@ public class AuthController {
         return responseMsgVO.buildOKWithData(new JwtAuthenticationResponse(token));
     }
 
-    @RequestMapping(value = "refresh", method = RequestMethod.GET)
+    @GetMapping(value = "refresh",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO refreshAndGetAuthenticationToken(
             HttpServletRequest request) {
-        ResponseMsgVO<xyz.sanshan.common.JwtAuthenticationResponse> msgVO = new ResponseMsgVO<>();
+        ResponseMsgVO<JwtAuthenticationResponse> msgVO = new ResponseMsgVO<>();
         String token = request.getHeader(tokenHeader);
         String refreshedToken = authService.refresh(token);
         if (refreshedToken == null) {
             return msgVO.buildWithMsgAndStatus(PosCodeEnum.NO_PRIVILEGE, "没有权限操作");
         } else {
-            return msgVO.buildOKWithData(new xyz.sanshan.common.JwtAuthenticationResponse(refreshedToken));
+            return msgVO.buildOKWithData(new JwtAuthenticationResponse(refreshedToken));
         }
     }
 }

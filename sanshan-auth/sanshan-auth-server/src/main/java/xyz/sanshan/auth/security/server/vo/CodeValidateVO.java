@@ -1,4 +1,4 @@
-package xyz.sanshan.main.service.vo;
+package xyz.sanshan.auth.security.server.vo;
 
 import lombok.Data;
 import lombok.ToString;

@@ -1,14 +1,14 @@
-package xyz.sanshan.main.web.controller.auth;
+package xyz.sanshan.auth.security.server.controller;
 
 import com.google.code.kaptcha.Producer;
-import xyz.sanshan.common.info.ConstanceCacheKey;
-import xyz.sanshan.main.service.vo.CodeValidateVO;
-import xyz.sanshan.common.vo.ResponseMsgVO;
 import com.sun.org.apache.xerces.internal.impl.dv.util.Base64;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import xyz.sanshan.auth.security.server.vo.CodeValidateVO;
+import xyz.sanshan.common.info.ConstanceCacheKey;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 
 import javax.imageio.ImageIO;
 import javax.servlet.http.HttpServletResponse;

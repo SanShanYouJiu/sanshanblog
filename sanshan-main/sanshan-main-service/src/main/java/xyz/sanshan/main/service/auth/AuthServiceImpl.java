@@ -1,30 +1,22 @@
 package xyz.sanshan.main.service.auth;
 
+import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+import xyz.sanshan.common.info.PosCodeEnum;
+import xyz.sanshan.common.setting.Setting;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.main.api.vo.user.UserInfo;
 import xyz.sanshan.main.dao.mongo.UserRepository;
 import xyz.sanshan.main.pojo.dto.UserDTO;
 import xyz.sanshan.main.pojo.entity.UserDO;
-import xyz.sanshan.main.service.vo.JwtUser;
 import xyz.sanshan.main.service.SettingService;
 import xyz.sanshan.main.service.convent.UserConvert;
 import xyz.sanshan.main.service.search.ElasticSearchService;
-import xyz.sanshan.common.vo.ResponseMsgVO;
-import xyz.sanshan.common.info.PosCodeEnum;
-import xyz.sanshan.common.setting.Setting;
-import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
 
 import java.util.Date;
 
@@ -34,9 +26,6 @@ import static java.util.Arrays.asList;
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    private AuthenticationManager authenticationManager;
-    private UserDetailsService userDetailsService;
-    private JwtTokenUtil jwtTokenUtil;
     private UserRepository userRepository;
 
     @Value("${jwt.tokenHead}")
@@ -51,13 +40,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Autowired
     public AuthServiceImpl(
-            AuthenticationManager authenticationManager,
-            UserDetailsService userDetailsService,
-            JwtTokenUtil jwtTokenUtil,
             UserRepository userRepository) {
-        this.authenticationManager = authenticationManager;
-        this.userDetailsService = userDetailsService;
-        this.jwtTokenUtil = jwtTokenUtil;
         this.userRepository = userRepository;
     }
 
@@ -121,38 +104,6 @@ public class AuthServiceImpl implements AuthService {
 
 
 
-    @Override
-    public String login(String username, String password) {
-        UsernamePasswordAuthenticationToken upToken = new UsernamePasswordAuthenticationToken(username, password);
-        // 执行安全检测
-        final Authentication authentication;
-        final String token;
-        try {
-            authentication = authenticationManager.authenticate(upToken);
-        } catch (BadCredentialsException e) {
-            token=null;
-            return token;
-        }
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        // Reload password post-security so we can generate token
-        //重新加载 生成token
-        log.info("用户{}登录", username);
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-         token = jwtTokenUtil.generateToken(userDetails);
-        return token;
-    }
-
-    @Override
-    public String refresh(String oldToken) {
-        final String token = oldToken.substring(tokenHead.length());
-        String username = jwtTokenUtil.getUsernameFromToken(token);
-        JwtUser user = (JwtUser) userDetailsService.loadUserByUsername(username);
-        if (jwtTokenUtil.canTokenBeRefreshed(token, user.getLastPasswordResetDate())) {
-            return jwtTokenUtil.refreshToken(token);
-        }
-        return null;
-    }
 
     public UserInfo validate(String username,String password){
         UserInfo info =null;

@@ -6,6 +6,15 @@ spring:
       port: ${RABBIT_MQ_PORT:5672}
       username: guest
       password: guest
+    jackson:
+      date-format: yyyy-MM-dd HH:mm:ss
+      time-zone: GMT+8
+      default-property-inclusion: non_null
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      pool:
+        max-active: 20
     zipkin:
       enabled: true
     sleuth:
@@ -14,12 +23,6 @@ spring:
 
 server:
     port: 8081 #启动端口
-
-feign:
-  httpclient:
-    enabled: false
-  okhttp:
-    enabled: true
 
 
 eureka:
@@ -31,7 +34,28 @@ eureka:
 #            defaultZone: http://localhost:8761/eureka/
                 defaultZone: http://${EUREKA_HOST:localhost}:${EUREKA_PORT:8761}/eureka/
 
+hystrix:
+  command:
+    default:
+      execution:
+        timeout:
+          enabled: false
+        isolation:
+          thread:
+            timeoutInMilliseconds: 5000
+      circuitBreaker:
+        enabled: true
+        requestVolumeThreshold: 3
+
 jwt:
   token-header: Authorization
-  secret: mysecret
+  rsa-secret: c@vbb0}1s{alg3{
   expiration: 7200
+
+
+client:
+  id: sanshan-auth
+  secret: 123456
+  token-header: client-token
+  expire: 3600
+  rsa-secret:  23g2@167{ds5

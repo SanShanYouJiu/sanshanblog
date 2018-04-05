@@ -1,24 +1,20 @@
 package xyz.sanshan.main.service.user;
 
 import com.mongodb.WriteResult;
-import xyz.sanshan.main.dao.mongo.UserRepository;
-import xyz.sanshan.main.pojo.entity.UserDO;
-import xyz.sanshan.main.service.MailService;
-import xyz.sanshan.main.service.auth.JwtTokenUtil;
-import xyz.sanshan.main.service.vo.JwtUser;
-import xyz.sanshan.common.vo.ResponseMsgVO;
-import xyz.sanshan.common.JwtAuthenticationResponse;
-import xyz.sanshan.common.info.CodeTypeEnum;
-import xyz.sanshan.common.info.PosCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import xyz.sanshan.common.JwtAuthenticationResponse;
+import xyz.sanshan.common.UserContextHandler;
+import xyz.sanshan.common.info.CodeTypeEnum;
+import xyz.sanshan.common.info.PosCodeEnum;
+import xyz.sanshan.common.vo.ResponseMsgVO;
+import xyz.sanshan.main.dao.mongo.UserRepository;
+import xyz.sanshan.main.pojo.entity.UserDO;
+import xyz.sanshan.main.service.MailService;
 
 import java.util.Objects;
 import java.util.Random;
@@ -42,11 +38,7 @@ public class UserService {
     @Autowired
     private MailService mailService;
 
-    @Autowired
-    private UserDetailsService userDetailsService;
 
-    @Autowired
-    private JwtTokenUtil jwtTokenUtil;
 
     private static  final  Integer PASSWORD_MIN_LENGTH=6;
     private static  final  Integer PASSWORD_MAX_LENGTH=30;
@@ -66,9 +58,10 @@ public class UserService {
      * @param responseMsgVO
      */
     public void changePwd(String code, String password, ResponseMsgVO responseMsgVO) {
-        JwtUser jwtUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username=  UserContextHandler.getUsername();
 
-        UserDO userDO = userRepository.findByUsername(jwtUser.getUsername());
+
+        UserDO userDO = userRepository.findByUsername(username);
         log.info("用户:{}更改密码",userDO.getUsername());
         String key = CODE_PREFIX + CodeTypeEnum.CHANGE_PWD.getValue() + userDO.getEmail();
         String value = redisTemplate.opsForValue().get(key);
@@ -83,7 +76,7 @@ public class UserService {
 
         // 更新到mongo数据库
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        WriteResult result = userRepository.changePassword(jwtUser.getUsername(), passwordEncoder.encode(password));
+        WriteResult result = userRepository.changePassword(username, passwordEncoder.encode(password));
         if (result.getN() == 0) {
             responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "更新失败");
             return;
@@ -179,8 +172,9 @@ public class UserService {
             userRepository.changePassword(userDO.getUsername(), tempPwd);
 
             //为当前用户产生token
-            final UserDetails userDetails = userDetailsService.loadUserByUsername(userDO.getUsername());
-            final String loginToken = jwtTokenUtil.generateToken(userDetails);
+            //final UserDetails userDetails = userDetailsService.loadUserByUsername(userDO.getUsername());
+            //FIXME: 忘记密码功能
+            final String loginToken = "no have";
             JwtAuthenticationResponse response = new JwtAuthenticationResponse(loginToken);
             responseMsgVO.buildOKWithData(response);
             return;
@@ -253,9 +247,9 @@ public class UserService {
      * 注册后的邮箱认证
      */
     public void checkRegisterEmailToken(String token, ResponseMsgVO responseMsgVO) {
-        JwtUser jwtUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        String username=  UserContextHandler.getUsername();
 
-        UserDO userDO = userRepository.findByUsername(jwtUser.getUsername());
+        UserDO userDO = userRepository.findByUsername(username);
         String email = redisTemplate.opsForValue().get(token);
         if (StringUtils.isEmpty(email)) {
             responseMsgVO.buildWithPosCode(PosCodeEnum.URL_ERROR);

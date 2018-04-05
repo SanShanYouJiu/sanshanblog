@@ -13,6 +13,7 @@ import xyz.sanshan.auth.security.client.config.ServiceAuthConfig;
 import xyz.sanshan.auth.security.client.config.UserAuthConfig;
 import xyz.sanshan.auth.security.client.jwt.UserAuthUtil;
 import xyz.sanshan.auth.security.common.util.jwt.IJWTInfo;
+import xyz.sanshan.common.UserContextHandler;
 import xyz.sanshan.common.info.HttpMethodEnum;
 import xyz.sanshan.common.vo.PermissionInfo;
 import xyz.sanshan.gate.server.auth.AuthPermissionUrlUtil;
@@ -66,6 +67,10 @@ public class AccessFilter extends ZuulFilter {
         HttpServletRequest request = ctx.getRequest();
         final String requestUri = request.getRequestURI().substring(zuulPrefix.length());
         final String method = request.getMethod();
+        UserContextHandler.setToken(null);
+
+        //拦截地址过滤
+        //TODO: 2018:4:4  将分散在各个子系统的资源权限集中到这里进行审核 RBAC模型
         boolean userAuthDetection = userAuthDetection(requestUri, method);
         if (userAuthDetection) {
             //需要用户权限
@@ -102,6 +107,7 @@ public class AccessFilter extends ZuulFilter {
             authToken = request.getParameter("token");
         }
         ctx.addZuulRequestHeader(userAuthConfig.getTokenHeader(), authToken);
+        UserContextHandler.setToken(authToken);
         return userAuthUtil.getInfoFromToken(authToken);
     }
 

@@ -3,23 +3,22 @@ package xyz.sanshan.main.service;
 import com.mongodb.WriteResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import xyz.sanshan.main.service.editor.BlogIdGenerate;
+import xyz.sanshan.common.UserContextHandler;
 import xyz.sanshan.common.exception.NotFoundBlogException;
 import xyz.sanshan.common.info.EditorTypeEnum;
 import xyz.sanshan.common.info.PosCodeEnum;
+import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.main.dao.mongo.UserRepository;
 import xyz.sanshan.main.pojo.dto.UserDTO;
 import xyz.sanshan.main.pojo.entity.UserDO;
+import xyz.sanshan.main.service.convent.UserConvert;
+import xyz.sanshan.main.service.editor.BlogIdGenerate;
 import xyz.sanshan.main.service.editor.MarkDownBlogService;
 import xyz.sanshan.main.service.editor.UeditorBlogService;
+import xyz.sanshan.main.service.search.ElasticSearchService;
 import xyz.sanshan.main.service.user.info.UserInfoService;
 import xyz.sanshan.main.service.vo.BlogVO;
-import xyz.sanshan.main.service.vo.JwtUser;
-import xyz.sanshan.common.vo.ResponseMsgVO;
-import xyz.sanshan.main.service.convent.UserConvert;
-import xyz.sanshan.main.service.search.ElasticSearchService;
 
 import java.util.Collections;
 import java.util.List;
@@ -52,8 +51,8 @@ public class AdminIndexService {
     private ElasticSearchService elasticSearchService;
 
     public List<BlogVO> queryAllBlog() {
-        JwtUser jwtUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        List<BlogVO> list = userInfoService.getUserBlogs(jwtUser.getUsername());
+        String username= UserContextHandler.getUsername();
+        List<BlogVO> list = userInfoService.getUserBlogs(username);
         Collections.sort(list,(o1,o2)->{
             if (o1.getId()>o2.getId()){
                 return -1;
@@ -71,32 +70,30 @@ public class AdminIndexService {
 
     public List<BlogVO> queryMarkdownBlogAll() {
         List<BlogVO> list;
-            JwtUser jwtUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            list = userInfoService.getUserBlogs(jwtUser.getUsername());
+         String username=  UserContextHandler.getUsername();
+            list = userInfoService.getUserBlogs(username);
            return list.stream().filter((blogVO) -> blogVO.getType() == 1).collect(Collectors.toList());
     }
 
 
     public List<BlogVO> queryUEditorBlogAll() {
         List<BlogVO> list;
-            JwtUser jwtUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-            list = userInfoService.getUserBlogs(jwtUser.getUsername());
+        String username=  UserContextHandler.getUsername();
+            list = userInfoService.getUserBlogs(username);
             return list.stream().filter((blogVO) -> blogVO.getType() == 0).collect(Collectors.toList());
     }
 
 
     public UserDTO getUserInfo() {
-        JwtUser jwtUser = (JwtUser) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        UserDO userDO = userRepository.findByUsername(jwtUser.getUsername());
+        String username=  UserContextHandler.getUsername();
+        UserDO userDO = userRepository.findByUsername(username);
         UserDTO userDTO = UserConvert.doToDto(userDO);
         return userDTO;
     }
 
     public Boolean changeUserInfo(Map<String,String> mapList ){
         UserDO userDO ;
-        JwtUser user = (JwtUser) SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal();
-        String username =user.getUsername();
+        String username=  UserContextHandler.getUsername();
         userDO = userRepository.findByUsername(username);
         String avatar = mapList.get("avatar");
         String blogLink = mapList.get("blogLink");

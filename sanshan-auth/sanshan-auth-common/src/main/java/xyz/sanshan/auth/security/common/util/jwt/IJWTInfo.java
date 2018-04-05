@@ -1,7 +1,8 @@
 package xyz.sanshan.auth.security.common.util.jwt;
 
+import java.util.Date;
+
 /**
- * Created by ace on 2017/9/10.
  */
 public interface IJWTInfo {
     /**
@@ -21,5 +22,10 @@ public interface IJWTInfo {
      * @return
      */
     String getName();
+
+    /**
+     * 获取创建时间
+     */
+    Date getCreated();
 
 }

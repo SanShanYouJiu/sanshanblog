@@ -9,10 +9,6 @@ public interface AuthService {
 
     boolean usernameIsDisabled(String username);
 
-    String login(String username, String password);
-
-    String refresh(String oldToken);
-
     public UserInfo validate(String username, String password);
 }
 

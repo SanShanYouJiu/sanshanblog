@@ -9,6 +9,8 @@ import xyz.sanshan.auth.security.server.util.user.JwtTokenUtil;
 import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.main.api.vo.user.UserInfo;
 
+import java.util.Date;
+
 @Service
 public class AuthServiceImpl  implements AuthService{
 
@@ -29,13 +31,13 @@ public class AuthServiceImpl  implements AuthService{
 
     @Override
     public String login(String username, String password) throws Exception {
-        ResponseMsgVO<UserInfo> msgVO = userService.validate(username, password);
+        ResponseMsgVO<UserInfo> msgVO = userService.validate(username,password);
         UserInfo info = msgVO.getData();
         if (info == null) {
             return null;
         }
         String token = "";
-        token = jwtTokenUtil.generateToken(new JWTInfo(info.getUsername(),info.get_id()));
+        token = jwtTokenUtil.generateToken(new JWTInfo(info.getUsername(),info.get_id(),new Date()));
         return token;
     }
 

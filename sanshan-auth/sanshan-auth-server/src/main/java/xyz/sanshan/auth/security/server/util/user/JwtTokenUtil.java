@@ -1,125 +1,28 @@
 package xyz.sanshan.auth.security.server.util.user;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import xyz.sanshan.auth.security.common.util.jwt.IJWTInfo;
-import xyz.sanshan.main.api.vo.user.UserInfo;
-
-import java.io.Serializable;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import xyz.sanshan.auth.security.common.util.jwt.JWTHelper;
+import xyz.sanshan.auth.security.server.config.KeyConfiguration;
 
 @Component
-public class JwtTokenUtil implements Serializable {
-
-
-    private static final long serialVersionUID = 5147131089330923881L;
-    private static final String CLAIM_KEY_USERNAME = "sub";
-    private static final String CLAIM_KEY_CREATED = "created";
-
-    @Value("${jwt.secret}")
-    private String secret;
+public class JwtTokenUtil {
 
     @Value("${jwt.expiration}")
-    private Long expiration;
+    private int expiration;
+    @Autowired
+    private KeyConfiguration keyConfiguration;
 
-    public String getUsernameFromToken(String token) {
-        String username;
-        try {
-            final Claims claims = getClaimsFromToken(token);
-            username = claims.getSubject();
-        } catch (Exception e) {
-            username = null;
-        }
-        return username;
+
+    public String generateToken(IJWTInfo jwtInfo) throws Exception {
+        return JWTHelper.generateToken(jwtInfo, keyConfiguration.getUserPriKey(),expiration);
     }
 
-    public Date getCreatedDateFromToken(String token) {
-        Date created;
-        try {
-            final Claims claims = getClaimsFromToken(token);
-            created = new Date((Long) claims.get(CLAIM_KEY_CREATED));
-        } catch (Exception e) {
-            created = null;
-        }
-        return created;
+    public IJWTInfo getInfoFromToken(String token) throws Exception {
+        return JWTHelper.getInfoFromToken(token, keyConfiguration.getUserPubKey());
     }
 
-    public Date getExpirationDateFromToken(String token) {
-        Date expiration;
-        try {
-            final Claims claims = getClaimsFromToken(token);
-            expiration = claims.getExpiration();
-        } catch (Exception e) {
-            expiration = null;
-        }
-        return expiration;
-    }
 
-    private Claims getClaimsFromToken(String token) {
-        Claims claims;
-        try {
-            claims = Jwts.parser()
-                    .setSigningKey(secret)
-                    .parseClaimsJws(token)
-                    .getBody();
-        } catch (Exception e) {
-            claims = null;
-        }
-        return claims;
-    }
-
-    private Date generateExpirationDate() {
-        return new Date(System.currentTimeMillis() + expiration * 1000);
-    }
-
-    private Boolean isTokenExpired(String token) {
-        final Date expiration = getExpirationDateFromToken(token);
-        return expiration.before(new Date());
-    }
-
-    private Boolean isCreatedBeforeLastPasswordReset(Date created, Date lastPasswordReset) {
-        return (lastPasswordReset != null && created.before(lastPasswordReset));
-    }
-
-    public String generateToken(IJWTInfo info) {
-        Map<String, Object> claims = new HashMap<String,Object>();
-        claims.put(CLAIM_KEY_USERNAME, info.getUsername());
-        claims.put(CLAIM_KEY_CREATED, new Date());
-        return generateToken(claims);
-    }
-
-   private String generateToken(Map<String, Object> claims) {
-        return Jwts.builder()
-                .setClaims(claims)
-                .setExpiration(generateExpirationDate())
-                .signWith(SignatureAlgorithm.HS512, secret)
-                .compact();
-    }
-
-    public Boolean canTokenBeRefreshed(String token, Date lastPasswordReset) {
-        final Date created = getCreatedDateFromToken(token);
-        return !isCreatedBeforeLastPasswordReset(created, lastPasswordReset)
-                && !isTokenExpired(token);
-    }
-
-    public String refreshToken(String token) {
-        String refreshedToken = null;
-       //未完成
-        return refreshedToken;
-    }
-
-    public Boolean validateToken(String token, UserInfo user) {
-        final String username = getUsernameFromToken(token);
-        final Date created = getCreatedDateFromToken(token);
-        //final Date expiration = getExpirationDateFromToken(token);
-        return (
-                username.equals(user.getUsername())
-                        && !isTokenExpired(token)
-                        && !isCreatedBeforeLastPasswordReset(created, user.getLastPasswordResetDate()));
-    }
 }

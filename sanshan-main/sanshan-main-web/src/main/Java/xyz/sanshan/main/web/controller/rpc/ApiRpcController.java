@@ -30,7 +30,7 @@ public class ApiRpcController {
     }
 
   @PostMapping(value = "/user/validate",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-  public  ResponseMsgVO<UserInfo> userValidate(@RequestParam(name = "username")String username, @RequestParam("password")String password){
+ public ResponseMsgVO<UserInfo> validate(@RequestParam("username") String username, @RequestParam("password") String password){
     ResponseMsgVO responseMsgVO = new ResponseMsgVO();
     UserInfo userInfo = authService.validate(username, password);
     if (userInfo!=null){

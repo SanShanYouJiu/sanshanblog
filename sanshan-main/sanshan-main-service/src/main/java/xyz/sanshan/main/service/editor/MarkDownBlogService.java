@@ -2,14 +2,13 @@ package xyz.sanshan.main.service.editor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import xyz.sanshan.common.UserContextHandler;
 import xyz.sanshan.common.info.EditorTypeEnum;
 import xyz.sanshan.main.pojo.dto.MarkDownBlogDTO;
 import xyz.sanshan.main.pojo.entity.MarkDownBlogDO;
 import xyz.sanshan.main.service.convent.MarkDownEditorConvert;
 import xyz.sanshan.main.service.editor.cacheservice.MarkDownBlogCacheService;
-import xyz.sanshan.main.service.vo.JwtUser;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -66,9 +65,8 @@ public class MarkDownBlogService {
         }
         markDownBlog.setTime(date);
         //获得当前用户
-        JwtUser user = (JwtUser) SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal();
-        markDownBlog.setUser(user.getUsername());
+        String username=  UserContextHandler.getUsername();
+        markDownBlog.setUser(username);
 
         //检查
         MarkDownBlogDO checkResult = blogOperation.markdownBlogAddCheck(markDownBlog);
@@ -79,9 +77,9 @@ public class MarkDownBlogService {
             blogIdGenerate.removeIdMap(id);
             return 0;
         }
-        blogOperation.markdownBlogAdd(checkResult,user.getUsername());
+        blogOperation.markdownBlogAdd(checkResult,username);
 
-        log.info("用户:{} 新增Markdown博客Id为:{}",user.getUsername(),id);
+        log.info("用户:{} 新增Markdown博客Id为:{}",username,id);
         return result;
     }
 
@@ -106,17 +104,16 @@ public class MarkDownBlogService {
 
     public Integer deleteDOById(Long id) {
         //获得当前用户
-        JwtUser user = (JwtUser) SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal();
+        String username=  UserContextHandler.getUsername();
         //检查
-        blogOperation.baseDeleteCheck(id, user.getUsername());
+        blogOperation.baseDeleteCheck(id, username);
         //id去除匹配
         Integer rows = cacheService.deleteById(id);
         if (rows==0){
             return 0;
         }
-        blogOperation.markdownDelete(id, user.getUsername());
-        log.info("用户:{}删除了Markdown博客 Id为{}", user.getUsername(), id);
+        blogOperation.markdownDelete(id, username);
+        log.info("用户:{}删除了Markdown博客 Id为{}", username, id);
         return rows;
     }
 

@@ -1,8 +1,7 @@
 package xyz.sanshan.auth.security.client.interceptor;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -10,14 +9,15 @@ import xyz.sanshan.auth.security.client.annotation.WantUserToken;
 import xyz.sanshan.auth.security.client.config.UserAuthConfig;
 import xyz.sanshan.auth.security.client.jwt.UserAuthUtil;
 import xyz.sanshan.auth.security.common.util.jwt.IJWTInfo;
+import xyz.sanshan.common.UserContextHandler;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 /**
  */
+@Slf4j
 public class UserAuthRestInterceptor extends HandlerInterceptorAdapter {
-    private Logger logger = LoggerFactory.getLogger(UserAuthRestInterceptor.class);
 
     @Autowired
     private UserAuthUtil userAuthUtil;
@@ -33,14 +33,17 @@ public class UserAuthRestInterceptor extends HandlerInterceptorAdapter {
         if (annotation==null){
             annotation = handlerMethod.getMethodAnnotation(WantUserToken.class);
         }
-        if (annotation == null) {
-            return super.preHandle(request, response, handler);
-        }
+        //判断在网关处鉴权
         String token = request.getHeader(userAuthConfig.getTokenHeader());
         if (StringUtils.isEmpty(token)) {
-         //
+            if (annotation == null) {
+                return super.preHandle(request, response, handler);
+            }
         }
+        //进行拦截
         IJWTInfo infoFromToken = userAuthUtil.getInfoFromToken(token);
+        UserContextHandler.setUsername(infoFromToken.getUsername());
+        UserContextHandler.setUserID(infoFromToken.getId());
         return super.preHandle(request, response, handler);
     }
 

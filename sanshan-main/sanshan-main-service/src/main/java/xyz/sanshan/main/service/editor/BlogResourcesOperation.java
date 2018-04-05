@@ -2,8 +2,8 @@ package xyz.sanshan.main.service.editor;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import xyz.sanshan.common.UserContextHandler;
 import xyz.sanshan.common.exception.NotFoundPermissionException;
 import xyz.sanshan.common.exception.PropertyAccessException;
 import xyz.sanshan.common.info.EditorTypeEnum;
@@ -20,7 +20,6 @@ import xyz.sanshan.main.service.convent.UeditorEditorConvert;
 import xyz.sanshan.main.service.search.ElasticSearchService;
 import xyz.sanshan.main.service.user.cache.UserBlogCacheService;
 import xyz.sanshan.main.service.vo.BlogVO;
-import xyz.sanshan.main.service.vo.JwtUser;
 import xyz.sanshan.main.service.vote.VoteService;
 
 import java.util.Date;
@@ -276,14 +275,13 @@ public class BlogResourcesOperation {
      */
     private  boolean baseUpdateCheck(BaseBlogEditorDO editorDO,long id){
         //获得当前用户
-        JwtUser user = (JwtUser) SecurityContextHolder.getContext().getAuthentication()
-                .getPrincipal();
+        String username=  UserContextHandler.getUsername();
         //用户资源检查
-        if (!userResourceAuthDetection(id,user.getUsername())){
+        if (!userResourceAuthDetection(id,username)){
             log.warn("权限检查失败,id:{},username:{}",id,editorDO.getUser());
             throw  new NotFoundPermissionException("权限检查失败,请查看你提供的资源参数是否正确", PosCodeEnum.PARAM_ERROR.getStatus());
         }
-        editorDO.setUser(user.getUsername());
+        editorDO.setUser(username);
         String title = null;
         String tag = null;
         String content = null;

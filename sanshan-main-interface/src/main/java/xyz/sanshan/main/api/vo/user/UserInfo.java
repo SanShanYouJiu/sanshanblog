@@ -12,9 +12,9 @@ import java.util.List;
 @Data
 public class UserInfo implements Serializable{
 
-    public String _id;
-    public String username;
-    public String password;
+    private String _id;
+    private String username;
+    private String password;
     private String description;
 
     /**

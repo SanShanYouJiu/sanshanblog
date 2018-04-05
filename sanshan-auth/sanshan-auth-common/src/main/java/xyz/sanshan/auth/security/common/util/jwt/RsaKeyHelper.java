@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * Created by ace on 2017/9/10.
  */
 public class RsaKeyHelper {
     /**
@@ -118,7 +119,7 @@ public class RsaKeyHelper {
     }
 
     /**
-     * 生存rsa公钥
+     * 生存rsa私钥
      *
      * @param password
      * @throws IOException

@@ -1,0 +1,150 @@
+# 初步版本 还没有完成
+version: '2'
+
+volumes:
+    mongo-data:
+    elasticsearch-data:
+    db-data:
+
+services:
+
+  eureka:
+    image: sanshan/sanshan-center
+    depends_on:
+      - mongo
+    ports:
+      - "8761:8761"
+
+  sanshan-auth:
+    image: sanshan/sanshan-auth
+    ports:
+      - "8081:8081"
+    depends_on:
+      - eureka
+      - redis
+      - mongo
+      - rabbitmq
+      - db
+      - sanshan-config
+     environment:
+      - EUREKA_HOST=eureka
+      - EUREKA_PORT=8761
+      - REDIS_HOST=redis
+      - REDIS_PORT=6379
+      - MYSQL_HOST=mysql
+      - MYSQL_PORT=3306
+      - RABBIT_MQ_HOST=rabbitmq
+      - RABBIT_MQ_HOST=5672
+
+  sanshan-config:
+    image: sanshan/sanshan-config
+    ports:
+      - "8750:8750"
+    environment:
+      - EUREKA_HOST=eureka
+      - EUREKA_PORT=8761
+
+  sanshan-search:
+     image: sanshan/sanshan-search
+     ports:
+        - "8070:8070"
+     depends_on:
+        - eureka
+        - rabbitmq
+        - mongo
+        - elasticsearch
+        - db
+        - sanshan-config
+     environment:
+        - EUREKA_HOST=eureka
+        - EUREKA_PORT=8761
+        - RABBIT_MQ_HOST=rabbitmq
+        - RABBIT_MQ_HOST=5672
+        - ELASTIC_SEARCH_HOST=elasticsearch
+        - ELASTIC_SEARCH_PORT=9300
+
+  sanshan-main:
+     image: sanshan/sanshan-main
+     ports:
+        - "8060:8060"
+     depends_on:
+        - eureka
+        - redis
+        - mongo
+        - rabbitmq
+        - db
+        - sanshan-config
+     environment:
+        - EUREKA_HOST=eureka
+        - EUREKA_PORT=8761
+        - REDIS_HOST=redis
+        - REDIS_PORT=6379
+        - MYSQL_HOST=mysql
+        - MYSQL_PORT=3306
+        - RABBIT_MQ_HOST=rabbitmq
+        - RABBIT_MQ_HOST=5672
+
+  sanshan-gate:
+     image: sanshan/sanshan-gate
+     ports:
+        - "8080:8080"
+     depends_on:
+        - eureka
+        - mongo
+        - rabbitmq
+        - sanshan-config
+     environment:
+        - EUREKA_HOST=eureka
+        - EUREKA_PORT=8761
+        - RABBIT_MQ_HOST=rabbitmq
+        - RABBIT_MQ_HOST=5672
+
+
+
+  redis:
+     image: "redis:3.2"
+     restart: always
+     mem_limit: 100M
+     volumes:
+        - "redis-data:/data"
+
+
+
+  rabbitmq:
+     image: "rabbitmq:3.7"
+     restart: always
+
+
+  mongo:
+     image: "mongo:3.4"
+     restart: always
+     mem_limit: 150M
+     volumes:
+        - "mongo-data:/data/db"
+
+
+  elasticsearch:
+     build: "./elasticsearch"
+     restart: always
+     mem_limit: 700M
+     volumes:
+        - "elasticsearch-data:/usr/share/elasticsearch/data"
+        - "./elasticsearch/logs:/usr/share/elasticsearch/logs"
+
+
+  db:
+     image: "mysql:5.7"
+     restart: always
+     mem_limit: 450M
+     environment:
+        1234567q: 1234567q
+        MYSQL_DATABASE: sanshanblog
+        MYSQL_USER: sanshan
+        MYSQL_PASSWORD: 1234567q
+     volumes:
+        - "./db/init:/docker-entrypoint-initdb.d"
+        - "db-data:/var/lib/mysql"
+        - "./db/conf:/etc/mysql/conf.d"
+
+
+

@@ -8,6 +8,8 @@ import org.joda.time.DateTime;
 import xyz.sanshan.auth.security.common.constance.UserInfoConstance;
 import xyz.sanshan.auth.security.common.util.StringHelper;
 
+import java.util.Date;
+
 /**
  */
 public class JWTHelper {
@@ -26,6 +28,7 @@ public class JWTHelper {
         String compactJws = Jwts.builder()
                 .setSubject(jwtInfo.getUsername())
                 .claim(UserInfoConstance.JWT_KEY_USER_ID, jwtInfo.getId())
+                .claim(UserInfoConstance.JWT_KEY_CREATED, jwtInfo.getCreated())
                 .setExpiration(DateTime.now().plusSeconds(expire).toDate())
                 .signWith(SignatureAlgorithm.RS256, rsaKeyHelper.getPrivateKey(priKeyPath))
                 .compact();
@@ -45,6 +48,7 @@ public class JWTHelper {
         String compactJws = Jwts.builder()
                 .setSubject(jwtInfo.getUsername())
                 .claim(UserInfoConstance.JWT_KEY_USER_ID, jwtInfo.getId())
+                .claim(UserInfoConstance.JWT_KEY_CREATED, jwtInfo.getCreated())
                 .setExpiration(DateTime.now().plusSeconds(expire).toDate())
                 .signWith(SignatureAlgorithm.RS256, rsaKeyHelper.getPrivateKey(priKey))
                 .compact();
@@ -86,7 +90,7 @@ public class JWTHelper {
     public static IJWTInfo getInfoFromToken(String token, String pubKeyPath) throws Exception {
         Jws<Claims> claimsJws = parserToken(token, pubKeyPath);
         Claims body = claimsJws.getBody();
-        return new JWTInfo(body.getSubject(), StringHelper.getObjectValue(body.get(UserInfoConstance.JWT_KEY_USER_ID)));
+        return new JWTInfo(body.getSubject(), StringHelper.getObjectValue(body.get(UserInfoConstance.JWT_KEY_USER_ID)),body.get(UserInfoConstance.JWT_KEY_CREATED,Date.class));
     }
 
     /**
@@ -100,6 +104,6 @@ public class JWTHelper {
     public static IJWTInfo getInfoFromToken(String token, byte[] pubKey) throws Exception {
         Jws<Claims> claimsJws = parserToken(token, pubKey);
         Claims body = claimsJws.getBody();
-        return new JWTInfo(body.getSubject(), StringHelper.getObjectValue(body.get(UserInfoConstance.JWT_KEY_USER_ID)));
+        return new JWTInfo(body.getSubject(), StringHelper.getObjectValue(body.get(UserInfoConstance.JWT_KEY_USER_ID)),body.get(UserInfoConstance.JWT_KEY_CREATED,Date.class));
     }
 }

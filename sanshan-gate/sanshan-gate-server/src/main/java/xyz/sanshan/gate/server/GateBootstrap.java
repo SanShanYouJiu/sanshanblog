@@ -10,7 +10,7 @@ import xyz.sanshan.auth.security.client.EnableSanShanAuthClient;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableZuulProxy
-@EnableFeignClients
+@EnableFeignClients({"xyz.sanshan.gate.server.feign","xyz.sanshan.auth.security.client.feign"})
 @EnableSanShanAuthClient
 public class GateBootstrap {
 

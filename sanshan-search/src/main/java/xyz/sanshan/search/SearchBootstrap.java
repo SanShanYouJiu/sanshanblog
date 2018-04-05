@@ -8,8 +8,8 @@ import org.springframework.cloud.netflix.feign.EnableFeignClients;
 import xyz.sanshan.auth.security.client.EnableSanShanAuthClient;
 
 @SpringCloudApplication
-@EnableFeignClients
 @EnableSanShanAuthClient
+@EnableFeignClients({"xyz.sanshan.auth.security.client.feign"})
 public class SearchBootstrap extends SpringBootServletInitializer {
 
     @Override

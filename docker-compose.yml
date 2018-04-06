@@ -4,12 +4,13 @@ version: '2'
 volumes:
     mongo-data:
     elasticsearch-data:
-    db-data:
+    sanshan-main-db-data:
+    sanshan-auth-db-data:
 
 services:
 
   eureka:
-    image: sanshan/sanshan-center
+    image: sanshan/sanshanblog/sanshan-center
     depends_on:
       - mongo
     ports:
@@ -24,7 +25,7 @@ services:
       - redis
       - mongo
       - rabbitmq
-      - db
+      - sanshan-auth-db
       - sanshan-config
      environment:
       - EUREKA_HOST=eureka
@@ -37,7 +38,7 @@ services:
       - RABBIT_MQ_HOST=5672
 
   sanshan-config:
-    image: sanshan/sanshan-config
+    image: sanshan/sanshanblog/sanshan-config
     ports:
       - "8750:8750"
     environment:
@@ -45,7 +46,7 @@ services:
       - EUREKA_PORT=8761
 
   sanshan-search:
-     image: sanshan/sanshan-search
+     image: sanshan/sanshanblog/sanshan-search
      ports:
         - "8070:8070"
      depends_on:
@@ -53,7 +54,6 @@ services:
         - rabbitmq
         - mongo
         - elasticsearch
-        - db
         - sanshan-config
      environment:
         - EUREKA_HOST=eureka
@@ -64,7 +64,7 @@ services:
         - ELASTIC_SEARCH_PORT=9300
 
   sanshan-main:
-     image: sanshan/sanshan-main
+     image: sanshan/sanshanblog/sanshan-main
      ports:
         - "8060:8060"
      depends_on:
@@ -72,7 +72,7 @@ services:
         - redis
         - mongo
         - rabbitmq
-        - db
+        - sanshan-main-db
         - sanshan-config
      environment:
         - EUREKA_HOST=eureka
@@ -85,7 +85,7 @@ services:
         - RABBIT_MQ_HOST=5672
 
   sanshan-gate:
-     image: sanshan/sanshan-gate
+     image: sanshan/sanshanblog/sanshan-gate
      ports:
         - "8080:8080"
      depends_on:
@@ -124,7 +124,7 @@ services:
 
 
   elasticsearch:
-     build: "./elasticsearch"
+     imgae: sanshan/sanshanblog/elasticsearch
      restart: always
      mem_limit: 700M
      volumes:
@@ -132,19 +132,29 @@ services:
         - "./elasticsearch/logs:/usr/share/elasticsearch/logs"
 
 
-  db:
+  sanshan-main-db:
      image: "mysql:5.7"
      restart: always
      mem_limit: 450M
      environment:
-        1234567q: 1234567q
-        MYSQL_DATABASE: sanshanblog
+        MYSQL_ROOT_PASSWORD: 1234567q
+        MYSQL_DATABASE: sanshan-main
         MYSQL_USER: sanshan
         MYSQL_PASSWORD: 1234567q
      volumes:
-        - "./db/init:/docker-entrypoint-initdb.d"
-        - "db-data:/var/lib/mysql"
-        - "./db/conf:/etc/mysql/conf.d"
+        - "./sanshan-main/sanshan-main-web/db:/docker-entrypoint-initdb.d"
+        - "sanshan-main-db-data:/var/lib/mysql"
 
+  sanshan-auth-db:
+     image: "mysql:5.7"
+     restart: always
+     mem_limit: 450M
+     MYSQL_ROOT_PASSWORD: 1234567q
+     MYSQL_DATABASE: sanshan-auth
+     MYSQL_USER: sanshan
+     MYSQL_PASSWORD: 1234567q
+     volumes:
+        - "./sanshan-auth/sanshan-auth-server/db:/docker-entrypoint-initdb.d"
+        - "sanshan-auth-db-data::/var/lib/mysql"
 
 

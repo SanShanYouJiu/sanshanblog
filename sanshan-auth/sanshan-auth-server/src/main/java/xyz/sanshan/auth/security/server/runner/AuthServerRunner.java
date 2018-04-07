@@ -4,15 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.core.RedisTemplate;
-import xyz.sanshan.auth.security.common.util.jwt.IJWTInfo;
-import xyz.sanshan.auth.security.common.util.jwt.JWTHelper;
-import xyz.sanshan.auth.security.common.util.jwt.JWTInfo;
 import xyz.sanshan.auth.security.common.util.jwt.RsaKeyHelper;
 import xyz.sanshan.auth.security.server.config.KeyConfiguration;
 
-import java.io.IOException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Date;
 import java.util.Map;
 
 /**
@@ -50,25 +44,6 @@ public class AuthServerRunner implements CommandLineRunner {
             redisTemplate.opsForValue().set(REDIS_SERVICE_PRI_KEY, RsaKeyHelper.toHexString(keyMap.get("pri")));
             redisTemplate.opsForValue().set(REDIS_SERVICE_PUB_KEY, RsaKeyHelper.toHexString(keyMap.get("pub")));
 
-        }
-    }
-
-    public static void main(String[] args) {
-        try {
-            KeyConfiguration keyConfiguration = new KeyConfiguration();
-            Map<String, byte[]> keyMap = RsaKeyHelper.generateKey("c@vbb0}1s{alg3{");
-            keyConfiguration.setUserPriKey(keyMap.get("pri"));
-            keyConfiguration.setUserPubKey(keyMap.get("pub"));
-            JWTInfo jwtInfo =new JWTInfo("ceshi","32121f",new Date());
-            String token = JWTHelper.generateToken(jwtInfo, keyConfiguration.getUserPriKey(), 7200);
-            IJWTInfo ijwtInfo = JWTHelper.getInfoFromToken(token, keyConfiguration.getUserPubKey());
-            System.out.println(ijwtInfo.getUsername());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
     }
 }

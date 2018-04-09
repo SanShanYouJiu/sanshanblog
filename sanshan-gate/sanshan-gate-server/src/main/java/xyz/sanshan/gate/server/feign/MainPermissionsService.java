@@ -13,4 +13,6 @@ public interface MainPermissionsService {
     @GetMapping("/api/user-permissions")
     ResponseMsgVO<List<PermissionInfo>> getAllUserPermission();
 
+    @GetMapping("/api/admin-permissions")
+    ResponseMsgVO<List<PermissionInfo>> getAllAdminPermission();
 }

@@ -90,7 +90,7 @@
                         <target>1.8</target>
                         <encoding>${project.build.sourceEncoding}</encoding>
                         <compilerArguments>
-                            <verbose /><!-- 这个选项用来传递编译器自身不包含但是却支持的参数选项 -->
+                            <!--<verbose />&lt;!&ndash; 这个选项用来传递编译器自身不包含但是却支持的参数选项 &ndash;&gt;-->
                             <!-- <bootclasspath>${java.home}/lib/rt.jar:${java.home}/jre/lib/jce.jar</bootclasspath> -->
                         </compilerArguments>
                     </configuration>

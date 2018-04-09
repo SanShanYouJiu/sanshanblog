@@ -1,7 +1,6 @@
 package xyz.sanshan.main.web.controller.auth;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -16,9 +15,6 @@ import xyz.sanshan.main.service.user.UserService;
 @RequestMapping("/auth")
 public class AuthController {
 
-    @Value("${jwt.header}")
-    private String tokenHeader;
-
     @Autowired
     private AuthService authService;
 
@@ -28,24 +24,6 @@ public class AuthController {
     @Autowired
     private RedisTemplate<String,String> redisTemplate;
 
-    //@PostMapping(value = "/login", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    //public ResponseMsgVO createAuthenticationToken(
-    //        JwtAuthenticationRequest authenticationRequest, @RequestParam(name = "codeid") String codeid) throws AuthenticationException {
-    //    ResponseMsgVO msgVO = new ResponseMsgVO();
-    //    //验证码检测
-    //    String codeValue = redisTemplate.opsForValue().get(ConstanceCacheKey.CODE_ID_PREFIX + codeid);
-    //    if (!authenticationRequest.getCode().equalsIgnoreCase(codeValue)) {
-    //        return msgVO.buildWithMsgAndStatus(
-    //                        PosCodeEnum.PARAM_ERROR, "验证码错误");
-    //    }
-    //    final String token = authService.login(authenticationRequest.getUsername(), authenticationRequest.getPassword());
-    //    if (Objects.isNull(token)) {
-    //        msgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "账户或密码错误");
-    //        return msgVO;
-    //    }
-    //    //检查是否能登陆
-    //    return msgVO.buildOKWithData(new JwtAuthenticationResponse(token));
-    //}
 
     @PostMapping(value = "/register", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO register(UserDO addedUser,
@@ -100,26 +78,6 @@ public class AuthController {
         return responseMsgVO;
     }
 
-
-    ///**
-    // * 刷新token
-    // *
-    // * @param request
-    // * @return
-    // * @throws AuthenticationException
-    // */
-    //@PostMapping(value = "/refresh-token", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    //public ResponseMsgVO refreshAndGetAuthenticationToken(
-    //        HttpServletRequest request) throws AuthenticationException {
-    //    ResponseMsgVO<JwtAuthenticationResponse> msgVO = new ResponseMsgVO<>();
-    //    String token = request.getHeader(tokenHeader);
-    //    String refreshedToken = authService.refresh(token);
-    //    if (refreshedToken == null) {
-    //        return msgVO.buildWithMsgAndStatus(PosCodeEnum.NO_PRIVILEGE, "没有权限操作");
-    //    } else {
-    //        return msgVO.buildOKWithData(new JwtAuthenticationResponse(refreshedToken));
-    //    }
-    //}
 
 
     /**

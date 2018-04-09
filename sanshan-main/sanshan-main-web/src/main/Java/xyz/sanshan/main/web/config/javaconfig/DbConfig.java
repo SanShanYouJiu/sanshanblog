@@ -19,33 +19,33 @@ public class DbConfig {
     private String username;
     @Value("${druid.password}")
     private String passowrd;
-    @Value("${filters}")
+    @Value("${druid.filters}")
     private String filters;
-    @Value("${maxActive}")
+    @Value("${druid.maxActive}")
     private int maxActive;
-    @Value("${initialSize}")
+    @Value("${druid.initialSize}")
     private int initialSize;
-    @Value("${maxWait}")
+    @Value("${druid.maxWait}")
     private long maxWait;
-    @Value("${minIdle}")
+    @Value("${druid.minIdle}")
     private int minIdle;
-    @Value("${timeBetweenEvictionRunsMillis}")
+    @Value("${druid.timeBetweenEvictionRunsMillis}")
     private long timeBetweenEvictionRunsMillis;
-    @Value("${minEvictableIdleTimeMillis}")
+    @Value("${druid.minEvictableIdleTimeMillis}")
     private long minEvictableIdleTimeMillis;
-    @Value("${testWhileIdle}")
+    @Value("${druid.testWhileIdle}")
     private boolean testWhileIdle;
-    @Value("${testOnBorrow}")
+    @Value("${druid.testOnBorrow}")
     private boolean testOnBorrow;
-    @Value("${testOnReturn}")
+    @Value("${druid.testOnReturn}")
     private boolean testOnReturn;
-    @Value("${maxOpenPreparedStatements}")
+    @Value("${druid.maxOpenPreparedStatements}")
     private int maxOpenPreparedStatements;
-    @Value("${removeAbandoned}")
+    @Value("${druid.removeAbandoned}")
     private boolean removeAbandoned;
-    @Value("${removeAbandonedTimeout}")
+    @Value("${druid.removeAbandonedTimeout}")
     private int removeAbandonedTimeout;
-    @Value("${logAbandoned}")
+    @Value("${druid.logAbandoned}")
     private boolean logAbandoned;
 
 

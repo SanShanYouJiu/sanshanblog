@@ -29,6 +29,13 @@ public class ApiRpcController {
       return responseMsgVO;
     }
 
+   @GetMapping(value = "/admin-permissions",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+   public ResponseMsgVO<List<PermissionInfo>> getAdminPermission(){
+       ResponseMsgVO<List<PermissionInfo>> responseMsgVO = new ResponseMsgVO();
+       responseMsgVO.buildOKWithData(permissionService.getAllAdminPermission());
+       return responseMsgVO;
+   }
+
   @PostMapping(value = "/user/validate",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
  public ResponseMsgVO<UserInfo> validate(@RequestParam("username") String username, @RequestParam("password") String password){
     ResponseMsgVO responseMsgVO = new ResponseMsgVO();

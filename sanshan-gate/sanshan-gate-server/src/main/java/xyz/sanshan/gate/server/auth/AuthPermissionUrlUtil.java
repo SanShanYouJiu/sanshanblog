@@ -39,10 +39,13 @@ public class AuthPermissionUrlUtil   {
     @Scheduled(cron = "0 0/1 * * * ?")
     public void refreshPermissionUrl() {
         log.debug("refresh permission url ");
-        List<PermissionInfo> mainUserPermissonUrl=   mainPermissionsService.getAllUserPermission().getData();
-        List<PermissionInfo> searchAdminPermissonUrl= searchPermissionsService.getAllAdminPermission().getData();
-        assembleUserPermissionUrl(mainUserPermissonUrl,mainPrefix);
-        assembleAdminPermissionUrl(searchAdminPermissonUrl,searchPrefix);
+        List<PermissionInfo> mainUserPermissionUrl=   mainPermissionsService.getAllUserPermission().getData();
+        List<PermissionInfo> mainAdminPermissionUrl=   mainPermissionsService.getAllAdminPermission().getData();
+        List<PermissionInfo> searchAdminPermissionUrl= searchPermissionsService.getAllAdminPermission().getData();
+
+        assembleUserPermissionUrl(mainUserPermissionUrl,mainPrefix);
+        assembleAdminPermissionUrl(searchAdminPermissionUrl,searchPrefix);
+        assembleAdminPermissionUrl(mainAdminPermissionUrl,mainPrefix);
     }
 
     private void assembleUserPermissionUrl(List<PermissionInfo> permissionUrls,String prefix){

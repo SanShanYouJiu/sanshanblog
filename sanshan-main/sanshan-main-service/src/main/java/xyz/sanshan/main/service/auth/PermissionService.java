@@ -31,4 +31,13 @@ public class PermissionService {
         result.add(new PermissionInfo("/api/user-permissions", HttpMethodEnum.ALL, ""));
         return result;
     }
+
+    /**
+     * @return
+     */
+    public List<PermissionInfo> getAllAdminPermission(){
+        List<PermissionInfo> result = new LinkedList<>();
+        result.add(new PermissionInfo("/druid/**", HttpMethodEnum.ALL, ""));
+        return result;
+    }
 }

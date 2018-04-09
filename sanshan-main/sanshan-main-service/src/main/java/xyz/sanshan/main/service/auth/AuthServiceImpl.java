@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import xyz.sanshan.common.info.PosCodeEnum;
@@ -28,8 +27,6 @@ public class AuthServiceImpl implements AuthService {
 
     private UserRepository userRepository;
 
-    @Value("${jwt.tokenHead}")
-    private String tokenHead;
 
     @Autowired
     private ElasticSearchService elasticSearchService;

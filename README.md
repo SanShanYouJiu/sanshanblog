@@ -18,7 +18,8 @@ SanShanBlog是基于Spring Cloud微服务化博客社区平台，具有统一授
 
 ![sanshanblog-3](https://github.com/SanShanYouJiu/ImageRepository/blob/master/SanShaBlog/sanshanblog-3.jpg?raw=true)
 
-
+## 架构说明
+![sanshanblog-4](https://github.com/SanShanYouJiu/ImageRepository/blob/master/SanShaBlog/SanShanBlog%20%E6%9E%B6%E6%9E%84%E5%9B%BE%20(1).png?raw=true)
 
 ## 技术选型
 

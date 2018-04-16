@@ -1,21 +1,20 @@
 package xyz.sanshan.main.web.controller.auth;
 
-import xyz.sanshan.common.info.ConstanceCacheKey;
-import xyz.sanshan.main.dao.mongo.UserRepository;
-import xyz.sanshan.main.service.user.UserService;
-import xyz.sanshan.common.vo.ResponseMsgVO;
-import xyz.sanshan.common.info.PosCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+import xyz.sanshan.common.info.ConstanceCacheKey;
+import xyz.sanshan.common.info.PosCodeEnum;
+import xyz.sanshan.common.vo.ResponseMsgVO;
+import xyz.sanshan.main.service.user.UserService;
 
 @RestController
 @RequestMapping("/user")
 public class UserController {
-
-    @Autowired
-    private UserRepository userRepository;
 
     @Autowired
     private UserService userService;

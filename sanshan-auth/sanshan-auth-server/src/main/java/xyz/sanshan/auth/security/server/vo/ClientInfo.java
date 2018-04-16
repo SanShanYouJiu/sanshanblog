@@ -1,4 +1,4 @@
-package xyz.sanshan.auth.security.server.entity;
+package xyz.sanshan.auth.security.server.vo;
 
 
 import xyz.sanshan.auth.security.common.util.jwt.IJWTInfo;
@@ -17,8 +17,25 @@ public class ClientInfo implements IJWTInfo {
         this.clientId = clientId;
         this.name = name;
         this.id = id;
-        this.created=created;
+        this.created = created;
     }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getClientId() {
+        return clientId;
+    }
+
+    public void setClientId(String clientId) {
+        this.clientId = clientId;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
 
     @Override
     public String getUsername() {

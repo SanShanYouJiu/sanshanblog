@@ -171,8 +171,6 @@ public class UserService {
             String tempPwd = randomString(20);
             userRepository.changePassword(userDO.getUsername(), tempPwd);
 
-            //为当前用户产生token
-            //final UserDetails userDetails = userDetailsService.loadUserByUsername(userDO.getUsername());
             //FIXME: 忘记密码功能
             final String loginToken = "no have";
             JwtAuthenticationResponse response = new JwtAuthenticationResponse(loginToken);

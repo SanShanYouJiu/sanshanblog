@@ -1,10 +1,11 @@
-package xyz.sanshan.auth.security.server.service;
+package xyz.sanshan.auth.security.server.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import xyz.sanshan.auth.security.common.util.jwt.JWTInfo;
 import xyz.sanshan.auth.security.server.feign.IUserService;
+import xyz.sanshan.auth.security.server.service.AuthService;
 import xyz.sanshan.auth.security.server.util.user.JwtTokenUtil;
 import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.main.api.vo.user.UserInfo;
@@ -12,7 +13,7 @@ import xyz.sanshan.main.api.vo.user.UserInfo;
 import java.util.Date;
 
 @Service
-public class AuthServiceImpl  implements AuthService{
+public class AuthServiceImpl  implements AuthService {
 
     private JwtTokenUtil jwtTokenUtil;
     private IUserService userService;

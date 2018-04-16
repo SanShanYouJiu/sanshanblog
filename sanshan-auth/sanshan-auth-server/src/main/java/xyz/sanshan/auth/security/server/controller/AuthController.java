@@ -31,7 +31,7 @@ public class AuthController {
     public ResponseMsgVO createAuthenticationToken( JwtAuthenticationRequest authenticationRequest) throws Exception {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         String codeKey =ConstanceCacheKey.CODE_ID_PREFIX+authenticationRequest.getCodeid();
-        String codeValue = (String) redisTemplate.opsForValue().get(codeKey);
+        String codeValue =  redisTemplate.opsForValue().get(codeKey);
         if (!authenticationRequest.getCode().equalsIgnoreCase(codeValue)) {
            //验证码错误
             return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "验证码错误");

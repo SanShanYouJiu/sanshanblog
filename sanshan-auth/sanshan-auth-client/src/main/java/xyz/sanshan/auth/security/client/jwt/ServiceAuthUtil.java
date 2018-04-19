@@ -57,7 +57,7 @@ public class ServiceAuthUtil  implements ApplicationListener<AuthRemoteEvent> {
         }
     }
 
-    @Scheduled(cron = "0 0/10 * * * ?")
+    @Scheduled(cron = "0 0/1 * * * ?")
     public void refreshClientToken() {
         log.debug("refresh client token.....");
         ResponseMsgVO<String> resp = serviceAuthFeign.getAccessToken(serviceAuthConfig.getClientId(), serviceAuthConfig.getClientSecret());

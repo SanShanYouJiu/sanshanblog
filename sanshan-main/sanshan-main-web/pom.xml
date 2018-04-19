@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <parent>
         <groupId>xyz.sanshan</groupId>
-        <artifactId>sanshanblog</artifactId>
+        <artifactId>sanshan-main</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -117,13 +117,6 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-stream-binder-rabbit</artifactId>
         </dependency>
-
-        <dependency>
-            <groupId>xyz.sanshan</groupId>
-            <artifactId>sanshan-auth-client</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
 
     </dependencies>
 

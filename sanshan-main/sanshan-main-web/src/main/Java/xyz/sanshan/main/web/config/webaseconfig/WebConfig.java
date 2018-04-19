@@ -35,8 +35,6 @@ import java.util.List;
                 type= FilterType.ANNOTATION,
                 value = {Configuration.class,Service.class, Repository.class})
 })
-//@PropertySource("file:/etc/sanshanblog/SanShan-main.properties")
-//@PropertySource("file:D:/SanShan-main.properties")
 @EnableAspectJAutoProxy(proxyTargetClass = true)//开启切面
 public class WebConfig extends WebMvcConfigurerAdapter {
 

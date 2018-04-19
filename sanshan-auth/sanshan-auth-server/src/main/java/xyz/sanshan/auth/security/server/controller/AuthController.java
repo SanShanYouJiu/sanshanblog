@@ -28,8 +28,8 @@ public class AuthController {
     private RedisTemplate<String, String> redisTemplate;
 
     @PostMapping(value = "token",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO createAuthenticationToken( JwtAuthenticationRequest authenticationRequest) throws Exception {
-        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
+    public ResponseMsgVO<JwtAuthenticationResponse> createAuthenticationToken( JwtAuthenticationRequest authenticationRequest) throws Exception {
+        ResponseMsgVO<JwtAuthenticationResponse> responseMsgVO = new ResponseMsgVO();
         String codeKey =ConstanceCacheKey.CODE_ID_PREFIX+authenticationRequest.getCodeid();
         String codeValue =  redisTemplate.opsForValue().get(codeKey);
         if (!authenticationRequest.getCode().equalsIgnoreCase(codeValue)) {
@@ -45,7 +45,7 @@ public class AuthController {
     }
 
     @GetMapping(value = "refresh",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO refreshAndGetAuthenticationToken(
+    public ResponseMsgVO<JwtAuthenticationResponse> refreshAndGetAuthenticationToken(
             HttpServletRequest request) {
         ResponseMsgVO<JwtAuthenticationResponse> msgVO = new ResponseMsgVO<>();
         String token = request.getHeader(tokenHeader);

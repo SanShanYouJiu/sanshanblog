@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import xyz.sanshan.auth.security.client.config.ServiceAuthConfig;
+import xyz.sanshan.auth.security.client.feign.ServiceAuthFeign;
 import xyz.sanshan.common.JwtAuthenticationResponse;
 import xyz.sanshan.common.UserContextHandler;
 import xyz.sanshan.common.info.CodeTypeEnum;
@@ -38,13 +40,18 @@ public class UserService {
     @Autowired
     private MailService mailService;
 
+    @Autowired
+    private ServiceAuthConfig serviceAuthConfig;
+
+    @Autowired
+    private ServiceAuthFeign serviceAuthFeign;
 
 
     private static  final  Integer PASSWORD_MIN_LENGTH=6;
     private static  final  Integer PASSWORD_MAX_LENGTH=30;
 
 
-    public static final String CODE_PREFIX = "sendEmailCode";
+    public static final String CODE_PREFIX = "sendEmailCode:";
 
     /**
      * 邮箱匹配正则
@@ -168,11 +175,13 @@ public class UserService {
         String value = redisTemplate.opsForValue().get(key);
         if (!Objects.isNull(value) && value.equals(token)) {
             //通过随机生成字符串 暂时替换为密码
-            String tempPwd = randomString(20);
-            userRepository.changePassword(userDO.getUsername(), tempPwd);
+            String randomPwd = randomString(20);
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            String tmpPwd=encoder.encode(randomPwd);
+            userRepository.changePassword(userDO.getUsername(), tmpPwd);
+            //忘记密码功能
+            final String loginToken = serviceAuthFeign.generateUserToken(serviceAuthConfig.getClientId(), serviceAuthConfig.getClientSecret(), userDO.getUsername(), randomPwd).getData();
 
-            //FIXME: 忘记密码功能
-            final String loginToken = "no have";
             JwtAuthenticationResponse response = new JwtAuthenticationResponse(loginToken);
             responseMsgVO.buildOKWithData(response);
             return;

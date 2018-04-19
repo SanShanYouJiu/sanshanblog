@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import xyz.sanshan.auth.security.client.config.ServiceAuthConfig;
 import xyz.sanshan.auth.security.client.config.UserAuthConfig;
+import xyz.sanshan.auth.security.client.jwt.ServiceAuthUtil;
 import xyz.sanshan.auth.security.client.jwt.UserAuthUtil;
 import xyz.sanshan.auth.security.common.util.jwt.IJWTInfo;
 import xyz.sanshan.common.UserContextHandler;
@@ -36,6 +37,8 @@ public class AccessFilter extends ZuulFilter {
     private AuthPermissionUrlUtil authPermissionUrlUtil;
 
     @Autowired
+    private ServiceAuthUtil serviceAuthUtil;
+    @Autowired
     private UserAuthUtil userAuthUtil;
     @Autowired
     private UserAuthConfig userAuthConfig;
@@ -43,8 +46,6 @@ public class AccessFilter extends ZuulFilter {
     @Autowired
     private ServiceAuthConfig serviceAuthConfig;
 
-    //@Autowired
-    //private ServiceAuthUtil serviceAuthUtil;
 
     @Override
     public String filterType() {
@@ -90,7 +91,7 @@ public class AccessFilter extends ZuulFilter {
         }
 
         // 申请客户端密钥头
-        //ctx.addZuulRequestHeader(serviceAuthConfig.getTokenHeader(), serviceAuthUtil.getClientToken());
+        ctx.addZuulRequestHeader(serviceAuthConfig.getTokenHeader(), serviceAuthUtil.getClientToken());
         return null;
     }
 

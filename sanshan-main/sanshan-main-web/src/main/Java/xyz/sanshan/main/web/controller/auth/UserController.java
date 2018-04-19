@@ -79,7 +79,8 @@ public class UserController {
             @RequestParam(name = "code") String code) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
           //验证码
-        String codeValidate = redisTemplate.opsForValue().get(ConstanceCacheKey.CODE_ID_PREFIX + codeid);
+        String codeKey = ConstanceCacheKey.CODE_ID_PREFIX + codeid;
+        String codeValidate = redisTemplate.opsForValue().get(codeKey);
         if (!code.equalsIgnoreCase(codeValidate)) {
             return new ResponseMsgVO().buildWithMsgAndStatus(PosCodeEnum.PARAM_ERROR, "验证码错误");
         }

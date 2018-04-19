@@ -40,9 +40,9 @@ public class ServiceAuthInterceptor extends HandlerInterceptorAdapter {
         }
         IJWTInfo infoFromToken = serviceAuthUtil.getInfoFromToken(token);
         //客户端的名字
-        String username = infoFromToken.getUsername();
+        String clientName = infoFromToken.getUsername();
         for(String client:serviceAuthUtil.getAllowedClient()){
-            if(client.equals(username)){
+            if(client.equals(clientName)){
                 return super.preHandle(request, response, handler);
             }
         }

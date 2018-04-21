@@ -7,17 +7,15 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import xyz.sanshan.common.info.PosCodeEnum;
 import xyz.sanshan.common.vo.ResponseMsgVO;
-import xyz.sanshan.main.web.controller.globalexception.GlobalException;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Objects;
 
 
 @RestController
 @RequestMapping("/")
 public class  IndexController implements ErrorController {
 
-    private static final String PATH = GlobalException.ERROR_URL;
+    private static final String PATH = "/error";
 
     @RequestMapping()
     public ModelAndView index() {
@@ -25,20 +23,14 @@ public class  IndexController implements ErrorController {
     }
 
     /**
-     * 只适用于应用程序的自定义的异常信息抛出
-     * 而不能对框架内部的异常进行处理
+     *  异常信息抛出
      * @param request
      * @return
      */
     @RequestMapping(value = PATH,produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO error(HttpServletRequest request){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
-        String errorMsg ;
-        if (Objects.isNull( request.getAttribute(GlobalException.ERROR_MSG))){
-            errorMsg="请求错误";
-        }else {
-            errorMsg= (String) request.getAttribute(GlobalException.ERROR_MSG);
-        }
+        String errorMsg ="请求错误";
        return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.INTER_ERROR, errorMsg);
     }
 

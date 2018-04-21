@@ -1,12 +1,9 @@
 package xyz.sanshan.auth.security.server.config;
 
-import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import com.google.code.kaptcha.impl.DefaultKaptcha;
 import com.google.code.kaptcha.util.Config;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.connection.RedisConnectionFactory;
-import org.springframework.data.redis.core.RedisTemplate;
 
 import java.util.Properties;
 
@@ -27,13 +24,4 @@ public class CodeConfiguration {
         return kaptcha;
     }
 
-    @Bean
-    public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory cf) {
-        RedisTemplate<String, String> redis = new RedisTemplate<String, String>();
-        GenericFastJsonRedisSerializer fastJsonRedisSerializer = new GenericFastJsonRedisSerializer();
-        redis.setDefaultSerializer(fastJsonRedisSerializer);
-        redis.setConnectionFactory(cf);
-        redis.afterPropertiesSet();
-        return redis;
-    }
 }

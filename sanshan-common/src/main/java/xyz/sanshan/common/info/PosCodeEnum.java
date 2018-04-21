@@ -1,5 +1,8 @@
 package xyz.sanshan.common.info;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * 全局错误码配置
  */
@@ -16,6 +19,13 @@ public enum PosCodeEnum {
     PARAM_ERROR(50417,"错误的参数值"), FREQUENTLY_REQUEST(50408,"请求太频繁"),UNKONW_EXCEPTION(50404,"未知错误")
     ;
 
+    private static final Map<Integer, PosCodeEnum> mappings = new HashMap<Integer, PosCodeEnum>(30);
+
+    static {
+        for (PosCodeEnum codeEnum : values()) {
+            mappings.put(codeEnum.getStatus(), codeEnum);
+        }
+    }
 
     private Integer status;
     private String msg;
@@ -23,6 +33,10 @@ public enum PosCodeEnum {
     PosCodeEnum(Integer status, String msg) {
         this.status = status;
         this.msg = msg;
+    }
+
+    public static PosCodeEnum resolve(Integer status) {
+        return (status != null ? mappings.get(status) : null);
     }
 
     public Integer getStatus() {

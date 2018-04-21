@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.mongo.MongoAutoConfiguration;
 import org.springframework.boot.autoconfigure.thymeleaf.ThymeleafAutoConfiguration;
 import org.springframework.boot.autoconfigure.transaction.TransactionAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
@@ -22,6 +23,7 @@ import xyz.sanshan.auth.security.client.EnableSanShanAuthClient;
 @EnableFeignClients({"xyz.sanshan.main.service.feign","xyz.sanshan.auth.security.client.feign"})
 @EnableCircuitBreaker
 @EnableSanShanAuthClient
+@ServletComponentScan("xyz.sanshan.main.web.config.javaconfig.druid")
 public class MainBootstrap extends SpringBootServletInitializer {
 
     @Override

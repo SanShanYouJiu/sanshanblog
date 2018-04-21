@@ -55,6 +55,7 @@ public class AuthServiceImpl  implements AuthService {
 
     @Override
     public void validate(String token) throws Exception {
+        jwtTokenUtil.getInfoFromToken(token);
     }
 
     @Override

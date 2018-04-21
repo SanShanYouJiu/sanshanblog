@@ -15,6 +15,7 @@ import xyz.sanshan.auth.security.client.jwt.ServiceAuthUtil;
 import xyz.sanshan.auth.security.client.jwt.UserAuthUtil;
 import xyz.sanshan.auth.security.common.util.jwt.IJWTInfo;
 import xyz.sanshan.common.UserContextHandler;
+import xyz.sanshan.common.exception.auth.UserTokenException;
 import xyz.sanshan.common.info.HttpMethodEnum;
 import xyz.sanshan.common.vo.PermissionInfo;
 import xyz.sanshan.gate.server.auth.AuthPermissionUrlUtil;
@@ -78,6 +79,9 @@ public class AccessFilter extends ZuulFilter {
             IJWTInfo user = null;
             try {
                 user = getJWTUser(request, ctx);
+            } catch (UserTokenException e) {
+                setFailedRequest(JSON.toJSONString(e.getMessage()), 401);
+                return null;
             } catch (Exception e) {
                 setFailedRequest(JSON.toJSONString(e.getMessage()), 200);
                 return null;

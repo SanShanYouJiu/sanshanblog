@@ -10,7 +10,6 @@ import xyz.sanshan.auth.security.server.service.AuthService;
 import xyz.sanshan.common.info.PosCodeEnum;
 import xyz.sanshan.common.vo.ResponseMsgVO;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -40,8 +39,7 @@ public class ClientController {
     @GetMapping(value = "/myClient",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO<List<String>> getAllowedClient(@RequestParam("serviceId")String serviceId, @RequestParam("secret")String secret) {
         ResponseMsgVO<List<String>>  msgVO = new ResponseMsgVO<List<String>> ();
-        //TODO: 2018:4:5 授权的客户端列表
-        msgVO.buildOKWithData(new ArrayList<>());
+        msgVO.buildOKWithData(authClientService.getAllowedClient(serviceId,secret));
         return msgVO;
     }
 

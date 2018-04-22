@@ -1,9 +1,9 @@
 package xyz.sanshan.main.service.convent;
 
 
-import xyz.sanshan.main.pojo.dto.RecommendDTO;
-import xyz.sanshan.main.pojo.entity.RecommendDO;
 import org.modelmapper.ModelMapper;
+import xyz.sanshan.main.pojo.dto.recommend.RecommendDTO;
+import xyz.sanshan.main.pojo.entity.recommend.RecommendDO;
 
 import java.util.Objects;
 

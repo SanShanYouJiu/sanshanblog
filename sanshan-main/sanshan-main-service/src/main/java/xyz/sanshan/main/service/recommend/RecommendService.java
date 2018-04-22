@@ -3,12 +3,12 @@ package xyz.sanshan.main.service.recommend;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import xyz.sanshan.main.dao.mongo.RecommendRepository;
-import xyz.sanshan.main.pojo.dto.BaseBlogDTO;
-import xyz.sanshan.main.pojo.dto.RecommendDTO;
-import xyz.sanshan.main.pojo.dto.UserDTO;
-import xyz.sanshan.main.pojo.entity.RecommendDO;
 import xyz.sanshan.common.vo.ResponseMsgVO;
+import xyz.sanshan.main.dao.mongo.RecommendRepository;
+import xyz.sanshan.main.pojo.dto.recommend.RecommendDTO;
+import xyz.sanshan.main.pojo.entity.recommend.BlogRecommendDO;
+import xyz.sanshan.main.pojo.entity.recommend.RecommendDO;
+import xyz.sanshan.main.pojo.entity.recommend.UserRecommendDO;
 import xyz.sanshan.main.service.convent.RecommendConvert;
 
 import javax.annotation.PostConstruct;
@@ -76,8 +76,8 @@ public class RecommendService {
      */
     public void generateRecommedn() {
         RecommendDO recommendDO = new RecommendDO();
-        List<UserDTO> recommnedUsers= userRecommendService.generateUsers();
-        List<BaseBlogDTO> recommnedBlogs= blogRecommendService.generateBlogs();
+        List<UserRecommendDO> recommnedUsers= userRecommendService.generateUsers();
+        List<BlogRecommendDO> recommnedBlogs= blogRecommendService.generateBlogs();
         recommendDO.setRecommendUsers(recommnedUsers);
         recommendDO.setRecommendBlogs(recommnedBlogs);
         recommendDO.setCreated(new Date());

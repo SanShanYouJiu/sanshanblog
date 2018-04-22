@@ -3,14 +3,14 @@ package xyz.sanshan.main.service.recommend;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import xyz.sanshan.main.service.editor.BlogIdGenerate;
 import xyz.sanshan.common.info.EditorTypeEnum;
 import xyz.sanshan.common.info.PosCodeEnum;
 import xyz.sanshan.common.vo.ResponseMsgVO;
-import xyz.sanshan.main.pojo.dto.BaseBlogDTO;
 import xyz.sanshan.main.pojo.dto.BlogVoteDTO;
-import xyz.sanshan.main.pojo.dto.MarkDownBlogDTO;
-import xyz.sanshan.main.pojo.dto.UeditorBlogDTO;
+import xyz.sanshan.main.pojo.dto.CommonBlogDTO;
+import xyz.sanshan.main.pojo.entity.recommend.BlogRecommendDO;
+import xyz.sanshan.main.service.convent.BlogRecommendConvert;
+import xyz.sanshan.main.service.editor.BlogIdGenerate;
 import xyz.sanshan.main.service.vote.BlogVoteInfoService;
 
 import java.util.*;
@@ -25,7 +25,11 @@ public class BlogRecommendService {
     @Autowired
     private BlogIdGenerate blogIdGenerate;
 
-    private final Integer generateBlogs = 5;
+
+    private Map<Long, Double> recommendRateMap = new HashMap<>();
+
+    private final Integer generateBlogs = 10;
+
 
 
     /**
@@ -33,7 +37,7 @@ public class BlogRecommendService {
      *
      * @return
      */
-    public List<BaseBlogDTO> generateBlogs() {
+    public List<BlogRecommendDO> generateBlogs() {
         log.info("生成一次 博客推荐数据");
 
         Map<Long, EditorTypeEnum> idMap = blogIdGenerate.getIdCopy();
@@ -56,18 +60,17 @@ public class BlogRecommendService {
             }
         }
 
-        return assembleResult(blogVoteDTOS, idMap);
+        return assembleResult(blogVoteDTOS);
     }
 
     /**
      * 组装结果
      *
      * @param blogVoteDTOS
-     * @param idMap
      * @return
      */
-    private List<BaseBlogDTO> assembleResult(Set<BlogVoteDTO> blogVoteDTOS, Map<Long, EditorTypeEnum> idMap) {
-        List<BaseBlogDTO> recommendBlogs = new LinkedList<>();
+    private List<BlogRecommendDO> assembleResult(Set<BlogVoteDTO> blogVoteDTOS) {
+        List<BlogRecommendDO> recommendBlogs = new LinkedList<>();
 
         Map<Long, String> invertIdTitleMap = blogIdGenerate.getInvertIdTitleMap();
         //放到这里自动排序
@@ -75,26 +78,16 @@ public class BlogRecommendService {
         int i = 0;
 
         //组装结果
-        while (i < generateBlogs - 1 && it.hasNext()) {
+        while (i < generateBlogs && it.hasNext()) {
             Long blogId = it.next().getBlogId();
-            BaseBlogDTO blogDTO = null;
-
-            EditorTypeEnum editorType = idMap.get(blogId);
-            switch (editorType) {
-                case MARKDOWN_EDITOR:
-                    blogDTO = new MarkDownBlogDTO();
-                    break;
-                case UEDITOR_EDITOR:
-                    blogDTO = new UeditorBlogDTO();
-                    break;
-                case VOID_ID:
-                    break;
-                default:
-                    break;
-            }
+            CommonBlogDTO blogDTO = new CommonBlogDTO();
             blogDTO.setId(blogId);
             blogDTO.setTitle(invertIdTitleMap.get(blogId));
-            recommendBlogs.add(i, blogDTO);
+            BlogRecommendDO blogRecommendDO = BlogRecommendConvert.dtoToDo(blogDTO);
+            //添加Recommend相关属性
+            blogRecommendDO.setRecommendRate(recommendRateMap.get(blogId));
+            blogRecommendDO.setCreated(new Date());
+            recommendBlogs.add(i, blogRecommendDO);
             i++;
         }
         return recommendBlogs;
@@ -129,6 +122,10 @@ public class BlogRecommendService {
         b1RecommendRate = recommendRate(b1Votes, b1Rate);
         double b2RecommendRate;
         b2RecommendRate = recommendRate(b2Votes, b2Rate);
+
+        //存一下
+        recommendRateMap.put(b1.getBlogId(), b1RecommendRate);
+        recommendRateMap.put(b2.getBlogId(), b2RecommendRate);
 
         //不设置0 因为每个值都是有意义的
         if (b1RecommendRate > b2RecommendRate) {

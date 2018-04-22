@@ -1,8 +1,6 @@
-package xyz.sanshan.main.pojo.entity;
+package xyz.sanshan.main.pojo.entity.recommend;
 
 
-import xyz.sanshan.main.pojo.dto.BaseBlogDTO;
-import xyz.sanshan.main.pojo.dto.UserDTO;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -21,9 +19,9 @@ public class RecommendDO  implements Serializable {
 
     private String _id;
 
-    private List<BaseBlogDTO> recommendBlogs;
+    private List<BlogRecommendDO> recommendBlogs;
 
-    private List<UserDTO> recommendUsers;
+    private List<UserRecommendDO> recommendUsers;
 
     @Indexed(expireAfterSeconds = 2592000)
     private Date created;

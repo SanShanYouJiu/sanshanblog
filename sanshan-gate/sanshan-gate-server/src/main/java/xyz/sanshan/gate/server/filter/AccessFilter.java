@@ -90,7 +90,7 @@ public class AccessFilter extends ZuulFilter {
         boolean adminAuthDetection = adminAuthDetection(requestUri, method);
         if (adminAuthDetection) {
             //管理权限暂不开放
-            setFailedRequest(JSON.toJSONString("Wrong URL to access"), 200);
+            setFailedRequest(JSON.toJSONString("Wrong URL to access"), 401);
             return null;
         }
 

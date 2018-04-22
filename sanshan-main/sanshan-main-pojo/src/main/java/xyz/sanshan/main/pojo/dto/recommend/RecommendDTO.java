@@ -1,8 +1,10 @@
-package xyz.sanshan.main.pojo.dto;
+package xyz.sanshan.main.pojo.dto.recommend;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import xyz.sanshan.main.pojo.dto.CommonBlogDTO;
+import xyz.sanshan.main.pojo.dto.UserDTO;
 
 import java.io.Serializable;
 import java.util.List;
@@ -18,7 +20,7 @@ public class RecommendDTO implements Serializable {
 
     private String _id;
 
-    private List<BaseBlogDTO> recommendBlogs;
+    private List<CommonBlogDTO> recommendBlogs;
 
     private List<UserDTO> recommendUsers;
 

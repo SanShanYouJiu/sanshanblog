@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Query;
-import xyz.sanshan.main.pojo.entity.RecommendDO;
+import xyz.sanshan.main.pojo.entity.recommend.RecommendDO;
 
 public class RecommendRepositoryImpl  implements CustomRecommendRepository{
     @Autowired

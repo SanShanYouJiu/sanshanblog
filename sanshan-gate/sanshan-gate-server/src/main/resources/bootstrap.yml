@@ -7,12 +7,10 @@ info:
 spring:
   cloud:
     config:
-        discovery:
-           service-id: sanshan-config
-           enabled: true
         label: master  # git 分支
         name: gate
-        profile: dev
+        profile: deploy
+        uri: http://${CONFIG_HOST:118.31.13.102}:${CONFIG_PORT:8750}
 
 #请求和响应GZIP压缩支持
 feign:

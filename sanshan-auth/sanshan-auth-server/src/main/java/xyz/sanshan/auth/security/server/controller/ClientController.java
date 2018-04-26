@@ -61,6 +61,7 @@ public class ClientController {
     public ResponseMsgVO<byte[]> getServicePublicKey(@RequestParam("clientId") String clientId, @RequestParam("secret") String secret) throws Exception {
         ResponseMsgVO<byte[]> msgVO = new ResponseMsgVO();
         //验证
+        log.info("clientId:{} 服务公钥授权",clientId);
         authClientService.validate(clientId, secret);
         msgVO.buildOKWithData(keyConfiguration.getServicePubKey());
         return  msgVO;
@@ -69,6 +70,7 @@ public class ClientController {
     @PostMapping(value = "/userPubKey",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO<byte[]> getUserPublicKey(@RequestParam("clientId") String clientId, @RequestParam("secret") String secret) throws Exception {
         ResponseMsgVO<byte[]> msgVO = new ResponseMsgVO();
+        log.info("clientId:{} 用户公钥授权",clientId);
         authClientService.validate(clientId, secret);
         msgVO.buildOKWithData(keyConfiguration.getUserPubKey());
         return  msgVO;

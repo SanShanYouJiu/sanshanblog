@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xyz.sanshan.common.vo.ResponseMsgVO;
-import xyz.sanshan.main.dao.mongo.RecommendRepository;
+import xyz.sanshan.main.dao.mongo.recommend.RecommendRepository;
 import xyz.sanshan.main.pojo.dto.recommend.RecommendDTO;
 import xyz.sanshan.main.pojo.entity.recommend.BlogRecommendDO;
 import xyz.sanshan.main.pojo.entity.recommend.RecommendDO;

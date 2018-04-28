@@ -3,6 +3,7 @@ package xyz.sanshan.main.pojo.entity.recommend;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.springframework.data.mongodb.core.index.Indexed;
 
 import java.util.Date;
 
@@ -21,5 +22,6 @@ public class UserRecommendDO {
 
     private Double recommendRate;
 
+    @Indexed(expireAfterSeconds = 2592000)
     private Date created;
 }

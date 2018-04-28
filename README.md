@@ -39,6 +39,7 @@ SanShanBlog是基于Spring Cloud微服务化博客社区平台，具有统一授
  - feign 服务消费
  - zikpin 链路追踪
 5. 整体项目使用[Docker][3]部署
+6. 基于Jenkins实现CI
 
 ##  领域模型设计 
 主要为 DO DTO VO 三种实体对象

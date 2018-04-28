@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS `blog_vote` (
   `extra` varchar(255) CHARACTER SET utf8 DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `blog_vote_id` (`blog_id`) USING BTREE
+  KEY `favours` (`favours`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- 数据导出被取消选择。

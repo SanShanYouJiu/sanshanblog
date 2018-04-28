@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import xyz.sanshan.common.info.EditorTypeEnum;
 import xyz.sanshan.common.info.PosCodeEnum;
 import xyz.sanshan.common.vo.ResponseMsgVO;
+import xyz.sanshan.main.dao.mongo.recommend.BlogRecommendRepository;
 import xyz.sanshan.main.pojo.dto.BlogVoteDTO;
 import xyz.sanshan.main.pojo.dto.CommonBlogDTO;
 import xyz.sanshan.main.pojo.entity.recommend.BlogRecommendDO;
@@ -25,11 +26,13 @@ public class BlogRecommendService {
     @Autowired
     private BlogIdGenerate blogIdGenerate;
 
+    @Autowired
+    private BlogRecommendRepository blogRecommendRepository;
+
 
     private Map<Long, Double> recommendRateMap = new HashMap<>();
 
-    private final Integer generateBlogs = 10;
-
+    private final Integer generateBlogs = 5;
 
 
     /**
@@ -38,7 +41,7 @@ public class BlogRecommendService {
      * @return
      */
     public List<BlogRecommendDO> generateBlogs() {
-        log.info("生成一次 博客推荐数据");
+        log.info("生成一次 推荐博客数据");
 
         Map<Long, EditorTypeEnum> idMap = blogIdGenerate.getIdCopy();
 
@@ -60,16 +63,19 @@ public class BlogRecommendService {
             }
         }
 
-        return assembleResult(blogVoteDTOS);
+        List<BlogRecommendDO> result = assembleAndSaveResult(blogVoteDTOS);
+        return result;
     }
 
+
     /**
-     * 组装结果
+     * 组装并存储计算结果
      *
      * @param blogVoteDTOS
      * @return
      */
-    private List<BlogRecommendDO> assembleResult(Set<BlogVoteDTO> blogVoteDTOS) {
+    private List<BlogRecommendDO> assembleAndSaveResult(Set<BlogVoteDTO> blogVoteDTOS) {
+        //返回给前端的list
         List<BlogRecommendDO> recommendBlogs = new LinkedList<>();
 
         Map<Long, String> invertIdTitleMap = blogIdGenerate.getInvertIdTitleMap();
@@ -77,8 +83,8 @@ public class BlogRecommendService {
         Iterator<BlogVoteDTO> it = blogVoteDTOS.iterator();
         int i = 0;
 
-        //组装结果
-        while (i < generateBlogs && it.hasNext()) {
+        //存储结果
+        while (it.hasNext()) {
             Long blogId = it.next().getBlogId();
             CommonBlogDTO blogDTO = new CommonBlogDTO();
             blogDTO.setId(blogId);
@@ -87,12 +93,16 @@ public class BlogRecommendService {
             //添加Recommend相关属性
             blogRecommendDO.setRecommendRate(recommendRateMap.get(blogId));
             blogRecommendDO.setCreated(new Date());
-            recommendBlogs.add(i, blogRecommendDO);
+            //如果有就更新
+            blogRecommendRepository.save(blogRecommendDO);
+            //组装需要返回给前端的结果
+            if (i < generateBlogs) {
+                recommendBlogs.add(blogRecommendDO);
+            }
             i++;
         }
         return recommendBlogs;
     }
-
 
     /**
      * 推荐算法  算法简陋
@@ -115,7 +125,7 @@ public class BlogRecommendService {
         double b1Rate;
         b1Rate = excellentRate(b1Favours, b1Treads);
         double b2Rate;
-        b2Rate = excellentRate(b1Favours, b2Treads);
+        b2Rate = excellentRate(b2Favours, b2Treads);
 
         //推荐比例
         double b1RecommendRate;
@@ -146,17 +156,19 @@ public class BlogRecommendService {
      * @param treads
      * @return
      */
-    private double excellentRate(Integer favours, Integer treads) {
+    private double excellentRate(int favours, int treads) {
         double rate = 1;
         //防止 /zero 异常
         if (favours == 0 && treads != 0) {
-            rate = 1 / treads;
+            treads+=1;
+            rate = (double)1 / (double)treads;
         } else if (favours != 0 && treads == 0) {
             rate = favours;
         } else if (favours == 0 & treads == 0) {
-            rate = 1;
+            rate = 0.8;
         } else {
-            rate = favours / treads;
+            treads += 1;
+            rate = (double)favours / (double)treads;
         }
         return rate;
     }
@@ -165,7 +177,7 @@ public class BlogRecommendService {
     /**
      * 推荐比例
      * 比例越大越好
-     *
+     * <p>
      * 非常简陋
      *
      * @param votes         投票总数
@@ -174,6 +186,10 @@ public class BlogRecommendService {
      */
     private double recommendRate(Integer votes, Double excellentRate) {
         double recommendRate;
+        //0的情况
+        if (votes==0){
+            votes=1;
+        }
         recommendRate = (excellentRate * excellentRate) * votes;
         return recommendRate;
     }

@@ -100,7 +100,7 @@
         <dependency>
             <groupId>xyz.sanshan</groupId>
             <artifactId>sanshan-common</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0</version>
         </dependency>
 
 
@@ -120,7 +120,7 @@
         <dependency>
             <groupId>xyz.sanshan</groupId>
             <artifactId>sanshan-auth-client</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0</version>
         </dependency>
 
         <dependency>

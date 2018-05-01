@@ -1,52 +1,87 @@
-# 初步版本 还没有完成
-version: '3'
+version: '3.3' 
 
 volumes:
   mongo-data:
   elasticsearch-data:
   sanshan-auth-db-data:
   sanshan-main-db-data:
+  
+networks:
+  sanshan:  
+    driver: overlay
+    attachable: true
+  
 services:
 
   eureka:
-    image: sanshanyoujiu/sanshan-center
+    image: sanshanyoujiu/sanshan-center:0.8
     depends_on:
       - mongo
     ports:
       - "8761:8761"
+    deploy:
+      replicas: 1    
+    networks:
+      - sanshan  
+      
+  sanshan-main:
+    image: sanshanyoujiu/sanshan-main:0.8
+    depends_on:
+      - sanshan-main-db
+      - mongo
+      - redis
+      - sanshan-auth
+      - rabbit
+      - eureka
+    deploy:
+      replicas: 1
+    networks:
+      - sanshan
+    environment:
+      - EUREKA_HOST=eureka
+      - EUREKA_PORT=8761
+      - REDIS_HOST=redis
+      - RABBIT_MQ_HOST=rabbit
+      - RABBIT_MQ_PORT=5672
+
 
 
   sanshan-search:
-    image: sanshanyoujiu/sanshan-search
-    ports:
-      - "8070:8070"
+    image: sanshanyoujiu/sanshan-search:0.8
     links:
       - rabbit
+    networks:
+      - sanshan
     depends_on:
       - elasticsearch
       - mongo
       - eureka
       - rabbit
       - sanshan-auth
+    deploy:
+      replicas: 1
     environment:
       - EUREKA_HOST=eureka
       - EUREKA_PORT=8761
       - RABBIT_MQ_HOST=rabbit
       - RABBIT_MQ_PORT=5672
-      - CONFIG_HOST=118.31.13.102
-      - CONFIG_PORT=8750
 
 
   elasticsearch:
-    image: sanshanyoujiu/elasticsearch
-    restart: always
+    image: sanshanyoujiu/sanshan-elasticsearch:0.8
+    networks:
+      - sanshan
+    deploy:
+      replicas: 1
     volumes:
       - "elasticsearch-data:/usr/share/elasticsearch/data"
 
   sanshan-auth:
-    image: sanshanyoujiu/sanshan-auth
-    ports:
-      - "8081:8081"
+    image: sanshanyoujiu/sanshan-auth:0.8
+    networks:
+      - sanshan
+    deploy:
+      replicas: 1
     depends_on:
       - mongo
       - eureka
@@ -61,74 +96,75 @@ services:
       - RABBIT_MQ_PORT=5672
       - MYSQL_HOST=sanshan-auth-db
 
-  sanshan-main:
-    image: SanShanYouJiu/sanshan-main-web
-    ports:
-      - "8060:8060"
+  rabbit:
+    image: "rabbitmq:3.7.4"
+    networks:
+      - sanshan
+    deploy:
+      replicas: 1
+    restart: always
+
+  sanshan-gate:
+    image: sanshanyoujiu/sanshan-gate:0.8
+    networks:
+      - sanshan
+    deploy:
+      replicas: 1
     depends_on:
-      - mongo
       - eureka
+      - mongo
       - rabbit
-      - redis
-      - sanshan-main-db
       - sanshan-auth
     environment:
       - EUREKA_HOST=eureka
       - EUREKA_PORT=8761
-      - REDIS_HOST=redis
       - RABBIT_MQ_HOST=rabbit
       - RABBIT_MQ_PORT=5672
 
-  rabbit:
-    image: "rabbitmq:3.7.4"
-    restart: always
-
-  sanshan-gate:
-     image: sanshanyoujiu/sanshan-gate
-     ports:
-        - "8080:8080"
-     depends_on:
-        - eureka
-        - mongo
-        - rabbit
-        - sanshan-auth
-     environment:
-        - EUREKA_HOST=eureka
-        - EUREKA_PORT=8761
-        - RABBIT_MQ_HOST=rabbit
-        - RABBIT_MQ_PORT=5672
-
-
   sanshan-auth-db:
-    image: "mysql:5.7"
+    image: sanshanyoujiu/sanshan-auth-db:0.8
     restart: always
+    deploy:
+      replicas: 1
+    networks:
+      - sanshan
     environment:
-      MYSQL_ROOT_PASSWORD: 1234567q
-      MYSQL_DATABASE: sanshan_auth
+      MYSQL_ROOT_PASSWORD: liuziye
+      MYSQL_DATABASE: sanshan-auth
       MYSQL_USER: sanshan
       MYSQL_PASSWORD: 1234567q
     volumes:
-       - "./sanshan-auth/sanshan-auth-server/db:/docker-entrypoint-initdb.d"
        - "sanshan-auth-db-data:/var/lib/mysql"
 
   sanshan-main-db:
-    image: "mysql:5.7"
+    image: sanshanyoujiu/sanshan-main-db:0.8
     restart: always
+    deploy:
+      replicas: 1
+    networks:
+      - sanshan
     environment:
-      MYSQL_ROOT_PASSWORD: 1234567q
+      MYSQL_ROOT_PASSWORD: liuziye
       MYSQL_DATABASE: sanshan_main
       MYSQL_USER: sanshan
       MYSQL_PASSWORD: 1234567q
     volumes:
-       - "./sanshan-main/sanshan-main-web/db:/docker-entrypoint-initdb.d"
        - "sanshan-main-db-data:/var/lib/mysql"
 
   redis:
     image: "redis:3.2"
+    networks:
+      - sanshan
+    deploy:
+      replicas: 1
     restart: always
 
   mongo:
     image: "mongo:3.4"
+    deploy:
+      replicas: 1
+    networks:
+      - sanshan
     restart: always
     volumes:
       - "mongo-data:/data/db"

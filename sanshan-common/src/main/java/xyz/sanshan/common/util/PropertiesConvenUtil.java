@@ -17,14 +17,14 @@ import java.util.Map.Entry;
 public class PropertiesConvenUtil {
 
     /**
-     * 根据java标准properties文件读取信息(文件编码格式采用UTF-8格式！)，默认赋值为一个 HashMap<String,String>
+     * 根据java标准properties文件读取信息(文件编码格式采用UTF-8格式！)，默认赋值为一个 {@code HashMap<String,String>}
      *
-     * @param path
-     * @param map
+     * @param path 路径
+     * @param map map
      * @param type 0是指 String,Set(Long) 1则是Long,EditorTypeEnum
      *             2则是Long,String 3则是Date,Set(Long) 4则是 Long Date
-     * @return
-     * @throws Exception
+     * @return 返回的map
+     * @throws Exception 抛出的异常
      */
     public  final static Map fileToMap(String path, Map map, int type) throws Exception {
         if (map == null) {
@@ -98,12 +98,13 @@ public class PropertiesConvenUtil {
     }
 
     /**
-     * 根据java标准properties文件读取信息，并赋值为一个 HashMap<String,String>
+     * 根据java标准properties文件读取信息，并赋值为一个 {@code HashMap<String,String>}
      *
-     * @param path
-     * @param map
-     * @return
-     * @throws Exception
+     * @param path 路径
+     * @param map map
+     * @param encoding  编码
+     * @return 返回 {@code Map<String,String>}’
+     * @throws Exception 异常
      */
     public final static Map<String, String> fileToMap(String path, Map map, String encoding) throws Exception {
         if (map == null) {
@@ -160,9 +161,10 @@ public class PropertiesConvenUtil {
     /**
      * 存储到本地磁盘的properties文件中
      *
-     * @param path
-     * @param map
-     * @throws IOException
+     * @param path 路径
+     * @param map map
+     * @param description  需要加入的描述信息
+     * @throws IOException io异常
      */
     public final static void idMapToFile(String path, Map<Long, EditorTypeEnum> map, String description) throws IOException {
         if (map.size() != 0) {
@@ -180,9 +182,10 @@ public class PropertiesConvenUtil {
     /**
      * 存储到本地磁盘的properties文件中
      *
-     * @param path
-     * @param map
-     * @throws IOException
+     * @param path 路径
+     * @param map  map
+     * @param description 描述信息
+     * @throws IOException 异常
      */
     public final static void setLongStringToFile(String path, Map<String, Set<Long>> map, String description) throws IOException {
         if (map.size() != 0) {
@@ -199,9 +202,10 @@ public class PropertiesConvenUtil {
     /**
      * 存储到本地磁盘的properties文件中
      *
-     * @param path
-     * @param map
-     * @throws IOException
+     * @param path 路径
+     * @param map map
+     * @param description  描述信息
+     * @throws IOException io异常
      */
     public final static void setLongDateMapToFile(String path, Map<Date, Set<Long>> map, String description) throws IOException {
         if (map.size() != 0) {

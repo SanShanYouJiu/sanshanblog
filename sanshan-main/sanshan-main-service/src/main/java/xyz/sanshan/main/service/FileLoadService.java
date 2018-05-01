@@ -34,7 +34,7 @@ public class FileLoadService {
         GridFSDBFile gridFSDBFile = fileOperation.getFile(filename).get(0);
         try {
             //FIXME 这里的值会随着不同的系统而改变
-            file = new File("/etc/sanshanblog/imageFile/imageFile.jpg");
+            file = new File("/etc/sanshan-main/imageFile/imageFile.jpg");
             gridFSDBFile.writeTo(file);
             body = new FileSystemResource(file);
 

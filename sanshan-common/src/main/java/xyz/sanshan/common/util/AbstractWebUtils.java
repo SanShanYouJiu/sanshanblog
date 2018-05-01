@@ -153,10 +153,10 @@ public abstract class AbstractWebUtils {
     }
 
     /**
-     * 把request请求参数转换为Map<String,String>
+     * 把request请求参数转换为{@code Map<String,String>}
      *
      * @param request 该请求
-     * @return Map<String,String>格式的参数
+     * @return {@code Map<String,String>}格式的参数
      */
     @SuppressWarnings("unchecked")
     public static Map<String, String> requestToMap(HttpServletRequest request) {
@@ -202,6 +202,7 @@ public abstract class AbstractWebUtils {
      *
      * @param url          URL
      * @param parameterMap 请求参数
+     * @param encoding 编码格式
      * @return 返回结果
      */
     public static String post(String url, Map<String, ?> parameterMap, String encoding) {
@@ -231,7 +232,7 @@ public abstract class AbstractWebUtils {
      *
      * @param url       请求连接
      * @param json      json串
-     * @param encording 编码
+     * @param encording 编码格式
      * @return 结果
      */
     public static String post(String url, String json, String encording) {
@@ -266,6 +267,7 @@ public abstract class AbstractWebUtils {
      *
      * @param url               URL
      * @param inputStreamEntity 请求体
+     * @param encording 编码格式
      * @return 返回结果
      */
     public static String post(String url, InputStreamEntity inputStreamEntity, String encording) {
@@ -319,6 +321,8 @@ public abstract class AbstractWebUtils {
      * @param passwd   证书密码
      * @param uri      请求地址
      * @param entity   请求体xml内容
+     * @param encording 编码格式
+     * @throws Exception 异常
      * @return 得到的结果
      */
     public static String post(String certPath, String passwd, String uri, InputStreamEntity entity,
@@ -353,6 +357,7 @@ public abstract class AbstractWebUtils {
      * 处理返回的请求,拿到返回内容
      *
      * @param httpResponse 要处理的返回
+     * @param encording 编码格式
      * @return 返回的内容
      */
     private static String consumeResponse(CloseableHttpResponse httpResponse, String encording) {
@@ -376,6 +381,8 @@ public abstract class AbstractWebUtils {
 
     /**
      * 获取客户端ip地址
+     * @param request reques请求
+     * @return ip地址
      */
     public static String getIp(HttpServletRequest request) {
 

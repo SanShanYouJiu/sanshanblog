@@ -20,8 +20,8 @@ public enum HttpMethodEnum {
 
 	/**
 	 *
-	 * @param method
-	 * @return
+	 * @param method 请求方法
+	 * @return HttpMethodEnum 返回HttpMethodEnum
 	 */
 	public static HttpMethodEnum resolve(String method) {
 		return (method != null ? mappings.get(method) : null);

@@ -10,7 +10,7 @@ import java.util.Objects;
 @Service
 public class SettingService {
 
-    @Value("${sanshanblog-setting.location}")
+    @Value("${sanshan-main-setting.location}")
     private String location;
 
     private SystemUtil systemUtil =null;

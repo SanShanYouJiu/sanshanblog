@@ -67,6 +67,7 @@ public class AuthCodeUtil {
     /**
      * 得到验证码
      * @param codeCount 数量
+     * @return  验证码
      */
     public static String getCode(int codeCount) {
         StringBuilder builderCode = new StringBuilder();

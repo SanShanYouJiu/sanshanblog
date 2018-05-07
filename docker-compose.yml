@@ -14,7 +14,7 @@ networks:
 services:
 
   eureka:
-    image: sanshanyoujiu/sanshan-center:0.8
+    image: registry.cn-hangzhou.aliyuncs.com/sanshan/sanshan-center:0.8
     depends_on:
       - mongo
     ports:
@@ -25,7 +25,7 @@ services:
       - sanshan  
       
   sanshan-main:
-    image: sanshanyoujiu/sanshan-main:0.8
+    image: registry.cn-hangzhou.aliyuncs.com/sanshan/sanshan-main:0.8
     depends_on:
       - sanshan-main-db
       - mongo
@@ -47,7 +47,7 @@ services:
 
 
   sanshan-search:
-    image: sanshanyoujiu/sanshan-search:0.8
+    image: registry.cn-hangzhou.aliyuncs.com/sanshan/sanshan-search:0.8
     links:
       - rabbit
     networks:
@@ -68,7 +68,7 @@ services:
 
 
   elasticsearch:
-    image: sanshanyoujiu/sanshan-elasticsearch:0.8
+    image: registry.cn-hangzhou.aliyuncs.com/sanshan/sanshan-elasticsearch:0.8
     networks:
       - sanshan
     deploy:
@@ -77,7 +77,7 @@ services:
       - "elasticsearch-data:/usr/share/elasticsearch/data"
 
   sanshan-auth:
-    image: sanshanyoujiu/sanshan-auth:0.8
+    image: registry.cn-hangzhou.aliyuncs.com/sanshan/sanshan-auth:0.8
     networks:
       - sanshan
     deploy:
@@ -105,7 +105,7 @@ services:
     restart: always
 
   sanshan-gate:
-    image: sanshanyoujiu/sanshan-gate:0.8
+    image: registry.cn-hangzhou.aliyuncs.com/sanshan/sanshan-gate:0.8
     networks:
       - sanshan
     deploy:
@@ -122,7 +122,7 @@ services:
       - RABBIT_MQ_PORT=5672
 
   sanshan-auth-db:
-    image: sanshanyoujiu/sanshan-auth-db:0.8
+    image: registry.cn-hangzhou.aliyuncs.com/sanshan/sanshan-auth-db:0.8
     restart: always
     deploy:
       replicas: 1
@@ -137,7 +137,7 @@ services:
        - "sanshan-auth-db-data:/var/lib/mysql"
 
   sanshan-main-db:
-    image: sanshanyoujiu/sanshan-main-db:0.8
+    image: registry.cn-hangzhou.aliyuncs.com/sanshan/sanshan-main-db:0.8
     restart: always
     deploy:
       replicas: 1

@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS `blog_vote` (
   `updated` datetime NOT NULL,
   `extra` varchar(255) CHARACTER SET utf8 DEFAULT '',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `blog_vote_id` (`blog_id`) USING BTREE
+  UNIQUE KEY `blog_vote_id` (`blog_id`) USING BTREE,
   KEY `favours` (`favours`)
 ) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -96,7 +96,7 @@ CREATE TABLE IF NOT EXISTS `ueditor_file_quote` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `ueditor_filename` (`filename`),
   KEY `ueditor_file_quote` (`quote`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 -- 数据导出被取消选择。
 -- 导出  表 sanshan_main.ueditor_id_file_map 结构

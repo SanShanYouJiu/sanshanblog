@@ -35,7 +35,6 @@ zuul:
       path: /auth/**
       serviceId: sanshan-auth
 
-
 eureka:
   client:
     service-url:
@@ -51,3 +50,11 @@ auth:
     token-header: client-token
     id: sanshan-gate  #不填则默认读取spring.application.name
     secret: 123456
+
+hystrix:
+  command:
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 6000 #超时熔断配置为6秒

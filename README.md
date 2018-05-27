@@ -47,10 +47,11 @@ SanShanBlog是基于Spring Cloud微服务化博客社区平台，具有统一授
 2. DTO:数据传输载体
 3. VO 对应接口返回数据包装.简单情况下DTO可以直接作为VO使用
 
-
+> 开发中需要的配置模板可以在[这里][4]获取 
 
 在代码中采用lombok进行缩写代码
 
 [1]: https://github.com/SanShanYouJiu/SanShanBlog-Web
 [2]: https://sanshan.xyz/
 [3]: https://github.com/SanShanYouJiu/sanshanblog-docker-file
+[4]: https://gitee.com/SanShanYouJiu/config-repo-demo

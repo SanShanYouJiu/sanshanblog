@@ -9,13 +9,3 @@ spring:
 
 server:
   port: 8750
-
-eureka:
-    instance:
-        statusPageUrlPath: /info
-        healthCheckUrlPath: /health
-    client:
-      service-url:
-        defaultZone: http://localhost:8761/eureka/
-           # docker 部署开启
-        #defaultZone: http://${EUREKA_HOST:localhost}:${EUREKA_PORT:8761}/eureka/

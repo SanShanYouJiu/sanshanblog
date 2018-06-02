@@ -15,5 +15,4 @@ sanshan-common/src/main/resources/data/
 *.war
 *.ear
 *.zip
-*.tar.gz
 *.rar

@@ -11,6 +11,8 @@ SanShanBlog是基于Spring Cloud微服务化博客社区平台，具有统一授
 > 这是后台代码 在下文中有技术选型的说明 前端代码在这里 [地址][1]
 >
 > docker编排文件 [地址][3]
+>
+> 项目部署 [快速开始][5]
 
 ![sanshanblog-1](https://github.com/SanShanYouJiu/ImageRepository/blob/master/SanShaBlog/sanshanblog-1.jpg?raw=true)
 
@@ -18,7 +20,12 @@ SanShanBlog是基于Spring Cloud微服务化博客社区平台，具有统一授
 
 ![sanshanblog-3](https://github.com/SanShanYouJiu/ImageRepository/blob/master/SanShaBlog/sanshanblog-3.jpg?raw=true)
 
+
+
+
+
 ## 架构说明
+
 ![sanshanblog-4](https://github.com/SanShanYouJiu/ImageRepository/blob/master/SanShaBlog/SanShanBlog%20%E6%9E%B6%E6%9E%84%E5%9B%BE%20(1).png?raw=true)
 
 ## 技术选型
@@ -51,7 +58,10 @@ SanShanBlog是基于Spring Cloud微服务化博客社区平台，具有统一授
 
 在代码中采用lombok进行缩写代码
 
+ 
+
 [1]: https://github.com/SanShanYouJiu/SanShanBlog-Web
 [2]: https://sanshan.xyz/
 [3]: https://github.com/SanShanYouJiu/sanshanblog-docker-file
 [4]: https://gitee.com/SanShanYouJiu/config-repo-demo
+[5]: https://github.com/SanShanYouJiu/sanshanblog/wiki/%E5%BF%AB%E9%80%9F%E5%BC%80%E5%A7%8B

@@ -7,5 +7,9 @@ spring:
           git:
             uri: https://gitee.com/SanShanYouJiu/config-repo-demo.git
 
+security:
+  user:
+    password: 123456
+
 server:
   port: 8750

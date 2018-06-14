@@ -27,7 +27,7 @@ public class BrowseService {
     }
 
     /**
-     * 加入BlogId对应的博客浏览数
+     * 增加BlogId对应的博客浏览数
      * @param blogId
      */
     public void BlogBrowsesAddForBlogId(Long blogId){

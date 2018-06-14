@@ -27,6 +27,7 @@ public class UeditorFileUploadCheck {
     @Autowired
     private UeditorFileQuoteMapper ueditorFileQuoteMapper;
 
+    //TODO: 这里可以考虑改造为spring batch来处理
     @Transactional(isolation = Isolation.READ_COMMITTED,propagation = Propagation.REQUIRES_NEW,rollbackFor = Exception.class)
     public void check(){
        Map<String,Integer> fileQuoteMap= redisTemplate.opsForHash().entries(UeditorFileService.UEDITOR_UPLOAD_FILE);

@@ -22,10 +22,11 @@ public class InstantiationTracingBeanPostProcessor implements CommandLineRunner 
 
     @Override
     public void run(String... args) throws Exception {
-        log.info("数据一致性检查-> 从数据库恢复数据");
+        log.info("数据一致性检查 -> 从数据库恢复数据");
         //不推荐开启 如果出错的情况可以在项目启动时开启作为一次数据恢复
+
         blogMetaDataInspect.inspectDataConsistency();
-        voteDataInspect.inspectDataConsistency();
-        ueditorFileDataInspect.inspectDataConsistency();
+        //voteDataInspect.inspectDataConsistency();
+        //ueditorFileDataInspect.inspectDataConsistency();
     }
 }

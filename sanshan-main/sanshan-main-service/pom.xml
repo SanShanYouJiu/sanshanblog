@@ -56,6 +56,14 @@
             <version>${modelmapper}</version>
         </dependency>
 
+        <!--ehcache-->
+        <dependency>
+            <groupId>net.sf.ehcache</groupId>
+            <artifactId>ehcache</artifactId>
+            <version>2.10.4</version>
+        </dependency>
+
+
         <dependency>
             <groupId>xyz.sanshan</groupId>
             <artifactId>sanshan-common</artifactId>

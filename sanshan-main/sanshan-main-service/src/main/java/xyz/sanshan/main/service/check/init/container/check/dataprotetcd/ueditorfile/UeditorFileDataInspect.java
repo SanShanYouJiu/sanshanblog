@@ -36,21 +36,27 @@ public class UeditorFileDataInspect {
      从数据库恢复数据
      */
     public void inspectDataConsistency() {
-        //数据库与BlogIdGenerate的事物完整性检查
-        Long initTime = System.currentTimeMillis();
-        log.info("ueditor的文件数据从数据库中回滚");
-        //开启事务
-        SessionCallback sessionCallback = new SessionCallback() {
-            @Override
-            public Object execute(RedisOperations redisOperations) throws DataAccessException {
-                redisOperations.multi();
-                rollbackData();
-                return redisOperations.exec();
-            }
-        };
-        //事务执行
-        redisTemplate.execute(sessionCallback);
-        log.info("ueditor上传文件数据中的数据回滚完成 耗时:{}ms", System.currentTimeMillis() - initTime);
+        if(checkIsNeedRollback()) {
+            //数据库与BlogIdGenerate的事物完整性检查
+            Long initTime = System.currentTimeMillis();
+            log.info("ueditor的文件数据从数据库中回滚");
+            //开启事务
+            SessionCallback sessionCallback = new SessionCallback() {
+                @Override
+                public Object execute(RedisOperations redisOperations) throws DataAccessException {
+                    redisOperations.multi();
+                    rollbackData();
+                    return redisOperations.exec();
+                }
+            };
+            //事务执行
+            redisTemplate.execute(sessionCallback);
+            log.info("ueditor上传文件数据中的数据回滚完成 耗时:{}ms", System.currentTimeMillis() - initTime);
+        }
+    }
+    //目前缓存不需要回滚
+    private Boolean checkIsNeedRollback(){
+        return false;
     }
 
 

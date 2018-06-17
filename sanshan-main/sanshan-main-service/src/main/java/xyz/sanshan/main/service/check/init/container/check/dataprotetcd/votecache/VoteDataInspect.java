@@ -36,24 +36,34 @@ public class VoteDataInspect {
      * 从数据库恢复数据
      */
     public void inspectDataConsistency() {
-        Long initTime = System.currentTimeMillis();
-        //进行点赞数据的事务完整性检查
-        log.info("投票数据进行数据回滚");
-        List<BlogVoteDO> blogVoteDOS = blogVoteMapper.selectAll();
-        List<IpBlogVoteDO> ipBlogVoteDOS = ipBlogVoteMapper.selectAll();
-        //开启事务
-        SessionCallback sessionCallback = new SessionCallback() {
-            @Override
-            public Object execute(RedisOperations redisOperations) throws DataAccessException {
-                redisOperations.multi();
-                rollbackData(blogVoteDOS, ipBlogVoteDOS);
-                return redisOperations.exec();
-            }
-        };
-        //执行
-        redisTemplate.execute(sessionCallback);
-        log.info("从数据库中回滚投票数据的完成 耗时:{}ms", System.currentTimeMillis() - initTime);
+        if(checkIsNeedRollback()) {
+            Long initTime = System.currentTimeMillis();
+            //进行点赞数据的事务完整性检查
+            log.info("投票数据进行数据回滚");
+            List<BlogVoteDO> blogVoteDOS = blogVoteMapper.selectAll();
+            List<IpBlogVoteDO> ipBlogVoteDOS = ipBlogVoteMapper.selectAll();
+            //开启事务
+            SessionCallback sessionCallback = new SessionCallback() {
+                @Override
+                public Object execute(RedisOperations redisOperations) throws DataAccessException {
+                    redisOperations.multi();
+                    rollbackData(blogVoteDOS, ipBlogVoteDOS);
+                    return redisOperations.exec();
+                }
+            };
+            //执行
+            redisTemplate.execute(sessionCallback);
+            log.info("从数据库中回滚投票数据的完成 耗时:{}ms", System.currentTimeMillis() - initTime);
+        }else {
+
+        }
     }
+
+    //目前缓存不需要回滚
+    private Boolean checkIsNeedRollback(){
+        return false;
+    }
+
 
     /**
      * 数据回滚到缓存

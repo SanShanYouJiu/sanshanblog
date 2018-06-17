@@ -10,12 +10,20 @@ import xyz.sanshan.common.exception.NotFoundBlogException;
 import xyz.sanshan.common.info.EditorTypeEnum;
 import xyz.sanshan.common.info.PosCodeEnum;
 import xyz.sanshan.common.vo.ResponseMsgVO;
+import xyz.sanshan.main.dao.mybatis.MarkDownBlogMapper;
+import xyz.sanshan.main.dao.mybatis.UeditorBlogMapper;
 import xyz.sanshan.main.pojo.dto.MarkDownBlogDTO;
 import xyz.sanshan.main.pojo.dto.UeditorBlogDTO;
+import xyz.sanshan.main.pojo.entity.MarkDownBlogDO;
+import xyz.sanshan.main.pojo.entity.UeditorBlogDO;
+import xyz.sanshan.main.service.convent.BlogConvert;
+import xyz.sanshan.main.service.convent.MarkDownEditorConvert;
+import xyz.sanshan.main.service.convent.UeditorEditorConvert;
 import xyz.sanshan.main.service.editor.BlogIdGenerate;
 import xyz.sanshan.main.service.editor.BlogResourcesOperation;
 import xyz.sanshan.main.service.editor.MarkDownBlogService;
 import xyz.sanshan.main.service.editor.UeditorBlogService;
+import xyz.sanshan.main.service.util.EHCacheUtil;
 import xyz.sanshan.main.service.vo.BlogVO;
 
 import java.util.*;
@@ -34,11 +42,22 @@ public class BlogService {
     private UeditorBlogService uEditorBlogService;
 
     @Autowired
+    private MarkDownBlogMapper markDownBlogMapper;
+
+    @Autowired
+    private UeditorBlogMapper ueditorBlogMapper;
+
+
+    @Autowired
     private BlogIdGenerate blogIdGenerate;
 
     @Autowired
     private BlogResourcesOperation blogOperation;
 
+    static {
+        EHCacheUtil.initCacheManager();
+        EHCacheUtil.initCache("blog_meta_data");
+    }
 
     public Long getCurrentId() {
         return blogIdGenerate.getExistMaxId();
@@ -51,29 +70,25 @@ public class BlogService {
      * @return
      */
     public List<BlogVO> getBlogByTag(String tag) {
-        List<BlogVO> blogVOS = new LinkedList<>();
-        Set<Long> longs = blogIdGenerate.getTagMap(tag);
-        if (Objects.isNull(longs)){
-            return null;
+        String cacheKey = "BlogService#getBlogByTag:{"+"tag:" + tag +"}";
+        if (EHCacheUtil.get(cacheKey) != null) {
+            return (List<BlogVO>) EHCacheUtil.get(cacheKey);
         }
-        Long[] a = {};
-        Long[] ids = longs.toArray(a);
-        Map<Long, String> titleMap = blogIdGenerate.getInvertIdTitleMap();
-        Map<Long, EditorTypeEnum> idMap = blogIdGenerate.getIdCopy();
-        for (int i = 0; i < ids.length; i++) {
-            Long id = ids[i];
-            switchTypeAssembleBlogList(id, titleMap, blogVOS, idMap.get(id));
-        }
+        List<BlogVO> blogVOS ;
+        blogVOS = buildBlogVOS(ueditorBlogMapper.queryByTag(tag), markDownBlogMapper.queryByTag(tag));
+        EHCacheUtil.put(cacheKey,blogVOS);
         return blogVOS;
     }
 
-    public List queryTagAll() {
-        List list = new LinkedList();
-        Map<String, Set<Long>> map = blogIdGenerate.getIdTagCopy();
-        for (Map.Entry<String, Set<Long>> entry : map.entrySet()) {
-            list.add(entry.getKey());
-        }
-        return list;
+
+    /**
+     * 其实只是查最近100条
+     * @return
+     */
+    @Deprecated
+    public PageInfo queryTagAll() {
+        PageInfo pageInfo = queryTagByPage(100, 1);
+        return pageInfo;
     }
 
     public PageInfo queryTagByPage(long pageRows,long pageSize){
@@ -88,14 +103,6 @@ public class BlogService {
         return pageInfo;
     }
 
-    public List queryTitleAll() {
-        List list = new LinkedList();
-        Map<String, Set<Long>> map = blogIdGenerate.getIdTitleCopy();
-        for (Map.Entry<String, Set<Long>> entry : map.entrySet()) {
-            list.add(entry.getKey());
-        }
-        return list;
-    }
 
     /**
      * 查询对应title标签的博客
@@ -104,19 +111,13 @@ public class BlogService {
      * @return
      */
     public List<BlogVO> getBlogByTitle(String title) {
-        List<BlogVO> blogVOS = new LinkedList<>();
-        Set<Long> longs = blogIdGenerate.getTitleMap(title);
-        if (Objects.isNull(longs)){
-            return null;
+        String cacheKey = "BlogService#getBlogByTitle:{"+"title:" + title +"}";
+        if (EHCacheUtil.get(cacheKey) != null) {
+            return (List<BlogVO>) EHCacheUtil.get(cacheKey);
         }
-        Long[] a = {};
-        Long[] ids = longs.toArray(a);
-        Map<Long, String> titleMap = blogIdGenerate.getInvertIdTitleMap();
-        Map<Long, EditorTypeEnum> idMap = blogIdGenerate.getIdCopy();
-        for (int i = 0; i < ids.length; i++) {
-            Long id = ids[i];
-            switchTypeAssembleBlogList(id, titleMap, blogVOS, idMap.get(id));
-        }
+        List<BlogVO> blogVOS ;
+        blogVOS = buildBlogVOS(ueditorBlogMapper.queryByTitle(title), markDownBlogMapper.queryByTitle(title));
+        EHCacheUtil.put(cacheKey, blogVOS);
         return blogVOS;
     }
 
@@ -132,14 +133,6 @@ public class BlogService {
         return pageInfo;
     }
 
-    public List queryDateAll() {
-        List list = new LinkedList();
-        Map<Date, Set<Long>> map = blogIdGenerate.getIdDateCopy();
-        for (Map.Entry<Date, Set<Long>> entry : map.entrySet()) {
-            list.add(entry.getKey());
-        }
-        return list;
-    }
 
     public PageInfo queryDateByPage(long pageRows,long pageNum){
         List list = new LinkedList();
@@ -232,32 +225,56 @@ public class BlogService {
     }
 
 
-    public List<BlogVO> queryAllOfIdMap() {
-        List<BlogVO> blogVOS = new LinkedList<>();
-        Map<Long, EditorTypeEnum> map = blogIdGenerate.getIdCopy();
-        Map<Long, String> titleMap = blogIdGenerate.getInvertIdTitleMap();
-        for (Map.Entry<Long, EditorTypeEnum> entry : map.entrySet()) {
-            long id = entry.getKey();
-            switchTypeAssembleBlogList(id, titleMap, blogVOS, entry.getValue());
+    /**
+     * 分页获取首页博客信息
+     * @param pageRows
+     * @param pageSize
+     * @return
+     */
+    public PageInfo queryByPage(long pageRows, long pageSize) {
+        String cacheKey = "BlogService#queryByPage:{"+"pageRows:" + pageRows + "pageSize:" + pageSize+"}";
+        if (EHCacheUtil.get(cacheKey)!=null) {
+            return (PageInfo) EHCacheUtil.get(cacheKey);
         }
-        return blogVOS;
+        PageInfo pageInfo = blogIdGenerate.getIdCopyByPage(pageRows, pageSize);
+        //build博客相关信息
+        PageInfo resultPageInfo = buildHomeBlogInfoPageInfo(pageInfo);
+        EHCacheUtil.put(cacheKey, resultPageInfo);
+        return resultPageInfo;
     }
 
-    public PageInfo queryByPage(long pageRows, long pageSize) {
-        List<BlogVO> blogVOS = new LinkedList<>();
-        PageInfo pageInfo = blogIdGenerate.getIdCopyByPage(pageRows, pageSize);
-        Map<Long, EditorTypeEnum> map = pageInfo.getCurrentMapData();
-        Map<Long, String> titleMap = blogIdGenerate.getInvertIdTitleMap();
-        for (Map.Entry<Long, EditorTypeEnum> entry : map.entrySet()) {
-            Long id = entry.getKey();
-            switchTypeAssembleBlogList(id, titleMap, blogVOS, entry.getValue());
+    private PageInfo buildHomeBlogInfoPageInfo(PageInfo pageInfo) {
+        Map<Long, EditorTypeEnum> idMap = pageInfo.getCurrentMapData();
+
+        List<BlogVO> commonBlogDTOS = new ArrayList<>(idMap.size());
+        for (Map.Entry<Long, EditorTypeEnum> map : idMap.entrySet()) {
+            switch (map.getValue()) {
+                case MARKDOWN_EDITOR:
+                   commonBlogDTOS.add( BlogConvert.markdownDTOConvertBlogVO(markDownBlogService.queryDtoById(map.getKey())));
+                   break;
+                case UEDITOR_EDITOR:
+                    commonBlogDTOS.add(BlogConvert.ueditorDTOConvertBlogVO(uEditorBlogService.queryDtoById(map.getKey())));
+                    break;
+                case VOID_ID:
+                    continue;
+                default:
+                    continue;
+            }
         }
         pageInfo.setCurrentMapData(null);
-        pageInfo.setCompleteData(blogVOS);
+        pageInfo.setCompleteData(commonBlogDTOS);
         return pageInfo;
     }
 
-    protected void switchTypeAssembleBlogList(Long id, Map<Long, String> titleMap, List<BlogVO> blogVOS, EditorTypeEnum type) {
+    private List<BlogVO> buildBlogVOS(List<UeditorBlogDO> ueditorBlogDOS, List<MarkDownBlogDO> markDownBlogDOS) {
+        List<BlogVO> blogVOS = new LinkedList<>();
+        blogVOS.addAll(BlogConvert.ueditorDoToDtoList(UeditorEditorConvert.doToDtoList(ueditorBlogDOS)));
+        blogVOS.addAll(BlogConvert.markdownDoToDtoList(MarkDownEditorConvert.doToDtoList(markDownBlogDOS)));
+        return blogVOS;
+    }
+
+    @Deprecated
+    private void switchTypeAssembleBlogList(Long id, Map<Long, String> titleMap, List<BlogVO> blogVOS, EditorTypeEnum type) {
         if (type==null){
             throw new MapFoundNullException();
         }

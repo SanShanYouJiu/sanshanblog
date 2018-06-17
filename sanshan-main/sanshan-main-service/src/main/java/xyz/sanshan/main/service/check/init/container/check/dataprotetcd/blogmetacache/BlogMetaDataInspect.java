@@ -34,15 +34,28 @@ public class BlogMetaDataInspect {
      从数据库回滚数据
      */
     public void inspectDataConsistency() {
-        //数据库与BlogIdGenerate的事物完整性检查
-        Long initTime = System.currentTimeMillis();
-        log.info("BlogIdGenerate从数据库中回滚数据");
-        //初始化数据
-        blogIdGenerate.initData();
-        List<MarkDownBlogDO> markDownBlogDOList = markDownBlogMapper.selectAll();
-        List<UeditorBlogDO> uEditorBlogDOS = uEditorBlogMapper.selectAll();
-        rollBackData(markDownBlogDOList, uEditorBlogDOS);
-        log.info("从数据库中回滚properties中的数据完成 耗时:{}ms", System.currentTimeMillis() - initTime);
+        if (checkIsEmpty()) {
+            //数据库与BlogIdGenerate的事物完整性检查
+            Long initTime = System.currentTimeMillis();
+            log.info("BlogIdGenerate从数据库中回滚数据");
+            //初始化数据
+            blogIdGenerate.initData();
+            List<MarkDownBlogDO> markDownBlogDOList = markDownBlogMapper.selectAll();
+            List<UeditorBlogDO> uEditorBlogDOS = uEditorBlogMapper.selectAll();
+            rollBackData(markDownBlogDOList, uEditorBlogDOS);
+            log.info("从数据库中回滚properties中的数据完成 耗时:{}ms", System.currentTimeMillis() - initTime);
+        }else {
+            //策略：
+            // 默认 认为文件内容可靠 不进行回滚
+            // 如果是外部配置也可以认为不需要回滚 但是这个配置不是默认选项
+        }
+    }
+
+    /**
+     * TODO: 检测文件内容是否为空
+     */
+    private Boolean checkIsEmpty(){
+        return true;
     }
 
     /**

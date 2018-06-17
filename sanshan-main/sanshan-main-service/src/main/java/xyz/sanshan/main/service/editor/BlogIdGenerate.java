@@ -14,6 +14,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 组件ID生成器
  * 以及作为在缓存中进行查找关键字段的倒排索引的维护类
  * 生成关键文件
+ *
+ * 该类属于初学代码时期的设计失误
+ * 后期单纯作为ID生成器使用
+ *
  */
 @Slf4j
 public final class BlogIdGenerate {
@@ -74,9 +78,9 @@ public final class BlogIdGenerate {
     /**
      * 删除内部维护所有数据--初始化
      * 目的是在系统重新初始化时进行使用
-     * importance!!
-     * danger !!
+     *
      */
+    @Deprecated
     public  void initData(){
         this.invertDateMap.clear();
         this.idDateMap.clear();

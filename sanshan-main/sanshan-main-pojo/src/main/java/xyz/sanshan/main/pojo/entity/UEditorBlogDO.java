@@ -9,7 +9,7 @@ import javax.persistence.Table;
 @Table(name = "ueditor_blog")
 @Data
 @NoArgsConstructor
-public class UeditorBlogDO extends BaseBlogEditorDO {
+public class UEditorBlogDO extends BaseBlogEditorDO {
 
     private static final long serialVersionUID = 4108703926461957019L;
 

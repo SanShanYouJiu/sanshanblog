@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @ToString
-public class UeditorFileQuoteDTO implements Serializable{
+public class UEditorFileQuoteDTO implements Serializable{
 
     private static final long serialVersionUID = 121650339542497886L;
 
@@ -20,7 +20,7 @@ public class UeditorFileQuoteDTO implements Serializable{
 
     private Integer quote;
 
-    public UeditorFileQuoteDTO(String filename,Integer quote) {
+    public UEditorFileQuoteDTO(String filename, Integer quote) {
         this.filename = filename;
         this.quote = quote;
     }

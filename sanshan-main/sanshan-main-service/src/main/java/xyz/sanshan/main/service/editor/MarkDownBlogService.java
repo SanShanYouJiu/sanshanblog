@@ -95,8 +95,8 @@ public class MarkDownBlogService {
         //检查
         MarkDownBlogDO checkResult = blogOperation.markDownBlogUpdateCheck(markDownBlogDO);
 
-        cacheService.updateSelective(checkResult);
-        MarkDownBlogDTO markDownBlogDTO= MarkDownEditorConvert.doToDto(checkResult);
+        MarkDownBlogDO markDownBlogDOResult = cacheService.updateSelective(checkResult);
+        MarkDownBlogDTO markDownBlogDTO= MarkDownEditorConvert.doToDto(markDownBlogDOResult);
 
         blogOperation.markdownOtherUpdate(markDownBlogDTO);
         return true;

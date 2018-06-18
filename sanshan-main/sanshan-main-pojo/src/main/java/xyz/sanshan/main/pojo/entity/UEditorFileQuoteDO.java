@@ -8,7 +8,7 @@ import java.util.Date;
 /**
  */
 @Table(name = "ueditor_file_quote")
-public class UeditorFileQuoteDO extends BaseDO implements Serializable{
+public class UEditorFileQuoteDO extends BaseDO implements Serializable{
 
 
     private static final long serialVersionUID = 8290646201408849806L;
@@ -21,10 +21,10 @@ public class UeditorFileQuoteDO extends BaseDO implements Serializable{
 
     private String extra;
 
-    public UeditorFileQuoteDO() {
+    public UEditorFileQuoteDO() {
     }
 
-    public UeditorFileQuoteDO(String filename, Integer quote, Date created, Date updated){
+    public UEditorFileQuoteDO(String filename, Integer quote, Date created, Date updated){
         this.filename=filename;
         this.quote=quote;
         this.setCreated(created);
@@ -66,10 +66,10 @@ public class UeditorFileQuoteDO extends BaseDO implements Serializable{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof UeditorFileQuoteDO)) return false;
+        if (!(o instanceof UEditorFileQuoteDO)) return false;
         if (!super.equals(o)) return false;
 
-        UeditorFileQuoteDO that = (UeditorFileQuoteDO) o;
+        UEditorFileQuoteDO that = (UEditorFileQuoteDO) o;
 
         if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
         if (getFilename() != null ? !getFilename().equals(that.getFilename()) : that.getFilename() != null)

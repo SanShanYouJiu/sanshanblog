@@ -5,10 +5,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xyz.sanshan.common.UserContextHandler;
 import xyz.sanshan.common.info.EditorTypeEnum;
-import xyz.sanshan.main.pojo.dto.UeditorBlogDTO;
-import xyz.sanshan.main.pojo.entity.UeditorBlogDO;
-import xyz.sanshan.main.service.convent.UeditorEditorConvert;
-import xyz.sanshan.main.service.editor.cacheservice.UeditorBlogCacheService;
+import xyz.sanshan.main.pojo.dto.UEditorBlogDTO;
+import xyz.sanshan.main.pojo.entity.UEditorBlogDO;
+import xyz.sanshan.main.service.convent.UEditorEditorConvert;
+import xyz.sanshan.main.service.editor.cacheservice.UEditorBlogCacheService;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -17,10 +17,10 @@ import java.util.Date;
 
 @Service
 @Slf4j
-public class UeditorBlogService {
+public class UEditorBlogService {
 
     @Autowired
-    private UeditorBlogCacheService cacheService;
+    private UEditorBlogCacheService cacheService;
 
     @Autowired
     private   BlogIdGenerate blogIdGenerate;
@@ -34,8 +34,8 @@ public class UeditorBlogService {
      * @param id 查询ID
      * @return
      */
-    public UeditorBlogDTO queryDtoById(Long id){
-        return UeditorEditorConvert.doToDto(cacheService.queryById(id));
+    public UEditorBlogDTO queryDtoById(Long id){
+        return UEditorEditorConvert.doToDto(cacheService.queryById(id));
     }
 
     /**
@@ -46,7 +46,7 @@ public class UeditorBlogService {
      * @return
      */
     public Integer saveDO(String content, String title, String tag) {
-        UeditorBlogDO uEditorBlogDO = new UeditorBlogDO();
+        UEditorBlogDO uEditorBlogDO = new UEditorBlogDO();
         //使用IdMap生成的Id
         Long id = blogIdGenerate.getId(EditorTypeEnum.UEDITOR_EDITOR);
         uEditorBlogDO.setId(id);
@@ -71,7 +71,7 @@ public class UeditorBlogService {
           uEditorBlogDO.setUser(username);
 
           //检查
-        UeditorBlogDO checkResult = blogOperation.ueditorBlogAddCheck(uEditorBlogDO);
+        UEditorBlogDO checkResult = blogOperation.ueditorBlogAddCheck(uEditorBlogDO);
 
         int result = cacheService.save(checkResult);
         //插入失败
@@ -95,17 +95,17 @@ public class UeditorBlogService {
      * @return
      */
     public Boolean  updateSelectiveDO(Long id,String content,String title,String tag){
-        UeditorBlogDO uEditorBlogDO = new UeditorBlogDO();
+        UEditorBlogDO uEditorBlogDO = new UEditorBlogDO();
         uEditorBlogDO.setId(id);
         uEditorBlogDO.setContent(content);
         uEditorBlogDO.setUpdated(new Date());
         uEditorBlogDO.setTag(tag);
         uEditorBlogDO.setTitle(title);
         //检查
-        UeditorBlogDO checkResult= blogOperation.ueditorBlogUpdateCheck(uEditorBlogDO);
+        UEditorBlogDO checkResult= blogOperation.ueditorBlogUpdateCheck(uEditorBlogDO);
 
-        UeditorBlogDTO uEditorBlogDTO = UeditorEditorConvert.doToDto(checkResult);
-        cacheService.updateSelective(checkResult);
+        UEditorBlogDO UEditorBlogDOResult =  cacheService.updateSelective(checkResult);
+        UEditorBlogDTO uEditorBlogDTO = UEditorEditorConvert.doToDto(UEditorBlogDOResult);
         blogOperation.ueditorOtherUpdate(uEditorBlogDTO);
         return true;
     }

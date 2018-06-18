@@ -1,9 +1,9 @@
 package xyz.sanshan.main.service.check.init.container.check.dataprotetcd.blogmetacache;
 
 import xyz.sanshan.main.dao.mybatis.MarkDownBlogMapper;
-import xyz.sanshan.main.dao.mybatis.UeditorBlogMapper;
+import xyz.sanshan.main.dao.mybatis.UEditorBlogMapper;
 import xyz.sanshan.main.pojo.entity.MarkDownBlogDO;
-import xyz.sanshan.main.pojo.entity.UeditorBlogDO;
+import xyz.sanshan.main.pojo.entity.UEditorBlogDO;
 import xyz.sanshan.main.service.editor.BlogIdGenerate;
 import xyz.sanshan.common.info.EditorTypeEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +24,7 @@ public class BlogMetaDataInspect {
     private MarkDownBlogMapper markDownBlogMapper;
 
     @Autowired
-    private UeditorBlogMapper uEditorBlogMapper;
+    private UEditorBlogMapper uEditorBlogMapper;
 
     @Autowired
     private BlogIdGenerate blogIdGenerate;
@@ -41,7 +41,7 @@ public class BlogMetaDataInspect {
             //初始化数据
             blogIdGenerate.initData();
             List<MarkDownBlogDO> markDownBlogDOList = markDownBlogMapper.selectAll();
-            List<UeditorBlogDO> uEditorBlogDOS = uEditorBlogMapper.selectAll();
+            List<UEditorBlogDO> uEditorBlogDOS = uEditorBlogMapper.selectAll();
             rollBackData(markDownBlogDOList, uEditorBlogDOS);
             log.info("从数据库中回滚properties中的数据完成 耗时:{}ms", System.currentTimeMillis() - initTime);
         }else {
@@ -61,31 +61,17 @@ public class BlogMetaDataInspect {
     /**
      从数据库中回滚properties中的数据（宕机恢复使用)
      */
-    private void rollBackData(List<MarkDownBlogDO> markDownBlogDOList, List<UeditorBlogDO> uEditorBlogDOS) {
+    private void rollBackData(List<MarkDownBlogDO> markDownBlogDOList, List<UEditorBlogDO> uEditorBlogDOS) {
         for (MarkDownBlogDO m : markDownBlogDOList) {
             blogIdGenerate.addIdMap(m.getId(), EditorTypeEnum.MARKDOWN_EDITOR);
-            if (m.getTitle() != null && !m.getTitle().equals("")) {
-                blogIdGenerate.putTitle(m.getTitle(), m.getId());
-            }
-            if (m.getTag() != null && !m.getTag().equals("")) {
-                blogIdGenerate.putTag(m.getTag(), m.getId());
-            }
-            blogIdGenerate.putDate(m.getTime(), m.getId());
         }
 
-        for (UeditorBlogDO u : uEditorBlogDOS) {
+        for (UEditorBlogDO u : uEditorBlogDOS) {
             blogIdGenerate.addIdMap(u.getId(), EditorTypeEnum.UEDITOR_EDITOR);
-            if (u.getTitle() != null && !u.getTitle().equals("")) {
-                blogIdGenerate.putTitle(u.getTitle(), u.getId());
-            }
-            if (u.getTag() != null && ! u.getTag().equals("")) {
-                blogIdGenerate.putTag(u.getTag(), u.getId());
-            }
-            blogIdGenerate.putDate(u.getTime(), u.getId());
         }
 
         //找出被删除的ID数目 也就是void_id
-        TreeMap<Long, EditorTypeEnum> idMap = (TreeMap<Long, EditorTypeEnum>) blogIdGenerate.getIdCopy();
+        TreeMap<Long, EditorTypeEnum> idMap =  blogIdGenerate.getIdCopy();
         if (idMap.size() == 0) {
             return;
         }

@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.search.pojo.DTO.MarkDownBlogDTO;
-import xyz.sanshan.search.pojo.DTO.UeditorBlogDTO;
+import xyz.sanshan.search.pojo.DTO.UEditorBlogDTO;
 import xyz.sanshan.search.pojo.DTO.UserDTO;
 import xyz.sanshan.search.service.ElasticDataOperationService;
 
@@ -31,9 +31,9 @@ public class ElasticDataOperationController {
     }
 
     @PostMapping("/ueditor-info")
-    public ResponseMsgVO ueditorBlogAdd(@RequestBody UeditorBlogDTO ueditorBlogDTO){
+    public ResponseMsgVO ueditorBlogAdd(@RequestBody UEditorBlogDTO UEditorBlogDTO){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
-        operationService.ueditorBlogAdd(ueditorBlogDTO);
+        operationService.ueditorBlogAdd(UEditorBlogDTO);
         return responseMsgVO.buildOK();
     }
 

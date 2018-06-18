@@ -9,7 +9,7 @@ import java.util.Date;
 /**
  */
 @Table(name = "ueditor_id_file_map")
-public class UeditorIdFileMapDO extends BaseDO implements Serializable{
+public class UEditorIdFileMapDO extends BaseDO implements Serializable{
 
 
     private static final long serialVersionUID = -2310558671488507061L;
@@ -23,10 +23,10 @@ public class UeditorIdFileMapDO extends BaseDO implements Serializable{
 
     private String extra;
 
-    public UeditorIdFileMapDO() {
+    public UEditorIdFileMapDO() {
     }
 
-    public UeditorIdFileMapDO(Long blod_id, String filename, Date created, Date updated) {
+    public UEditorIdFileMapDO(Long blod_id, String filename, Date created, Date updated) {
         this.blod_id = blod_id;
         this.filename = filename;
         this.setCreated(created);
@@ -68,10 +68,10 @@ public class UeditorIdFileMapDO extends BaseDO implements Serializable{
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof UeditorIdFileMapDO)) return false;
+        if (!(o instanceof UEditorIdFileMapDO)) return false;
         if (!super.equals(o)) return false;
 
-        UeditorIdFileMapDO that = (UeditorIdFileMapDO) o;
+        UEditorIdFileMapDO that = (UEditorIdFileMapDO) o;
 
         if (getId() != null ? !getId().equals(that.getId()) : that.getId() != null) return false;
         if (getBlod_id() != null ? !getBlod_id().equals(that.getBlod_id()) : that.getBlod_id() != null) return false;

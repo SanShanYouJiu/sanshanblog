@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 import xyz.sanshan.common.exception.NotFoundBlogException;
 import xyz.sanshan.common.info.EditorTypeEnum;
 import xyz.sanshan.main.pojo.dto.MarkDownBlogDTO;
-import xyz.sanshan.main.pojo.dto.UeditorBlogDTO;
+import xyz.sanshan.main.pojo.dto.UEditorBlogDTO;
 import xyz.sanshan.main.pojo.dto.UserDTO;
 import xyz.sanshan.main.service.feign.SearchClient;
 
@@ -24,10 +24,10 @@ public class ElasticSearchService {
     /**
      * ueditor类型博客数据添加到es
      *
-     * @param ueditorBlogDTO
+     * @param UEditorBlogDTO
      */
-    public void ueditorBlogAdd(UeditorBlogDTO ueditorBlogDTO) {
-        searchClient.ueditorBlogAdd(ueditorBlogDTO);
+    public void ueditorBlogAdd(UEditorBlogDTO UEditorBlogDTO) {
+        searchClient.ueditorBlogAdd(UEditorBlogDTO);
     }
 
 

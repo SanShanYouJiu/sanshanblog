@@ -24,7 +24,6 @@ public class EHCacheUtil {
             try {
                 if (cacheManager == null)
                     cacheManager = CacheManager.getInstance();
-
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -5,7 +5,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import xyz.sanshan.main.pojo.entity.UeditorBlogDO;
+import xyz.sanshan.main.pojo.entity.UEditorBlogDO;
 import xyz.sanshan.main.service.BaseServiceImpl;
 
 import java.util.List;
@@ -16,10 +16,10 @@ import java.util.List;
  * DO存到缓存中
  */
 @Service
-public class UeditorBlogCacheService extends BaseServiceImpl<UeditorBlogDO> {
+public class UEditorBlogCacheService extends BaseServiceImpl<UEditorBlogDO> {
 
     @Override
-    public List<UeditorBlogDO> queryAll() {
+    public List<UEditorBlogDO> queryAll() {
         return super.queryAll();
     }
 
@@ -27,25 +27,25 @@ public class UeditorBlogCacheService extends BaseServiceImpl<UeditorBlogDO> {
 
     @Cacheable({"ueditor-blog"})
     @Override
-    public List<UeditorBlogDO> queryListByWhere(UeditorBlogDO example) {
+    public List<UEditorBlogDO> queryListByWhere(UEditorBlogDO example) {
         return super.queryListByWhere(example);
     }
 
     @Cacheable(value = {"ueditor-blog"},key = "'ueditor-blog:'+#a0")
     @Override
-    public UeditorBlogDO queryById(Long id) {
+    public UEditorBlogDO queryById(Long id) {
         return super.queryById(id);
     }
 
 
     @Override
-    public PageInfo<UeditorBlogDO> queryPageListByWhere(UeditorBlogDO example, Integer page, Integer rows) {
+    public PageInfo<UEditorBlogDO> queryPageListByWhere(UEditorBlogDO example, Integer page, Integer rows) {
         return super.queryPageListByWhere(example, page, rows);
     }
 
 
     @Override
-    public Integer save(UeditorBlogDO uEditorBlog) {
+    public Integer save(UEditorBlogDO uEditorBlog) {
         return super.save(uEditorBlog);
     }
 
@@ -59,13 +59,13 @@ public class UeditorBlogCacheService extends BaseServiceImpl<UeditorBlogDO> {
 
     @CachePut(value = {"ueditor-blog"},key = "'ueditor-blog:'+#a0.id")
     @Override
-    public UeditorBlogDO update(UeditorBlogDO uEditorBlogDO) {
+    public UEditorBlogDO update(UEditorBlogDO uEditorBlogDO) {
         return super.update(uEditorBlogDO);
     }
 
     @Override
     @CachePut(value = {"ueditor-blog"},key = "'ueditor-blog:'+#a0.id")
-    public UeditorBlogDO updateSelective(UeditorBlogDO uEditorBlogDO) {
+    public UEditorBlogDO updateSelective(UEditorBlogDO uEditorBlogDO) {
         super.updateSelective(uEditorBlogDO);
         //cache注解是通过切面实现的 调用同一类中的方法不会用到缓存 直接访问数据库获取
         return queryById(uEditorBlogDO.getId());

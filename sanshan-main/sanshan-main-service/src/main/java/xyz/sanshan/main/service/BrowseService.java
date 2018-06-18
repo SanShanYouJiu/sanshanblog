@@ -7,7 +7,7 @@ import xyz.sanshan.main.service.editor.BlogIdGenerate;
 
 /**
  * 用户浏览
- * @author sanshan <sanshan@maihaoche.com>
+ * @author sanshan
  * @date 2018-05-29
  */
 @Service

@@ -15,7 +15,7 @@ import xyz.sanshan.main.pojo.entity.UserDO;
 import xyz.sanshan.main.service.convent.UserConvert;
 import xyz.sanshan.main.service.editor.BlogIdGenerate;
 import xyz.sanshan.main.service.editor.MarkDownBlogService;
-import xyz.sanshan.main.service.editor.UeditorBlogService;
+import xyz.sanshan.main.service.editor.UEditorBlogService;
 import xyz.sanshan.main.service.search.ElasticSearchService;
 import xyz.sanshan.main.service.user.info.UserInfoService;
 import xyz.sanshan.main.service.vo.BlogVO;
@@ -42,7 +42,7 @@ public class AdminIndexService {
     private UserInfoService userInfoService;
 
     @Autowired
-    private UeditorBlogService ueditorBlogService;
+    private UEditorBlogService UEditorBlogService;
 
     @Autowired
     private MarkDownBlogService markDownBlogService;
@@ -133,7 +133,7 @@ public class AdminIndexService {
         EditorTypeEnum type = blogIdGenerate.getType(id);
         switch (type){
             case UEDITOR_EDITOR:
-               ueditorBlogService.updateSelectiveDO(id, content, title, tag);
+               UEditorBlogService.updateSelectiveDO(id, content, title, tag);
                 responseMsgVO.buildOK();
                 return;
             case MARKDOWN_EDITOR:

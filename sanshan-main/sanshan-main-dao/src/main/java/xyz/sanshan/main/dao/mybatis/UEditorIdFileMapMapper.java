@@ -1,6 +1,6 @@
 package xyz.sanshan.main.dao.mybatis;
 
-import xyz.sanshan.main.pojo.entity.UeditorIdFileMapDO;
+import xyz.sanshan.main.pojo.entity.UEditorIdFileMapDO;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  */
-public interface UeditorIdFileMapMapper extends Mapper<UeditorIdFileMapDO> {
+public interface UEditorIdFileMapMapper extends Mapper<UEditorIdFileMapDO> {
 
     @Delete("delete from ueditor_id_file_map  where blog_id =#{blog_id}")
     int deleteById(@Param("blog_id") Long blog_id);

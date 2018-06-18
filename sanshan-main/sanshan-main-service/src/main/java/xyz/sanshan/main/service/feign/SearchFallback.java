@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import xyz.sanshan.common.info.PosCodeEnum;
 import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.main.pojo.dto.MarkDownBlogDTO;
-import xyz.sanshan.main.pojo.dto.UeditorBlogDTO;
+import xyz.sanshan.main.pojo.dto.UEditorBlogDTO;
 import xyz.sanshan.main.pojo.dto.UserDTO;
 
 @Component
@@ -21,7 +21,7 @@ public class SearchFallback implements SearchClient {
     }
 
     @Override
-    public ResponseMsgVO ueditorBlogAdd(UeditorBlogDTO ueditorBlogDTO) {
+    public ResponseMsgVO ueditorBlogAdd(UEditorBlogDTO UEditorBlogDTO) {
         return new ResponseMsgVO().buildWithPosCode(PosCodeEnum.FREQUENTLY_REQUEST);
     }
 

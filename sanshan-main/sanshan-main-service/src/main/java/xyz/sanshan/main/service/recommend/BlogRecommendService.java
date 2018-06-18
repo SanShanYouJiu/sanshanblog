@@ -8,10 +8,11 @@ import xyz.sanshan.common.info.PosCodeEnum;
 import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.main.dao.mongo.recommend.BlogRecommendRepository;
 import xyz.sanshan.main.pojo.dto.BlogVoteDTO;
-import xyz.sanshan.main.pojo.dto.CommonBlogDTO;
 import xyz.sanshan.main.pojo.entity.recommend.BlogRecommendDO;
+import xyz.sanshan.main.service.BlogService;
 import xyz.sanshan.main.service.convent.BlogRecommendConvert;
 import xyz.sanshan.main.service.editor.BlogIdGenerate;
+import xyz.sanshan.main.service.vo.BlogVO;
 import xyz.sanshan.main.service.vote.BlogVoteInfoService;
 
 import java.util.*;
@@ -28,6 +29,9 @@ public class BlogRecommendService {
 
     @Autowired
     private BlogRecommendRepository blogRecommendRepository;
+
+    @Autowired
+    private BlogService blogService;
 
 
     private Map<Long, Double> recommendRateMap = new HashMap<>();
@@ -63,7 +67,7 @@ public class BlogRecommendService {
             }
         }
 
-        List<BlogRecommendDO> result = assembleAndSaveResult(blogVoteDTOS);
+        List<BlogRecommendDO> result = buildAndSaveResult(blogVoteDTOS);
         return result;
     }
 
@@ -74,11 +78,11 @@ public class BlogRecommendService {
      * @param blogVoteDTOS
      * @return
      */
-    private List<BlogRecommendDO> assembleAndSaveResult(Set<BlogVoteDTO> blogVoteDTOS) {
+    private List<BlogRecommendDO> buildAndSaveResult(Set<BlogVoteDTO> blogVoteDTOS) {
         //返回给前端的list
         List<BlogRecommendDO> recommendBlogs = new LinkedList<>();
 
-        Map<Long, String> invertIdTitleMap = blogIdGenerate.getInvertIdTitleMap();
+
         //放到这里自动排序
         Iterator<BlogVoteDTO> it = blogVoteDTOS.iterator();
         int i = 0;
@@ -86,10 +90,8 @@ public class BlogRecommendService {
         //存储结果
         while (it.hasNext()) {
             Long blogId = it.next().getBlogId();
-            CommonBlogDTO blogDTO = new CommonBlogDTO();
-            blogDTO.setId(blogId);
-            blogDTO.setTitle(invertIdTitleMap.get(blogId));
-            BlogRecommendDO blogRecommendDO = BlogRecommendConvert.dtoToDo(blogDTO);
+            BlogVO blog = blogService.getBlog(blogId);
+            BlogRecommendDO blogRecommendDO = BlogRecommendConvert.voToDto(blog);
             //添加Recommend相关属性
             blogRecommendDO.setRecommendRate(recommendRateMap.get(blogId));
             blogRecommendDO.setCreated(new Date());

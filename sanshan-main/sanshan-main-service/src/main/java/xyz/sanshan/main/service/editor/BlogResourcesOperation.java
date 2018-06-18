@@ -10,19 +10,18 @@ import xyz.sanshan.common.info.EditorTypeEnum;
 import xyz.sanshan.common.info.PosCodeEnum;
 import xyz.sanshan.main.pojo.dto.BaseBlogDTO;
 import xyz.sanshan.main.pojo.dto.MarkDownBlogDTO;
-import xyz.sanshan.main.pojo.dto.UeditorBlogDTO;
+import xyz.sanshan.main.pojo.dto.UEditorBlogDTO;
 import xyz.sanshan.main.pojo.entity.BaseBlogEditorDO;
 import xyz.sanshan.main.pojo.entity.MarkDownBlogDO;
-import xyz.sanshan.main.pojo.entity.UeditorBlogDO;
+import xyz.sanshan.main.pojo.entity.UEditorBlogDO;
 import xyz.sanshan.main.service.BlogService;
 import xyz.sanshan.main.service.convent.MarkDownEditorConvert;
-import xyz.sanshan.main.service.convent.UeditorEditorConvert;
+import xyz.sanshan.main.service.convent.UEditorEditorConvert;
 import xyz.sanshan.main.service.search.ElasticSearchService;
 import xyz.sanshan.main.service.user.cache.UserBlogCacheService;
 import xyz.sanshan.main.service.vo.BlogVO;
 import xyz.sanshan.main.service.vote.VoteService;
 
-import java.util.Date;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -47,7 +46,7 @@ public class BlogResourcesOperation {
     private UserBlogCacheService userBlogCacheService;
 
     @Autowired
-    private UeditorFileService ueditorFileService;
+    private UEditorFileService UEditorFileService;
 
     @Autowired
     private BlogIdGenerate blogIdGenerate;
@@ -104,12 +103,12 @@ public class BlogResourcesOperation {
     /**
      * ueditor类型博客插入检查
      *
-     * @param ueditorBlogDO
+     * @param UEditorBlogDO
      * @return
      */
-    public UeditorBlogDO ueditorBlogAddCheck(UeditorBlogDO ueditorBlogDO) {
-        if (baseCheck(ueditorBlogDO, ueditorBlogDO.getId())){
-            return ueditorBlogDO;
+    public UEditorBlogDO ueditorBlogAddCheck(UEditorBlogDO UEditorBlogDO) {
+        if (baseCheck(UEditorBlogDO, UEditorBlogDO.getId())){
+            return UEditorBlogDO;
         }else {
             return null;
         }
@@ -118,9 +117,9 @@ public class BlogResourcesOperation {
     /*
     ueditor 类型博客更新检测
      */
-    public UeditorBlogDO ueditorBlogUpdateCheck(UeditorBlogDO ueditorBlogDO) {
-        if (baseUpdateCheck(ueditorBlogDO,ueditorBlogDO.getId())){
-            return  ueditorBlogDO;
+    public UEditorBlogDO ueditorBlogUpdateCheck(UEditorBlogDO UEditorBlogDO) {
+        if (baseUpdateCheck(UEditorBlogDO, UEditorBlogDO.getId())){
+            return UEditorBlogDO;
         }else {
             return null;
         }
@@ -129,33 +128,20 @@ public class BlogResourcesOperation {
     /**
      * Ueditor博客存入以及相关操作
      *
-     * @param ueditorBlogDO
+     * @param UEditorBlogDO
      * @param username
      */
-    public void ueditorBlogAdd(UeditorBlogDO ueditorBlogDO, String username) {
+    public void ueditorBlogAdd(UEditorBlogDO UEditorBlogDO, String username) {
         pool.execute(() -> {
-            Long id = ueditorBlogDO.getId();
-            String tag = ueditorBlogDO.getTag();
-            String title = ueditorBlogDO.getTitle();
-            String content = ueditorBlogDO.getContent();
-            Date date = ueditorBlogDO.getTime();
-            //更新User对应的blog缓存
-            userBlogCacheService.userBlogRefresh(username);
-            //加入到索引中
-            if (tag != null) {
-                blogIdGenerate.putTag(tag, id);
-            }
-            if (title != null) {
-                blogIdGenerate.putTitle(title, id);
-            }
-            blogIdGenerate.putDate(date, id);
+            Long id = UEditorBlogDO.getId();
+            String content = UEditorBlogDO.getContent();
             //检测ueditor中上传的文件
-            ueditorFileService.checkUeditorContentFile(id, content);
+            UEditorFileService.checkUeditorContentFile(id, content);
 
-            UeditorBlogDTO ueditorBlogDTO = UeditorEditorConvert.doToDto(ueditorBlogDO);
+            UEditorBlogDTO UEditorBlogDTO = UEditorEditorConvert.doToDto(UEditorBlogDO);
 
             //加入到Es中
-            elasticSearchService.ueditorBlogAdd(ueditorBlogDTO);
+            elasticSearchService.ueditorBlogAdd(UEditorBlogDTO);
         });
     }
 
@@ -165,21 +151,8 @@ public class BlogResourcesOperation {
      */
     public void markdownBlogAdd(MarkDownBlogDO markDownBlogDO, String username) {
         pool.execute(() -> {
-            Long id = markDownBlogDO.getId();
-            String tag = markDownBlogDO.getTag();
-            String title = markDownBlogDO.getTitle();
-            Date date = markDownBlogDO.getTime();
             //更新User对应的blog缓存
             userBlogCacheService.userBlogRefresh(username);
-            //加入到索引中
-            if (tag != null) {
-                blogIdGenerate.putTag(tag, id);
-            }
-            if (title != null) {
-                blogIdGenerate.putTitle(title, id);
-            }
-            blogIdGenerate.putDate(date, id);
-
             MarkDownBlogDTO markDownBlogDTO = MarkDownEditorConvert.doToDto(markDownBlogDO);
             //加入到Es中
             elasticSearchService.markdownBlogAdd(markDownBlogDTO);
@@ -200,13 +173,13 @@ public class BlogResourcesOperation {
     /**
      * TODO 更新也要对内容中包含的文件进行检查
      *
-     * @param ueditorBlogDTO
+     * @param UEditorBlogDTO
      */
-    public void ueditorOtherUpdate(UeditorBlogDTO ueditorBlogDTO) {
+    public void ueditorOtherUpdate(UEditorBlogDTO UEditorBlogDTO) {
         pool.execute(() -> {
-            Long id = ueditorBlogDTO.getId();
-            baseOtherUpdateCache(ueditorBlogDTO,id);
-            elasticSearchService.ueditorBlogAdd(ueditorBlogDTO);
+            Long id = UEditorBlogDTO.getId();
+            baseOtherUpdateCache(UEditorBlogDTO,id);
+            elasticSearchService.ueditorBlogAdd(UEditorBlogDTO);
         });
     }
 
@@ -231,7 +204,7 @@ public class BlogResourcesOperation {
             userBlogCacheService.userBlogRefresh(username);
             blogIdGenerate.remove(id);
             //审核ueditor博客中对应的文件
-            ueditorFileService.deleteContentContainsFile(id);
+            UEditorFileService.deleteContentContainsFile(id);
             blogDelete(id, EditorTypeEnum.UEDITOR_EDITOR);
         });
     }
@@ -316,7 +289,7 @@ public class BlogResourcesOperation {
         //用户资源检查
         if (!userResourceAuthDetection(id,username)){
             log.warn("权限检查失败,id:{},username:{}",id,username);
-            throw  new NotFoundPermissionException("权限检查失败,请查看你提供的资源参数是否正确",PosCodeEnum.PARAM_ERROR.getStatus());
+            throw  new NotFoundPermissionException("权限检查失败,请查看提供的资源参数是否正确",PosCodeEnum.PARAM_ERROR.getStatus());
         }
         return true;
     }
@@ -329,14 +302,6 @@ public class BlogResourcesOperation {
     private void baseOtherUpdateCache(BaseBlogDTO editorDTO, Long id) {
         //更新User对应的blog缓存
         userBlogCacheService.userBlogRefresh(editorDTO.getUser());
-        //加入到索引中
-        if (editorDTO.getTag() != null) {
-            blogIdGenerate.putTag(editorDTO.getTag(), id);
-        }
-        if (editorDTO.getTitle() != null) {
-            blogIdGenerate.putTitle(editorDTO.getTitle(), id);
-        }
-
     }
 
 }

@@ -1,6 +1,6 @@
 package xyz.sanshan.main.dao.mybatis;
 
-import xyz.sanshan.main.pojo.entity.UeditorFileQuoteDO;
+import xyz.sanshan.main.pojo.entity.UEditorFileQuoteDO;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Update;
@@ -10,7 +10,7 @@ import java.util.Date;
 
 /**
  */
-public interface UeditorFileQuoteMapper extends Mapper<UeditorFileQuoteDO> {
+public interface UEditorFileQuoteMapper extends Mapper<UEditorFileQuoteDO> {
 
     @Update("update ueditor_file_quote set quote =quote+1,updated = #{updated}  where filename=#{filename}")
     int incrFilenameQuote(@Param("filename") String filename, @Param("updated")Date updated);

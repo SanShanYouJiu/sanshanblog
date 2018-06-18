@@ -1,28 +1,29 @@
 package xyz.sanshan.main.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xyz.sanshan.common.PageInfo;
 import xyz.sanshan.common.UserContextHandler;
-import xyz.sanshan.common.exception.MapFoundNullException;
 import xyz.sanshan.common.exception.NotFoundBlogException;
 import xyz.sanshan.common.info.EditorTypeEnum;
 import xyz.sanshan.common.info.PosCodeEnum;
 import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.main.dao.mybatis.MarkDownBlogMapper;
-import xyz.sanshan.main.dao.mybatis.UeditorBlogMapper;
+import xyz.sanshan.main.dao.mybatis.UEditorBlogMapper;
+import xyz.sanshan.main.pojo.dto.BaseBlogDTO;
 import xyz.sanshan.main.pojo.dto.MarkDownBlogDTO;
-import xyz.sanshan.main.pojo.dto.UeditorBlogDTO;
+import xyz.sanshan.main.pojo.dto.UEditorBlogDTO;
 import xyz.sanshan.main.pojo.entity.MarkDownBlogDO;
-import xyz.sanshan.main.pojo.entity.UeditorBlogDO;
+import xyz.sanshan.main.pojo.entity.UEditorBlogDO;
 import xyz.sanshan.main.service.convent.BlogConvert;
 import xyz.sanshan.main.service.convent.MarkDownEditorConvert;
-import xyz.sanshan.main.service.convent.UeditorEditorConvert;
+import xyz.sanshan.main.service.convent.UEditorEditorConvert;
 import xyz.sanshan.main.service.editor.BlogIdGenerate;
 import xyz.sanshan.main.service.editor.BlogResourcesOperation;
 import xyz.sanshan.main.service.editor.MarkDownBlogService;
-import xyz.sanshan.main.service.editor.UeditorBlogService;
+import xyz.sanshan.main.service.editor.UEditorBlogService;
 import xyz.sanshan.main.service.util.EHCacheUtil;
 import xyz.sanshan.main.service.vo.BlogVO;
 
@@ -39,14 +40,13 @@ public class BlogService {
     private MarkDownBlogService markDownBlogService;
 
     @Autowired
-    private UeditorBlogService uEditorBlogService;
+    private UEditorBlogService uEditorBlogService;
 
     @Autowired
     private MarkDownBlogMapper markDownBlogMapper;
 
     @Autowired
-    private UeditorBlogMapper ueditorBlogMapper;
-
+    private UEditorBlogMapper UEditorBlogMapper;
 
     @Autowired
     private BlogIdGenerate blogIdGenerate;
@@ -71,13 +71,7 @@ public class BlogService {
      */
     public List<BlogVO> getBlogByTag(String tag) {
         String cacheKey = "BlogService#getBlogByTag:{"+"tag:" + tag +"}";
-        if (EHCacheUtil.get(cacheKey) != null) {
-            return (List<BlogVO>) EHCacheUtil.get(cacheKey);
-        }
-        List<BlogVO> blogVOS ;
-        blogVOS = buildBlogVOS(ueditorBlogMapper.queryByTag(tag), markDownBlogMapper.queryByTag(tag));
-        EHCacheUtil.put(cacheKey,blogVOS);
-        return blogVOS;
+        return baseQueryElement(cacheKey, UEditorBlogMapper.queryByTag(tag), markDownBlogMapper.queryByTag(tag));
     }
 
 
@@ -91,17 +85,64 @@ public class BlogService {
         return pageInfo;
     }
 
-    public PageInfo queryTagByPage(long pageRows,long pageSize){
-        List list = new LinkedList();
-        PageInfo pageInfo = blogIdGenerate.getIdTagCopyByPage(pageRows, pageSize);
-        Map<String, Set<Long>> map = pageInfo.getCurrentMapData();
-        for (Map.Entry<String, Set<Long>> entry : map.entrySet()) {
-            list.add(entry.getKey());
+    /**
+     * 这里的tag可能为空 需要不为空的tag才能往下走
+     * 所以需要手动控制分页中的数据判断
+     * @param pageRows
+     * @param pageNum
+     * @return
+     */
+    public PageInfo queryTagByPage(long pageRows,long pageNum){
+        String cacheKey = "BlogService#queryTagByPage:{"+"pageRows:" + pageRows + "pageNum:" + pageNum+"}";
+        if (EHCacheUtil.get(cacheKey) != null) {
+            return (PageInfo) EHCacheUtil.get(cacheKey);
         }
-        pageInfo.setCurrentMapData(null);
-        pageInfo.setCompleteData(list);
-        return pageInfo;
+
+        long preRows = pageRows * (pageNum - 1);
+        long endRows = preRows + pageRows;
+        long count = 0;
+        TreeMap<Long, EditorTypeEnum> idMap  =  blogIdGenerate.getIdCopy();
+
+        List<BlogVO> blogVOS = new LinkedList();
+        for (Map.Entry<Long,EditorTypeEnum> entry: idMap.entrySet()) {
+            if (count >= preRows && count<endRows) {
+                switch (entry.getValue()) {
+                    case MARKDOWN_EDITOR:
+                        MarkDownBlogDTO markDownBlogDTO = markDownBlogService.queryDtoById(entry.getKey());
+                        if (StringUtils.isBlank(markDownBlogDTO.getTag())) {
+                            break;
+                        }
+                        BlogVO markdownDTOConvertBlogVO = BlogConvert.markdownDTOConvertBlogVO(markDownBlogDTO);
+                        markdownDTOConvertBlogVO.setContent(null);
+                        blogVOS.add(markdownDTOConvertBlogVO);
+                        break;
+                    case UEDITOR_EDITOR:
+                        UEditorBlogDTO UEditorBlogDTO = uEditorBlogService.queryDtoById(entry.getKey());
+                        if (StringUtils.isBlank(UEditorBlogDTO.getTag())) {
+                            break;
+                        }
+                        BlogVO ueditorDTOConvertBlogVO = BlogConvert.ueditorDTOConvertBlogVO(UEditorBlogDTO);
+                        ueditorDTOConvertBlogVO.setContent(null);
+                        blogVOS.add(ueditorDTOConvertBlogVO);
+                        break;
+                    case VOID_ID:
+                        break;
+                    default:
+                        break;
+
+                }
+            }
+            count++;
+            if (count==endRows || idMap.lastKey().equals(entry.getKey())) {
+                PageInfo pageInfo =  new PageInfo(blogVOS, pageRows, pageNum, idMap.size());
+                EHCacheUtil.put(cacheKey,pageInfo);
+                return pageInfo;
+            }
+
+        }
+        return new PageInfo();
     }
+
 
 
     /**
@@ -112,38 +153,18 @@ public class BlogService {
      */
     public List<BlogVO> getBlogByTitle(String title) {
         String cacheKey = "BlogService#getBlogByTitle:{"+"title:" + title +"}";
-        if (EHCacheUtil.get(cacheKey) != null) {
-            return (List<BlogVO>) EHCacheUtil.get(cacheKey);
-        }
-        List<BlogVO> blogVOS ;
-        blogVOS = buildBlogVOS(ueditorBlogMapper.queryByTitle(title), markDownBlogMapper.queryByTitle(title));
-        EHCacheUtil.put(cacheKey, blogVOS);
-        return blogVOS;
+        return baseQueryElement(cacheKey, UEditorBlogMapper.queryByTitle(title), markDownBlogMapper.queryByTitle(title));
     }
 
     public PageInfo queryTitleByPage(long pageRows, long pageNum) {
-        List list = new LinkedList();
-        PageInfo pageInfo = blogIdGenerate.getIdTitleByPage(pageRows, pageNum);
-        Map<String, Set<Long>> map = pageInfo.getCurrentMapData();
-        for (Map.Entry<String, Set<Long>> entry : map.entrySet()) {
-            list.add(entry.getKey());
-        }
-        pageInfo.setCurrentMapData(null);
-        pageInfo.setCompleteData(list);
-        return pageInfo;
+        String cacheKey = "BlogService#queryTitleByPage:{"+"pageRows:" + pageRows + "pageNum:" + pageNum+"}";
+        return baseQueryByPage(cacheKey,pageRows,pageNum);
     }
 
 
     public PageInfo queryDateByPage(long pageRows,long pageNum){
-        List list = new LinkedList();
-        PageInfo pageInfo = blogIdGenerate.getIdDateCopyByPage(pageRows, pageNum);
-        Map<Date, Set<Long>> map = pageInfo.getCurrentMapData();
-        for (Map.Entry<Date, Set<Long>> entry : map.entrySet()) {
-            list.add(entry.getKey());
-        }
-        pageInfo.setCurrentMapData(null);
-        pageInfo.setCompleteData(list);
-        return pageInfo;
+        String cacheKey = "BlogService#queryDateByPage:{"+"pageRows:" + pageRows + "pageNum:" + pageNum+"}";
+        return baseQueryByPage(cacheKey,pageRows,pageNum);
     }
 
     /**
@@ -153,22 +174,9 @@ public class BlogService {
      * @return
      */
     public List<BlogVO> getBlogByDate(Date date) {
-        List<BlogVO> blogVOS = new LinkedList<>();
-        Set<Long> longs = blogIdGenerate.getDateMap(date);
-        if (Objects.isNull(longs)){
-            return null;
-        }
-        Long[] a = {};
-        Long[] ids = longs.toArray(a);
-        Map<Long, String> titleMap = blogIdGenerate.getInvertIdTitleMap();
-        Map<Long, EditorTypeEnum> idMap = blogIdGenerate.getIdCopy();
-        for (int i = 0; i < ids.length; i++) {
-            Long id = ids[i];
-            switchTypeAssembleBlogList(id, titleMap, blogVOS, idMap.get(id));
-        }
-        return blogVOS;
+        String cacheKey = "BlogService#getBlogByDate:{"+"date:" + date +"}";
+        return baseQueryElement(cacheKey, UEditorBlogMapper.queryByDate(date), markDownBlogMapper.queryByDate(date));
     }
-
 
     public BlogVO getBlog(Long id) {
         EditorTypeEnum type = blogIdGenerate.getType(id);
@@ -228,74 +236,81 @@ public class BlogService {
     /**
      * 分页获取首页博客信息
      * @param pageRows
-     * @param pageSize
+     * @param pageNum
      * @return
      */
-    public PageInfo queryByPage(long pageRows, long pageSize) {
-        String cacheKey = "BlogService#queryByPage:{"+"pageRows:" + pageRows + "pageSize:" + pageSize+"}";
+    public PageInfo queryByPage(long pageRows, long pageNum) {
+        String cacheKey = "BlogService#queryByPage:{"+"pageRows:" + pageRows + "pageNum:" + pageNum+"}";
+        return baseQueryByPage(cacheKey,pageRows,pageNum);
+    }
+
+    private PageInfo baseQueryByPage(String cacheKey, long pageRows, long pageNum) {
         if (EHCacheUtil.get(cacheKey)!=null) {
             return (PageInfo) EHCacheUtil.get(cacheKey);
         }
-        PageInfo pageInfo = blogIdGenerate.getIdCopyByPage(pageRows, pageSize);
+        PageInfo pageInfo = blogIdGenerate.getIdCopyByPage(pageRows, pageNum);
         //build博客相关信息
         PageInfo resultPageInfo = buildHomeBlogInfoPageInfo(pageInfo);
         EHCacheUtil.put(cacheKey, resultPageInfo);
         return resultPageInfo;
     }
 
+
+    private List<BlogVO> baseQueryElement(String cacheKey, List<UEditorBlogDO> UEditorBlogDOS, List<MarkDownBlogDO> markDownBlogDOS){
+        if (EHCacheUtil.get(cacheKey) != null) {
+            return (List<BlogVO>) EHCacheUtil.get(cacheKey);
+        }
+        List<BlogVO> blogVOS ;
+        blogVOS = buildBlogVOS(UEditorBlogDOS, markDownBlogDOS);
+        EHCacheUtil.put(cacheKey, blogVOS);
+        return  blogVOS;
+    }
+
     private PageInfo buildHomeBlogInfoPageInfo(PageInfo pageInfo) {
         Map<Long, EditorTypeEnum> idMap = pageInfo.getCurrentMapData();
 
-        List<BlogVO> commonBlogDTOS = new ArrayList<>(idMap.size());
+        List<BlogVO> blogVOS = new ArrayList<>(idMap.size());
         for (Map.Entry<Long, EditorTypeEnum> map : idMap.entrySet()) {
-            switch (map.getValue()) {
-                case MARKDOWN_EDITOR:
-                   commonBlogDTOS.add( BlogConvert.markdownDTOConvertBlogVO(markDownBlogService.queryDtoById(map.getKey())));
-                   break;
-                case UEDITOR_EDITOR:
-                    commonBlogDTOS.add(BlogConvert.ueditorDTOConvertBlogVO(uEditorBlogService.queryDtoById(map.getKey())));
-                    break;
-                case VOID_ID:
-                    continue;
-                default:
-                    continue;
-            }
+            buildBlogBaseInfoS(blogVOS, map);
         }
         pageInfo.setCurrentMapData(null);
-        pageInfo.setCompleteData(commonBlogDTOS);
+        pageInfo.setCompleteData(blogVOS);
         return pageInfo;
     }
 
-    private List<BlogVO> buildBlogVOS(List<UeditorBlogDO> ueditorBlogDOS, List<MarkDownBlogDO> markDownBlogDOS) {
-        List<BlogVO> blogVOS = new LinkedList<>();
-        blogVOS.addAll(BlogConvert.ueditorDoToDtoList(UeditorEditorConvert.doToDtoList(ueditorBlogDOS)));
-        blogVOS.addAll(BlogConvert.markdownDoToDtoList(MarkDownEditorConvert.doToDtoList(markDownBlogDOS)));
-        return blogVOS;
-    }
 
-    @Deprecated
-    private void switchTypeAssembleBlogList(Long id, Map<Long, String> titleMap, List<BlogVO> blogVOS, EditorTypeEnum type) {
-        if (type==null){
-            throw new MapFoundNullException();
-        }
-        switch (type) {
+    private void buildBlogBaseInfoS(List<BlogVO> blogVOS, Map.Entry<Long, EditorTypeEnum> map) {
+        switch (map.getValue()) {
             case MARKDOWN_EDITOR:
-                MarkDownBlogDTO m = new MarkDownBlogDTO();
-                m.setId(id);
-                m.setTitle(titleMap.get(id));
-                blogVOS.add(new BlogVO(m));
-                break;
+                BlogVO markdownBlogVo = BlogConvert.markdownDTOConvertBlogVO(markDownBlogService.queryDtoById(map.getKey()));
+                markdownBlogVo.setContent(null);
+                blogVOS.add(markdownBlogVo);
+               break;
             case UEDITOR_EDITOR:
-                UeditorBlogDTO u = new UeditorBlogDTO();
-                u.setId(id);
-                u.setTitle(titleMap.get(id));
-                blogVOS.add(new BlogVO(u));
+                BlogVO ueditorBlogVO = BlogConvert.ueditorDTOConvertBlogVO(uEditorBlogService.queryDtoById(map.getKey()));
+                ueditorBlogVO.setContent(null);
+                blogVOS.add(ueditorBlogVO);
                 break;
             case VOID_ID:
                 break;
-             default:
-                 break;
+            default:
+                break;
         }
+    }
+
+    private BlogVO buildBlogVO(BaseBlogDTO baseBlogDTO) {
+        if (baseBlogDTO instanceof MarkDownBlogDTO) {
+        }else if (baseBlogDTO instanceof UEditorBlogDTO) {
+
+        }
+        return null;
+    }
+
+    private List<BlogVO> buildBlogVOS(List<UEditorBlogDO> UEditorBlogDOS, List<MarkDownBlogDO> markDownBlogDOS) {
+        List<BlogVO> blogVOS = new LinkedList<>();
+        blogVOS.addAll(BlogConvert.ueditorDoToDtoList(UEditorEditorConvert.doToDtoList(UEditorBlogDOS)));
+        blogVOS.addAll(BlogConvert.markdownDoToDtoList(MarkDownEditorConvert.doToDtoList(markDownBlogDOS)));
+        return blogVOS;
     }
 
 }

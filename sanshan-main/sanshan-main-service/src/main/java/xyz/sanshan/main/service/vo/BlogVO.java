@@ -1,7 +1,7 @@
 package xyz.sanshan.main.service.vo;
 
 import xyz.sanshan.main.pojo.dto.MarkDownBlogDTO;
-import xyz.sanshan.main.pojo.dto.UeditorBlogDTO;
+import xyz.sanshan.main.pojo.dto.UEditorBlogDTO;
 import xyz.sanshan.common.info.EditorTypeEnum;
 import lombok.Data;
 
@@ -33,7 +33,7 @@ public class BlogVO  implements Serializable{
 
     }
 
-    public BlogVO(UeditorBlogDTO uEditorBlog) {
+    public BlogVO(UEditorBlogDTO uEditorBlog) {
         this.type= EditorTypeEnum.UEDITOR_EDITOR.getIndex();
         this.id = uEditorBlog.getId();
         this.user  =uEditorBlog.getUser();

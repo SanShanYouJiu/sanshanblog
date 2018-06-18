@@ -5,7 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import xyz.sanshan.main.service.check.init.container.check.dataprotetcd.blogmetacache.BlogMetaDataInspect;
-import xyz.sanshan.main.service.check.init.container.check.dataprotetcd.ueditorfile.UeditorFileDataInspect;
+import xyz.sanshan.main.service.check.init.container.check.dataprotetcd.ueditorfile.UEditorFileDataInspect;
 import xyz.sanshan.main.service.check.init.container.check.dataprotetcd.votecache.VoteDataInspect;
 
 @Slf4j
@@ -18,7 +18,7 @@ public class InstantiationTracingBeanPostProcessor implements CommandLineRunner 
     private VoteDataInspect voteDataInspect;
 
     @Autowired
-    private UeditorFileDataInspect ueditorFileDataInspect;
+    private UEditorFileDataInspect UEditorFileDataInspect;
 
     @Override
     public void run(String... args) throws Exception {
@@ -26,6 +26,6 @@ public class InstantiationTracingBeanPostProcessor implements CommandLineRunner 
         //不推荐开启 如果出错的情况可以在项目启动时开启作为一次数据恢复
         blogMetaDataInspect.inspectDataConsistency();
         voteDataInspect.inspectDataConsistency();
-        ueditorFileDataInspect.inspectDataConsistency();
+        UEditorFileDataInspect.inspectDataConsistency();
     }
 }

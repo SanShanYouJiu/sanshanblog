@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 @ToString
-public class UeditorIdFileMapDTO implements Serializable{
+public class UEditorIdFileMapDTO implements Serializable{
 
     private static final long serialVersionUID = -5288491615042220240L;
 
@@ -20,7 +20,7 @@ public class UeditorIdFileMapDTO implements Serializable{
 
     private List<String> filenames;
 
-    public UeditorIdFileMapDTO(Long blog_id, List<String> filenames) {
+    public UEditorIdFileMapDTO(Long blog_id, List<String> filenames) {
         this.blog_id = blog_id;
         this.filenames = filenames;
     }

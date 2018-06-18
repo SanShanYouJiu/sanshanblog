@@ -4,7 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import xyz.sanshan.main.pojo.dto.CommonBlogDTO;
 import xyz.sanshan.main.pojo.dto.MarkDownBlogDTO;
-import xyz.sanshan.main.pojo.dto.UeditorBlogDTO;
+import xyz.sanshan.main.pojo.dto.UEditorBlogDTO;
 import xyz.sanshan.main.service.vo.BlogVO;
 
 import java.util.LinkedList;
@@ -36,7 +36,7 @@ public class BlogConvert {
       * @param uEditorBlogDOS
      * @return
      */
-    public static List<BlogVO> ueditorDoToDtoList(List<UeditorBlogDTO> uEditorBlogDOS) {
+    public static List<BlogVO> ueditorDoToDtoList(List<UEditorBlogDTO> uEditorBlogDOS) {
         List<BlogVO> blogVOS = new LinkedList<>();
         for (int i = 0; i <uEditorBlogDOS.size() ; i++) {
             blogVOS.add(new BlogVO(uEditorBlogDOS.get(i)));
@@ -45,27 +45,27 @@ public class BlogConvert {
     }
 
 
-    public static BlogVO ueditorDTOConvertBlogVO(UeditorBlogDTO ueditorBlogDTO) {
-        return MODEL_MAPPER.map(ueditorBlogDTO, BlogVO.class);
+    public static BlogVO ueditorDTOConvertBlogVO(UEditorBlogDTO UEditorBlogDTO) {
+        return MODEL_MAPPER.map(UEditorBlogDTO, BlogVO.class);
     }
 
     /**
      *将ueditor类型的博客转换为CommonBlogDTO
-     * @param ueditorBlogDTOS
+     * @param UEditorBlogDTOS
      * @return
      */
-    public static List<CommonBlogDTO> ueditorConvertcommonBlogDTO(List<UeditorBlogDTO> ueditorBlogDTOS) {
-        return MODEL_MAPPER.map(ueditorBlogDTOS, new TypeToken<List<CommonBlogDTO>>() {
+    public static List<CommonBlogDTO> ueditorConvertcommonBlogDTO(List<UEditorBlogDTO> UEditorBlogDTOS) {
+        return MODEL_MAPPER.map(UEditorBlogDTOS, new TypeToken<List<CommonBlogDTO>>() {
         }.getType());
     }
 
     /**
      *将ueditor类型的博客转换为CommonBlogDTO
-     * @param ueditorBlogDTO
+     * @param UEditorBlogDTO
      * @return
      */
-    public static CommonBlogDTO ueditorConvertcommonBlogDTO(UeditorBlogDTO ueditorBlogDTO) {
-        return MODEL_MAPPER.map(ueditorBlogDTO, CommonBlogDTO.class);
+    public static CommonBlogDTO ueditorConvertcommonBlogDTO(UEditorBlogDTO UEditorBlogDTO) {
+        return MODEL_MAPPER.map(UEditorBlogDTO, CommonBlogDTO.class);
     }
 
     /**

@@ -1,5 +1,6 @@
 package xyz.sanshan.main.web.controller.blog;
 
+import xyz.sanshan.main.pojo.form.BlogHomeIndexSearchForm;
 import xyz.sanshan.main.service.BlogService;
 import xyz.sanshan.main.service.vo.BlogVO;
 import xyz.sanshan.common.vo.ResponseMsgVO;
@@ -38,10 +39,10 @@ public class BlogController {
     }
 
 
-    @GetMapping(value = "tag/{tag}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO queryByTag(@PathVariable("tag")String tag){
+    @PostMapping(value = "tag",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO queryByTag(@RequestBody BlogHomeIndexSearchForm tag){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
-        List<BlogVO> list = blogService.getBlogByTag(tag);
+        List<BlogVO> list = blogService.getBlogByTag(tag.getTag());
         if (Objects.isNull(list)){
             return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND,"未知的标签");
         }
@@ -51,11 +52,11 @@ public class BlogController {
     @GetMapping(value = "tag-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO queryTagAll(){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
-        List list =blogService.queryTagAll();
-        if (Objects.isNull(list)){
+        PageInfo pageInfo =blogService.queryTagAll();
+        if (Objects.isNull(pageInfo.getCompleteData())){
             return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND,"没有标签");
         }
-        return responseMsgVO.buildOKWithData(list);
+        return responseMsgVO.buildOKWithData(pageInfo);
     }
 
     @GetMapping(value = "tag-page/pageRows:{pageRows}/pageNum:{pageNum}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -68,25 +69,16 @@ public class BlogController {
         return responseMsgVO.buildOKWithData(pageInfo);
     }
 
-    @GetMapping(value = "title/{title}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO  queryByTitle(@PathVariable("title")String title){
+    @PostMapping(value = "title",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO  queryByTitle(@RequestBody BlogHomeIndexSearchForm title){
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
-        List<BlogVO> list = blogService.getBlogByTitle(title);
+        List<BlogVO> list = blogService.getBlogByTitle(title.getTitle());
         if (Objects.isNull(list)){
             return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND,"未知的标题");
         }
         return responseMsgVO.buildOKWithData(list);
     }
 
-    //@GetMapping(value = "title-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO queryTitleAll(){
-        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
-        List list =blogService.queryTitleAll();
-        if (Objects.isNull(list)){
-            return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND,"没有标题");
-        }
-        return responseMsgVO.buildOKWithData(list);
-    }
 
 
     @GetMapping(value = "title-page/pageRows:{pageRows}/pageNum:{pageNum}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
@@ -99,28 +91,19 @@ public class BlogController {
         return responseMsgVO.buildOKWithData(pageInfo);
     }
 
-    @GetMapping(value = "date/{date}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO  queryByDate(@PathVariable("date")String dateString) throws ParseException {
+    @PostMapping(value = "date",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO  queryByDate(@RequestBody BlogHomeIndexSearchForm date) throws ParseException {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         DateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date= null;
-        date = format.parse(dateString);
-        List<BlogVO> list = blogService.getBlogByDate(date);
+        Date dateResult= null;
+        dateResult = format.parse(date.getDate());
+        List<BlogVO> list = blogService.getBlogByDate(dateResult);
         if (Objects.isNull(list)){
             return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND, "无效的日期");
         }
         return responseMsgVO.buildOKWithData(list);
     }
 
-    //@GetMapping(value = "date-all",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO queryDateAll(){
-        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
-        List list =blogService.queryDateAll();
-        if (Objects.isNull(list)){
-            return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND, "没有日期");
-        }
-        return  responseMsgVO.buildOKWithData(list);
-    }
 
     @GetMapping(value = "date-page/pageRows:{pageRows}/pageNum:{pageNum}", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO queryDateByPage(@PathVariable(name = "pageRows") long pageRows, @PathVariable(name = "pageNum") long pageNum) {
@@ -132,13 +115,6 @@ public class BlogController {
         return responseMsgVO.buildOKWithData(pageInfo);
     }
 
-    //@GetMapping(value = "all", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
-    public ResponseMsgVO queryAllBlog() {
-        ResponseMsgVO<List<BlogVO>> responseMsgVO = new ResponseMsgVO();
-        //List<BlogVO> list = blogService.queryAll();
-        List<BlogVO> list = blogService.queryAllOfIdMap();
-        return responseMsgVO.buildOKWithData(list);
-    }
 
     @GetMapping(value = "page/pageRows:{pageRows}/pageNum:{pageNum}",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public  ResponseMsgVO queryByPage(@PathVariable("pageRows")long pageRows,@PathVariable("pageNum")long pageNum){

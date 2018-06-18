@@ -10,8 +10,8 @@ import xyz.sanshan.common.info.EditorTypeEnum;
 import xyz.sanshan.common.info.PosCodeEnum;
 import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.main.service.editor.BlogIdGenerate;
-import xyz.sanshan.main.service.editor.UeditorBlogService;
-import xyz.sanshan.main.service.editor.UeditorFileService;
+import xyz.sanshan.main.service.editor.UEditorBlogService;
+import xyz.sanshan.main.service.editor.UEditorFileService;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,14 +22,14 @@ import java.io.UnsupportedEncodingException;
 @Slf4j
 @RestController
 @RequestMapping("ueditor-editor")
-public class UeditorEditorController {
+public class UEditorEditorController {
 
 
     @Autowired
-    private UeditorFileService fileService;
+    private UEditorFileService fileService;
 
     @Autowired
-    private UeditorBlogService uEditorBlogService;
+    private UEditorBlogService uEditorBlogService;
 
     @Autowired
     private BlogIdGenerate blogIdGenerate;

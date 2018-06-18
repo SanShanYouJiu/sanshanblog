@@ -13,11 +13,11 @@ import org.springframework.stereotype.Service;
 public class NightCheckHandler {
 
     @Autowired
-    private UeditorFileUploadCheck ueditorFileUploadCheck;
+    private UEditorFileUploadCheck UEditorFileUploadCheck;
 
     public void nightCheck() {
         log.info("午夜检测开始");
-        ueditorFileUploadCheck.check();
+        UEditorFileUploadCheck.check();
         log.info("核对完毕");
     }
 }

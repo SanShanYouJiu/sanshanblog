@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.main.pojo.dto.MarkDownBlogDTO;
-import xyz.sanshan.main.pojo.dto.UeditorBlogDTO;
+import xyz.sanshan.main.pojo.dto.UEditorBlogDTO;
 import xyz.sanshan.main.pojo.dto.UserDTO;
 
 @FeignClient(name = "sanshan-search", fallback = SearchFallback.class)
@@ -19,7 +19,7 @@ public interface SearchClient {
     public ResponseMsgVO markdownBlogAdd(MarkDownBlogDTO markDownBlogDTO);
 
     @PostMapping("/ueditor-info")
-    public ResponseMsgVO ueditorBlogAdd(UeditorBlogDTO ueditorBlogDTO);
+    public ResponseMsgVO ueditorBlogAdd(UEditorBlogDTO UEditorBlogDTO);
 
     @DeleteMapping("/user-info/{id}")
     public ResponseMsgVO userDelete(@PathVariable(name = "id")String id);

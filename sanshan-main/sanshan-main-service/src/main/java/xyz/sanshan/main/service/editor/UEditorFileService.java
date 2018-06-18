@@ -5,8 +5,8 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
-import xyz.sanshan.main.pojo.dto.UeditorFileQuoteDTO;
-import xyz.sanshan.main.pojo.dto.UeditorIdFileMapDTO;
+import xyz.sanshan.main.pojo.dto.UEditorFileQuoteDTO;
+import xyz.sanshan.main.pojo.dto.UEditorIdFileMapDTO;
 import xyz.sanshan.main.service.upload.QiniuStorageManager;
 
 import java.io.InputStream;
@@ -23,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 @Slf4j
 @Service
-public class UeditorFileService {
+public class UEditorFileService {
 
 
     @Autowired
@@ -51,11 +51,11 @@ public class UeditorFileService {
     });
 
 
-    public static ConcurrentLinkedQueue<UeditorIdFileMapDTO> ueditorFileAddQueue = new ConcurrentLinkedQueue<>();
+    public static ConcurrentLinkedQueue<UEditorIdFileMapDTO> ueditorFileAddQueue = new ConcurrentLinkedQueue<>();
 
-    public static ConcurrentLinkedQueue<UeditorFileQuoteDTO> ueditorFileUpload = new ConcurrentLinkedQueue<>();
+    public static ConcurrentLinkedQueue<UEditorFileQuoteDTO> ueditorFileUpload = new ConcurrentLinkedQueue<>();
 
-    public static ConcurrentLinkedQueue<UeditorIdFileMapDTO> ueditorFileDecrQueue = new ConcurrentLinkedQueue<>();
+    public static ConcurrentLinkedQueue<UEditorIdFileMapDTO> ueditorFileDecrQueue = new ConcurrentLinkedQueue<>();
 
     /**
      *  存入图片到七牛云
@@ -77,8 +77,8 @@ public class UeditorFileService {
         // 如果是在UEDITOR_UPLOAD_TEMP_FILE缓存没有 这一个缓存中有的文件就进行审核 值为0的代表0人引用 需要将这条缓存中以及暂存文件名的set中也删除
         redisTemplate.opsForHash().put(UEDITOR_UPLOAD_FILE, filename, 0);
         //加入到数据库中
-        UeditorFileQuoteDTO ueditorFileQuoteDTO = new UeditorFileQuoteDTO(filename,0);
-        ueditorFileUpload.add(ueditorFileQuoteDTO);
+        UEditorFileQuoteDTO UEditorFileQuoteDTO = new UEditorFileQuoteDTO(filename,0);
+        ueditorFileUpload.add(UEditorFileQuoteDTO);
     }
 
     /**
@@ -106,7 +106,7 @@ public class UeditorFileService {
             //在ID与文件对应表中进行关联
             redisTemplate.opsForHash().put(UEDITOR_UPLOAD_ID_FILE_MAP, id, blogFiles);
             //放到consumer中 定时进入数据库存储
-            UeditorIdFileMapDTO idFileMapDTO = new UeditorIdFileMapDTO(id,blogFiles);
+            UEditorIdFileMapDTO idFileMapDTO = new UEditorIdFileMapDTO(id,blogFiles);
             ueditorFileAddQueue.add(idFileMapDTO);
         });
     }
@@ -130,8 +130,8 @@ public class UeditorFileService {
             }
             //删除该博客ID文件对应表
             redisTemplate.opsForHash().delete(UEDITOR_UPLOAD_ID_FILE_MAP, blogId);
-            UeditorIdFileMapDTO ueditorIdFileMapDTO = new UeditorIdFileMapDTO(blogId,filenames);
-            ueditorFileDecrQueue.add(ueditorIdFileMapDTO);
+            UEditorIdFileMapDTO UEditorIdFileMapDTO = new UEditorIdFileMapDTO(blogId,filenames);
+            ueditorFileDecrQueue.add(UEditorIdFileMapDTO);
         });
     }
 

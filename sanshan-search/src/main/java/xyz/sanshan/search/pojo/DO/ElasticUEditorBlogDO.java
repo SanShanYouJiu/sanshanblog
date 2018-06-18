@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Data
 @ToString
 @Document(indexName = "blogs",type = "ueditor")
-public class ElasticUeditorBlogDO extends ElasticBaseEditorDO implements Serializable{
+public class ElasticUEditorBlogDO extends ElasticBaseEditorDO implements Serializable{
 
     private static final long serialVersionUID = -7380613830753506958L;
 

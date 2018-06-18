@@ -1,9 +1,9 @@
 package xyz.sanshan.main.service.check.init.container.check.dataprotetcd.ueditorfile;
 
-import xyz.sanshan.main.dao.mybatis.UeditorFileQuoteMapper;
-import xyz.sanshan.main.dao.mybatis.UeditorIdFileMapMapper;
-import xyz.sanshan.main.pojo.entity.UeditorFileQuoteDO;
-import xyz.sanshan.main.service.editor.UeditorFileService;
+import xyz.sanshan.main.dao.mybatis.UEditorFileQuoteMapper;
+import xyz.sanshan.main.dao.mybatis.UEditorIdFileMapMapper;
+import xyz.sanshan.main.pojo.entity.UEditorFileQuoteDO;
+import xyz.sanshan.main.service.editor.UEditorFileService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -18,14 +18,14 @@ import java.util.List;
  */
 @Component
 @Slf4j
-public class UeditorFileDataInspect {
+public class UEditorFileDataInspect {
 
 
     @Autowired
-    private UeditorIdFileMapMapper ueditorIdFileMapMapper;
+    private UEditorIdFileMapMapper UEditorIdFileMapMapper;
 
     @Autowired
-    private UeditorFileQuoteMapper ueditorFileQuoteMapper;
+    private UEditorFileQuoteMapper UEditorFileQuoteMapper;
 
     @Autowired
     private RedisTemplate redisTemplate;
@@ -64,15 +64,15 @@ public class UeditorFileDataInspect {
      * 数据回滚到缓存
      */
     private void rollbackData() {
-        List<UeditorFileQuoteDO> fileQuoteDOS = ueditorFileQuoteMapper.selectAll();
+        List<UEditorFileQuoteDO> fileQuoteDOS = UEditorFileQuoteMapper.selectAll();
         fileQuoteDOS.stream().forEach((fileQuoteDO)->{
-            redisTemplate.opsForHash().put(UeditorFileService.UEDITOR_UPLOAD_FILE, fileQuoteDO.getFilename(), fileQuoteDO.getQuote());
+            redisTemplate.opsForHash().put(UEditorFileService.UEDITOR_UPLOAD_FILE, fileQuoteDO.getFilename(), fileQuoteDO.getQuote());
         });
 
-        List<Long> ids = ueditorIdFileMapMapper.queryByAllBlogId();
+        List<Long> ids = UEditorIdFileMapMapper.queryByAllBlogId();
         ids.stream().forEach((id)->{
-           List<String> filenames= ueditorIdFileMapMapper.queryFileNamesByBlogId(id);
-            redisTemplate.opsForHash().put(UeditorFileService.UEDITOR_UPLOAD_ID_FILE_MAP, id,filenames);
+           List<String> filenames= UEditorIdFileMapMapper.queryFileNamesByBlogId(id);
+            redisTemplate.opsForHash().put(UEditorFileService.UEDITOR_UPLOAD_ID_FILE_MAP, id,filenames);
         });
     }
 

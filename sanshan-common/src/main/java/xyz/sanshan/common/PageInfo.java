@@ -4,7 +4,6 @@ import lombok.Data;
 import lombok.ToString;
 
 import java.io.Serializable;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,11 +13,11 @@ import java.util.Map;
  */
 @Data
 @ToString
-public class PageInfo implements Serializable {
+public class PageInfo<T> implements Serializable {
 
-    private static final long serialVersionUID = 967576004733332957L;
+    private static final long serialVersionUID = 1L;
     //结果集
-    private List completeData;
+    private T completeData;
 
     //从BlogIdGenerate中取出的映射 会在返回Json时设置为null 在Json中看不到此项
     private Map currentMapData;
@@ -66,6 +65,36 @@ public class PageInfo implements Serializable {
         this.pageNum = pageNum;
         this.total = total;
 
+        computeFiled(pageRows, pageNum, total, preRows);
+
+    }
+
+    /**
+     * 组装完成的数据
+     * @param completeData
+     * @param pageRows
+     * @param pageNum
+     * @param total
+     */
+    public PageInfo(T completeData, long pageRows, long pageNum, long total) {
+        long preRows = pageRows * (pageNum - 1);
+        this.completeData = completeData;
+        this.pageRows = pageRows;
+        this.pageNum = pageNum;
+        this.total = total;
+
+        computeFiled(pageRows, pageNum, total, preRows);
+    }
+
+    /**
+     * 空
+     */
+    public PageInfo(){
+
+    }
+
+
+    private void computeFiled(long pageRows, long pageNum, long total, long preRows) {
         if ((total % pageRows) != 0) {
             //如果余数不为0 代表除不尽 pages+1
             long pages = total / pageRows;
@@ -128,7 +157,6 @@ public class PageInfo implements Serializable {
                  this.nextPage=pageNum+1;
              }
          }
-
     }
 
 }

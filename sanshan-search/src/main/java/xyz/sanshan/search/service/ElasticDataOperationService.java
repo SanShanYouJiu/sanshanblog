@@ -4,16 +4,16 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import xyz.sanshan.search.convert.MarkDownEditorConvert;
-import xyz.sanshan.search.convert.UeditorEditorConvert;
+import xyz.sanshan.search.convert.UEditorEditorConvert;
 import xyz.sanshan.search.convert.UserConvert;
 import xyz.sanshan.search.dao.MarkDownBlogInfoRepository;
-import xyz.sanshan.search.dao.UeditorBlogInfoRepository;
+import xyz.sanshan.search.dao.UEditorBlogInfoRepository;
 import xyz.sanshan.search.dao.UserInfoRepository;
 import xyz.sanshan.search.pojo.DO.ElasticMarkDownBlogDO;
-import xyz.sanshan.search.pojo.DO.ElasticUeditorBlogDO;
+import xyz.sanshan.search.pojo.DO.ElasticUEditorBlogDO;
 import xyz.sanshan.search.pojo.DO.ElasticUserDO;
 import xyz.sanshan.search.pojo.DTO.MarkDownBlogDTO;
-import xyz.sanshan.search.pojo.DTO.UeditorBlogDTO;
+import xyz.sanshan.search.pojo.DTO.UEditorBlogDTO;
 import xyz.sanshan.search.pojo.DTO.UserDTO;
 
 @Service
@@ -28,17 +28,17 @@ public class ElasticDataOperationService {
     private MarkDownBlogInfoRepository markDownBlogInfoRepository;
 
     @Autowired
-    private UeditorBlogInfoRepository ueditorBlogInfoRepository;
+    private UEditorBlogInfoRepository UEditorBlogInfoRepository;
 
 
     /**
      * ueditor类型博客数据添加到es
      *
-     * @param ueditorBlogDTO
+     * @param UEditorBlogDTO
      */
-    public void ueditorBlogAdd(UeditorBlogDTO ueditorBlogDTO) {
-        ElasticUeditorBlogDO elasticUeditorBlogDO = UeditorEditorConvert.dtoToElastic(ueditorBlogDTO);
-        ueditorBlogInfoRepository.save(elasticUeditorBlogDO);
+    public void ueditorBlogAdd(UEditorBlogDTO UEditorBlogDTO) {
+        ElasticUEditorBlogDO elasticUEditorBlogDO = UEditorEditorConvert.dtoToElastic(UEditorBlogDTO);
+        UEditorBlogInfoRepository.save(elasticUEditorBlogDO);
     }
 
 
@@ -81,7 +81,7 @@ public class ElasticDataOperationService {
      * @param id
      */
     public void ueditorDelete(Long id){
-        ueditorBlogInfoRepository.delete(id);
+        UEditorBlogInfoRepository.delete(id);
     }
 
     ///**

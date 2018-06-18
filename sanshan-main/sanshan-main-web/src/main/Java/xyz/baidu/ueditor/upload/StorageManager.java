@@ -5,7 +5,7 @@ import xyz.baidu.ueditor.define.BaseState;
 import xyz.baidu.ueditor.define.State;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
-import xyz.sanshan.main.service.editor.UeditorFileService;
+import xyz.sanshan.main.service.editor.UEditorFileService;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,16 +23,16 @@ public class StorageManager {
 //    private static DBCollection collection = db.getCollection("MyImage");
 
     @Autowired
-    private UeditorFileService ueditorFileService;
+    private UEditorFileService UEditorFileService;
 
-    private static UeditorFileService staticueditorFileService;
+    private static UEditorFileService staticueditorFileService;
 
     /**
      * 通过PostConstruct方法间接静态注入UEditorFileService
      */
     @PostConstruct
     void  init(){
-     staticueditorFileService=this.ueditorFileService;
+     staticueditorFileService=this.UEditorFileService;
     }
 
     public StorageManager() {

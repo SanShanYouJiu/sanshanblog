@@ -14,11 +14,11 @@ import org.springframework.data.elasticsearch.core.query.SourceFilter;
 import org.springframework.stereotype.Service;
 import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.search.dao.MarkDownBlogInfoRepository;
-import xyz.sanshan.search.dao.UeditorBlogInfoRepository;
+import xyz.sanshan.search.dao.UEditorBlogInfoRepository;
 import xyz.sanshan.search.dao.UserInfoRepository;
 import xyz.sanshan.search.pojo.DO.ElasticBaseEditorDO;
 import xyz.sanshan.search.pojo.DO.ElasticMarkDownBlogDO;
-import xyz.sanshan.search.pojo.DO.ElasticUeditorBlogDO;
+import xyz.sanshan.search.pojo.DO.ElasticUEditorBlogDO;
 import xyz.sanshan.search.pojo.VO.ElasticResponseVO;
 import xyz.sanshan.search.pojo.VO.ElasticSearchResultDTO;
 
@@ -57,7 +57,7 @@ public class ElasticSearchService {
     private MarkDownBlogInfoRepository markDownBlogInfoRepository;
 
     @Autowired
-    private UeditorBlogInfoRepository ueditorBlogInfoRepository;
+    private UEditorBlogInfoRepository UEditorBlogInfoRepository;
 
     /**
      * 全部查询
@@ -128,7 +128,7 @@ public class ElasticSearchService {
      */
     public void blogContentSearch(String key, ResponseMsgVO responseMsgVO) {
         List<ElasticMarkDownBlogDO> markdownResult = markDownBlogInfoRepository.findByContent(key);
-        List<ElasticUeditorBlogDO> ueditorResult = ueditorBlogInfoRepository.findByContent(key);
+        List<ElasticUEditorBlogDO> ueditorResult = UEditorBlogInfoRepository.findByContent(key);
         List<ElasticBaseEditorDO> allResult = new LinkedList<>();
         allResult.addAll(markdownResult);
         allResult.addAll(ueditorResult);

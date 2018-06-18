@@ -16,7 +16,7 @@ public class ConsumerAccept {
     private VoteConsumer voteConsumer;
 
     @Autowired
-    private UeditorFileConsumer ueditorFileConsumer;
+    private UEditorFileConsumer UEditorFileConsumer;
 
 
     public void accept() {
@@ -24,7 +24,7 @@ public class ConsumerAccept {
             log.debug("处理consumer中的数据");
         }
         voteConsumer.voteConsumerProcess();
-        ueditorFileConsumer.ueditorConsumer();
+        UEditorFileConsumer.ueditorConsumer();
     }
 
 

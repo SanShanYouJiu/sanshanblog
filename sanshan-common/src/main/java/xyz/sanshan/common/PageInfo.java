@@ -113,7 +113,10 @@ public class PageInfo<T> implements Serializable {
             } else if ((total - preRows) > pageRows) {
                 //减掉前面所有的数量 还有比当前页面还多的数据 就不是最后一行 反之就是
             } else {
-                isLastPage = true;
+                //如果是减掉了前面所有行数正好还剩一些数据 但是不够一页的就是最后一页 反之不是
+                if (total-preRows>0){
+                    isLastPage = true;
+                }
             }
         }
 
@@ -127,8 +130,11 @@ public class PageInfo<T> implements Serializable {
             if (isLastPage){
                 //不是第一个但是是最后一个 会有前一页
                this.hasPreviousPage=true;
+            }else if (total-preRows <= 0){
+                //是最后的 但是前面也没有 也就是假分页
+
             }else {
-                //既不是第一个 也不是最后一个 都有
+                //既不是第一个 也不是最后一个
                 this.hasPreviousPage=true;
                 this.hasNextPage=true;
             }

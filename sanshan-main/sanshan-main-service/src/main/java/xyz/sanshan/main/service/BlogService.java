@@ -112,8 +112,7 @@ public class BlogService {
                         if (StringUtils.isBlank(markDownBlogDTO.getTag())) {
                             break;
                         }
-                        BlogVO markdownDTOConvertBlogVO = BlogConvert.markdownDTOConvertBlogVO(markDownBlogDTO);
-                        markdownDTOConvertBlogVO.setContent(null);
+                        BlogVO markdownDTOConvertBlogVO = buildBlogVO(markDownBlogDTO);
                         blogVOS.add(markdownDTOConvertBlogVO);
                         break;
                     case UEDITOR_EDITOR:
@@ -121,8 +120,7 @@ public class BlogService {
                         if (StringUtils.isBlank(UEditorBlogDTO.getTag())) {
                             break;
                         }
-                        BlogVO ueditorDTOConvertBlogVO = BlogConvert.ueditorDTOConvertBlogVO(UEditorBlogDTO);
-                        ueditorDTOConvertBlogVO.setContent(null);
+                        BlogVO ueditorDTOConvertBlogVO = buildBlogVO(UEditorBlogDTO);
                         blogVOS.add(ueditorDTOConvertBlogVO);
                         break;
                     case VOID_ID:
@@ -282,13 +280,11 @@ public class BlogService {
     private void buildBlogBaseInfoS(List<BlogVO> blogVOS, Map.Entry<Long, EditorTypeEnum> map) {
         switch (map.getValue()) {
             case MARKDOWN_EDITOR:
-                BlogVO markdownBlogVo = BlogConvert.markdownDTOConvertBlogVO(markDownBlogService.queryDtoById(map.getKey()));
-                markdownBlogVo.setContent(null);
+                BlogVO markdownBlogVo =buildBlogVO(markDownBlogService.queryDtoById(map.getKey()));
                 blogVOS.add(markdownBlogVo);
                break;
             case UEDITOR_EDITOR:
-                BlogVO ueditorBlogVO = BlogConvert.ueditorDTOConvertBlogVO(uEditorBlogService.queryDtoById(map.getKey()));
-                ueditorBlogVO.setContent(null);
+                BlogVO ueditorBlogVO = buildBlogVO(uEditorBlogService.queryDtoById(map.getKey()));
                 blogVOS.add(ueditorBlogVO);
                 break;
             case VOID_ID:
@@ -300,10 +296,17 @@ public class BlogService {
 
     private BlogVO buildBlogVO(BaseBlogDTO baseBlogDTO) {
         if (baseBlogDTO instanceof MarkDownBlogDTO) {
+            BlogVO blogVO = BlogConvert.markdownDTOConvertBlogVO((MarkDownBlogDTO) baseBlogDTO);
+            blogVO.setContent(null);
+            return blogVO;
         }else if (baseBlogDTO instanceof UEditorBlogDTO) {
-
+            BlogVO blogVO =  BlogConvert.ueditorDTOConvertBlogVO((UEditorBlogDTO) baseBlogDTO);
+            blogVO.setContent(null);
+            return blogVO;
+        }else {
+            log.error("无法转换,baseBlogDTO:{}",baseBlogDTO);
+            throw new RuntimeException("无法转换");
         }
-        return null;
     }
 
     private List<BlogVO> buildBlogVOS(List<UEditorBlogDO> UEditorBlogDOS, List<MarkDownBlogDO> markDownBlogDOS) {

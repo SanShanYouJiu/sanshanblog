@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.TreeMap;
 
 /**
@@ -52,10 +53,13 @@ public class BlogMetaDataInspect {
     }
 
     /**
-     * TODO: 检测文件内容是否为空
+     * 检测文件内容是否为空
      */
     private Boolean checkIsEmpty(){
-        return true;
+       if (Objects.isNull(blogIdGenerate.getExistMaxId())){
+           return true;
+       }
+        return false;
     }
 
     /**

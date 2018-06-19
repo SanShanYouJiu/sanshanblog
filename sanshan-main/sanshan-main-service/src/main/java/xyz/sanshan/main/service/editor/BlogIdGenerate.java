@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 生成关键文件
  *
  * 该类属于初学代码时期的设计失误
- * 后期扩展xing
+ * 后期尽量单独维护出来 作为一个单独的组件
  */
 @Slf4j
 public final class BlogIdGenerate {
@@ -219,7 +219,14 @@ public final class BlogIdGenerate {
 
     public synchronized final    Long getExistMaxId(){
         //获取存活的最大ID
-        return ((TreeMap<Long, EditorTypeEnum>) idExistMap).firstKey();
+        Long id = null;
+        try {
+            id = ((TreeMap<Long, EditorTypeEnum>) idExistMap).firstKey();
+        }catch (NoSuchElementException e){
+            log.warn("BlogIdGenerate,idExistMap无数据");
+            return null;
+        }
+        return id;
     }
 
 

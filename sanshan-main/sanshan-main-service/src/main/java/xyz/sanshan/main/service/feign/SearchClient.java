@@ -9,7 +9,11 @@ import xyz.sanshan.main.pojo.dto.MarkDownBlogDTO;
 import xyz.sanshan.main.pojo.dto.UEditorBlogDTO;
 import xyz.sanshan.main.pojo.dto.UserDTO;
 
+/**
+ * 采用数据库与ES同步的方式进行数据一致  不再使用接口
+ */
 @FeignClient(name = "sanshan-search", fallback = SearchFallback.class)
+@Deprecated
 public interface SearchClient {
 
     @PostMapping("/user-info")

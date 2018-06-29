@@ -16,7 +16,7 @@ import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.search.dao.MarkDownBlogInfoRepository;
 import xyz.sanshan.search.dao.UEditorBlogInfoRepository;
 import xyz.sanshan.search.dao.UserInfoRepository;
-import xyz.sanshan.search.pojo.DO.ElasticBaseEditorDO;
+import xyz.sanshan.search.pojo.DO.ElasticBaseBlogDO;
 import xyz.sanshan.search.pojo.DO.ElasticMarkDownBlogDO;
 import xyz.sanshan.search.pojo.DO.ElasticUEditorBlogDO;
 import xyz.sanshan.search.pojo.VO.ElasticResponseVO;
@@ -46,6 +46,11 @@ public class ElasticSearchService {
         t.setName("es-operation-thread:" + POOL_NUMBER);
         return t;
     });
+
+
+    private static final String USER_INFO_INDEX = "user-info";
+    private static final String BLOGS_INDEX = "blogs";
+
 
     @Autowired
     private ElasticsearchTemplate template;
@@ -86,7 +91,7 @@ public class ElasticSearchService {
      */
     public void userInfoSearch(String key, int pageRows, int pageNum, ResponseMsgVO responseMsgVO) {
         pageNum=pageNum-1;
-        SearchQuery query = new NativeSearchQueryBuilder().withQuery(matchQuery("_all", key)).withIndices("user-info").withTypes("user").withPageable(new PageRequest(pageNum, pageRows)).withFields().build();
+        SearchQuery query = new NativeSearchQueryBuilder().withQuery(matchQuery("_all", key)).withIndices(USER_INFO_INDEX).withTypes("user").withPageable(new PageRequest(pageNum, pageRows)).withFields().build();
         template.query(query, (searchResponse) -> {
             ElasticResponseVO responseVO = assembleElasticReuturnSourceResponse(searchResponse);
             return responseMsgVO.buildOKWithData(responseVO);
@@ -113,7 +118,7 @@ public class ElasticSearchService {
     public void blogInfoSearch(String key, Integer pageRows, Integer pageNum, ResponseMsgVO responseMsgVO) {
         pageNum=pageNum-1;
         SourceFilter sourceFilter = new FetchSourceFilter(new String[]{}, new String[]{"content"});
-        SearchQuery query = new NativeSearchQueryBuilder().withQuery(matchQuery("_all", key)).withIndices("blogs").withPageable(new PageRequest(pageNum, pageRows)).withSourceFilter(sourceFilter).build();
+        SearchQuery query = new NativeSearchQueryBuilder().withQuery(matchQuery("_all", key)).withIndices(BLOGS_INDEX).withPageable(new PageRequest(pageNum, pageRows)).withSourceFilter(sourceFilter).build();
         template.query(query, (searchResponse) -> {
             ElasticResponseVO responseVO = assembleElasticReuturnSourceResponse(searchResponse);
             return responseMsgVO.buildOKWithData(responseVO);
@@ -129,7 +134,7 @@ public class ElasticSearchService {
     public void blogContentSearch(String key, ResponseMsgVO responseMsgVO) {
         List<ElasticMarkDownBlogDO> markdownResult = markDownBlogInfoRepository.findByContent(key);
         List<ElasticUEditorBlogDO> ueditorResult = UEditorBlogInfoRepository.findByContent(key);
-        List<ElasticBaseEditorDO> allResult = new LinkedList<>();
+        List<ElasticBaseBlogDO> allResult = new LinkedList<>();
         allResult.addAll(markdownResult);
         allResult.addAll(ueditorResult);
         responseMsgVO.buildOKWithData(allResult);

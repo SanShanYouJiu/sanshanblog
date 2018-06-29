@@ -11,11 +11,8 @@ import xyz.sanshan.common.setting.Setting;
 import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.main.api.vo.user.UserInfo;
 import xyz.sanshan.main.dao.mongo.UserRepository;
-import xyz.sanshan.main.pojo.dto.UserDTO;
 import xyz.sanshan.main.pojo.entity.UserDO;
 import xyz.sanshan.main.service.SettingService;
-import xyz.sanshan.main.service.convent.UserConvert;
-import xyz.sanshan.main.service.search.ElasticSearchService;
 
 import java.util.Date;
 
@@ -27,9 +24,6 @@ public class AuthServiceImpl implements AuthService {
 
     private UserRepository userRepository;
 
-
-    @Autowired
-    private ElasticSearchService elasticSearchService;
 
      @Autowired
      private SettingService settingService;
@@ -73,9 +67,6 @@ public class AuthServiceImpl implements AuthService {
      */
     private void  userAdd(UserDO userToAdd){
         UserDO userDO = userRepository.insert(userToAdd);
-        //转换为DTO对象 加入到ElasticSearch中
-        UserDTO userDTO = UserConvert.doToDto(userDO);
-        elasticSearchService.userAdd(userDTO);
     }
 
     /**

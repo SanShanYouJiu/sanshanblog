@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Data
 @ToString
 @Document(indexName = "blogs",type = "markdown")
-public class ElasticMarkDownBlogDO extends ElasticBaseEditorDO implements Serializable{
+public class ElasticMarkDownBlogDO extends ElasticBaseBlogDO implements Serializable{
 
     private static final long serialVersionUID = -1154773418908534046L;
 

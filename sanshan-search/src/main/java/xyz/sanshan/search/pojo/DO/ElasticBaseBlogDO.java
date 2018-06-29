@@ -5,7 +5,7 @@ import lombok.Data;
 import java.util.Date;
 
 @Data
-public  abstract class ElasticBaseEditorDO {
+public  abstract class ElasticBaseBlogDO {
 
     private String user;
 

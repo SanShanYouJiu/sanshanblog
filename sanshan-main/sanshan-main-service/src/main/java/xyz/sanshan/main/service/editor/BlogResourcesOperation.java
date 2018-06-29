@@ -15,9 +15,6 @@ import xyz.sanshan.main.pojo.entity.BaseBlogEditorDO;
 import xyz.sanshan.main.pojo.entity.MarkDownBlogDO;
 import xyz.sanshan.main.pojo.entity.UEditorBlogDO;
 import xyz.sanshan.main.service.BlogService;
-import xyz.sanshan.main.service.convent.MarkDownEditorConvert;
-import xyz.sanshan.main.service.convent.UEditorEditorConvert;
-import xyz.sanshan.main.service.search.ElasticSearchService;
 import xyz.sanshan.main.service.user.cache.UserBlogCacheService;
 import xyz.sanshan.main.service.vo.BlogVO;
 import xyz.sanshan.main.service.vote.VoteService;
@@ -38,9 +35,6 @@ public class BlogResourcesOperation {
         t.setName("blog-operation-thread:" + POOL_NUMBER);
         return t;
     });
-
-    @Autowired
-    private ElasticSearchService elasticSearchService;
 
     @Autowired
     private UserBlogCacheService userBlogCacheService;
@@ -138,10 +132,6 @@ public class BlogResourcesOperation {
             //检测ueditor中上传的文件
             UEditorFileService.checkUeditorContentFile(id, content);
 
-            UEditorBlogDTO UEditorBlogDTO = UEditorEditorConvert.doToDto(UEditorBlogDO);
-
-            //加入到Es中
-            elasticSearchService.ueditorBlogAdd(UEditorBlogDTO);
         });
     }
 
@@ -153,9 +143,6 @@ public class BlogResourcesOperation {
         pool.execute(() -> {
             //更新User对应的blog缓存
             userBlogCacheService.userBlogRefresh(username);
-            MarkDownBlogDTO markDownBlogDTO = MarkDownEditorConvert.doToDto(markDownBlogDO);
-            //加入到Es中
-            elasticSearchService.markdownBlogAdd(markDownBlogDTO);
         });
     }
 
@@ -166,7 +153,6 @@ public class BlogResourcesOperation {
         pool.execute(() -> {
             Long id = markDownBlogDTO.getId();
             baseOtherUpdateCache(markDownBlogDTO,id);
-            elasticSearchService.markdownBlogAdd(markDownBlogDTO);
         });
     }
 
@@ -179,7 +165,6 @@ public class BlogResourcesOperation {
         pool.execute(() -> {
             Long id = UEditorBlogDTO.getId();
             baseOtherUpdateCache(UEditorBlogDTO,id);
-            elasticSearchService.ueditorBlogAdd(UEditorBlogDTO);
         });
     }
 
@@ -217,7 +202,6 @@ public class BlogResourcesOperation {
     private void blogDelete(Long id, EditorTypeEnum type) {
         log.info("正在删除博客id为:{}的相关数据", id);
         voteService.deleteBlogVote(id);
-        elasticSearchService.deleteBlog(id, type);
         log.info("删除博客id为:{}的相关数据完成", id);
     }
 

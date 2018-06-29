@@ -16,7 +16,6 @@ import xyz.sanshan.main.service.convent.UserConvert;
 import xyz.sanshan.main.service.editor.BlogIdGenerate;
 import xyz.sanshan.main.service.editor.MarkDownBlogService;
 import xyz.sanshan.main.service.editor.UEditorBlogService;
-import xyz.sanshan.main.service.search.ElasticSearchService;
 import xyz.sanshan.main.service.user.info.UserInfoService;
 import xyz.sanshan.main.service.vo.BlogVO;
 
@@ -46,9 +45,6 @@ public class AdminIndexService {
 
     @Autowired
     private MarkDownBlogService markDownBlogService;
-
-    @Autowired
-    private ElasticSearchService elasticSearchService;
 
     public List<BlogVO> queryAllBlog() {
         String username= UserContextHandler.getUsername();
@@ -119,14 +115,7 @@ public class AdminIndexService {
 
     private Boolean changeUserInfo(UserDO userDO){
         WriteResult result= userRepository.changeUserInfo(userDO);
-        //转换DTO对象
-        UserDTO userDTO = UserConvert.doToDto(userDO);
-        Boolean eschange=  elasticSearchService.userAdd(userDTO);
-        if (eschange!=null && result.getN()!=0){
-            return true;
-        }else {
-            return false;
-        }
+        return true;
     }
 
     public void updateBlogById(Long id,String title, String tag, String content, ResponseMsgVO responseMsgVO) {

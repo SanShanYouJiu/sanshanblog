@@ -12,10 +12,11 @@ import xyz.sanshan.main.service.feign.SearchClient;
 
 
 /**
- *
+ * 由ES与数据库同步进行数据更新 删除
  */
 @Service
 @Slf4j
+@Deprecated
 public class ElasticSearchService {
 
    @Autowired

@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 生成关键文件
  *
  * 该类属于初学代码时期的设计失误
- * 后期尽量单独维护出来 作为一个单独的组件
+ * TODO: 后期尽量单独维护出来 作为一个单独的组件 由组件自己去数据库同步
  */
 @Slf4j
 public final class BlogIdGenerate {

@@ -1,4 +1,4 @@
-package xyz.sanshan.main.web.config.javaconfig.druid;
+package xyz.sanshan.main.web.config.druid;
 
 import com.alibaba.druid.support.http.WebStatFilter;
 

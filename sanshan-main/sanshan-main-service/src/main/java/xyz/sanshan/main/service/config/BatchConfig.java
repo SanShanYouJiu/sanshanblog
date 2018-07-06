@@ -1,4 +1,4 @@
-package xyz.sanshan.main.web.config.javaconfig;
+package xyz.sanshan.main.service.config;
 
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.batch.MyBatisBatchItemWriter;

@@ -18,7 +18,7 @@ public class BrowseService {
     private BlogIdGenerate blogIdGenerate;
 
     /**
-     * 通过BlogId获取浏览数
+     * TODO: 通过BlogId获取浏览数
      * @param blogId
      * @return
      */
@@ -27,7 +27,7 @@ public class BrowseService {
     }
 
     /**
-     * 增加BlogId对应的博客浏览数
+     * TODO: 增加BlogId对应的博客浏览数
      * @param blogId
      */
     public void BlogBrowsesAddForBlogId(Long blogId){

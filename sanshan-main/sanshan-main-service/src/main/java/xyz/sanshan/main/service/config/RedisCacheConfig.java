@@ -1,4 +1,4 @@
-package xyz.sanshan.main.web.config.javaconfig;
+package xyz.sanshan.main.service.config;
 
 import com.alibaba.fastjson.support.spring.GenericFastJsonRedisSerializer;
 import lombok.extern.slf4j.Slf4j;
@@ -17,7 +17,6 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import redis.clients.jedis.JedisPoolConfig;
-import xyz.sanshan.main.web.config.javaconfig.auxiliary.CacheKeyGenerator;
 
 @Slf4j
 @Configuration

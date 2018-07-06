@@ -1,4 +1,4 @@
-package xyz.sanshan.main.web.config.javaconfig;
+package xyz.sanshan.main.service.config;
 
 import com.alibaba.druid.pool.DruidDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +11,6 @@ import org.springframework.transaction.annotation.TransactionManagementConfigure
 
 @Configuration
 @EnableTransactionManagement
-//@ImportResource("classpath:TransactionConfig.xml")
 public class TransactionConfig implements TransactionManagementConfigurer {
 
     @Autowired

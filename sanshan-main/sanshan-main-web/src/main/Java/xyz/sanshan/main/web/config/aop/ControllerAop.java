@@ -1,4 +1,4 @@
-package xyz.sanshan.main.web.config.javaconfig.auxiliary;
+package xyz.sanshan.main.web.config.aop;
 
 import lombok.extern.slf4j.Slf4j;
 import org.aspectj.lang.ProceedingJoinPoint;

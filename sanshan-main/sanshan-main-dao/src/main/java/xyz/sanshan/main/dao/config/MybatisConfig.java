@@ -1,4 +1,4 @@
-package xyz.sanshan.main.web.config.javaconfig;
+package xyz.sanshan.main.dao.config;
 
 import com.github.pagehelper.PageInterceptor;
 import org.apache.ibatis.plugin.Interceptor;

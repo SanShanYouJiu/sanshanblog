@@ -1,4 +1,4 @@
-package xyz.sanshan.main.web.config.javaconfig;
+package xyz.sanshan.main.dao.config;
 
 import com.mongodb.Mongo;
 import com.mongodb.MongoClient;

@@ -1,6 +1,5 @@
-package xyz.sanshan.main.web.config.javaconfig;
+package xyz.sanshan.main.service.config;
 
-import xyz.baidu.ueditor.upload.StorageManager;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -11,12 +10,6 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 @Configuration
 @ComponentScan(value = {"xyz.sanshan.main.service"})
 public class ServiceConfig {
-
-
-    @Bean
-    public StorageManager storageManager(){
-     return new StorageManager();
- }
 
 
     @Value("${mail.host}")

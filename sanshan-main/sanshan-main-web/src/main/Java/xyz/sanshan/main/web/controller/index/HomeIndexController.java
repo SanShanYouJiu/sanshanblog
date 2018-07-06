@@ -2,11 +2,9 @@ package xyz.sanshan.main.web.controller.index;
 
 import xyz.sanshan.main.service.FeedBackService;
 import xyz.sanshan.common.vo.ResponseMsgVO;
-import xyz.sanshan.main.web.config.javaconfig.auxiliary.MultipartFileBucketValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,19 +13,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class HomeIndexController {
 
 
-    @Autowired
-    private MultipartFileBucketValidator multipartFileBucketValidator;
-
 
     @Autowired
     private FeedBackService feedBackService;
-
-    //作校验使用
-    @InitBinder("multipartFileBucket")
-    protected void initBinderMultipartFileBucket(WebDataBinder binder) {
-        binder.setValidator(multipartFileBucketValidator);
-    }
-
 
     @PostMapping(value = "/advice", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody

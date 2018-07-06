@@ -20,6 +20,7 @@ import java.io.IOException;
  */
 @Service
 @Slf4j
+@Deprecated
 public class FileLoadService {
 
 

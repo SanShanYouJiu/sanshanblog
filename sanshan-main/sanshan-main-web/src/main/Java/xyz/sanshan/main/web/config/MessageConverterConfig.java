@@ -1,4 +1,4 @@
-package xyz.sanshan.main.web.config.javaconfig;
+package xyz.sanshan.main.web.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,7 +20,7 @@ public class MessageConverterConfig {
     @Bean
     public ResourceHttpMessageConverter  resourceHttpMessageConverter(){
         ResourceHttpMessageConverter res = new ResourceHttpMessageConverter();
-        List<org.springframework.http.MediaType> mediaTypes = new LinkedList<MediaType>();
+        List<MediaType> mediaTypes = new LinkedList<MediaType>();
         mediaTypes.add(MediaType.APPLICATION_JSON);
         mediaTypes.add(MediaType.APPLICATION_OCTET_STREAM);
         mediaTypes.add(MediaType.IMAGE_JPEG);

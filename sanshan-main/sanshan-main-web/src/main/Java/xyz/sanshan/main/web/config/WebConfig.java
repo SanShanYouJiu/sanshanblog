@@ -1,4 +1,4 @@
-package xyz.sanshan.main.web.config.webaseconfig;
+package xyz.sanshan.main.web.config;
 
 import com.alibaba.fastjson.support.config.FastJsonConfig;
 import com.alibaba.fastjson.support.spring.FastJsonHttpMessageConverter;
@@ -24,7 +24,8 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
-import xyz.sanshan.main.web.config.javaconfig.auxiliary.ControllerAop;
+import xyz.baidu.ueditor.upload.StorageManager;
+import xyz.sanshan.main.web.config.aop.ControllerAop;
 
 import java.util.List;
 
@@ -46,6 +47,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
         return viewResolver;
     }
 
+    @Bean
+    public StorageManager storageManager(){
+        return new StorageManager();
+    }
 
     @Bean
     public SpringTemplateEngine templateEngine(TemplateResolver templateResolver) {

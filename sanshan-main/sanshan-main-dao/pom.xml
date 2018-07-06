@@ -30,6 +30,7 @@
         <org.mybatis-ehcache>1.0.0</org.mybatis-ehcache>
         <org.mybatis-spring>1.2.2</org.mybatis-spring>
 
+        <com.github.pagehelper>5.0.0</com.github.pagehelper>
 
     </properties>
 
@@ -86,6 +87,13 @@
             <groupId>tk.mybatis</groupId>
             <artifactId>mapper</artifactId>
             <version>${tk.mybatis.mapper}</version>
+        </dependency>
+
+        <!--mybatis 分页插件-->
+        <dependency>
+            <groupId>com.github.pagehelper</groupId>
+            <artifactId>pagehelper</artifactId>
+            <version>${com.github.pagehelper}</version>
         </dependency>
 
         <!--mybatis end-->

@@ -1,4 +1,4 @@
-package xyz.sanshan.main.web.config.javaconfig.auxiliary;
+package xyz.sanshan.main.service.config;
 
 import com.google.common.hash.Hashing;
 import org.slf4j.Logger;

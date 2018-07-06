@@ -24,7 +24,7 @@ import org.thymeleaf.spring4.SpringTemplateEngine;
 import org.thymeleaf.spring4.view.ThymeleafViewResolver;
 import org.thymeleaf.templateresolver.ServletContextTemplateResolver;
 import org.thymeleaf.templateresolver.TemplateResolver;
-import xyz.baidu.ueditor.upload.StorageManager;
+import xyz.sanshan.main.web.api.ueditor.upload.StorageManager;
 import xyz.sanshan.main.web.config.aop.ControllerAop;
 
 import java.util.List;

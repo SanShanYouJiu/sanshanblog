@@ -1,12 +1,12 @@
-package xyz.baidu.ueditor;
+package xyz.sanshan.main.web.api.ueditor;
 
-import xyz.baidu.ueditor.define.ActionMap;
-import xyz.baidu.ueditor.define.AppInfo;
-import xyz.baidu.ueditor.define.BaseState;
-import xyz.baidu.ueditor.define.State;
-import xyz.baidu.ueditor.hunter.FileManager;
-import xyz.baidu.ueditor.hunter.ImageHunter;
-import xyz.baidu.ueditor.upload.Uploader;
+import xyz.sanshan.main.web.api.ueditor.define.ActionMap;
+import xyz.sanshan.main.web.api.ueditor.define.AppInfo;
+import xyz.sanshan.main.web.api.ueditor.define.BaseState;
+import xyz.sanshan.main.web.api.ueditor.define.State;
+import xyz.sanshan.main.web.api.ueditor.hunter.FileManager;
+import xyz.sanshan.main.web.api.ueditor.hunter.ImageHunter;
+import xyz.sanshan.main.web.api.ueditor.upload.Uploader;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;

@@ -1,4 +1,4 @@
-package xyz.baidu.ueditor;
+package xyz.sanshan.main.web.api.ueditor;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;

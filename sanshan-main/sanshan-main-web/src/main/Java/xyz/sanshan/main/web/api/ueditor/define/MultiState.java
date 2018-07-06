@@ -1,6 +1,6 @@
-package xyz.baidu.ueditor.define;
+package xyz.sanshan.main.web.api.ueditor.define;
 
-import xyz.baidu.ueditor.Encoder;
+import xyz.sanshan.main.web.api.ueditor.Encoder;
 
 import java.util.*;
 

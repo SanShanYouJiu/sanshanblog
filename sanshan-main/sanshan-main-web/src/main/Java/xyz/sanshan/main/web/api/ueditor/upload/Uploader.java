@@ -1,6 +1,6 @@
-package xyz.baidu.ueditor.upload;
+package xyz.sanshan.main.web.api.ueditor.upload;
 
-import xyz.baidu.ueditor.define.State;
+import xyz.sanshan.main.web.api.ueditor.define.State;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;

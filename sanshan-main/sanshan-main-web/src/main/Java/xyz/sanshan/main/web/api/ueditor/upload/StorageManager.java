@@ -1,8 +1,8 @@
-package xyz.baidu.ueditor.upload;
+package xyz.sanshan.main.web.api.ueditor.upload;
 
-import xyz.baidu.ueditor.define.AppInfo;
-import xyz.baidu.ueditor.define.BaseState;
-import xyz.baidu.ueditor.define.State;
+import xyz.sanshan.main.web.api.ueditor.define.AppInfo;
+import xyz.sanshan.main.web.api.ueditor.define.BaseState;
+import xyz.sanshan.main.web.api.ueditor.define.State;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DBObject;
 import xyz.sanshan.main.service.editor.UEditorFileService;

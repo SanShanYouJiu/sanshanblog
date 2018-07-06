@@ -1,9 +1,9 @@
-package xyz.baidu.ueditor;
+package xyz.sanshan.main.web.api.ueditor;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import xyz.baidu.ueditor.define.ActionMap;
+import xyz.sanshan.main.web.api.ueditor.define.ActionMap;
 
 import java.io.*;
 import java.util.HashMap;

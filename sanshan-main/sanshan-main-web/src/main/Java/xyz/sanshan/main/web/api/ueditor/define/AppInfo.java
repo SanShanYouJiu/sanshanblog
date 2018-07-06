@@ -1,4 +1,4 @@
-package xyz.baidu.ueditor.define;
+package xyz.sanshan.main.web.api.ueditor.define;
 
 import java.util.HashMap;
 import java.util.Map;

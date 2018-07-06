@@ -1,11 +1,11 @@
-package xyz.baidu.ueditor.hunter;
+package xyz.sanshan.main.web.api.ueditor.hunter;
 
 import org.apache.commons.io.FileUtils;
-import xyz.baidu.ueditor.PathFormat;
-import xyz.baidu.ueditor.define.AppInfo;
-import xyz.baidu.ueditor.define.BaseState;
-import xyz.baidu.ueditor.define.MultiState;
-import xyz.baidu.ueditor.define.State;
+import xyz.sanshan.main.web.api.ueditor.PathFormat;
+import xyz.sanshan.main.web.api.ueditor.define.AppInfo;
+import xyz.sanshan.main.web.api.ueditor.define.BaseState;
+import xyz.sanshan.main.web.api.ueditor.define.MultiState;
+import xyz.sanshan.main.web.api.ueditor.define.State;
 
 import java.io.File;
 import java.util.Arrays;

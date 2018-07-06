@@ -1,9 +1,9 @@
-package xyz.baidu.ueditor.hunter;
+package xyz.sanshan.main.web.api.ueditor.hunter;
 
-import xyz.baidu.ueditor.PathFormat;
-import xyz.baidu.ueditor.define.*;
-import xyz.baidu.ueditor.upload.StorageManager;
-import xyz.baidu.ueditor.upload.StorageManager;
+import xyz.sanshan.main.web.api.ueditor.PathFormat;
+import xyz.sanshan.main.web.api.ueditor.define.*;
+import xyz.sanshan.main.web.api.ueditor.upload.StorageManager;
+import xyz.sanshan.main.web.api.ueditor.upload.StorageManager;
 
 import java.net.HttpURLConnection;
 import java.net.InetAddress;

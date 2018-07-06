@@ -1,4 +1,4 @@
-package xyz.baidu.ueditor.define;
+package xyz.sanshan.main.web.api.ueditor.define;
 
 /**
  * 处理状态接口

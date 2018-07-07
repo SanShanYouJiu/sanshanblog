@@ -1,4 +1,4 @@
-package xyz.sanshan.main.service.check.night;
+package xyz.sanshan.main.service.task.night;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;

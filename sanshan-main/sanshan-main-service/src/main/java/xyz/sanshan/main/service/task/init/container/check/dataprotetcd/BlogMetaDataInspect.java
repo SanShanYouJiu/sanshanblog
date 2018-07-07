@@ -1,4 +1,4 @@
-package xyz.sanshan.main.service.check.init.container.check.dataprotetcd.blogmetacache;
+package xyz.sanshan.main.service.task.init.container.check.dataprotetcd;
 
 import xyz.sanshan.main.dao.mybatis.MarkDownBlogMapper;
 import xyz.sanshan.main.dao.mybatis.UEditorBlogMapper;

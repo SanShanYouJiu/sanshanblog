@@ -1,4 +1,4 @@
-package xyz.sanshan.main.service.check.init.container.check.dataprotetcd.ueditorfile;
+package xyz.sanshan.main.service.task.init.container.check.dataprotetcd;
 
 import xyz.sanshan.main.dao.mybatis.UEditorFileQuoteMapper;
 import xyz.sanshan.main.dao.mybatis.UEditorIdFileMapMapper;

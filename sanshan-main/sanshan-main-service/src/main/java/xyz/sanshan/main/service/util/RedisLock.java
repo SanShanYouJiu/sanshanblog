@@ -5,7 +5,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 
 /**
  * redis分布式锁 实现类
- * @Author wangxiaolong <xiaolong@maihaoche.com>
  */
 @Slf4j
 public class RedisLock {

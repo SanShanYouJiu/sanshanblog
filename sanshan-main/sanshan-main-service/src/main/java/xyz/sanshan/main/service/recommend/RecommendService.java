@@ -2,6 +2,7 @@ package xyz.sanshan.main.service.recommend;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import xyz.sanshan.common.vo.ResponseMsgVO;
 import xyz.sanshan.main.dao.mongo.recommend.RecommendRepository;
@@ -74,6 +75,7 @@ public class RecommendService {
     /**
      * 生成推荐数据
      */
+    @Scheduled(cron = "${recommend.quartz.expression:0 0 3 * * ?}")
     public void generateRecommedn() {
         RecommendDO recommendDO = new RecommendDO();
         List<UserRecommendDO> recommnedUsers= userRecommendService.generateUsers();

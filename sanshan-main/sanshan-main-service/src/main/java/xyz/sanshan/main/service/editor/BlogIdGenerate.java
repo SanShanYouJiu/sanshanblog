@@ -1,5 +1,6 @@
 package xyz.sanshan.main.service.editor;
 
+import org.springframework.scheduling.annotation.Scheduled;
 import xyz.sanshan.common.PageInfo;
 import xyz.sanshan.common.util.PropertiesConvenUtil;
 import xyz.sanshan.common.info.EditorTypeEnum;
@@ -19,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * TODO: 后期尽量单独维护出来 作为一个单独的组件 由组件自己去数据库同步
  */
 @Slf4j
-public final class BlogIdGenerate {
+public  class BlogIdGenerate {
 
     private final String filename;
 
@@ -37,7 +38,7 @@ public final class BlogIdGenerate {
     }
 
 
-    public final void init() {
+    public  void init() {
         Long initTime = System.currentTimeMillis();
         Future future = pool.submit(() -> {
             fileToMap(filename + "idMap.properties", idMap, 1);
@@ -104,7 +105,7 @@ public final class BlogIdGenerate {
      * @param id
      * @param type
      */
-    public synchronized final   void addIdMap(final Long id, final EditorTypeEnum type) {
+    public synchronized    void addIdMap(final Long id, final EditorTypeEnum type) {
         idMap.put(id, type);
         if (!(type.equals(EditorTypeEnum.VOID_ID))){
             idExistMap.put(id, type);
@@ -118,7 +119,7 @@ public final class BlogIdGenerate {
      *
      * @return 返回设置ID
      */
-    public synchronized  final Long getId(EditorTypeEnum type) {
+    public synchronized   Long getId(EditorTypeEnum type) {
         //log.debug("获取当前系统新的博客Id,可能是用于新增博客");
         Long id;
         try {
@@ -142,7 +143,7 @@ public final class BlogIdGenerate {
      * 可能是因为在获得ID 在之后的插入数据库失败时进行取消
      * @param id
      */
-    public synchronized  final void removeIdMap(Long id){
+    public synchronized   void removeIdMap(Long id){
         idMap.remove(id);
     }
 
@@ -151,7 +152,7 @@ public final class BlogIdGenerate {
      * @param id
      * @return
      */
-    public synchronized final   boolean containsId(Long id) {
+    public synchronized    boolean containsId(Long id) {
         return idExistMap.containsKey(id);
     }
 
@@ -161,7 +162,7 @@ public final class BlogIdGenerate {
      * @return
      */
     @SuppressWarnings("Duplicates")
-    public synchronized final  TreeMap<Long, EditorTypeEnum> getIdCopy() {
+    public synchronized   TreeMap<Long, EditorTypeEnum> getIdCopy() {
         TreeMap<Long, EditorTypeEnum> copyMap = new TreeMap<>(
                 (o1, o2) -> {
                     if (o1.equals(o2)) {
@@ -180,7 +181,7 @@ public final class BlogIdGenerate {
 
     //根据分页查询
     @SuppressWarnings("Duplicates")
-    public  synchronized final PageInfo getIdCopyByPage(long  pageRows, long pageNum){
+    public  synchronized  PageInfo getIdCopyByPage(long  pageRows, long pageNum){
         PageInfo pageInfo;
         TreeMap<Long, EditorTypeEnum> copyMap = new TreeMap<>(
                  (o1, o2) -> {
@@ -212,12 +213,12 @@ public final class BlogIdGenerate {
      }
 
 
-    public synchronized final long getSize() {
+    public synchronized  long getSize() {
         //log.debug("获取当前IdMap文件长度");
         return idMap.size();
     }
 
-    public synchronized final    Long getExistMaxId(){
+    public synchronized     Long getExistMaxId(){
         //获取存活的最大ID
         Long id = null;
         try {
@@ -246,7 +247,7 @@ public final class BlogIdGenerate {
      *
      * @param id
      */
-    public  synchronized final void remove(final Long id) {
+    public  synchronized  void remove(final Long id) {
         idMap.put(id, EditorTypeEnum.VOID_ID);
         idExistMap.remove(id);
         //log.debug("删除该Id对应的倒排索引对应项");
@@ -254,7 +255,8 @@ public final class BlogIdGenerate {
 
 
     //定时生成IdMap文件保存到磁盘上
-    private final void saveMap() {
+    @Scheduled(cron = "${blogIdGenerate.quartz.expression:* 0/1 * * * ?}")
+    public  void saveMap() {
         Long initTime = System.currentTimeMillis();
         Future future = saveMapByName("idMap.properties", "其他properties的依赖文件 根据Id来判断是否查找哪种类型");
         Future future0 = saveMapByName("idExistMap.properties", "真实存在的博客");

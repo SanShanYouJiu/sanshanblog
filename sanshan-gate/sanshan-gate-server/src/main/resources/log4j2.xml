@@ -2,7 +2,7 @@
 <Configuration status="off" monitorInterval="30">
     <Appenders>
         <NoSql name="mongoAppender" > <!--建议bufferSize配置,减少频繁写操作。 -->
-            <MongoDb databaseName="logs" collectionName="sanshan-gate-server-logs" server="mongo" port="27017"/>
+            <MongoDb databaseName="logs" collectionName="sanshan-gate-server-logs" server="localhost" port="27017"/>
         </NoSql>
         <Console name="STDOUT" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss,SSS} %5p %c{1}:%L - %m%n"/>

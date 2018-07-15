@@ -59,13 +59,12 @@ public class PageInfo<T> implements Serializable {
      * @param total     数据总数
      */
     public PageInfo(Map currentMapData, long pageRows, long pageNum, long total) {
-        long preRows = pageRows * (pageNum - 1);
         this.currentMapData = currentMapData;
         this.pageRows = pageRows;
         this.pageNum = pageNum;
         this.total = total;
 
-        computeFiled(pageRows, pageNum, total, preRows);
+        computeFiled(pageRows, pageNum, total);
 
     }
 
@@ -77,13 +76,12 @@ public class PageInfo<T> implements Serializable {
      * @param total
      */
     public PageInfo(T completeData, long pageRows, long pageNum, long total) {
-        long preRows = pageRows * (pageNum - 1);
         this.completeData = completeData;
         this.pageRows = pageRows;
         this.pageNum = pageNum;
         this.total = total;
 
-        computeFiled(pageRows, pageNum, total, preRows);
+        computeFiled(pageRows, pageNum, total);
     }
 
     /**
@@ -94,7 +92,8 @@ public class PageInfo<T> implements Serializable {
     }
 
 
-    private void computeFiled(long pageRows, long pageNum, long total, long preRows) {
+    private void computeFiled(long pageRows, long pageNum, long total ) {
+        long preRows = pageRows * (pageNum - 1);
         if ((total % pageRows) != 0) {
             //如果余数不为0 代表除不尽 pages+1
             long pages = total / pageRows;

@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import xyz.sanshan.common.vo.ResponseMsgVO;
-import xyz.sanshan.main.service.recommend.RecommendService;
+import xyz.sanshan.main.service.task.RecommendTask;
 
 /**
  */
@@ -15,7 +15,7 @@ import xyz.sanshan.main.service.recommend.RecommendService;
 public class RecommendController {
 
     @Autowired
-    private RecommendService recommendService;
+    private RecommendTask recommendService;
 
     @GetMapping(value = "/users",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO recommendUsers() {

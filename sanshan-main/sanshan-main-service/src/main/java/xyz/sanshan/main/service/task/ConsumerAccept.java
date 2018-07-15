@@ -1,9 +1,10 @@
-package xyz.sanshan.main.service.consumer.accept;
+package xyz.sanshan.main.service.task;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import xyz.sanshan.main.service.consumer.accept.VoteConsumer;
 
 /**
  * 消费者
@@ -17,7 +18,7 @@ public class ConsumerAccept {
     private VoteConsumer voteConsumer;
 
     @Autowired
-    private UEditorFileConsumer UEditorFileConsumer;
+    private xyz.sanshan.main.service.consumer.accept.UEditorFileConsumer UEditorFileConsumer;
 
 
     @Scheduled(cron = "${consumer.quartz.expression:*/5 * * * * ?}")

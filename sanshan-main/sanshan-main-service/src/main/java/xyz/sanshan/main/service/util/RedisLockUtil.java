@@ -7,7 +7,7 @@ import org.springframework.data.redis.core.RedisTemplate;
  * redis分布式锁 实现类
  */
 @Slf4j
-public class RedisLock {
+public class RedisLockUtil {
 
     private RedisTemplate<String,String> redisTemplate;
 
@@ -39,13 +39,10 @@ public class RedisLock {
     /**
      * 锁标志
      *
-     * 这里需不需要保证可见性值得讨论, 因为是分布式的锁,
-     * 1.同一个jvm的多个线程使用不同的锁对象其实也是可以的, 这种情况下不需要保证可见性
-     * 2.同一个jvm的多个线程使用同一个锁对象, 那可见性就必须要保证了.
      */
     private volatile boolean locked;
 
-    private RedisLock(RedisTemplate redisTemplate, String lockKey, Long timeoutMsecs, Long expireMsecs){
+    private RedisLockUtil(RedisTemplate redisTemplate, String lockKey, Long timeoutMsecs, Long expireMsecs){
         this.redisTemplate = redisTemplate;
         this.lockKey = lockKey;
         if(timeoutMsecs != null){
@@ -86,8 +83,8 @@ public class RedisLock {
             return this;
         }
 
-        public RedisLock build(){
-            return new RedisLock(redisTemplate,lockKey,timeoutMsecs,expireMsecs);
+        public RedisLockUtil build(){
+            return new RedisLockUtil(redisTemplate,lockKey,timeoutMsecs,expireMsecs);
         }
     }
 

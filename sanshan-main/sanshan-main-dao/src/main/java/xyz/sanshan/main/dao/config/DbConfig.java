@@ -50,7 +50,7 @@ public class DbConfig {
 
 
 
-    @Bean(initMethod = "init", destroyMethod = "close")
+    @Bean(initMethod = "init", destroyMethod = "close",name = "datasource")
     public DruidDataSource dataSource() throws SQLException {
         DruidDataSource ds = new DruidDataSource();
         ds.setDriverClassName(driver);
@@ -71,8 +71,8 @@ public class DbConfig {
         ds.setMinEvictableIdleTimeMillis(minEvictableIdleTimeMillis);
         ds.setValidationQuery("SELECT 1");
         ds.setTestWhileIdle(testWhileIdle);
-        //不开启mysql的自动事务
-        ds.setDefaultAutoCommit(false);
+        //开启mysql的自动事务
+        ds.setDefaultAutoCommit(true);
         ds.setTestOnBorrow(testOnBorrow);
         ds.setTestOnReturn(testOnReturn);
         ds.setMaxOpenPreparedStatements(maxOpenPreparedStatements);

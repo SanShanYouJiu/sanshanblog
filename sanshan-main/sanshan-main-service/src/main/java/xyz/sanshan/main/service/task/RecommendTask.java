@@ -1,4 +1,4 @@
-package xyz.sanshan.main.service.recommend;
+package xyz.sanshan.main.service.task;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +11,8 @@ import xyz.sanshan.main.pojo.entity.recommend.BlogRecommendDO;
 import xyz.sanshan.main.pojo.entity.recommend.RecommendDO;
 import xyz.sanshan.main.pojo.entity.recommend.UserRecommendDO;
 import xyz.sanshan.main.service.convent.RecommendConvert;
+import xyz.sanshan.main.service.recommend.BlogRecommendService;
+import xyz.sanshan.main.service.recommend.UserRecommendService;
 
 import javax.annotation.PostConstruct;
 import java.util.Date;
@@ -24,7 +26,7 @@ import java.util.Objects;
  */
 @Service
 @Slf4j
-public class RecommendService {
+public class RecommendTask {
 
     @Autowired
     private RecommendRepository recommendRepository;

@@ -20,15 +20,15 @@ public class UserController {
     private UserService userService;
 
     @Autowired
-    private RedisTemplate<String,String> redisTemplate;
+    private RedisTemplate<String, String> redisTemplate;
 
 
     /**
-     *更改密码 在更改密码之前需要发送邮箱验证码
+     * 更改密码 在更改密码之前需要发送邮箱验证码
      */
-    @PostMapping(value = "/change-pwd",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/change-pwd", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO changePassword(@RequestParam(name = "code") String code,
-                                        @RequestParam(name = "password") String password){
+                                        @RequestParam(name = "password") String password) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         userService.changePwd(code, password, responseMsgVO);
         return responseMsgVO;
@@ -42,22 +42,22 @@ public class UserController {
     public ResponseMsgVO checkUsername(@RequestParam(name = "email") String email) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         //查看是否存在邮箱
-        if (userService.judgeEmail(email)){
-            return  responseMsgVO.buildWithPosCode(PosCodeEnum.Email_EXIST);
+        if (userService.judgeEmail(email)) {
+            return responseMsgVO.buildWithPosCode(PosCodeEnum.Email_EXIST);
         }
         //合法性检测
         if (!userService.checkEmailLegal(email, responseMsgVO)) {
             return responseMsgVO;
         }
 
-            return responseMsgVO;
-        }
+        return responseMsgVO;
+    }
 
 
     /**
      * 注册之后的邮箱认证
      */
-    @PostMapping(value = "/register/check/token",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    @PostMapping(value = "/register/check/token", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO registerCheckToken(@RequestParam(name = "token") String token
     ) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
@@ -75,10 +75,10 @@ public class UserController {
     public ResponseMsgVO sendEmailCode(
             @RequestParam(name = "type") Integer type,
             @RequestParam(name = "email") String email,
-            @RequestParam(name = "codeid")String codeid,
+            @RequestParam(name = "codeid") String codeid,
             @RequestParam(name = "code") String code) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
-          //验证码
+        //验证码
         String codeKey = ConstanceCacheKey.CODE_ID_PREFIX + codeid;
         String codeValidate = redisTemplate.opsForValue().get(codeKey);
         if (!code.equalsIgnoreCase(codeValidate)) {
@@ -89,27 +89,37 @@ public class UserController {
     }
 
     /**
-     忘记密码
+     * 忘记密码
      */
     @PostMapping(value = "/forget-pwd", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO<?> findPassword(@RequestParam(name = "email") String email,
-                                          @RequestParam(name = "code") String code) {
+                                         @RequestParam(name = "code") String code) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO();
         userService.forgetPassword(email, code, responseMsgVO);
         return responseMsgVO;
     }
 
 
-
     /**
      * 作为其他功能的 目前暂留
      * 验证邮箱code
+     *
      * @param code code
      */
     @PostMapping(value = "/check/code", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
     public ResponseMsgVO checkToken(@RequestParam(name = "code") String code) {
         ResponseMsgVO responseMsgVO = new ResponseMsgVO<>();
-        userService.checkEmailToken(code,responseMsgVO);
+        userService.checkEmailToken(code, responseMsgVO);
+        return responseMsgVO.buildOK();
+    }
+
+    /**
+     * TODO  用户留言
+     */
+    @PostMapping(value = "/comment", produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+    public ResponseMsgVO userComment(@RequestParam(name = "content") String content) {
+        ResponseMsgVO responseMsgVO = new ResponseMsgVO<>();
+
         return responseMsgVO.buildOK();
     }
 

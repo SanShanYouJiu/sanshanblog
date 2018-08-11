@@ -2,6 +2,7 @@ package xyz.sanshan.main.service.task;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import xyz.sanshan.common.vo.ResponseMsgVO;
@@ -11,8 +12,10 @@ import xyz.sanshan.main.pojo.entity.recommend.BlogRecommendDO;
 import xyz.sanshan.main.pojo.entity.recommend.RecommendDO;
 import xyz.sanshan.main.pojo.entity.recommend.UserRecommendDO;
 import xyz.sanshan.main.service.convent.RecommendConvert;
+import xyz.sanshan.main.service.info.LockKeyEnum;
 import xyz.sanshan.main.service.recommend.BlogRecommendService;
 import xyz.sanshan.main.service.recommend.UserRecommendService;
+import xyz.sanshan.main.service.util.RedisLockUtil;
 
 import javax.annotation.PostConstruct;
 import java.util.Date;
@@ -36,6 +39,9 @@ public class RecommendTask {
 
     @Autowired
     private UserRecommendService userRecommendService;
+
+    @Autowired
+    private RedisTemplate redisTemplate;
 
     private RecommendDTO recommendResult = new RecommendDTO();
 
@@ -79,15 +85,24 @@ public class RecommendTask {
      */
     @Scheduled(cron = "${recommend.quartz.expression:0 0 3 * * ?}")
     public void generateRecommedn() {
-        RecommendDO recommendDO = new RecommendDO();
-        List<UserRecommendDO> recommnedUsers= userRecommendService.generateUsers();
-        List<BlogRecommendDO> recommnedBlogs= blogRecommendService.generateBlogs();
-        recommendDO.setRecommendUsers(recommnedUsers);
-        recommendDO.setRecommendBlogs(recommnedBlogs);
-        recommendDO.setCreated(new Date());
+        long EXPIRE_TIME = 5 * 1000L;
+        RedisLockUtil redisLock = RedisLockUtil.builder()
+                .redisTemplate(redisTemplate)
+                .lockKey(LockKeyEnum.NIGHT_CHECK.getKey())
+                .timeoutMsecs(0L)
+                .expireMsecs(EXPIRE_TIME)
+                .build();
+        redisLock.execute(()-> {
+            RecommendDO recommendDO = new RecommendDO();
+            List<UserRecommendDO> recommnedUsers = userRecommendService.generateUsers();
+            List<BlogRecommendDO> recommnedBlogs = blogRecommendService.generateBlogs();
+            recommendDO.setRecommendUsers(recommnedUsers);
+            recommendDO.setRecommendBlogs(recommnedBlogs);
+            recommendDO.setCreated(new Date());
 
-        RecommendDO saveResultDO = recommendRepository.save(recommendDO);
-        this.recommendResult = RecommendConvert.doToDto(saveResultDO);
+            RecommendDO saveResultDO = recommendRepository.save(recommendDO);
+            this.recommendResult = RecommendConvert.doToDto(saveResultDO);
+        });
     }
 
 }

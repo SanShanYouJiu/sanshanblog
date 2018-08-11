@@ -1,14 +1,14 @@
 package xyz.sanshan.main.web.controller.user.info;
 
-import xyz.sanshan.main.service.user.info.UserInfoService;
-import xyz.sanshan.common.vo.ResponseMsgVO;
-import xyz.sanshan.common.info.PosCodeEnum;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import xyz.sanshan.common.info.PosCodeEnum;
+import xyz.sanshan.common.vo.ResponseMsgVO;
+import xyz.sanshan.main.service.user.info.UserInfoService;
 
 import java.util.List;
 import java.util.Objects;
@@ -37,6 +37,13 @@ public class UserInfoController {
             return responseMsgVO.buildWithMsgAndStatus(PosCodeEnum.NOT_FOUND, "数据不存在");
         }
         return responseMsgVO.buildOKWithData(list);
+    }
+
+    //TODO: 查询用户备注
+    @GetMapping
+    public ResponseMsgVO getUserCommentInfo(){
+        ResponseMsgVO responseMsgVO = new ResponseMsgVO();
+        return responseMsgVO.buildOK();
     }
 
 }

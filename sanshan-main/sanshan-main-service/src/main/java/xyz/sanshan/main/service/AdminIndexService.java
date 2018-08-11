@@ -16,6 +16,7 @@ import xyz.sanshan.main.service.convent.UserConvert;
 import xyz.sanshan.main.service.editor.BlogIdGenerate;
 import xyz.sanshan.main.service.editor.MarkDownBlogService;
 import xyz.sanshan.main.service.editor.UEditorBlogService;
+import xyz.sanshan.main.service.search.ElasticSearchService;
 import xyz.sanshan.main.service.user.info.UserInfoService;
 import xyz.sanshan.main.service.vo.BlogVO;
 
@@ -46,6 +47,9 @@ public class AdminIndexService {
     @Autowired
     private MarkDownBlogService markDownBlogService;
 
+    @Autowired
+    private ElasticSearchService elasticSearchService;
+
     public List<BlogVO> queryAllBlog() {
         String username= UserContextHandler.getUsername();
         List<BlogVO> list = userInfoService.getUserBlogs(username);
@@ -66,17 +70,17 @@ public class AdminIndexService {
 
     public List<BlogVO> queryMarkdownBlogAll() {
         List<BlogVO> list;
-         String username=  UserContextHandler.getUsername();
-            list = userInfoService.getUserBlogs(username);
-           return list.stream().filter((blogVO) -> blogVO.getType() == 1).collect(Collectors.toList());
+        String username=  UserContextHandler.getUsername();
+        list = userInfoService.getUserBlogs(username);
+        return list.stream().filter((blogVO) -> blogVO.getType() == 1).collect(Collectors.toList());
     }
 
 
     public List<BlogVO> queryUEditorBlogAll() {
         List<BlogVO> list;
         String username=  UserContextHandler.getUsername();
-            list = userInfoService.getUserBlogs(username);
-            return list.stream().filter((blogVO) -> blogVO.getType() == 0).collect(Collectors.toList());
+        list = userInfoService.getUserBlogs(username);
+        return list.stream().filter((blogVO) -> blogVO.getType() == 0).collect(Collectors.toList());
     }
 
 
@@ -95,34 +99,41 @@ public class AdminIndexService {
         String blogLink = mapList.get("blogLink");
         boolean avatarFound=stringIsNotNull(avatar);
         boolean blogLinkFound=stringIsNotNull(blogLink);
-           if (avatarFound){
-               userDO.setAvatar(avatar);
-               log.info("用户{}更改自己的头像为{}",username,avatar);
-           }
-           if (blogLinkFound){
-                String httpPrefix="http://";
-                String httpsPrefix="https://";
-                if (blogLink.contains(httpPrefix)||blogLink.contains(httpsPrefix)){
-                } else {
-                    //猜测是http开头
-                    blogLink = httpPrefix + blogLink;
-                }
-               userDO.setBlogLink(blogLink);
-               log.info("用户{}更改自己的博客链接为{}",username,blogLink);
-           }
-       return changeUserInfo(userDO);
+        if (avatarFound){
+            userDO.setAvatar(avatar);
+            log.info("用户{}更改自己的头像为{}",username,avatar);
+        }
+        if (blogLinkFound){
+            String httpPrefix="http://";
+            String httpsPrefix="https://";
+            if (blogLink.contains(httpPrefix)||blogLink.contains(httpsPrefix)){
+            } else {
+                //猜测是http开头
+                blogLink = httpPrefix + blogLink;
+            }
+            userDO.setBlogLink(blogLink);
+            log.info("用户{}更改自己的博客链接为{}",username,blogLink);
+        }
+        return changeUserInfo(userDO);
     }
 
     private Boolean changeUserInfo(UserDO userDO){
         WriteResult result= userRepository.changeUserInfo(userDO);
-        return true;
+        //转换DTO对象
+        UserDTO userDTO = UserConvert.doToDto(userDO);
+        Boolean eschange=  elasticSearchService.userAdd(userDTO);
+        if (eschange!=null && result.getN()!=0){
+            return true;
+        }else {
+            return false;
+        }
     }
 
     public void updateBlogById(Long id,String title, String tag, String content, ResponseMsgVO responseMsgVO) {
         EditorTypeEnum type = blogIdGenerate.getType(id);
         switch (type){
             case UEDITOR_EDITOR:
-               UEditorBlogService.updateSelectiveDO(id, content, title, tag);
+                UEditorBlogService.updateSelectiveDO(id, content, title, tag);
                 responseMsgVO.buildOK();
                 return;
             case MARKDOWN_EDITOR:

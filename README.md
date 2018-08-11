@@ -4,7 +4,7 @@
 
 SanShanBlog是基于Spring Cloud微服务化博客社区平台，具有统一授权、主要业务系统、搜索系统、监控与链路追踪系统，其中包含 权限管理，搜索管理，网关API管理等多个模块，支持多业务系统并行开发
 
-核心技术采用Spring Boot1.5.2以及Spring Cloud (Dalston.SR1)相关核心组件
+核心采用Spring Boot1.5.2以及Spring Cloud (Dalston.SR1)相关核心组件
 
 > 演示 [地址][2]
 

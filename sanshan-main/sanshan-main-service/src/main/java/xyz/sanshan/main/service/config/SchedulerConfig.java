@@ -7,7 +7,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import xyz.sanshan.main.service.editor.BlogIdGenerate;
 
 /**
- * TODO: 存在分布式情况下任务重复消费的问题 需要分布式的全局锁
  * @author sanshan <sanshan@maihaoche.com>
  * @date 2018-07-08
  */
